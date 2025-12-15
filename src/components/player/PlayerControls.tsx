@@ -1,3 +1,4 @@
+import { motion } from 'framer-motion';
 import { Button } from '@/components/ui/button';
 import { Play, Pause, SkipBack, SkipForward, Square } from 'lucide-react';
 import { usePlayer } from '@/hooks/usePlayer';
@@ -7,79 +8,154 @@ interface PlayerControlsProps {
   isPlaying: boolean;
 }
 
+const buttonVariants = {
+  idle: { scale: 1 },
+  hover: { scale: 1.1 },
+  tap: { scale: 0.95 },
+};
+
+const iconVariants = {
+  play: { 
+    rotate: 0,
+    transition: { type: 'spring', stiffness: 200 }
+  },
+  pause: { 
+    rotate: 180,
+    transition: { type: 'spring', stiffness: 200 }
+  },
+};
+
 export function PlayerControls({ isPlaying }: PlayerControlsProps) {
   const { play, pause, next, prev, stop, isLoading } = usePlayer();
 
   return (
-    <div className="flex items-center justify-center gap-4 md:gap-6">
+    <motion.div 
+      className="flex items-center justify-center gap-4 md:gap-6"
+      initial={{ opacity: 0, y: 20 }}
+      animate={{ opacity: 1, y: 0 }}
+      transition={{ duration: 0.5, delay: 0.2 }}
+    >
       {/* Previous */}
-      <Button
-        variant="ghost"
-        size="icon"
-        onClick={prev}
-        disabled={isLoading}
-        className={cn(
-          "w-14 h-14 md:w-16 md:h-16 rounded-full",
-          "bg-kiosk-surface/50 hover:bg-kiosk-surface",
-          "text-kiosk-text hover:text-kiosk-primary",
-          "transition-all duration-200 hover:scale-110"
-        )}
+      <motion.div
+        variants={buttonVariants}
+        initial="idle"
+        whileHover="hover"
+        whileTap="tap"
       >
-        <SkipBack className="w-6 h-6 md:w-7 md:h-7" />
-      </Button>
+        <Button
+          variant="ghost"
+          size="icon"
+          onClick={prev}
+          disabled={isLoading}
+          className={cn(
+            "w-14 h-14 md:w-16 md:h-16 rounded-full",
+            "bg-kiosk-surface/50 hover:bg-kiosk-surface",
+            "text-kiosk-text hover:text-kiosk-primary",
+            "transition-colors duration-200"
+          )}
+        >
+          <SkipBack className="w-6 h-6 md:w-7 md:h-7" />
+        </Button>
+      </motion.div>
 
       {/* Play/Pause */}
-      <Button
-        variant="ghost"
-        size="icon"
-        onClick={isPlaying ? pause : play}
-        disabled={isLoading}
-        className={cn(
-          "w-20 h-20 md:w-24 md:h-24 rounded-full",
-          "bg-kiosk-primary hover:bg-kiosk-primary/90",
-          "text-kiosk-bg hover:text-kiosk-bg",
-          "shadow-lg shadow-kiosk-primary/30",
-          "transition-all duration-200 hover:scale-105"
-        )}
+      <motion.div
+        variants={buttonVariants}
+        initial="idle"
+        whileHover="hover"
+        whileTap="tap"
+        className="relative"
       >
-        {isPlaying ? (
-          <Pause className="w-8 h-8 md:w-10 md:h-10" />
-        ) : (
-          <Play className="w-8 h-8 md:w-10 md:h-10 ml-1" />
+        {/* Pulse effect when playing */}
+        {isPlaying && (
+          <motion.div
+            className="absolute inset-0 rounded-full bg-kiosk-primary"
+            animate={{
+              scale: [1, 1.2],
+              opacity: [0.3, 0],
+            }}
+            transition={{
+              duration: 1,
+              repeat: Infinity,
+              ease: 'easeOut',
+            }}
+          />
         )}
-      </Button>
+        
+        <Button
+          variant="ghost"
+          size="icon"
+          onClick={isPlaying ? pause : play}
+          disabled={isLoading}
+          className={cn(
+            "w-20 h-20 md:w-24 md:h-24 rounded-full relative z-10",
+            "bg-kiosk-primary hover:bg-kiosk-primary/90",
+            "text-kiosk-bg hover:text-kiosk-bg",
+            "shadow-lg shadow-kiosk-primary/30",
+            "transition-colors duration-200"
+          )}
+        >
+          <motion.div
+            key={isPlaying ? 'pause' : 'play'}
+            initial={{ scale: 0.5, opacity: 0 }}
+            animate={{ scale: 1, opacity: 1 }}
+            exit={{ scale: 0.5, opacity: 0 }}
+            transition={{ type: 'spring', stiffness: 300, damping: 20 }}
+          >
+            {isPlaying ? (
+              <Pause className="w-8 h-8 md:w-10 md:h-10" />
+            ) : (
+              <Play className="w-8 h-8 md:w-10 md:h-10 ml-1" />
+            )}
+          </motion.div>
+        </Button>
+      </motion.div>
 
       {/* Next */}
-      <Button
-        variant="ghost"
-        size="icon"
-        onClick={next}
-        disabled={isLoading}
-        className={cn(
-          "w-14 h-14 md:w-16 md:h-16 rounded-full",
-          "bg-kiosk-surface/50 hover:bg-kiosk-surface",
-          "text-kiosk-text hover:text-kiosk-primary",
-          "transition-all duration-200 hover:scale-110"
-        )}
+      <motion.div
+        variants={buttonVariants}
+        initial="idle"
+        whileHover="hover"
+        whileTap="tap"
       >
-        <SkipForward className="w-6 h-6 md:w-7 md:h-7" />
-      </Button>
+        <Button
+          variant="ghost"
+          size="icon"
+          onClick={next}
+          disabled={isLoading}
+          className={cn(
+            "w-14 h-14 md:w-16 md:h-16 rounded-full",
+            "bg-kiosk-surface/50 hover:bg-kiosk-surface",
+            "text-kiosk-text hover:text-kiosk-primary",
+            "transition-colors duration-200"
+          )}
+        >
+          <SkipForward className="w-6 h-6 md:w-7 md:h-7" />
+        </Button>
+      </motion.div>
 
-      {/* Stop - smaller, secondary action */}
-      <Button
-        variant="ghost"
-        size="icon"
-        onClick={stop}
-        disabled={isLoading}
-        className={cn(
-          "w-12 h-12 rounded-full",
-          "bg-kiosk-surface/30 hover:bg-destructive/20",
-          "text-kiosk-text/50 hover:text-destructive",
-          "transition-all duration-200"
-        )}
+      {/* Stop */}
+      <motion.div
+        variants={buttonVariants}
+        initial="idle"
+        whileHover="hover"
+        whileTap="tap"
       >
-        <Square className="w-5 h-5" />
-      </Button>
-    </div>
+        <Button
+          variant="ghost"
+          size="icon"
+          onClick={stop}
+          disabled={isLoading}
+          className={cn(
+            "w-12 h-12 rounded-full",
+            "bg-kiosk-surface/30 hover:bg-destructive/20",
+            "text-kiosk-text/50 hover:text-destructive",
+            "transition-colors duration-200"
+          )}
+        >
+          <Square className="w-5 h-5" />
+        </Button>
+      </motion.div>
+    </motion.div>
   );
 }

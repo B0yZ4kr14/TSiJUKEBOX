@@ -7,7 +7,9 @@ import type {
   Feedback 
 } from './types';
 
-const API_BASE_URL = import.meta.env.VITE_API_URL || 'http://localhost:8000/api';
+// Production: https://midiaserver.local/api (via nginx proxy)
+// Development: http://localhost:8000/api
+const API_BASE_URL = import.meta.env.VITE_API_URL || 'https://midiaserver.local/api';
 
 class ApiClient {
   private baseUrl: string;

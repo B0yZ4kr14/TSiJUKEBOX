@@ -1,7 +1,27 @@
+import { useState } from 'react';
 import { X, Trash2, Music, GripVertical, Play } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { ScrollArea } from '@/components/ui/scroll-area';
 import { QueueItem, PlaybackQueue } from '@/lib/api/types';
+import {
+  DndContext,
+  closestCenter,
+  KeyboardSensor,
+  PointerSensor,
+  useSensor,
+  useSensors,
+  DragEndEvent,
+  DragStartEvent,
+  DragOverlay,
+} from '@dnd-kit/core';
+import {
+  arrayMove,
+  SortableContext,
+  sortableKeyboardCoordinates,
+  useSortable,
+  verticalListSortingStrategy,
+} from '@dnd-kit/sortable';
+import { CSS } from '@dnd-kit/utilities';
 
 interface QueuePanelProps {
   isOpen: boolean;
@@ -10,7 +30,16 @@ interface QueuePanelProps {
   onPlayItem: (uri: string) => void;
   onRemoveItem: (id: string) => void;
   onClearQueue: () => void;
+  onReorderQueue?: (fromIndex: number, toIndex: number) => void;
   isLoading?: boolean;
+}
+
+interface QueueTrackItemProps {
+  item: QueueItem;
+  onPlay?: () => void;
+  onRemove?: () => void;
+  showPlay?: boolean;
+  isDragging?: boolean;
 }
 
 function QueueTrackItem({ 
@@ -18,14 +47,10 @@ function QueueTrackItem({
   onPlay, 
   onRemove,
   showPlay = true,
-}: { 
-  item: QueueItem; 
-  onPlay?: () => void; 
-  onRemove?: () => void;
-  showPlay?: boolean;
-}) {
+  isDragging = false,
+}: QueueTrackItemProps) {
   return (
-    <div className="group flex items-center gap-3 p-2 rounded-lg hover:bg-kiosk-surface/50 transition-colors">
+    <div className={`group flex items-center gap-3 p-2 rounded-lg hover:bg-kiosk-surface/50 transition-colors ${isDragging ? 'opacity-50' : ''}`}>
       {/* Drag handle */}
       <GripVertical className="w-4 h-4 text-kiosk-text/20 opacity-0 group-hover:opacity-100 cursor-grab" />
       
@@ -73,6 +98,80 @@ function QueueTrackItem({
   );
 }
 
+function SortableQueueItem({
+  item,
+  onPlay,
+  onRemove,
+}: {
+  item: QueueItem;
+  onPlay: () => void;
+  onRemove: () => void;
+}) {
+  const {
+    attributes,
+    listeners,
+    setNodeRef,
+    transform,
+    transition,
+    isDragging,
+  } = useSortable({ id: item.id });
+
+  const style = {
+    transform: CSS.Transform.toString(transform),
+    transition,
+  };
+
+  return (
+    <div
+      ref={setNodeRef}
+      style={style}
+      className={`group flex items-center gap-3 p-2 rounded-lg hover:bg-kiosk-surface/50 transition-colors ${isDragging ? 'opacity-50 bg-kiosk-surface/30' : ''}`}
+    >
+      {/* Drag handle */}
+      <div {...attributes} {...listeners} className="touch-none">
+        <GripVertical className="w-4 h-4 text-kiosk-text/40 cursor-grab active:cursor-grabbing" />
+      </div>
+      
+      {/* Cover */}
+      <div className="w-10 h-10 rounded bg-kiosk-surface flex-shrink-0 overflow-hidden">
+        {item.cover ? (
+          <img src={item.cover} alt={item.album} className="w-full h-full object-cover" />
+        ) : (
+          <div className="w-full h-full flex items-center justify-center">
+            <Music className="w-5 h-5 text-kiosk-text/30" />
+          </div>
+        )}
+      </div>
+      
+      {/* Info */}
+      <div className="flex-1 min-w-0">
+        <p className="text-sm font-medium text-kiosk-text truncate">{item.title}</p>
+        <p className="text-xs text-kiosk-text/60 truncate">{item.artist}</p>
+      </div>
+      
+      {/* Actions */}
+      <div className="flex items-center gap-1 opacity-0 group-hover:opacity-100 transition-opacity">
+        <Button
+          variant="ghost"
+          size="icon"
+          onClick={onPlay}
+          className="w-8 h-8 text-kiosk-text/50 hover:text-[#1DB954]"
+        >
+          <Play className="w-4 h-4" />
+        </Button>
+        <Button
+          variant="ghost"
+          size="icon"
+          onClick={onRemove}
+          className="w-8 h-8 text-kiosk-text/50 hover:text-destructive"
+        >
+          <X className="w-4 h-4" />
+        </Button>
+      </div>
+    </div>
+  );
+}
+
 export function QueuePanel({
   isOpen,
   onClose,
@@ -80,8 +179,46 @@ export function QueuePanel({
   onPlayItem,
   onRemoveItem,
   onClearQueue,
+  onReorderQueue,
   isLoading,
 }: QueuePanelProps) {
+  const [activeId, setActiveId] = useState<string | null>(null);
+  const [localQueue, setLocalQueue] = useState<QueueItem[]>([]);
+
+  const sensors = useSensors(
+    useSensor(PointerSensor, {
+      activationConstraint: {
+        distance: 8,
+      },
+    }),
+    useSensor(KeyboardSensor, {
+      coordinateGetter: sortableKeyboardCoordinates,
+    })
+  );
+
+  const handleDragStart = (event: DragStartEvent) => {
+    setActiveId(event.active.id as string);
+    if (queue) {
+      setLocalQueue([...queue.next]);
+    }
+  };
+
+  const handleDragEnd = (event: DragEndEvent) => {
+    const { active, over } = event;
+    setActiveId(null);
+
+    if (over && active.id !== over.id && queue) {
+      const oldIndex = queue.next.findIndex((item) => item.id === active.id);
+      const newIndex = queue.next.findIndex((item) => item.id === over.id);
+
+      if (oldIndex !== -1 && newIndex !== -1 && onReorderQueue) {
+        onReorderQueue(oldIndex, newIndex);
+      }
+    }
+  };
+
+  const activeItem = activeId ? queue?.next.find((item) => item.id === activeId) : null;
+
   if (!isOpen) return null;
 
   return (
@@ -152,7 +289,7 @@ export function QueuePanel({
               </section>
             )}
 
-            {/* Next Up */}
+            {/* Next Up - Sortable */}
             <section>
               <h3 className="text-xs font-semibold text-kiosk-text/50 uppercase tracking-wider mb-2">
                 Próximas ({queue?.next.length || 0})
@@ -163,16 +300,35 @@ export function QueuePanel({
                   <p className="text-sm">A fila está vazia</p>
                 </div>
               ) : (
-                <div className="space-y-1">
-                  {queue.next.map((item) => (
-                    <QueueTrackItem
-                      key={item.id}
-                      item={item}
-                      onPlay={() => item.uri && onPlayItem(item.uri)}
-                      onRemove={() => onRemoveItem(item.id)}
-                    />
-                  ))}
-                </div>
+                <DndContext
+                  sensors={sensors}
+                  collisionDetection={closestCenter}
+                  onDragStart={handleDragStart}
+                  onDragEnd={handleDragEnd}
+                >
+                  <SortableContext
+                    items={queue.next.map((item) => item.id)}
+                    strategy={verticalListSortingStrategy}
+                  >
+                    <div className="space-y-1">
+                      {queue.next.map((item) => (
+                        <SortableQueueItem
+                          key={item.id}
+                          item={item}
+                          onPlay={() => item.uri && onPlayItem(item.uri)}
+                          onRemove={() => onRemoveItem(item.id)}
+                        />
+                      ))}
+                    </div>
+                  </SortableContext>
+                  <DragOverlay>
+                    {activeItem && (
+                      <div className="p-2 rounded-lg bg-kiosk-surface border border-kiosk-border shadow-lg">
+                        <QueueTrackItem item={activeItem} showPlay={false} />
+                      </div>
+                    )}
+                  </DragOverlay>
+                </DndContext>
               )}
             </section>
 

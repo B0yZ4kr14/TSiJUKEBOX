@@ -7,9 +7,31 @@ import type {
   Feedback 
 } from './types';
 
-// Production: https://midiaserver.local/api (via nginx proxy)
-// Development: http://localhost:8000/api
-const API_BASE_URL = import.meta.env.VITE_API_URL || 'https://midiaserver.local/api';
+/**
+ * API Base URL Configuration
+ * Priority: VITE_API_URL env var > Production default > Development fallback
+ */
+function getApiBaseUrl(): string {
+  // 1. Explicit env var takes priority
+  if (import.meta.env.VITE_API_URL) {
+    return import.meta.env.VITE_API_URL;
+  }
+  
+  // 2. Production detection (running on midiaserver.local)
+  if (typeof window !== 'undefined' && window.location.hostname === 'midiaserver.local') {
+    return 'https://midiaserver.local/api';
+  }
+  
+  // 3. Development fallback
+  if (import.meta.env.DEV) {
+    return 'http://localhost:8000/api';
+  }
+  
+  // 4. Default production URL
+  return 'https://midiaserver.local/api';
+}
+
+export const API_BASE_URL = getApiBaseUrl();
 
 class ApiClient {
   private baseUrl: string;
@@ -44,6 +66,22 @@ class ApiClient {
     }
 
     return response.json();
+  }
+
+  // Health check endpoint
+  async healthCheck(): Promise<{ status: string; service: string; version: string; timestamp: string }> {
+    return this.request('/health');
+  }
+
+  // Metrics endpoint (Prometheus format - returns text)
+  async getMetrics(): Promise<string> {
+    const response = await fetch(`${this.baseUrl}/metrics`, {
+      headers: this.getAuthHeaders(),
+    });
+    if (!response.ok) {
+      throw new Error(`Metrics Error: ${response.status}`);
+    }
+    return response.text();
   }
 
   // Public endpoints

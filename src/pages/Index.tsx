@@ -170,6 +170,9 @@ export default function Index() {
   }
 
   if (error) {
+    const apiUrl = import.meta.env.VITE_API_URL || 'https://midiaserver.local/api';
+    const isDev = import.meta.env.DEV;
+    
     return (
       <KioskLayout>
         <motion.div 
@@ -193,10 +196,13 @@ export default function Index() {
             <h2 className="text-2xl font-bold text-kiosk-text">Erro de Conexão</h2>
             <p className="text-kiosk-text/70">
               Não foi possível conectar ao servidor em <br />
-              <code className="text-kiosk-primary">https://midiaserver.local/api</code>
+              <code className="text-kiosk-primary">{apiUrl}</code>
             </p>
             <p className="text-sm text-kiosk-text/50">
-              Verifique se o backend FastAPI está em execução.
+              {isDev 
+                ? 'Modo desenvolvimento: configure VITE_API_URL ou ative VITE_DEMO_MODE=true'
+                : 'Verifique se o backend FastAPI está em execução.'
+              }
             </p>
           </div>
         </motion.div>

@@ -14,7 +14,19 @@ interface SettingsContextType {
 const defaultApiUrl = import.meta.env.VITE_API_URL || 'https://midiaserver.local/api';
 const envDemoMode = import.meta.env.VITE_DEMO_MODE === 'true';
 
-const SettingsContext = createContext<SettingsContextType | undefined>(undefined);
+// Default values for when context is not available (fallback)
+const defaultSettings: SettingsContextType = {
+  isDemoMode: envDemoMode,
+  setDemoMode: () => {},
+  apiUrl: defaultApiUrl,
+  setApiUrl: () => {},
+  useWebSocket: true,
+  setUseWebSocket: () => {},
+  pollingInterval: 2000,
+  setPollingInterval: () => {},
+};
+
+const SettingsContext = createContext<SettingsContextType>(defaultSettings);
 
 const STORAGE_KEY = 'tsi_jukebox_settings';
 
@@ -73,28 +85,24 @@ export function SettingsProvider({ children }: { children: React.ReactNode }) {
     setSettings(prev => ({ ...prev, pollingInterval: value }));
   }, []);
 
+  const value = {
+    isDemoMode: settings.isDemoMode ?? false,
+    setDemoMode,
+    apiUrl: settings.apiUrl ?? defaultApiUrl,
+    setApiUrl,
+    useWebSocket: settings.useWebSocket ?? true,
+    setUseWebSocket,
+    pollingInterval: settings.pollingInterval ?? 2000,
+    setPollingInterval,
+  };
+
   return (
-    <SettingsContext.Provider
-      value={{
-        isDemoMode: settings.isDemoMode ?? false,
-        setDemoMode,
-        apiUrl: settings.apiUrl ?? defaultApiUrl,
-        setApiUrl,
-        useWebSocket: settings.useWebSocket ?? true,
-        setUseWebSocket,
-        pollingInterval: settings.pollingInterval ?? 2000,
-        setPollingInterval,
-      }}
-    >
+    <SettingsContext.Provider value={value}>
       {children}
     </SettingsContext.Provider>
   );
 }
 
 export function useSettings() {
-  const context = useContext(SettingsContext);
-  if (context === undefined) {
-    throw new Error('useSettings must be used within a SettingsProvider');
-  }
-  return context;
+  return useContext(SettingsContext);
 }

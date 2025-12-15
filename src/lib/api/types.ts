@@ -16,7 +16,8 @@ export interface SystemStatus {
   playing: boolean;
   volume: number;
   muted: boolean;
-  dmx: boolean;
+  /** DMX lighting control status (optional feature for kiosk environments) */
+  dmx?: boolean;
   track: TrackInfo | null;
 }
 

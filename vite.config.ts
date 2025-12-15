@@ -49,13 +49,27 @@ export default defineConfig(({ mode }) => ({
         globPatterns: ["**/*.{js,css,html,ico,png,svg,woff2}"],
         runtimeCaching: [
           {
-            urlPattern: /^https:\/\/midiaserver\.local\/api\/.*/i,
+            // Cache API responses from any configured backend
+            urlPattern: /\/api\/.*/i,
             handler: "NetworkFirst",
             options: {
               cacheName: "api-cache",
               expiration: {
                 maxEntries: 50,
-                maxAgeSeconds: 60 * 5, // 5 minutes
+                maxAgeSeconds: 60 * 2, // 2 minutes (reduced for fresher data)
+              },
+              networkTimeoutSeconds: 5, // Fallback to cache after 5s
+            },
+          },
+          {
+            // Cache album cover images
+            urlPattern: /^https:\/\/i\.scdn\.co\/image\/.*/i,
+            handler: "CacheFirst",
+            options: {
+              cacheName: "spotify-images",
+              expiration: {
+                maxEntries: 100,
+                maxAgeSeconds: 60 * 60 * 24 * 7, // 7 days
               },
             },
           },

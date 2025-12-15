@@ -7,6 +7,7 @@ import { PlayerControls } from '@/components/player/PlayerControls';
 import { VolumeSlider } from '@/components/player/VolumeSlider';
 import { SystemMonitor } from '@/components/player/SystemMonitor';
 import { AudioVisualizer } from '@/components/player/AudioVisualizer';
+import { ConnectionIndicator } from '@/components/player/ConnectionIndicator';
 import { useStatus } from '@/hooks/useStatus';
 import { usePlayer } from '@/hooks/usePlayer';
 import { useVolume } from '@/hooks/useVolume';
@@ -33,7 +34,7 @@ const loadingVariants = {
 };
 
 export default function Index() {
-  const { data: status, isLoading, error } = useStatus();
+  const { data: status, isLoading, error, connectionType } = useStatus();
   const { play, pause, next, prev } = usePlayer();
   const { setVolume } = useVolume();
   const { canInstall, install } = usePWAInstall();
@@ -264,31 +265,10 @@ export default function Index() {
                 temp={status?.temp ?? 0} 
               />
               
-              {/* Network Status Indicator */}
-              <motion.div
-                className={`flex items-center gap-1 px-2 py-1 rounded-full text-xs ${
-                  isOnline 
-                    ? 'bg-green-500/20 text-green-400' 
-                    : 'bg-red-500/20 text-red-400'
-                }`}
-                initial={{ opacity: 0, scale: 0.8 }}
-                animate={{ opacity: 1, scale: 1 }}
-                transition={{ type: 'spring', stiffness: 300 }}
-              >
-                {isOnline ? (
-                  <Wifi className="w-3 h-3" />
-                ) : (
-                  <motion.div
-                    animate={{ opacity: [1, 0.5, 1] }}
-                    transition={{ duration: 1, repeat: Infinity }}
-                  >
-                    <WifiOff className="w-3 h-3" />
-                  </motion.div>
-                )}
-                <span className="hidden sm:inline">
-                  {isOnline ? 'Online' : 'Offline'}
-                </span>
-              </motion.div>
+              {/* Connection Status Indicator */}
+              <ConnectionIndicator 
+                connectionType={isOnline ? (connectionType ?? 'polling') : 'disconnected'} 
+              />
             </div>
             
             <div className="flex items-center gap-2">

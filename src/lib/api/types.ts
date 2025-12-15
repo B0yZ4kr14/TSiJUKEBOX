@@ -19,9 +19,27 @@ export interface SystemStatus {
   playing: boolean;
   volume: number;
   muted: boolean;
+  shuffle: boolean;
+  repeat: 'off' | 'track' | 'context';
   /** DMX lighting control status (optional feature for kiosk environments) */
   dmx?: boolean;
   track: TrackInfo | null;
+}
+
+export interface QueueItem {
+  id: string;
+  title: string;
+  artist: string;
+  album: string;
+  cover: string | null;
+  duration: number;
+  uri?: string;
+}
+
+export interface PlaybackQueue {
+  current: QueueItem | null;
+  next: QueueItem[];
+  history: QueueItem[];
 }
 
 export interface PlaybackAction {

@@ -1,0 +1,202 @@
+import { X, Trash2, Music, GripVertical, Play } from 'lucide-react';
+import { Button } from '@/components/ui/button';
+import { ScrollArea } from '@/components/ui/scroll-area';
+import { QueueItem, PlaybackQueue } from '@/lib/api/types';
+
+interface QueuePanelProps {
+  isOpen: boolean;
+  onClose: () => void;
+  queue: PlaybackQueue | null;
+  onPlayItem: (uri: string) => void;
+  onRemoveItem: (id: string) => void;
+  onClearQueue: () => void;
+  isLoading?: boolean;
+}
+
+function QueueTrackItem({ 
+  item, 
+  onPlay, 
+  onRemove,
+  showPlay = true,
+}: { 
+  item: QueueItem; 
+  onPlay?: () => void; 
+  onRemove?: () => void;
+  showPlay?: boolean;
+}) {
+  return (
+    <div className="group flex items-center gap-3 p-2 rounded-lg hover:bg-kiosk-surface/50 transition-colors">
+      {/* Drag handle */}
+      <GripVertical className="w-4 h-4 text-kiosk-text/20 opacity-0 group-hover:opacity-100 cursor-grab" />
+      
+      {/* Cover */}
+      <div className="w-10 h-10 rounded bg-kiosk-surface flex-shrink-0 overflow-hidden">
+        {item.cover ? (
+          <img src={item.cover} alt={item.album} className="w-full h-full object-cover" />
+        ) : (
+          <div className="w-full h-full flex items-center justify-center">
+            <Music className="w-5 h-5 text-kiosk-text/30" />
+          </div>
+        )}
+      </div>
+      
+      {/* Info */}
+      <div className="flex-1 min-w-0">
+        <p className="text-sm font-medium text-kiosk-text truncate">{item.title}</p>
+        <p className="text-xs text-kiosk-text/60 truncate">{item.artist}</p>
+      </div>
+      
+      {/* Actions */}
+      <div className="flex items-center gap-1 opacity-0 group-hover:opacity-100 transition-opacity">
+        {showPlay && onPlay && (
+          <Button
+            variant="ghost"
+            size="icon"
+            onClick={onPlay}
+            className="w-8 h-8 text-kiosk-text/50 hover:text-[#1DB954]"
+          >
+            <Play className="w-4 h-4" />
+          </Button>
+        )}
+        {onRemove && (
+          <Button
+            variant="ghost"
+            size="icon"
+            onClick={onRemove}
+            className="w-8 h-8 text-kiosk-text/50 hover:text-destructive"
+          >
+            <X className="w-4 h-4" />
+          </Button>
+        )}
+      </div>
+    </div>
+  );
+}
+
+export function QueuePanel({
+  isOpen,
+  onClose,
+  queue,
+  onPlayItem,
+  onRemoveItem,
+  onClearQueue,
+  isLoading,
+}: QueuePanelProps) {
+  if (!isOpen) return null;
+
+  return (
+    <div className="fixed inset-0 z-50 flex items-end justify-center md:items-center">
+      {/* Backdrop */}
+      <div 
+        className="absolute inset-0 bg-black/70 backdrop-blur-sm"
+        onClick={onClose}
+      />
+
+      {/* Panel */}
+      <div className="relative z-10 w-full max-w-md bg-kiosk-bg border border-kiosk-border rounded-t-2xl md:rounded-2xl shadow-2xl overflow-hidden max-h-[80vh] flex flex-col">
+        {/* Header */}
+        <div className="flex items-center justify-between p-4 border-b border-kiosk-border">
+          <div className="flex items-center gap-2">
+            <Music className="w-5 h-5 text-[#1DB954]" />
+            <h2 className="text-lg font-bold text-kiosk-text">Fila de Reprodução</h2>
+          </div>
+          <div className="flex items-center gap-2">
+            {queue && queue.next.length > 0 && (
+              <Button
+                variant="ghost"
+                size="sm"
+                onClick={onClearQueue}
+                className="text-kiosk-text/50 hover:text-destructive"
+              >
+                <Trash2 className="w-4 h-4 mr-1" />
+                Limpar
+              </Button>
+            )}
+            <Button
+              variant="ghost"
+              size="icon"
+              onClick={onClose}
+              className="w-8 h-8 text-kiosk-text/50 hover:text-kiosk-text"
+            >
+              <X className="w-5 h-5" />
+            </Button>
+          </div>
+        </div>
+
+        {/* Content */}
+        <ScrollArea className="flex-1">
+          <div className="p-4 space-y-4">
+            {/* Now Playing */}
+            {queue?.current && (
+              <section>
+                <h3 className="text-xs font-semibold text-kiosk-text/50 uppercase tracking-wider mb-2">
+                  Tocando Agora
+                </h3>
+                <div className="p-3 rounded-lg bg-[#1DB954]/10 border border-[#1DB954]/20">
+                  <div className="flex items-center gap-3">
+                    <div className="w-12 h-12 rounded bg-kiosk-surface overflow-hidden">
+                      {queue.current.cover ? (
+                        <img src={queue.current.cover} alt={queue.current.album} className="w-full h-full object-cover" />
+                      ) : (
+                        <div className="w-full h-full flex items-center justify-center">
+                          <Music className="w-6 h-6 text-kiosk-text/30" />
+                        </div>
+                      )}
+                    </div>
+                    <div className="flex-1 min-w-0">
+                      <p className="font-medium text-kiosk-text truncate">{queue.current.title}</p>
+                      <p className="text-sm text-kiosk-text/60 truncate">{queue.current.artist}</p>
+                    </div>
+                  </div>
+                </div>
+              </section>
+            )}
+
+            {/* Next Up */}
+            <section>
+              <h3 className="text-xs font-semibold text-kiosk-text/50 uppercase tracking-wider mb-2">
+                Próximas ({queue?.next.length || 0})
+              </h3>
+              {!queue || queue.next.length === 0 ? (
+                <div className="text-center py-8 text-kiosk-text/40">
+                  <Music className="w-8 h-8 mx-auto mb-2 opacity-50" />
+                  <p className="text-sm">A fila está vazia</p>
+                </div>
+              ) : (
+                <div className="space-y-1">
+                  {queue.next.map((item) => (
+                    <QueueTrackItem
+                      key={item.id}
+                      item={item}
+                      onPlay={() => item.uri && onPlayItem(item.uri)}
+                      onRemove={() => onRemoveItem(item.id)}
+                    />
+                  ))}
+                </div>
+              )}
+            </section>
+
+            {/* History */}
+            {queue && queue.history.length > 0 && (
+              <section>
+                <h3 className="text-xs font-semibold text-kiosk-text/50 uppercase tracking-wider mb-2">
+                  Histórico
+                </h3>
+                <div className="space-y-1 opacity-60">
+                  {queue.history.slice(0, 5).map((item) => (
+                    <QueueTrackItem
+                      key={item.id}
+                      item={item}
+                      onPlay={() => item.uri && onPlayItem(item.uri)}
+                      showPlay={true}
+                    />
+                  ))}
+                </div>
+              </section>
+            )}
+          </div>
+        </ScrollArea>
+      </div>
+    </div>
+  );
+}

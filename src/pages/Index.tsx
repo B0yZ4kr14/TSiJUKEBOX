@@ -3,6 +3,8 @@ import { Link } from 'react-router-dom';
 import { KioskLayout } from '@/components/layout/KioskLayout';
 import { NowPlaying } from '@/components/player/NowPlaying';
 import { PlayerControls } from '@/components/player/PlayerControls';
+import { PlaybackControls } from '@/components/player/PlaybackControls';
+import { QueuePanel } from '@/components/player/QueuePanel';
 import { VolumeSlider } from '@/components/player/VolumeSlider';
 import { SystemMonitor } from '@/components/player/SystemMonitor';
 import { AudioVisualizer } from '@/components/player/AudioVisualizer';
@@ -11,13 +13,14 @@ import { ProgressBar } from '@/components/player/ProgressBar';
 import { useStatus } from '@/hooks/useStatus';
 import { usePlayer } from '@/hooks/usePlayer';
 import { useVolume } from '@/hooks/useVolume';
+import { usePlaybackControls } from '@/hooks/usePlaybackControls';
 import { useTouchGestures } from '@/hooks/useTouchGestures';
 import { api } from '@/lib/api/client';
 import { usePWAInstall } from '@/hooks/usePWAInstall';
 import { useNetworkStatus } from '@/hooks/useNetworkStatus';
 import { useSettings } from '@/contexts/SettingsContext';
 import { Button } from '@/components/ui/button';
-import { Settings, Music, ChevronLeft, ChevronRight, Download, Wifi, WifiOff, Disc3 } from 'lucide-react';
+import { Settings, ChevronLeft, ChevronRight, Download, Wifi, WifiOff, Disc3, Music } from 'lucide-react';
 import { toast } from 'sonner';
 
 export default function Index() {
@@ -27,7 +30,9 @@ export default function Index() {
   const { canInstall, install } = usePWAInstall();
   const { isOnline, wasOffline } = useNetworkStatus();
   const { spotify } = useSettings();
+  const { shuffle, repeat, queue, toggleShuffle, toggleRepeat, removeFromQueue, clearQueue } = usePlaybackControls();
   const [swipeDirection, setSwipeDirection] = useState<'left' | 'right' | null>(null);
+  const [showQueue, setShowQueue] = useState(false);
 
   // Show toast on network status change
   useEffect(() => {
@@ -277,6 +282,16 @@ export default function Index() {
             />
           </div>
           
+          <div className="flex items-center gap-4">
+            <PlaybackControls
+              shuffle={shuffle}
+              repeat={repeat}
+              onShuffleToggle={toggleShuffle}
+              onRepeatToggle={toggleRepeat}
+              onQueueOpen={() => setShowQueue(true)}
+            />
+          </div>
+
           <PlayerControls isPlaying={status?.playing ?? false} />
           
           <VolumeSlider 
@@ -296,6 +311,16 @@ export default function Index() {
             TSi JUKEBOX Enterprise v4.0
           </p>
         </footer>
+
+        {/* Queue Panel */}
+        <QueuePanel
+          isOpen={showQueue}
+          onClose={() => setShowQueue(false)}
+          queue={queue}
+          onPlayItem={(uri) => api.playSpotifyUri(uri)}
+          onRemoveItem={removeFromQueue}
+          onClearQueue={clearQueue}
+        />
       </div>
     </KioskLayout>
   );

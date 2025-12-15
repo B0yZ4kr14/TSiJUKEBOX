@@ -138,6 +138,8 @@ export function useMockStatus(isDemoMode: boolean) {
     playing: true,
     volume: 75,
     muted: false,
+    shuffle: false,
+    repeat: 'off',
     dmx: false,
     track: mockTracks[0],
   }));

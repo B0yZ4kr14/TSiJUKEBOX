@@ -4,7 +4,8 @@ import type {
   VolumeControl, 
   Track, 
   LogEntry, 
-  Feedback 
+  Feedback,
+  PlaybackQueue,
 } from './types';
 
 /**
@@ -235,6 +236,49 @@ class ApiClient {
     return this.request('/play/uri', {
       method: 'POST',
       body: JSON.stringify({ uri }),
+    });
+  }
+
+  // Shuffle control via playerctl
+  async setShuffle(enabled: boolean): Promise<{ success: boolean }> {
+    return this.request('/player/shuffle', {
+      method: 'POST',
+      body: JSON.stringify({ enabled }),
+    });
+  }
+
+  // Repeat control via playerctl
+  async setRepeat(mode: 'off' | 'track' | 'context'): Promise<{ success: boolean }> {
+    return this.request('/player/repeat', {
+      method: 'POST',
+      body: JSON.stringify({ mode }),
+    });
+  }
+
+  // Get playback queue
+  async getQueue(): Promise<PlaybackQueue> {
+    return this.request<PlaybackQueue>('/player/queue');
+  }
+
+  // Add track to queue
+  async addToQueue(uri: string): Promise<{ success: boolean }> {
+    return this.request('/player/queue', {
+      method: 'POST',
+      body: JSON.stringify({ uri }),
+    });
+  }
+
+  // Remove track from queue
+  async removeFromQueue(id: string): Promise<{ success: boolean }> {
+    return this.request(`/player/queue/${id}`, {
+      method: 'DELETE',
+    });
+  }
+
+  // Clear queue
+  async clearQueue(): Promise<{ success: boolean }> {
+    return this.request('/player/queue', {
+      method: 'DELETE',
     });
   }
 }

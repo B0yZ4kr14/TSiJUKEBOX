@@ -281,6 +281,58 @@ class ApiClient {
       method: 'DELETE',
     });
   }
+
+  // Reorder queue
+  async reorderQueue(trackId: string, fromIndex: number, toIndex: number): Promise<{ success: boolean }> {
+    return this.request('/player/queue/reorder', {
+      method: 'POST',
+      body: JSON.stringify({ trackId, fromIndex, toIndex }),
+    });
+  }
+
+  // System endpoints
+  async reloadServices(): Promise<{ success: boolean }> {
+    return this.request('/system/reload', { method: 'POST' });
+  }
+
+  async rebootSystem(): Promise<{ success: boolean }> {
+    return this.request('/system/reboot', { method: 'POST' });
+  }
+
+  // Backup schedule
+  async getBackupSchedule(): Promise<{ enabled: boolean; frequency: string; time: string; retention: number }> {
+    return this.request('/backup/schedule');
+  }
+
+  async setBackupSchedule(schedule: { enabled: boolean; frequency: string; time: string; retention: number }): Promise<{ success: boolean }> {
+    return this.request('/backup/schedule', {
+      method: 'POST',
+      body: JSON.stringify(schedule),
+    });
+  }
+
+  // User management (for local SQLite backend)
+  async getUsers(): Promise<{ id: string; username: string; role: string; createdAt: string }[]> {
+    return this.request('/users');
+  }
+
+  async createUser(user: { username: string; password: string; role: string }): Promise<{ success: boolean; id: string }> {
+    return this.request('/users', {
+      method: 'POST',
+      body: JSON.stringify(user),
+    });
+  }
+
+  async updateUser(id: string, updates: { role?: string; password?: string }): Promise<{ success: boolean }> {
+    return this.request(`/users/${id}`, {
+      method: 'PUT',
+      body: JSON.stringify(updates),
+    });
+  }
+
+  async deleteUser(id: string): Promise<{ success: boolean }> {
+    return this.request(`/users/${id}`, { method: 'DELETE' });
+  }
 }
 
 export const api = new ApiClient(API_BASE_URL);

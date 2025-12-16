@@ -1,4 +1,4 @@
-import { Disc3 } from 'lucide-react';
+import { Music } from 'lucide-react';
 import { motion, AnimatePresence } from 'framer-motion';
 import type { TrackInfo } from '@/lib/api/types';
 import { cn } from '@/lib/utils';
@@ -11,54 +11,41 @@ interface NowPlayingProps {
 export function NowPlaying({ track, isPlaying }: NowPlayingProps) {
   return (
     <div className="flex flex-col items-center gap-6">
-      {/* Album Cover with Vinyl Effect */}
+      {/* Album Cover - Static with subtle effects */}
       <div className="relative">
         {/* Outer glow when playing */}
         <motion.div
-          className="absolute -inset-4 rounded-full bg-kiosk-primary/20 blur-xl"
+          className="absolute -inset-6 rounded-2xl bg-kiosk-primary/20 blur-2xl"
           animate={{
-            opacity: isPlaying ? [0.3, 0.5, 0.3] : 0,
-            scale: isPlaying ? [1, 1.05, 1] : 1,
+            opacity: isPlaying ? [0.2, 0.4, 0.2] : 0.1,
+            scale: isPlaying ? [1, 1.02, 1] : 1,
           }}
           transition={{
-            duration: 2,
+            duration: 3,
             repeat: Infinity,
             ease: 'easeInOut',
           }}
         />
 
-        {/* Vinyl disc background */}
-        <motion.div
-          className="absolute inset-0 rounded-full"
-          style={{
-            background: 'repeating-radial-gradient(circle at center, transparent 0px, transparent 2px, rgba(255,255,255,0.03) 3px, transparent 4px)',
-          }}
-          animate={{
-            rotate: isPlaying ? 360 : 0,
-          }}
-          transition={{
-            duration: 8,
-            repeat: Infinity,
-            ease: 'linear',
-          }}
-        />
+        {/* Shadow layer for depth */}
+        <div className="absolute -inset-2 rounded-2xl bg-black/40 blur-xl" />
 
-        {/* Main album cover */}
+        {/* Main album cover - NO ROTATION */}
         <motion.div 
           className={cn(
-            "w-72 h-72 md:w-80 md:h-80 rounded-full overflow-hidden",
-            "bg-kiosk-surface border-4 border-kiosk-surface/50",
-            "shadow-2xl shadow-black/50",
-            "flex items-center justify-center relative z-10"
+            "w-72 h-72 md:w-80 md:h-80 rounded-2xl overflow-hidden relative z-10",
+            "bg-kiosk-surface border border-white/10",
+            "shadow-2xl shadow-black/60"
           )}
-          animate={{
-            rotate: isPlaying ? 360 : 0,
+          initial={{ scale: 0.95, opacity: 0 }}
+          animate={{ 
+            scale: 1, 
+            opacity: 1,
+            boxShadow: isPlaying 
+              ? '0 25px 50px -12px rgba(0, 0, 0, 0.7), 0 0 60px -15px hsl(var(--kiosk-primary) / 0.3)'
+              : '0 25px 50px -12px rgba(0, 0, 0, 0.5)'
           }}
-          transition={{
-            duration: 8,
-            repeat: Infinity,
-            ease: 'linear',
-          }}
+          transition={{ duration: 0.5 }}
         >
           <AnimatePresence mode="wait">
             {track?.cover ? (
@@ -69,8 +56,8 @@ export function NowPlaying({ track, isPlaying }: NowPlayingProps) {
                 className="w-full h-full object-cover"
                 initial={{ opacity: 0, scale: 1.1 }}
                 animate={{ opacity: 1, scale: 1 }}
-                exit={{ opacity: 0, scale: 0.9 }}
-                transition={{ duration: 0.5 }}
+                exit={{ opacity: 0, scale: 0.95 }}
+                transition={{ duration: 0.4 }}
               />
             ) : (
               <motion.div 
@@ -80,36 +67,33 @@ export function NowPlaying({ track, isPlaying }: NowPlayingProps) {
                 animate={{ opacity: 1 }}
                 exit={{ opacity: 0 }}
               >
-                <Disc3 className="w-32 h-32 text-kiosk-primary/50" />
+                <Music className="w-24 h-24 text-kiosk-primary/40" />
               </motion.div>
             )}
           </AnimatePresence>
-        </motion.div>
-        
-        {/* Center hole effect */}
-        <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-16 h-16 rounded-full bg-kiosk-bg border-4 border-kiosk-surface/30 z-20 shadow-inner" />
-        
-        {/* Center dot */}
-        <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-3 h-3 rounded-full bg-kiosk-primary z-20" />
 
-        {/* Playing pulse ring */}
+          {/* Subtle overlay gradient for depth */}
+          <div className="absolute inset-0 bg-gradient-to-t from-black/20 via-transparent to-white/5 pointer-events-none" />
+        </motion.div>
+
+        {/* Playing indicator - subtle pulse at corner */}
         {isPlaying && (
           <motion.div
-            className="absolute inset-0 rounded-full border-2 border-kiosk-primary/30"
+            className="absolute -bottom-2 -right-2 w-4 h-4 rounded-full bg-kiosk-primary z-20"
             animate={{
-              scale: [1, 1.15],
-              opacity: [0.5, 0],
+              scale: [1, 1.2, 1],
+              opacity: [0.8, 1, 0.8],
             }}
             transition={{
               duration: 1.5,
               repeat: Infinity,
-              ease: 'easeOut',
+              ease: 'easeInOut',
             }}
           />
         )}
       </div>
 
-      {/* Track Info with animations */}
+      {/* Track Info */}
       <div className="text-center space-y-2 max-w-md">
         <AnimatePresence mode="wait">
           <motion.h2 

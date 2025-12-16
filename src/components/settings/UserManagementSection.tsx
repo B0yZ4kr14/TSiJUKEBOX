@@ -168,10 +168,10 @@ export function UserManagementSection() {
           {users.map((user) => (
             <div
               key={user.id}
-              className="flex items-center justify-between p-3 rounded-lg bg-background/50 border border-border/50 card-option-neon"
+              className="flex items-center justify-between p-3 rounded-lg card-option-dark-3d"
             >
               <div className="flex items-center gap-3">
-                <div className="w-8 h-8 rounded-full bg-muted flex items-center justify-center">
+                <div className="w-8 h-8 rounded-full avatar-neon-glow flex items-center justify-center">
                   <span className="text-sm font-medium">
                     {user.username.charAt(0).toUpperCase()}
                   </span>
@@ -187,19 +187,17 @@ export function UserManagementSection() {
                   </Badge>
                 </div>
               </div>
-              <div className="flex gap-1">
+              <div className="flex gap-2">
                 <Button
-                  variant="ghost"
                   size="icon"
-                  className="h-8 w-8"
+                  className="h-8 w-8 button-action-neon"
                   onClick={() => openEditDialog(user)}
                 >
                   <Edit2 className="w-4 h-4" />
                 </Button>
                 <Button
-                  variant="ghost"
                   size="icon"
-                  className="h-8 w-8 text-destructive hover:text-destructive"
+                  className="h-8 w-8 button-destructive-neon"
                   onClick={() => openDeleteDialog(user)}
                 >
                   <Trash2 className="w-4 h-4" />
@@ -211,8 +209,7 @@ export function UserManagementSection() {
 
         {/* Add User Button */}
         <Button
-          variant="outline"
-          className="w-full"
+          className="w-full button-primary-glow-3d"
           onClick={() => {
             setFormData({ username: '', password: '', role: 'user' });
             setShowAddDialog(true);
@@ -223,7 +220,7 @@ export function UserManagementSection() {
         </Button>
 
         {/* Role Legend */}
-        <div className="p-3 rounded-lg bg-muted/30 card-option-neon space-y-2">
+        <div className="p-3 rounded-lg card-option-dark-3d space-y-2">
           <p className="text-xs font-medium text-label-yellow">{t('users.permissionLevels')}:</p>
           {Object.entries(roleDescriptions).map(([role, desc]) => (
             <div key={role} className="flex items-start gap-2">

@@ -63,7 +63,7 @@ export function DatabaseConfigSection({ isDemoMode = false }: DatabaseConfigSect
     <SettingsSection
       title="Banco de Dados"
       description="Configure a conexão com o banco de dados SQLite"
-      icon={<Database className="w-5 h-5" />}
+      icon={<Database className="w-5 h-5 icon-neon-blue" />}
     >
       <div className="space-y-6">
         <RadioGroup
@@ -72,12 +72,12 @@ export function DatabaseConfigSection({ isDemoMode = false }: DatabaseConfigSect
           className="grid grid-cols-1 gap-3"
         >
           {/* SQLite Local */}
-          <div className={`flex items-center space-x-3 rounded-lg border p-4 cursor-pointer transition-colors ${
-            config.type === 'sqlite-local' ? 'border-primary bg-primary/5' : 'border-border hover:border-primary/50'
+          <div className={`flex items-center space-x-3 rounded-lg p-4 cursor-pointer transition-all ${
+            config.type === 'sqlite-local' ? 'card-option-selected-3d' : 'card-option-dark-3d'
           }`}>
             <RadioGroupItem value="sqlite-local" id="sqlite-local" />
             <Label htmlFor="sqlite-local" className="flex items-center gap-3 cursor-pointer flex-1">
-              <HardDrive className="w-5 h-5 text-kiosk-text/80" />
+              <HardDrive className="w-5 h-5 icon-neon-blue" />
               <div>
                 <p className="font-medium text-kiosk-text">SQLite Local</p>
                 <p className="text-sm text-kiosk-text/75">Arquivo no servidor local</p>
@@ -86,12 +86,12 @@ export function DatabaseConfigSection({ isDemoMode = false }: DatabaseConfigSect
           </div>
 
           {/* SQLite Remote */}
-          <div className={`flex items-center space-x-3 rounded-lg border p-4 cursor-pointer transition-colors ${
-            config.type === 'sqlite-remote' ? 'border-primary bg-primary/5' : 'border-border hover:border-primary/50'
+          <div className={`flex items-center space-x-3 rounded-lg p-4 cursor-pointer transition-all ${
+            config.type === 'sqlite-remote' ? 'card-option-selected-3d' : 'card-option-dark-3d'
           }`}>
             <RadioGroupItem value="sqlite-remote" id="sqlite-remote" />
             <Label htmlFor="sqlite-remote" className="flex items-center gap-3 cursor-pointer flex-1">
-              <Server className="w-5 h-5 text-kiosk-text/80" />
+              <Server className="w-5 h-5 icon-neon-blue" />
               <div>
                 <p className="font-medium text-kiosk-text">SQLite Remoto</p>
                 <p className="text-sm text-kiosk-text/75">Arquivo em servidor externo via SSH</p>
@@ -100,12 +100,12 @@ export function DatabaseConfigSection({ isDemoMode = false }: DatabaseConfigSect
           </div>
 
           {/* Lovable Cloud */}
-          <div className={`flex items-center space-x-3 rounded-lg border p-4 cursor-pointer transition-colors ${
-            config.type === 'lovable-cloud' ? 'border-primary bg-primary/5' : 'border-border hover:border-primary/50'
+          <div className={`flex items-center space-x-3 rounded-lg p-4 cursor-pointer transition-all ${
+            config.type === 'lovable-cloud' ? 'card-option-selected-3d' : 'card-option-dark-3d'
           }`}>
             <RadioGroupItem value="lovable-cloud" id="lovable-cloud" />
             <Label htmlFor="lovable-cloud" className="flex items-center gap-3 cursor-pointer flex-1">
-              <Cloud className="w-5 h-5 text-kiosk-text/80" />
+              <Cloud className="w-5 h-5 icon-neon-blue" />
               <div>
                 <p className="font-medium text-kiosk-text">Lovable Cloud</p>
                 <p className="text-sm text-kiosk-text/75">Banco de dados gerenciado na nuvem</p>
@@ -215,7 +215,7 @@ export function DatabaseConfigSection({ isDemoMode = false }: DatabaseConfigSect
           <Button 
             onClick={handleSave} 
             disabled={isSaving || isDemoMode}
-            className="w-full"
+            className="w-full button-primary-glow-3d"
           >
             <Save className="w-4 h-4 mr-2" />
             {isSaving ? 'Salvando...' : 'Salvar Configuração'}

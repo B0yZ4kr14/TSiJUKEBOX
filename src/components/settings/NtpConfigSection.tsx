@@ -170,7 +170,7 @@ export function NtpConfigSection() {
         )}
 
         {/* Status Info */}
-        <div className="p-3 rounded-lg bg-background/30 border border-border/50 card-option-neon space-y-2">
+        <div className="p-3 rounded-lg card-option-dark-3d space-y-2">
           <div className="flex items-center justify-between text-sm">
             <span className="text-label-orange">{t('ntp.activeServer')}:</span>
             <span className="font-mono text-kiosk-text">{getActiveServer() || t('ntp.notConfigured')}</span>
@@ -203,7 +203,7 @@ export function NtpConfigSection() {
         <Button
           onClick={handleSync}
           disabled={isSyncing || (!getActiveServer())}
-          className="w-full bg-cyan-500/20 hover:bg-cyan-500/30 text-cyan-400 border border-cyan-500/30"
+          className="w-full button-primary-glow-3d"
         >
           <RefreshCw className={`w-4 h-4 mr-2 ${isSyncing ? 'animate-spin' : ''}`} />
           {isSyncing ? t('ntp.syncing') : t('ntp.syncNow')}

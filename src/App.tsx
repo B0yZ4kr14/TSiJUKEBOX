@@ -11,6 +11,8 @@ import Auth from "./pages/Auth";
 import Install from "./pages/Install";
 import Settings from "./pages/Settings";
 import ThemePreview from "./pages/ThemePreview";
+import SetupWizard from "./pages/SetupWizard";
+import Help from "./pages/Help";
 import Dashboard from "./pages/Dashboard";
 import Admin from "./pages/Admin";
 import AdminLibrary from "./pages/AdminLibrary";
@@ -45,6 +47,8 @@ const App = () => (
               <Route path="/auth" element={<Auth />} />
               <Route path="/login" element={<Navigate to="/auth" replace />} />
               <Route path="/install" element={<Install />} />
+              <Route path="/setup" element={<SetupWizard />} />
+              <Route path="/help" element={<Help />} />
               <Route path="/settings" element={
                 <ProtectedRoute requiredPermission="canAccessSettings">
                   <Settings />

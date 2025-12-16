@@ -80,11 +80,28 @@ export function WeatherConfigSection() {
     toast.success(enabled ? t('weatherConfig.widgetEnabled') : t('weatherConfig.widgetDisabled'));
   };
 
+  const instructions = {
+    title: "🌤️ Como funciona o Widget de Clima?",
+    steps: [
+      "O widget mostra a temperatura e condições do tempo na sua cidade em tempo real.",
+      "Ele usa o serviço OpenWeatherMap, que é gratuito para uso básico (1000 consultas/dia).",
+      "Você precisa criar uma conta gratuita e obter uma 'chave de API' (é como uma senha de acesso).",
+      "A cidade pode ser digitada como 'São Paulo, BR' ou 'Montes Claros, MG, Brazil'."
+    ],
+    tips: [
+      "💡 O widget atualiza automaticamente a cada 30 minutos",
+      "💡 Use o botão 'Testar' para verificar se está funcionando",
+      "💡 Se der erro 401, a chave de API está incorreta"
+    ],
+    warning: "⚠️ A chave de API é pessoal - não compartilhe com ninguém!"
+  };
+
   return (
     <SettingsSection
       icon={<Cloud className="w-5 h-5 icon-neon-blue" />}
       title={t('weatherConfig.title')}
       description={t('weatherConfig.description')}
+      instructions={instructions}
       badge={
         weather.isEnabled && testWeather ? (
           <Badge variant="outline" className="ml-2 border-cyan-400 text-cyan-400">

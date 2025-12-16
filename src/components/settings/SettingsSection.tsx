@@ -37,8 +37,8 @@ export function SettingsSection({
           onClick={() => setIsOpen(!isOpen)}
         >
           <div className="flex items-center justify-between">
-            <CardTitle className="flex items-center gap-2 text-gold-neon">
-              {icon}
+            <CardTitle className="flex items-center gap-2 text-gold-neon-hover">
+              <span className="icon-neon-blue-hover">{icon}</span>
               {title}
               {badge}
             </CardTitle>

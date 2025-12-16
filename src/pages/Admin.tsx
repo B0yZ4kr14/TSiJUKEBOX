@@ -19,11 +19,11 @@ function StatCard({
   return (
     <Card>
       <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-        <CardTitle className="text-sm font-medium">{title}</CardTitle>
+        <CardTitle className="text-sm font-medium text-label-yellow">{title}</CardTitle>
         <Icon className={cn(
-          "h-4 w-4",
-          status === 'good' && "text-green-500",
-          status === 'warning' && "text-yellow-500",
+          "h-4 w-4 icon-neon-blue",
+          status === 'good' && "text-green-400",
+          status === 'warning' && "text-yellow-400",
           status === 'danger' && "text-destructive"
         )} />
       </CardHeader>
@@ -48,8 +48,8 @@ export default function Admin() {
     <AdminLayout>
       <div className="space-y-6">
         <div>
-          <h2 className="text-3xl font-bold tracking-tight">Dashboard</h2>
-          <p className="text-muted-foreground">Visão geral do sistema TSi JUKEBOX</p>
+          <h2 className="text-3xl font-bold tracking-tight text-gold-neon">Dashboard</h2>
+          <p className="text-kiosk-text/70">Visão geral do sistema TSi JUKEBOX</p>
         </div>
 
         {/* Stats Grid */}
@@ -83,8 +83,8 @@ export default function Admin() {
         {/* Current Track */}
         <Card>
           <CardHeader>
-            <CardTitle className="flex items-center gap-2">
-              <Music className="h-5 w-5" />
+            <CardTitle className="flex items-center gap-2 text-gold-neon">
+              <Music className="h-5 w-5 icon-neon-blue" />
               Faixa Atual
             </CardTitle>
           </CardHeader>
@@ -99,7 +99,7 @@ export default function Admin() {
                   />
                 ) : (
                   <div className="w-16 h-16 rounded-md bg-muted flex items-center justify-center">
-                    <Music className="w-8 h-8 text-muted-foreground" />
+                    <Music className="w-8 h-8 icon-neon-blue" />
                   </div>
                 )}
                 <div>
@@ -119,8 +119,8 @@ export default function Admin() {
         {/* Recent Logs */}
         <Card>
           <CardHeader>
-            <CardTitle className="flex items-center gap-2">
-              <AlertCircle className="h-5 w-5" />
+            <CardTitle className="flex items-center gap-2 text-gold-neon">
+              <AlertCircle className="h-5 w-5 icon-neon-blue" />
               Logs Recentes
             </CardTitle>
             <CardDescription>Últimas 10 entradas do sistema</CardDescription>

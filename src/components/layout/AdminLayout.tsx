@@ -38,8 +38,8 @@ export function AdminLayout({ children }: AdminLayoutProps) {
       {/* Sidebar */}
       <aside className="fixed left-0 top-0 h-full w-64 bg-sidebar border-r border-sidebar-border">
         <div className="p-4 border-b border-sidebar-border">
-          <h1 className="text-xl font-bold text-sidebar-foreground">TSi JUKEBOX</h1>
-          <p className="text-sm text-muted-foreground">Painel Admin</p>
+          <h1 className="text-xl font-bold text-gold-neon">TSi JUKEBOX</h1>
+          <p className="text-sm text-kiosk-text/70">Painel Admin</p>
         </div>
         
         <nav className="p-2 space-y-1">
@@ -50,11 +50,11 @@ export function AdminLayout({ children }: AdminLayoutProps) {
               className={cn(
                 'flex items-center gap-3 px-3 py-2 rounded-md text-sm transition-colors',
                 pathname === item.href
-                  ? 'bg-sidebar-accent text-sidebar-accent-foreground'
+                  ? 'bg-sidebar-accent text-gold-neon'
                   : 'text-sidebar-foreground hover:bg-sidebar-accent/50'
               )}
             >
-              <item.icon className="w-4 h-4" />
+              <item.icon className={cn("w-4 h-4", pathname === item.href && "icon-neon-blue")} />
               {item.label}
             </Link>
           ))}

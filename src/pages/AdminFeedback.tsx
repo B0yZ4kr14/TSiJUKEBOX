@@ -14,26 +14,26 @@ export default function AdminFeedback() {
     <AdminLayout>
       <div className="space-y-6">
         <div>
-          <h2 className="text-3xl font-bold tracking-tight">Feedback</h2>
-          <p className="text-muted-foreground">Visualize as avaliações dos usuários</p>
+          <h2 className="text-3xl font-bold tracking-tight text-gold-neon">Feedback</h2>
+          <p className="text-kiosk-text/70">Visualize as avaliações dos usuários</p>
         </div>
 
         <Card>
           <CardHeader>
-            <CardTitle>Avaliações Recebidas</CardTitle>
-            <CardDescription>
+            <CardTitle className="text-gold-neon">Avaliações Recebidas</CardTitle>
+            <CardDescription className="text-kiosk-text/70">
               {feedbacks?.length ?? 0} feedbacks registrados
             </CardDescription>
           </CardHeader>
           <CardContent>
             {isLoading ? (
               <div className="flex items-center justify-center py-8">
-                <Loader2 className="w-8 h-8 animate-spin text-muted-foreground" />
+                <Loader2 className="w-8 h-8 animate-spin icon-neon-blue" />
               </div>
             ) : !feedbacks || feedbacks.length === 0 ? (
               <div className="flex flex-col items-center justify-center py-8 text-center">
-                <MessageSquare className="w-12 h-12 text-muted-foreground mb-4" />
-                <p className="text-muted-foreground">Nenhum feedback recebido</p>
+                <MessageSquare className="w-12 h-12 icon-neon-blue mb-4" />
+                <p className="text-kiosk-text/70">Nenhum feedback recebido</p>
               </div>
             ) : (
               <div className="space-y-4">

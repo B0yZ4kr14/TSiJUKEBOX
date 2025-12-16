@@ -53,8 +53,8 @@ export default function AdminLibrary() {
     <AdminLayout>
       <div className="space-y-6">
         <div>
-          <h2 className="text-3xl font-bold tracking-tight">Biblioteca</h2>
-          <p className="text-muted-foreground">Gerencie suas faixas de áudio</p>
+          <h2 className="text-3xl font-bold tracking-tight text-gold-neon">Biblioteca</h2>
+          <p className="text-kiosk-text/70">Gerencie suas faixas de áudio</p>
         </div>
 
         {/* Upload Area */}
@@ -71,12 +71,12 @@ export default function AdminLibrary() {
             <div className="flex flex-col items-center justify-center py-8 text-center">
               {isUploading ? (
                 <>
-                  <Loader2 className="w-10 h-10 text-primary animate-spin mb-4" />
-                  <p className="text-sm text-muted-foreground">Enviando arquivos...</p>
+                  <Loader2 className="w-10 h-10 icon-neon-blue animate-spin mb-4" />
+                  <p className="text-sm text-kiosk-text/70">Enviando arquivos...</p>
                 </>
               ) : (
                 <>
-                  <Upload className="w-10 h-10 text-muted-foreground mb-4" />
+                  <Upload className="w-10 h-10 icon-neon-blue mb-4" />
                   <p className="text-sm font-medium mb-1">
                     Arraste arquivos MP3 aqui ou
                   </p>
@@ -106,8 +106,8 @@ export default function AdminLibrary() {
           <CardHeader>
             <div className="flex items-center justify-between">
               <div>
-                <CardTitle>Faixas ({tracks.length})</CardTitle>
-                <CardDescription>Lista de todas as músicas disponíveis</CardDescription>
+                <CardTitle className="text-gold-neon">Faixas ({tracks.length})</CardTitle>
+                <CardDescription className="text-kiosk-text/70">Lista de todas as músicas disponíveis</CardDescription>
               </div>
               <div className="relative">
                 <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-muted-foreground" />
@@ -123,12 +123,12 @@ export default function AdminLibrary() {
           <CardContent>
             {isLoading ? (
               <div className="flex items-center justify-center py-8">
-                <Loader2 className="w-8 h-8 animate-spin text-muted-foreground" />
+                <Loader2 className="w-8 h-8 animate-spin icon-neon-blue" />
               </div>
             ) : filteredTracks.length === 0 ? (
               <div className="flex flex-col items-center justify-center py-8 text-center">
-                <Music className="w-12 h-12 text-muted-foreground mb-4" />
-                <p className="text-muted-foreground">
+                <Music className="w-12 h-12 icon-neon-blue mb-4" />
+                <p className="text-kiosk-text/70">
                   {search ? 'Nenhuma faixa encontrada' : 'Biblioteca vazia'}
                 </p>
               </div>

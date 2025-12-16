@@ -112,26 +112,26 @@ export default function Dashboard() {
             <ArrowLeft className="w-5 h-5" />
           </Button>
           <div>
-            <h1 className="text-2xl font-bold flex items-center gap-2">
-              <BarChart3 className="w-6 h-6 text-kiosk-primary" />
+            <h1 className="text-2xl font-bold flex items-center gap-2 text-gold-neon">
+              <BarChart3 className="w-6 h-6 icon-neon-blue" />
               {t('dashboard.title')}
             </h1>
-            <p className="text-sm text-kiosk-text/60">Estatísticas e monitoramento do sistema</p>
+            <p className="text-sm text-kiosk-text/70">Estatísticas e monitoramento do sistema</p>
           </div>
         </div>
         
         {/* Live Stats */}
         <div className="flex items-center gap-4">
           <div className="flex items-center gap-2 px-4 py-2 rounded-xl badge-3d">
-            <Cpu className="w-4 h-4 text-cyan-400" />
+            <Cpu className="w-4 h-4 icon-neon-blue" />
             <span className="font-mono font-bold">{status?.cpu || 0}%</span>
           </div>
           <div className="flex items-center gap-2 px-4 py-2 rounded-xl badge-3d">
-            <HardDrive className="w-4 h-4 text-purple-400" />
+            <HardDrive className="w-4 h-4 icon-neon-blue" />
             <span className="font-mono font-bold">{status?.memory || 0}%</span>
           </div>
           <div className="flex items-center gap-2 px-4 py-2 rounded-xl badge-3d">
-            <Thermometer className="w-4 h-4 text-orange-400" />
+            <Thermometer className="w-4 h-4 icon-neon-blue" />
             <span className="font-mono font-bold">{status?.temp || 0}°C</span>
           </div>
         </div>
@@ -148,8 +148,8 @@ export default function Dashboard() {
         >
           <Card className="card-settings-3d h-full">
             <CardHeader className="pb-2">
-              <CardTitle className="text-lg flex items-center gap-2 text-kiosk-text">
-                <Activity className="w-5 h-5 text-kiosk-primary" />
+              <CardTitle className="text-lg flex items-center gap-2 text-gold-neon">
+                <Activity className="w-5 h-5 icon-neon-blue" />
                 {t('dashboard.systemUsage')} - {t('dashboard.last24h')}
               </CardTitle>
             </CardHeader>
@@ -207,8 +207,8 @@ export default function Dashboard() {
         >
           <Card className="card-settings-3d h-full">
             <CardHeader className="pb-2">
-              <CardTitle className="text-lg flex items-center gap-2 text-kiosk-text">
-                <PieChartIcon className="w-5 h-5 text-kiosk-primary" />
+              <CardTitle className="text-lg flex items-center gap-2 text-gold-neon">
+                <PieChartIcon className="w-5 h-5 icon-neon-blue" />
                 {t('dashboard.genres')}
               </CardTitle>
             </CardHeader>
@@ -254,8 +254,8 @@ export default function Dashboard() {
         >
           <Card className="card-settings-3d h-full">
             <CardHeader className="pb-2">
-              <CardTitle className="text-lg flex items-center gap-2 text-kiosk-text">
-                <Music2 className="w-5 h-5 text-kiosk-primary" />
+              <CardTitle className="text-lg flex items-center gap-2 text-gold-neon">
+                <Music2 className="w-5 h-5 icon-neon-blue" />
                 {t('dashboard.playbackStats')} - {t('dashboard.last7days')}
               </CardTitle>
             </CardHeader>
@@ -283,8 +283,8 @@ export default function Dashboard() {
         >
           <Card className="card-settings-3d h-full">
             <CardHeader className="pb-2">
-              <CardTitle className="text-lg flex items-center gap-2 text-kiosk-text">
-                <Clock className="w-5 h-5 text-kiosk-primary" />
+              <CardTitle className="text-lg flex items-center gap-2 text-gold-neon">
+                <Clock className="w-5 h-5 icon-neon-blue" />
                 {t('dashboard.activity')} por Hora
               </CardTitle>
             </CardHeader>
@@ -319,8 +319,8 @@ export default function Dashboard() {
         >
           <Card className="card-settings-3d">
             <CardHeader className="pb-2">
-              <CardTitle className="text-lg flex items-center gap-2 text-kiosk-text">
-                <TrendingUp className="w-5 h-5 text-kiosk-primary" />
+              <CardTitle className="text-lg flex items-center gap-2 text-gold-neon">
+                <TrendingUp className="w-5 h-5 icon-neon-blue" />
                 {t('dashboard.topTracks')} - {t('dashboard.thisMonth')}
               </CardTitle>
             </CardHeader>

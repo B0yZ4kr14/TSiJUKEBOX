@@ -13,13 +13,16 @@ import {
   Key,
   HelpCircle,
   ChevronRight,
-  ExternalLink
+  ExternalLink,
+  RotateCcw
 } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { ScrollArea } from '@/components/ui/scroll-area';
 import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from '@/components/ui/accordion';
 import { LogoBrand } from '@/components/ui/LogoBrand';
+import { resetTour } from '@/components/tour/GuidedTour';
+import { toast } from 'sonner';
 
 interface HelpSection {
   id: string;
@@ -40,7 +43,7 @@ const helpSections: HelpSection[] = [
   {
     id: 'getting-started',
     title: 'Primeiros Passos',
-    icon: <Book className="w-5 h-5" />,
+    icon: <Book className="w-5 h-5 icon-neon-blue" />,
     items: [
       {
         id: 'what-is',
@@ -70,7 +73,7 @@ const helpSections: HelpSection[] = [
   {
     id: 'settings',
     title: 'Configurações',
-    icon: <Settings className="w-5 h-5" />,
+    icon: <Settings className="w-5 h-5 icon-neon-blue" />,
     items: [
       {
         id: 'theme',
@@ -110,7 +113,7 @@ const helpSections: HelpSection[] = [
   {
     id: 'spotify',
     title: 'Spotify',
-    icon: <Music className="w-5 h-5" />,
+    icon: <Music className="w-5 h-5 icon-neon-blue" />,
     items: [
       {
         id: 'connect-spotify',
@@ -136,7 +139,7 @@ const helpSections: HelpSection[] = [
   {
     id: 'database',
     title: 'Banco de Dados',
-    icon: <Database className="w-5 h-5" />,
+    icon: <Database className="w-5 h-5 icon-neon-blue" />,
     items: [
       {
         id: 'what-is-db',
@@ -159,7 +162,7 @@ const helpSections: HelpSection[] = [
   {
     id: 'security',
     title: 'Segurança',
-    icon: <Shield className="w-5 h-5" />,
+    icon: <Shield className="w-5 h-5 icon-neon-blue" />,
     items: [
       {
         id: 'ssh-keys',
@@ -186,7 +189,7 @@ const helpSections: HelpSection[] = [
   {
     id: 'cloud',
     title: 'Nuvem e Backup',
-    icon: <Cloud className="w-5 h-5" />,
+    icon: <Cloud className="w-5 h-5 icon-neon-blue" />,
     items: [
       {
         id: 'cloud-backup',
@@ -249,11 +252,25 @@ export default function Help() {
               <ArrowLeft className="w-5 h-5" />
             </Button>
             <div className="flex items-center gap-3">
-              <HelpCircle className="w-6 h-6 text-primary" />
+              <HelpCircle className="w-6 h-6 icon-neon-blue" />
               <h1 className="text-xl font-bold text-kiosk-text">Manual & FAQ</h1>
             </div>
           </div>
-          <LogoBrand size="sm" />
+          <div className="flex items-center gap-3">
+            <Button
+              onClick={() => {
+                resetTour();
+                navigate('/');
+                toast.success('Tour reiniciado! Aproveite o passeio guiado.');
+              }}
+              variant="outline"
+              className="button-outline-neon"
+            >
+              <RotateCcw className="w-4 h-4 mr-2 icon-neon-blue" />
+              Reiniciar Tour
+            </Button>
+            <LogoBrand size="sm" />
+          </div>
         </div>
       </div>
 
@@ -354,8 +371,8 @@ export default function Help() {
                   </Accordion>
                 </motion.div>
               ) : (
-                <div className="text-center py-12">
-                  <HelpCircle className="w-16 h-16 mx-auto text-kiosk-text/30 mb-4" />
+              <div className="text-center py-12">
+                  <HelpCircle className="w-16 h-16 mx-auto icon-neon-blue opacity-30 mb-4" />
                   <p className="text-kiosk-text/70">Selecione uma seção no índice para ver o conteúdo</p>
                 </div>
               )}

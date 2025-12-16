@@ -19,7 +19,7 @@ export function InfoTooltip({
   children, 
   side = 'top',
   showIcon = true,
-  iconClassName = 'w-4 h-4 text-kiosk-text/50 hover:text-kiosk-text cursor-help'
+  iconClassName = 'w-4 h-4 icon-neon-blue cursor-help'
 }: InfoTooltipProps) {
   return (
     <Tooltip delayDuration={200}>

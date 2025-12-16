@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { Cloud, CloudUpload, Settings, Check, AlertCircle, Eye, EyeOff } from 'lucide-react';
+import { Cloud, CloudUpload, Settings, Check, AlertCircle, Eye, EyeOff, FolderSync, Package, Lock, CloudCog, Satellite } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
@@ -29,12 +29,12 @@ interface CloudConfig {
 }
 
 const cloudProviders = [
-  { id: 'aws', name: 'AWS S3', icon: '☁️', needsOAuth: false },
-  { id: 'gdrive', name: 'Google Drive', icon: '📁', needsOAuth: true },
-  { id: 'dropbox', name: 'Dropbox', icon: '📦', needsOAuth: true },
-  { id: 'mega', name: 'MEGA', icon: '🔒', needsOAuth: false },
-  { id: 'onedrive', name: 'OneDrive', icon: '☁️', needsOAuth: true },
-  { id: 'storj', name: 'Storj', icon: '🛰️', needsOAuth: false },
+  { id: 'aws', name: 'AWS S3', icon: <Cloud className="w-4 h-4 icon-neon-blue" />, needsOAuth: false },
+  { id: 'gdrive', name: 'Google Drive', icon: <FolderSync className="w-4 h-4 icon-neon-blue" />, needsOAuth: true },
+  { id: 'dropbox', name: 'Dropbox', icon: <Package className="w-4 h-4 icon-neon-blue" />, needsOAuth: true },
+  { id: 'mega', name: 'MEGA', icon: <Lock className="w-4 h-4 icon-neon-blue" />, needsOAuth: false },
+  { id: 'onedrive', name: 'OneDrive', icon: <CloudCog className="w-4 h-4 icon-neon-blue" />, needsOAuth: true },
+  { id: 'storj', name: 'Storj', icon: <Satellite className="w-4 h-4 icon-neon-blue" />, needsOAuth: false },
 ];
 
 export function CloudBackupSection({ isDemoMode }: CloudBackupSectionProps) {
@@ -148,8 +148,8 @@ export function CloudBackupSection({ isDemoMode }: CloudBackupSectionProps) {
             <SelectContent className="bg-kiosk-surface border-kiosk-border">
               {cloudProviders.map((provider) => (
                 <SelectItem key={provider.id} value={provider.id}>
-                  <span className="flex items-center gap-2">
-                    <span>{provider.icon}</span>
+                  <span className="flex items-center gap-2 text-white">
+                    {provider.icon}
                     <span>{provider.name}</span>
                   </span>
                 </SelectItem>

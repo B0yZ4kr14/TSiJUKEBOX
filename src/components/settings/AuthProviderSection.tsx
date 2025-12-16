@@ -18,7 +18,7 @@ const providers: ProviderOption[] = [
     id: 'local',
     name: 'Backend FastAPI',
     description: 'Autenticação local via SQLite',
-    icon: <Server className="w-5 h-5" />,
+    icon: <Server className="w-5 h-5 icon-neon-blue" />,
     features: [
       'Funciona offline',
       'Dados locais no servidor',
@@ -30,7 +30,7 @@ const providers: ProviderOption[] = [
     id: 'supabase',
     name: 'Lovable Cloud',
     description: 'Autenticação via Supabase Auth',
-    icon: <Cloud className="w-5 h-5" />,
+    icon: <Cloud className="w-5 h-5 icon-neon-blue" />,
     features: [
       'Autenticação segura',
       'Sincronização na nuvem',
@@ -65,34 +65,34 @@ export function AuthProviderSection() {
                 className={cn(
                   "w-full p-4 rounded-lg text-left transition-all",
                   isSelected
-                    ? "card-option-selected-3d"
-                    : "card-option-dark-3d"
+                    ? "card-provider-selected"
+                    : "card-provider-option"
                 )}
               >
                 <div className="flex items-start gap-3">
                   <div className={cn(
                     "p-2 rounded-lg",
-                    isSelected ? "bg-primary/20 text-primary" : "bg-kiosk-surface icon-neon-blue"
+                    isSelected ? "bg-primary/20" : "bg-kiosk-surface/60"
                   )}>
                     {provider.icon}
                   </div>
                   
                   <div className="flex-1 min-w-0">
                     <div className="flex items-center justify-between">
-                      <h4 className="font-medium text-sm text-foreground">{provider.name}</h4>
+                      <h4 className="text-provider-name text-sm">{provider.name}</h4>
                       {isSelected && (
                         <div className="w-5 h-5 rounded-full bg-primary flex items-center justify-center">
                           <Check className="w-3 h-3 text-primary-foreground" />
                         </div>
                       )}
                     </div>
-                    <p className="text-xs text-kiosk-text/80 mt-0.5">
+                    <p className="text-provider-description text-xs mt-0.5">
                       {provider.description}
                     </p>
                     
                     <ul className="mt-3 space-y-1.5">
                       {provider.features.map((feature, i) => (
-                        <li key={i} className="text-xs text-kiosk-text/75 flex items-center gap-2">
+                        <li key={i} className="text-provider-feature text-xs flex items-center gap-2">
                           <span className="w-1.5 h-1.5 rounded-full bg-cyan-400/70" />
                           {feature}
                         </li>

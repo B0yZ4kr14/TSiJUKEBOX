@@ -2,7 +2,7 @@ import React, { createContext, useContext, useState, useEffect, useCallback } fr
 import { spotifyClient, SpotifyTokens, SpotifyUser } from '@/lib/api/spotify';
 import type { Language } from '@/i18n';
 
-export type ThemeColor = 'blue' | 'green' | 'purple';
+export type ThemeColor = 'blue' | 'green' | 'purple' | 'orange' | 'pink' | 'custom';
 
 interface SpotifySettings {
   clientId: string;

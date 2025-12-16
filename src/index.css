@@ -594,6 +594,30 @@
     --neon-accent: 300 100% 65%;
   }
 
+  [data-theme="orange"] {
+    --neon-primary: 25 100% 55%;
+    --neon-primary-glow: 25 100% 65%;
+    --neon-accent: 35 100% 60%;
+  }
+
+  [data-theme="pink"] {
+    --neon-primary: 330 100% 60%;
+    --neon-primary-glow: 330 100% 70%;
+    --neon-accent: 340 100% 65%;
+  }
+
+  /* Custom theme - uses CSS custom properties */
+  [data-theme="custom"] {
+    --neon-primary: var(--custom-primary, 195 100% 50%);
+    --neon-primary-glow: var(--custom-primary-glow, 195 100% 60%);
+    --neon-accent: var(--custom-accent, 210 100% 55%);
+    --kiosk-bg: var(--custom-bg, 240 10% 10%);
+    --kiosk-surface: var(--custom-surface, 240 10% 15%);
+    --kiosk-text: var(--custom-text, 0 0% 96%);
+    --background: var(--custom-bg, 240 10% 4%);
+    --card: var(--custom-surface, 240 10% 6%);
+  }
+
   /* ========== SWITCH NEON 3D ========== */
   
   .switch-neon {

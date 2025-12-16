@@ -1442,6 +1442,143 @@
   }
 }
 
+/* ========== THEME MORPHING TRANSITIONS ========== */
+  
+/* Smooth color transitions for theme switching */
+:root,
+[data-theme] {
+  transition: 
+    --neon-primary 0.6s cubic-bezier(0.4, 0, 0.2, 1),
+    --neon-glow 0.6s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+/* Global morphing class applied during theme change */
+.theme-transitioning,
+.theme-transitioning * {
+  transition: 
+    background-color 0.5s cubic-bezier(0.4, 0, 0.2, 1),
+    border-color 0.4s cubic-bezier(0.4, 0, 0.2, 1),
+    box-shadow 0.5s cubic-bezier(0.4, 0, 0.2, 1),
+    color 0.3s cubic-bezier(0.4, 0, 0.2, 1),
+    filter 0.4s cubic-bezier(0.4, 0, 0.2, 1) !important;
+}
+
+/* ========== HIGH CONTRAST MODE ========== */
+
+[data-high-contrast="true"] {
+  /* Pure black background */
+  --background: 0 0% 0%;
+  --kiosk-bg: 0 0% 0%;
+  --kiosk-surface: 0 0% 8%;
+  
+  /* Pure white text */
+  --foreground: 0 0% 100%;
+  --kiosk-text: 0 0% 100%;
+  --muted-foreground: 0 0% 90%;
+  
+  /* Ultra visible borders */
+  --border: 0 0% 100%;
+  
+  /* Intensified primary colors */
+  --primary: 195 100% 70%;
+  --neon-primary: 195 100% 70%;
+}
+
+[data-high-contrast="true"] .card-option-dark-3d,
+[data-high-contrast="true"] .card-option-selected-3d {
+  background: hsl(0 0% 5%) !important;
+  border: 2px solid hsl(0 0% 100%) !important;
+}
+
+[data-high-contrast="true"] .text-kiosk-text,
+[data-high-contrast="true"] .text-settings-label,
+[data-high-contrast="true"] .text-settings-description {
+  color: hsl(0 0% 100%) !important;
+  text-shadow: none !important;
+}
+
+[data-high-contrast="true"] input,
+[data-high-contrast="true"] select,
+[data-high-contrast="true"] textarea {
+  background: hsl(0 0% 5%) !important;
+  border: 2px solid hsl(0 0% 100%) !important;
+  color: hsl(0 0% 100%) !important;
+}
+
+[data-high-contrast="true"] .icon-neon-blue,
+[data-high-contrast="true"] .icon-neon-blue-hover {
+  color: hsl(195 100% 80%) !important;
+  filter: drop-shadow(0 0 8px hsl(195 100% 70%)) !important;
+}
+
+[data-high-contrast="true"] .text-gold-neon,
+[data-high-contrast="true"] .text-gold-neon-hover,
+[data-high-contrast="true"] .text-label-yellow {
+  color: hsl(50 100% 70%) !important;
+  text-shadow: 0 0 10px hsl(50 100% 60%) !important;
+}
+
+/* Reduced motion for accessibility */
+[data-reduced-motion="true"],
+[data-reduced-motion="true"] * {
+  animation-duration: 0.01ms !important;
+  animation-iteration-count: 1 !important;
+  transition-duration: 0.01ms !important;
+}
+
+/* ========== INSTRUCTIONS PANEL ========== */
+
+.instructions-panel {
+  background: linear-gradient(145deg, 
+    hsl(210 40% 12%) 0%, 
+    hsl(210 35% 8%) 100%);
+  border: 1px solid hsl(195 100% 50% / 0.25);
+  border-radius: 0.75rem;
+  padding: 1rem;
+}
+
+.instructions-step {
+  display: flex;
+  align-items: flex-start;
+  gap: 0.75rem;
+  padding: 0.5rem 0;
+}
+
+.instructions-step-number {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  min-width: 1.5rem;
+  height: 1.5rem;
+  border-radius: 50%;
+  background: hsl(195 100% 50% / 0.2);
+  border: 1px solid hsl(195 100% 50% / 0.4);
+  color: hsl(195 100% 70%);
+  font-size: 0.75rem;
+  font-weight: 600;
+}
+
+.instructions-tip {
+  display: flex;
+  align-items: flex-start;
+  gap: 0.5rem;
+  padding: 0.5rem;
+  background: hsl(45 100% 50% / 0.08);
+  border-radius: 0.5rem;
+  border-left: 3px solid hsl(45 100% 55%);
+}
+
+.instructions-warning {
+  display: flex;
+  align-items: flex-start;
+  gap: 0.5rem;
+  padding: 0.75rem;
+  background: hsl(0 100% 50% / 0.08);
+  border-radius: 0.5rem;
+  border-left: 3px solid hsl(0 100% 55%);
+  color: hsl(0 100% 75%);
+}
+
 /* Custom scrollbar for dark theme */
 ::-webkit-scrollbar {
   width: 8px;

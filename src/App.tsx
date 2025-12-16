@@ -10,6 +10,7 @@ import Index from "./pages/Index";
 import Auth from "./pages/Auth";
 import Install from "./pages/Install";
 import Settings from "./pages/Settings";
+import ThemePreview from "./pages/ThemePreview";
 import Dashboard from "./pages/Dashboard";
 import Admin from "./pages/Admin";
 import AdminLibrary from "./pages/AdminLibrary";
@@ -47,6 +48,11 @@ const App = () => (
               <Route path="/settings" element={
                 <ProtectedRoute requiredPermission="canAccessSettings">
                   <Settings />
+                </ProtectedRoute>
+              } />
+              <Route path="/theme-preview" element={
+                <ProtectedRoute requiredPermission="canAccessSettings">
+                  <ThemePreview />
                 </ProtectedRoute>
               } />
               

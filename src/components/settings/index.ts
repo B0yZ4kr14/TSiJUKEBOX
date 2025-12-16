@@ -13,3 +13,5 @@ export { SystemUrlsSection } from './SystemUrlsSection';
 export { NtpConfigSection } from './NtpConfigSection';
 export { WeatherConfigSection } from './WeatherConfigSection';
 export { LanguageSection } from './LanguageSection';
+export { AccessibilitySection } from './AccessibilitySection';
+export { KeysManagementSection } from './KeysManagementSection';

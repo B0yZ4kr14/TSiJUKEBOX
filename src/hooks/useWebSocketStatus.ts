@@ -41,13 +41,13 @@ export function useWebSocketStatus({
     try {
       // Convert HTTP URL to WebSocket URL
       const wsUrl = url.replace(/^http/, 'ws').replace('/api', '/ws/status');
-      console.log('[WebSocket] Connecting to:', wsUrl);
+      if (import.meta.env.DEV) console.log('[WebSocket] Connecting to:', wsUrl);
       
       const ws = new WebSocket(wsUrl);
       wsRef.current = ws;
 
       ws.onopen = () => {
-        console.log('[WebSocket] Connected');
+        if (import.meta.env.DEV) console.log('[WebSocket] Connected');
         setIsConnected(true);
         setError(null);
         reconnectAttemptsRef.current = 0;
@@ -57,21 +57,20 @@ export function useWebSocketStatus({
       ws.onmessage = (event) => {
         try {
           const data = JSON.parse(event.data);
-          console.log('[WebSocket] Received status update');
           setStatus(data);
         } catch (e) {
-          console.error('[WebSocket] Failed to parse message:', e);
+          if (import.meta.env.DEV) console.error('[WebSocket] Failed to parse message:', e);
         }
       };
 
       ws.onerror = (event) => {
-        console.error('[WebSocket] Error:', event);
+        if (import.meta.env.DEV) console.error('[WebSocket] Error:', event);
         setError(new Error('WebSocket connection error'));
         onError?.(event);
       };
 
       ws.onclose = (event) => {
-        console.log('[WebSocket] Disconnected, code:', event.code);
+        if (import.meta.env.DEV) console.log('[WebSocket] Disconnected, code:', event.code);
         setIsConnected(false);
         wsRef.current = null;
         onDisconnect?.();
@@ -79,19 +78,19 @@ export function useWebSocketStatus({
         // Attempt reconnection with exponential backoff
         if (enabled && reconnectAttemptsRef.current < maxReconnectAttempts) {
           const delay = baseReconnectDelay * Math.pow(2, reconnectAttemptsRef.current);
-          console.log(`[WebSocket] Reconnecting in ${delay}ms (attempt ${reconnectAttemptsRef.current + 1}/${maxReconnectAttempts})`);
+          if (import.meta.env.DEV) console.log(`[WebSocket] Reconnecting in ${delay}ms (attempt ${reconnectAttemptsRef.current + 1}/${maxReconnectAttempts})`);
           
           reconnectTimeoutRef.current = window.setTimeout(() => {
             reconnectAttemptsRef.current++;
             connect();
           }, delay);
         } else if (reconnectAttemptsRef.current >= maxReconnectAttempts) {
-          console.log('[WebSocket] Max reconnect attempts reached');
+          if (import.meta.env.DEV) console.log('[WebSocket] Max reconnect attempts reached');
           setError(new Error('Failed to connect after multiple attempts'));
         }
       };
     } catch (e) {
-      console.error('[WebSocket] Connection error:', e);
+      if (import.meta.env.DEV) console.error('[WebSocket] Connection error:', e);
       setError(e instanceof Error ? e : new Error('Unknown error'));
     }
   }, [url, enabled, onConnect, onDisconnect, onError]);

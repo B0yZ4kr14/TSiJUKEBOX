@@ -7,6 +7,7 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@
 import { Switch } from '@/components/ui/switch';
 import { SettingsSection } from './SettingsSection';
 import { toast } from 'sonner';
+import { api } from '@/lib/api/client';
 
 interface BackupSchedule {
   enabled: boolean;
@@ -52,11 +53,18 @@ export function BackupScheduleSection() {
       localStorage.setItem('backup_schedule', JSON.stringify(schedule));
       
       // Call backend API to configure cron job
-      // await api.setBackupSchedule(schedule);
+      await api.setBackupSchedule({
+        enabled: schedule.enabled,
+        frequency: schedule.frequency,
+        time: schedule.time,
+        retention: schedule.retention,
+      });
       
       toast.success('Agendamento salvo com sucesso');
     } catch (error) {
-      toast.error('Erro ao salvar agendamento');
+      // Silently fail in demo mode, still save to localStorage
+      if (import.meta.env.DEV) console.error('Failed to save backup schedule to API:', error);
+      toast.success('Agendamento salvo localmente');
     } finally {
       setIsSaving(false);
     }

@@ -75,6 +75,30 @@ export function usePlaybackControls() {
     },
   });
 
+  // Reorder queue mutation
+  const reorderQueueMutation = useMutation({
+    mutationFn: ({ trackId, fromIndex, toIndex }: { trackId: string; fromIndex: number; toIndex: number }) => 
+      api.reorderQueue(trackId, fromIndex, toIndex),
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ['playback', 'queue'] });
+      toast.success('Fila reordenada');
+    },
+    onError: () => {
+      toast.error('Erro ao reordenar fila');
+    },
+  });
+
+  const reorderQueue = useCallback((fromIndex: number, toIndex: number) => {
+    if (isDemoMode) {
+      toast.success('Fila reordenada (demo)');
+      return;
+    }
+    const trackId = queueQuery.data?.next[fromIndex]?.id;
+    if (trackId) {
+      reorderQueueMutation.mutate({ trackId, fromIndex, toIndex });
+    }
+  }, [isDemoMode, queueQuery.data, reorderQueueMutation]);
+
   const toggleShuffle = useCallback(() => {
     if (isDemoMode) {
       setShuffle(prev => !prev);
@@ -124,6 +148,7 @@ export function usePlaybackControls() {
     addToQueue: addToQueueMutation.mutate,
     removeFromQueue: removeFromQueueMutation.mutate,
     clearQueue: clearQueueMutation.mutate,
+    reorderQueue,
     refetchQueue: queueQuery.refetch,
   };
 }

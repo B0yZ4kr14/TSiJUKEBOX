@@ -10,6 +10,7 @@ import { SystemMonitor } from '@/components/player/SystemMonitor';
 import { AudioVisualizer } from '@/components/player/AudioVisualizer';
 import { ConnectionIndicator } from '@/components/player/ConnectionIndicator';
 import { ProgressBar } from '@/components/player/ProgressBar';
+import { CommandDeck } from '@/components/player/CommandDeck';
 import { useStatus } from '@/hooks/useStatus';
 import { usePlayer } from '@/hooks/usePlayer';
 import { useVolume } from '@/hooks/useVolume';
@@ -20,7 +21,7 @@ import { usePWAInstall } from '@/hooks/usePWAInstall';
 import { useNetworkStatus } from '@/hooks/useNetworkStatus';
 import { useSettings } from '@/contexts/SettingsContext';
 import { Button } from '@/components/ui/button';
-import { Settings, ChevronLeft, ChevronRight, Download, Wifi, WifiOff, Disc3, Music } from 'lucide-react';
+import { ChevronLeft, ChevronRight, Download, Wifi, WifiOff, Disc3, Music, Settings } from 'lucide-react';
 import { toast } from 'sonner';
 
 export default function Index() {
@@ -243,16 +244,6 @@ export default function Index() {
                 <Download className="w-5 h-5" />
               </Button>
             )}
-
-            <Link to="/settings">
-              <Button
-                variant="ghost"
-                size="icon"
-                className="w-10 h-10 rounded-full bg-kiosk-surface/30 hover:bg-kiosk-surface/50 text-kiosk-text/50 hover:text-kiosk-text transition-colors"
-              >
-                <Settings className="w-5 h-5" />
-              </Button>
-            </Link>
           </div>
         </header>
 
@@ -306,11 +297,14 @@ export default function Index() {
         </main>
 
         {/* Footer branding */}
-        <footer className="pb-4 text-center">
+        <footer className="pb-20 text-center">
           <p className="text-xs text-kiosk-text/30">
             TSi JUKEBOX Enterprise v4.0
           </p>
         </footer>
+
+        {/* Command Deck */}
+        <CommandDeck />
 
         {/* Queue Panel */}
         <QueuePanel

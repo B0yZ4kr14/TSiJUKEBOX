@@ -1,0 +1,238 @@
+import { useState, useEffect } from 'react';
+import { Calendar, Clock, Save, Trash2 } from 'lucide-react';
+import { Button } from '@/components/ui/button';
+import { Input } from '@/components/ui/input';
+import { Label } from '@/components/ui/label';
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
+import { Switch } from '@/components/ui/switch';
+import { SettingsSection } from './SettingsSection';
+import { toast } from 'sonner';
+
+interface BackupSchedule {
+  enabled: boolean;
+  frequency: 'daily' | 'weekly' | 'monthly';
+  time: string;
+  dayOfWeek?: number; // 0-6 for weekly
+  dayOfMonth?: number; // 1-31 for monthly
+  retention: number; // Number of backups to keep
+}
+
+const defaultSchedule: BackupSchedule = {
+  enabled: false,
+  frequency: 'daily',
+  time: '03:00',
+  retention: 7,
+};
+
+const daysOfWeek = [
+  { value: '0', label: 'Domingo' },
+  { value: '1', label: 'Segunda' },
+  { value: '2', label: 'Terça' },
+  { value: '3', label: 'Quarta' },
+  { value: '4', label: 'Quinta' },
+  { value: '5', label: 'Sexta' },
+  { value: '6', label: 'Sábado' },
+];
+
+export function BackupScheduleSection() {
+  const [schedule, setSchedule] = useState<BackupSchedule>(defaultSchedule);
+  const [isSaving, setIsSaving] = useState(false);
+
+  useEffect(() => {
+    const saved = localStorage.getItem('backup_schedule');
+    if (saved) {
+      setSchedule(JSON.parse(saved));
+    }
+  }, []);
+
+  const handleSave = async () => {
+    setIsSaving(true);
+    try {
+      // Save to localStorage
+      localStorage.setItem('backup_schedule', JSON.stringify(schedule));
+      
+      // Call backend API to configure cron job
+      // await api.setBackupSchedule(schedule);
+      
+      toast.success('Agendamento salvo com sucesso');
+    } catch (error) {
+      toast.error('Erro ao salvar agendamento');
+    } finally {
+      setIsSaving(false);
+    }
+  };
+
+  const handleReset = () => {
+    setSchedule(defaultSchedule);
+    localStorage.removeItem('backup_schedule');
+    toast.info('Agendamento resetado');
+  };
+
+  return (
+    <SettingsSection
+      title="Agendamento de Backup"
+      description="Configure backups automáticos periódicos"
+      icon={<Calendar className="w-5 h-5 text-purple-400" />}
+    >
+      <div className="space-y-4">
+        {/* Enable Toggle */}
+        <div className="flex items-center justify-between">
+          <Label htmlFor="schedule-enabled" className="text-sm text-muted-foreground">
+            Backup Automático
+          </Label>
+          <Switch
+            id="schedule-enabled"
+            checked={schedule.enabled}
+            onCheckedChange={(enabled) => setSchedule({ ...schedule, enabled })}
+          />
+        </div>
+
+        {schedule.enabled && (
+          <>
+            {/* Frequency */}
+            <div className="space-y-2">
+              <Label className="text-sm text-muted-foreground">Frequência</Label>
+              <Select
+                value={schedule.frequency}
+                onValueChange={(value: 'daily' | 'weekly' | 'monthly') => 
+                  setSchedule({ ...schedule, frequency: value })
+                }
+              >
+                <SelectTrigger className="bg-background/50">
+                  <SelectValue />
+                </SelectTrigger>
+                <SelectContent>
+                  <SelectItem value="daily">Diário</SelectItem>
+                  <SelectItem value="weekly">Semanal</SelectItem>
+                  <SelectItem value="monthly">Mensal</SelectItem>
+                </SelectContent>
+              </Select>
+            </div>
+
+            {/* Day of Week (for weekly) */}
+            {schedule.frequency === 'weekly' && (
+              <div className="space-y-2">
+                <Label className="text-sm text-muted-foreground">Dia da Semana</Label>
+                <Select
+                  value={String(schedule.dayOfWeek ?? 0)}
+                  onValueChange={(value) => 
+                    setSchedule({ ...schedule, dayOfWeek: parseInt(value) })
+                  }
+                >
+                  <SelectTrigger className="bg-background/50">
+                    <SelectValue />
+                  </SelectTrigger>
+                  <SelectContent>
+                    {daysOfWeek.map((day) => (
+                      <SelectItem key={day.value} value={day.value}>
+                        {day.label}
+                      </SelectItem>
+                    ))}
+                  </SelectContent>
+                </Select>
+              </div>
+            )}
+
+            {/* Day of Month (for monthly) */}
+            {schedule.frequency === 'monthly' && (
+              <div className="space-y-2">
+                <Label className="text-sm text-muted-foreground">Dia do Mês</Label>
+                <Select
+                  value={String(schedule.dayOfMonth ?? 1)}
+                  onValueChange={(value) => 
+                    setSchedule({ ...schedule, dayOfMonth: parseInt(value) })
+                  }
+                >
+                  <SelectTrigger className="bg-background/50">
+                    <SelectValue />
+                  </SelectTrigger>
+                  <SelectContent>
+                    {Array.from({ length: 28 }, (_, i) => i + 1).map((day) => (
+                      <SelectItem key={day} value={String(day)}>
+                        Dia {day}
+                      </SelectItem>
+                    ))}
+                  </SelectContent>
+                </Select>
+              </div>
+            )}
+
+            {/* Time */}
+            <div className="space-y-2">
+              <Label className="text-sm text-muted-foreground flex items-center gap-2">
+                <Clock className="w-4 h-4" />
+                Horário
+              </Label>
+              <Input
+                type="time"
+                value={schedule.time}
+                onChange={(e) => setSchedule({ ...schedule, time: e.target.value })}
+                className="bg-background/50"
+              />
+            </div>
+
+            {/* Retention */}
+            <div className="space-y-2">
+              <Label className="text-sm text-muted-foreground">
+                Backups a Reter
+              </Label>
+              <Select
+                value={String(schedule.retention)}
+                onValueChange={(value) => 
+                  setSchedule({ ...schedule, retention: parseInt(value) })
+                }
+              >
+                <SelectTrigger className="bg-background/50">
+                  <SelectValue />
+                </SelectTrigger>
+                <SelectContent>
+                  <SelectItem value="3">3 backups</SelectItem>
+                  <SelectItem value="5">5 backups</SelectItem>
+                  <SelectItem value="7">7 backups</SelectItem>
+                  <SelectItem value="14">14 backups</SelectItem>
+                  <SelectItem value="30">30 backups</SelectItem>
+                </SelectContent>
+              </Select>
+              <p className="text-xs text-muted-foreground">
+                Backups mais antigos serão removidos automaticamente
+              </p>
+            </div>
+          </>
+        )}
+
+        {/* Actions */}
+        <div className="flex gap-2 pt-2">
+          <Button
+            onClick={handleSave}
+            disabled={isSaving}
+            className="flex-1"
+          >
+            <Save className="w-4 h-4 mr-2" />
+            {isSaving ? 'Salvando...' : 'Salvar'}
+          </Button>
+          <Button
+            variant="outline"
+            onClick={handleReset}
+          >
+            <Trash2 className="w-4 h-4" />
+          </Button>
+        </div>
+
+        {/* Schedule Summary */}
+        {schedule.enabled && (
+          <div className="p-3 rounded-lg bg-purple-500/10 border border-purple-500/20">
+            <p className="text-sm text-purple-300">
+              {schedule.frequency === 'daily' && `Backup diário às ${schedule.time}`}
+              {schedule.frequency === 'weekly' && 
+                `Backup semanal às ${daysOfWeek[schedule.dayOfWeek ?? 0]?.label} às ${schedule.time}`
+              }
+              {schedule.frequency === 'monthly' && 
+                `Backup mensal no dia ${schedule.dayOfMonth} às ${schedule.time}`
+              }
+            </p>
+          </div>
+        )}
+      </div>
+    </SettingsSection>
+  );
+}

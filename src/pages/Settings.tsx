@@ -13,7 +13,7 @@ import { Badge } from '@/components/ui/badge';
 import { useSettings } from '@/contexts/SettingsContext';
 import { spotifyClient } from '@/lib/api/spotify';
 import { toast } from 'sonner';
-import { SettingsSection, CloudConnectionSection, BackendConnectionSection, DatabaseSection, BackupSection, CloudBackupSection } from '@/components/settings';
+import { SettingsSection, CloudConnectionSection, BackendConnectionSection, DatabaseSection, BackupSection, CloudBackupSection, BackupScheduleSection, UserManagementSection, AuthProviderSection } from '@/components/settings';
 
 export default function Settings() {
   const [searchParams, setSearchParams] = useSearchParams();
@@ -185,7 +185,14 @@ export default function Settings() {
           {/* Cloud Backup */}
           <CloudBackupSection isDemoMode={isDemoMode} />
 
-          {/* Spotify Integration */}
+          {/* Backup Schedule */}
+          <BackupScheduleSection />
+
+          {/* User Management */}
+          <UserManagementSection />
+
+          {/* Auth Provider */}
+          <AuthProviderSection />
           <SettingsSection
             icon={<Music className="w-5 h-5 text-[#1DB954]" />}
             title="Spotify"

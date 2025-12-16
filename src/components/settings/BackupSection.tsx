@@ -106,7 +106,7 @@ export function BackupSection({ isDemoMode }: BackupSectionProps) {
 
   return (
     <SettingsSection
-      icon={<Archive className="w-5 h-5 text-kiosk-primary" />}
+      icon={<Archive className="w-5 h-5 icon-neon-blue" />}
       title="Backup Local"
       description="Criar e restaurar backups do banco de dados"
       delay={0.2}
@@ -144,11 +144,11 @@ export function BackupSection({ isDemoMode }: BackupSectionProps) {
         {/* Backup List */}
         <div className="space-y-2">
           <div className="flex items-center gap-2">
-            <Clock className="w-4 h-4 text-kiosk-text/90" />
-            <span className="text-sm font-medium text-kiosk-text">Backups Existentes</span>
+            <Clock className="w-4 h-4 icon-neon-blue" />
+            <span className="text-sm font-medium text-label-yellow">Backups Existentes</span>
           </div>
           
-          <ScrollArea className="h-48 rounded-lg border border-kiosk-border bg-kiosk-background/50">
+          <ScrollArea className="h-48 rounded-lg border border-kiosk-border bg-kiosk-background/50 card-option-neon">
             <div className="p-2 space-y-2">
               {backups.length === 0 ? (
                 <p className="text-sm text-kiosk-text/80 text-center py-4">
@@ -161,10 +161,10 @@ export function BackupSection({ isDemoMode }: BackupSectionProps) {
                     className="flex items-center justify-between p-3 rounded-lg bg-kiosk-surface/50 hover:bg-kiosk-surface transition-colors"
                   >
                     <div className="flex items-center gap-3 flex-1 min-w-0">
-                      <Archive className="w-4 h-4 text-kiosk-text/90 flex-shrink-0" />
+                      <Archive className="w-4 h-4 icon-neon-blue flex-shrink-0" />
                       <div className="min-w-0">
                         <p className="text-sm text-kiosk-text font-medium truncate">{backup.name}</p>
-                        <div className="flex items-center gap-2 text-xs text-kiosk-text/85">
+                        <div className="flex items-center gap-2 text-xs text-kiosk-text/80">
                           <span>{backup.size}</span>
                           <span>•</span>
                           <span>{new Date(backup.date).toLocaleDateString()}</span>
@@ -174,8 +174,8 @@ export function BackupSection({ isDemoMode }: BackupSectionProps) {
                         variant="outline"
                         className={`ml-2 flex-shrink-0 ${
                           backup.type === 'full'
-                            ? 'border-green-500/50 text-green-500'
-                            : 'border-blue-500/50 text-blue-500'
+                            ? 'border-green-500/50 text-green-400'
+                            : 'border-blue-500/50 text-blue-400'
                         }`}
                       >
                         {backup.type === 'full' ? 'Full' : 'Inc'}
@@ -187,7 +187,7 @@ export function BackupSection({ isDemoMode }: BackupSectionProps) {
                         size="icon"
                         onClick={() => handleRestore(backup.id)}
                         disabled={isDemoMode || isLoading === `restore-${backup.id}`}
-                        className="w-8 h-8 text-kiosk-text/85 hover:text-kiosk-primary"
+                        className="w-8 h-8 text-kiosk-text/80 hover:text-kiosk-primary"
                         title="Restaurar"
                       >
                         <Upload className="w-4 h-4" />
@@ -197,7 +197,7 @@ export function BackupSection({ isDemoMode }: BackupSectionProps) {
                         size="icon"
                         onClick={() => handleDelete(backup.id)}
                         disabled={isDemoMode || isLoading === `delete-${backup.id}`}
-                        className="w-8 h-8 text-kiosk-text/85 hover:text-red-500"
+                        className="w-8 h-8 text-kiosk-text/80 hover:text-red-500"
                         title="Excluir"
                       >
                         <Trash2 className="w-4 h-4" />
@@ -211,9 +211,9 @@ export function BackupSection({ isDemoMode }: BackupSectionProps) {
         </div>
 
         {isDemoMode && (
-          <div className="flex items-start gap-2 p-3 rounded-lg bg-yellow-500/10 border border-yellow-500/20">
-            <AlertCircle className="w-4 h-4 text-yellow-500 mt-0.5 flex-shrink-0" />
-            <p className="text-xs text-yellow-500">
+          <div className="flex items-start gap-2 p-3 rounded-lg bg-yellow-500/10 border border-yellow-500/30">
+            <AlertCircle className="w-4 h-4 text-yellow-400 mt-0.5 flex-shrink-0" />
+            <p className="text-xs text-yellow-400">
               Operações de backup indisponíveis no modo demo
             </p>
           </div>

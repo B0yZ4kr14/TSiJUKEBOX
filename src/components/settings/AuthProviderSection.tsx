@@ -1,5 +1,4 @@
 import { Server, Cloud, Check } from 'lucide-react';
-import { Button } from '@/components/ui/button';
 import { Label } from '@/components/ui/label';
 import { SettingsSection } from './SettingsSection';
 import { useUser } from '@/contexts/UserContext';
@@ -48,10 +47,10 @@ export function AuthProviderSection() {
     <SettingsSection
       title="Provedor de Autenticação"
       description="Escolha como os usuários serão autenticados"
-      icon={<Server className="w-5 h-5 text-green-400" />}
+      icon={<Server className="w-5 h-5 icon-neon-blue" />}
     >
       <div className="space-y-4">
-        <Label className="text-sm text-settings-label">
+        <Label className="text-sm text-label-yellow">
           Selecione o método de autenticação
         </Label>
 
@@ -64,16 +63,16 @@ export function AuthProviderSection() {
                 key={provider.id}
                 onClick={() => setAuthProvider(provider.id)}
                 className={cn(
-                  "w-full p-4 rounded-lg border text-left transition-all",
+                  "w-full p-4 rounded-lg text-left transition-all",
                   isSelected
-                    ? "border-primary bg-primary/10 ring-1 ring-primary"
-                    : "border-border/50 bg-background/50 hover:border-border hover:bg-muted/30"
+                    ? "border-primary bg-primary/10 ring-1 ring-primary card-neon-border"
+                    : "border-border/50 bg-background/50 hover:border-border hover:bg-muted/30 card-option-neon"
                 )}
               >
                 <div className="flex items-start gap-3">
                   <div className={cn(
                     "p-2 rounded-lg",
-                    isSelected ? "bg-primary/20 text-primary" : "bg-muted text-kiosk-text/70"
+                    isSelected ? "bg-primary/20 text-primary" : "bg-muted icon-neon-blue"
                   )}>
                     {provider.icon}
                   </div>
@@ -87,14 +86,14 @@ export function AuthProviderSection() {
                         </div>
                       )}
                     </div>
-                    <p className="text-xs text-settings-description mt-0.5">
+                    <p className="text-xs text-kiosk-text/80 mt-0.5">
                       {provider.description}
                     </p>
                     
-                    <ul className="mt-3 space-y-1">
+                    <ul className="mt-3 space-y-1.5">
                       {provider.features.map((feature, i) => (
-                        <li key={i} className="text-xs text-settings-hint flex items-center gap-1.5">
-                          <span className="w-1 h-1 rounded-full bg-kiosk-text/50" />
+                        <li key={i} className="text-xs text-kiosk-text/75 flex items-center gap-2">
+                          <span className="w-1.5 h-1.5 rounded-full bg-cyan-400/70" />
                           {feature}
                         </li>
                       ))}
@@ -107,7 +106,7 @@ export function AuthProviderSection() {
         </div>
 
         {/* Warning when switching */}
-        <div className="p-3 rounded-lg bg-amber-500/10 border border-amber-500/20">
+        <div className="p-3 rounded-lg bg-amber-500/10 border border-amber-500/30">
           <p className="text-xs text-amber-400">
             <strong>Atenção:</strong> Alterar o provedor de autenticação irá desconectar 
             o usuário atual. Os dados de usuários são gerenciados separadamente por cada provedor.

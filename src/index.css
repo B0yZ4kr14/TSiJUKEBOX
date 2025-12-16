@@ -118,42 +118,60 @@
   }
 
   .text-settings-hint {
-    color: hsl(0 0% 68%);
+    color: hsl(0 0% 72%);
   }
 
   /* Labels com alta visibilidade - Amarelo/Laranja */
   .text-label-yellow {
-    color: hsl(45 100% 65%);
-    text-shadow: 0 0 8px hsl(45 100% 50% / 0.3);
+    color: hsl(45 100% 68%);
+    text-shadow: 0 0 10px hsl(45 100% 50% / 0.4);
   }
 
   .text-label-orange {
-    color: hsl(30 100% 60%);
-    text-shadow: 0 0 8px hsl(30 100% 50% / 0.3);
+    color: hsl(30 100% 65%);
+    text-shadow: 0 0 10px hsl(30 100% 50% / 0.4);
+  }
+
+  /* Feature list items - alta visibilidade para bullet points */
+  .text-feature-list {
+    color: hsl(0 0% 80%);
   }
 
   /* Neon azul brilhante para ícones */
   .icon-neon-blue {
-    color: hsl(195 100% 60%);
-    filter: drop-shadow(0 0 4px hsl(195 100% 60%)) drop-shadow(0 0 8px hsl(195 100% 50% / 0.5));
+    color: hsl(195 100% 65%);
+    filter: drop-shadow(0 0 6px hsl(195 100% 60%)) drop-shadow(0 0 12px hsl(195 100% 50% / 0.6));
   }
 
   /* Contornos de cards com neon azul */
   .card-neon-border {
     border: 1px solid hsl(195 100% 50% / 0.4);
     box-shadow: 
-      0 0 15px hsl(195 100% 50% / 0.15),
-      inset 0 0 15px hsl(195 100% 50% / 0.05);
+      0 0 20px hsl(195 100% 50% / 0.15),
+      inset 0 0 20px hsl(195 100% 50% / 0.05);
+  }
+
+  /* Card de opção com contorno neon sutil */
+  .card-option-neon {
+    border: 1px solid hsl(195 100% 50% / 0.25);
+    box-shadow: 0 0 12px hsl(195 100% 50% / 0.1);
+    transition: all 0.3s ease;
+  }
+
+  .card-option-neon:hover {
+    border-color: hsl(195 100% 50% / 0.45);
+    box-shadow: 0 0 18px hsl(195 100% 50% / 0.2);
   }
 
   /* Títulos com brilho azul neon */
   .title-neon-blue {
     color: hsl(195 100% 75%);
-    text-shadow: 0 0 10px hsl(195 100% 60% / 0.5);
+    text-shadow: 0 0 12px hsl(195 100% 60% / 0.6);
   }
 
   /* Placeholder com melhor visibilidade */
   input::placeholder,
+  textarea::placeholder,
   .input-3d::placeholder {
     color: hsl(0 0% 55%) !important;
     opacity: 1 !important;

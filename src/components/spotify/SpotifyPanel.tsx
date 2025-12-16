@@ -427,7 +427,7 @@ export function SpotifyPanel({ isOpen, onClose, currentTrackId, currentArtistIds
 }
 
 // Toggle button to open the panel
-export function SpotifyPanelToggle({ onClick, isOpen }: { onClick: () => void; isOpen: boolean }) {
+export function SpotifyPanelToggle({ onClick, isOpen, isConnected = true }: { onClick: () => void; isOpen: boolean; isConnected?: boolean }) {
   return (
     <Button
       onClick={onClick}
@@ -435,7 +435,11 @@ export function SpotifyPanelToggle({ onClick, isOpen }: { onClick: () => void; i
       size="icon"
       className={cn(
         "h-10 w-10 rounded-full transition-all button-3d",
-        isOpen ? "bg-[#1DB954] text-white button-primary-3d" : "bg-kiosk-surface/50 text-[#1DB954] hover:bg-[#1DB954]/20"
+        isConnected 
+          ? isOpen 
+            ? "bg-[#1DB954] text-white button-primary-3d" 
+            : "bg-kiosk-surface/50 text-[#1DB954] hover:bg-[#1DB954]/20"
+          : "bg-kiosk-surface/30 text-kiosk-text/40 hover:bg-kiosk-surface/50 hover:text-kiosk-text/60"
       )}
     >
       {isOpen ? <X className="w-5 h-5" /> : <Music2 className="w-5 h-5" />}

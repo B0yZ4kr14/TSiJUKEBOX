@@ -9,6 +9,12 @@ interface SpotifySettings {
   isConnected: boolean;
 }
 
+interface WeatherSettings {
+  apiKey: string;
+  city: string;
+  isEnabled: boolean;
+}
+
 interface SettingsContextType {
   isDemoMode: boolean;
   setDemoMode: (value: boolean) => void;
@@ -24,6 +30,9 @@ interface SettingsContextType {
   setSpotifyTokens: (tokens: SpotifyTokens | null) => void;
   setSpotifyUser: (user: SpotifyUser | null) => void;
   clearSpotifyAuth: () => void;
+  // Weather settings
+  weather: WeatherSettings;
+  setWeatherConfig: (config: Partial<WeatherSettings>) => void;
 }
 
 const defaultApiUrl = import.meta.env.VITE_API_URL || 'https://midiaserver.local/api';
@@ -37,6 +46,12 @@ const defaultSpotifySettings: SpotifySettings = {
   tokens: null,
   user: null,
   isConnected: false,
+};
+
+const defaultWeatherSettings: WeatherSettings = {
+  apiKey: '',
+  city: 'Montes Claros, MG',
+  isEnabled: false,
 };
 
 const defaultSettings: SettingsContextType = {
@@ -53,12 +68,15 @@ const defaultSettings: SettingsContextType = {
   setSpotifyTokens: () => {},
   setSpotifyUser: () => {},
   clearSpotifyAuth: () => {},
+  weather: defaultWeatherSettings,
+  setWeatherConfig: () => {},
 };
 
 const SettingsContext = createContext<SettingsContextType>(defaultSettings);
 
 const STORAGE_KEY = 'tsi_jukebox_settings';
 const SPOTIFY_STORAGE_KEY = 'tsi_jukebox_spotify';
+const WEATHER_STORAGE_KEY = 'tsi_jukebox_weather';
 
 interface StoredSettings {
   isDemoMode?: boolean;
@@ -107,6 +125,23 @@ function saveSpotifySettings(settings: StoredSpotifySettings) {
   }
 }
 
+function loadWeatherSettings(): WeatherSettings {
+  try {
+    const stored = localStorage.getItem(WEATHER_STORAGE_KEY);
+    return stored ? JSON.parse(stored) : defaultWeatherSettings;
+  } catch {
+    return defaultWeatherSettings;
+  }
+}
+
+function saveWeatherSettings(settings: WeatherSettings) {
+  try {
+    localStorage.setItem(WEATHER_STORAGE_KEY, JSON.stringify(settings));
+  } catch (e) {
+    console.error('Failed to save Weather settings:', e);
+  }
+}
+
 export function SettingsProvider({ children }: { children: React.ReactNode }) {
   const [settings, setSettings] = useState<StoredSettings>(() => {
     const stored = loadSettings();
@@ -142,6 +177,8 @@ export function SettingsProvider({ children }: { children: React.ReactNode }) {
       isConnected: !!stored.tokens?.accessToken,
     };
   });
+
+  const [weatherSettings, setWeatherSettings] = useState<WeatherSettings>(() => loadWeatherSettings());
 
   // Validate stored token on mount
   useEffect(() => {
@@ -236,6 +273,14 @@ export function SettingsProvider({ children }: { children: React.ReactNode }) {
     });
   }, [spotifySettings.clientId, spotifySettings.clientSecret]);
 
+  const setWeatherConfig = useCallback((config: Partial<WeatherSettings>) => {
+    setWeatherSettings(prev => {
+      const updated = { ...prev, ...config };
+      saveWeatherSettings(updated);
+      return updated;
+    });
+  }, []);
+
   const value = {
     isDemoMode: settings.isDemoMode ?? false,
     setDemoMode,
@@ -250,6 +295,8 @@ export function SettingsProvider({ children }: { children: React.ReactNode }) {
     setSpotifyTokens,
     setSpotifyUser,
     clearSpotifyAuth,
+    weather: weatherSettings,
+    setWeatherConfig,
   };
 
   return (

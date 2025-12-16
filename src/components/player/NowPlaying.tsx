@@ -31,12 +31,11 @@ export function NowPlaying({ track, isPlaying }: NowPlayingProps) {
         <div className="absolute -inset-1 rounded-2xl bg-black/60 blur-2xl" />
         <div className="absolute -inset-3 rounded-2xl bg-kiosk-primary/10 blur-3xl" />
 
-        {/* Main album cover - 3D Frame */}
+        {/* Main album cover - 3D Frame with SOLID dark background */}
         <motion.div 
           className={cn(
             "w-72 h-72 md:w-80 md:h-80 rounded-2xl overflow-hidden relative z-10",
-            "bg-kiosk-bg border border-kiosk-surface/50",
-            "album-frame-3d"
+            "album-frame-extreme-3d"
           )}
           initial={{ scale: 0.95, opacity: 0 }}
           animate={{ 
@@ -45,13 +44,16 @@ export function NowPlaying({ track, isPlaying }: NowPlayingProps) {
           }}
           transition={{ duration: 0.5 }}
         >
+          {/* SOLID dark background - prevents transparency issues */}
+          <div className="absolute inset-0 bg-[#0a0a12]" />
+          
           <AnimatePresence mode="wait">
             {track?.cover ? (
               <motion.img
                 key={track.cover}
                 src={track.cover}
                 alt={`${track.title} - ${track.artist}`}
-                className="w-full h-full object-cover"
+                className="w-full h-full object-cover relative z-10"
                 initial={{ opacity: 0, scale: 1.1 }}
                 animate={{ opacity: 1, scale: 1 }}
                 exit={{ opacity: 0, scale: 0.95 }}
@@ -60,7 +62,7 @@ export function NowPlaying({ track, isPlaying }: NowPlayingProps) {
             ) : (
               <motion.div 
                 key="placeholder"
-                className="w-full h-full bg-gradient-to-br from-kiosk-surface to-kiosk-bg flex items-center justify-center"
+                className="w-full h-full bg-gradient-to-br from-kiosk-surface to-[#0a0a12] flex items-center justify-center relative z-10"
                 initial={{ opacity: 0 }}
                 animate={{ opacity: 1 }}
                 exit={{ opacity: 0 }}
@@ -70,11 +72,11 @@ export function NowPlaying({ track, isPlaying }: NowPlayingProps) {
             )}
           </AnimatePresence>
 
-          {/* Overlay gradient for depth */}
-          <div className="absolute inset-0 bg-gradient-to-t from-black/30 via-transparent to-white/10 pointer-events-none" />
+          {/* Overlay gradient for depth - darkening effect */}
+          <div className="absolute inset-0 bg-gradient-to-t from-[#0a0a12]/50 via-transparent to-[#0a0a12]/30 pointer-events-none z-20" />
           
-          {/* Inner shadow for inset effect */}
-          <div className="absolute inset-0 shadow-[inset_0_0_40px_rgba(0,0,0,0.4)] pointer-events-none rounded-2xl" />
+          {/* Inner shadow for extreme inset effect */}
+          <div className="absolute inset-0 shadow-[inset_0_0_60px_rgba(0,0,0,0.6)] pointer-events-none rounded-2xl z-20" />
         </motion.div>
 
         {/* Playing indicator - glowing pulse */}

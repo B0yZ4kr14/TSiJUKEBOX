@@ -271,7 +271,7 @@ export default function Index() {
         </header>
 
         {/* Main Content */}
-        <main className="flex-1 flex flex-col items-center justify-center gap-6 px-4 pb-8 touch-pan-y">
+        <main className="flex-1 flex flex-col items-center justify-center gap-4 px-4 pb-40 touch-pan-y">
           <NowPlaying 
             track={status?.track ?? null} 
             isPlaying={status?.playing ?? false} 
@@ -314,14 +314,14 @@ export default function Index() {
           />
 
           {/* Swipe hint */}
-          <p className="text-xs text-kiosk-text/30 mt-2">
+          <p className="text-xs text-kiosk-text/40 mt-1">
             Deslize para mudar de faixa
           </p>
         </main>
 
         {/* Footer branding */}
-        <footer className="pb-20 text-center">
-          <p className="text-xs text-kiosk-text/30">
+        <footer className="pb-32 text-center">
+          <p className="text-xs text-kiosk-text/40">
             TSi JUKEBOX Enterprise v4.0
           </p>
         </footer>

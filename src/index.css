@@ -223,6 +223,125 @@
       inset 0 0 30px hsl(0 0% 0% / 0.2);
   }
 
+  /* ========== EXTREME 3D EFFECTS ========== */
+
+  /* Album frame with EXTREME depth and moldura */
+  .album-frame-extreme-3d {
+    box-shadow:
+      0 0 0 4px hsl(var(--kiosk-surface)),
+      0 0 0 6px hsl(0 0% 100% / 0.15),
+      0 0 0 8px hsl(0 0% 0% / 0.5),
+      0 0 0 12px hsl(var(--kiosk-bg)),
+      0 40px 80px -20px hsl(0 0% 0% / 0.8),
+      0 20px 40px -10px hsl(var(--kiosk-primary) / 0.25),
+      0 60px 120px -30px hsl(0 0% 0% / 0.6),
+      inset 0 0 60px hsl(0 0% 0% / 0.4);
+    border: 2px solid hsl(0 0% 100% / 0.1);
+  }
+
+  /* Card with EXTREME depth */
+  .card-extreme-3d {
+    box-shadow: 
+      0 4px 6px hsl(0 0% 0% / 0.3),
+      0 8px 15px hsl(0 0% 0% / 0.3),
+      0 16px 30px hsl(0 0% 0% / 0.35),
+      0 32px 60px hsl(0 0% 0% / 0.4),
+      0 64px 120px hsl(0 0% 0% / 0.3),
+      inset 0 1px 0 hsl(0 0% 100% / 0.15),
+      inset 0 -1px 0 hsl(0 0% 0% / 0.3);
+    border: 1px solid hsl(0 0% 100% / 0.1);
+    background: linear-gradient(145deg, 
+      hsl(var(--kiosk-surface) / 1.3) 0%, 
+      hsl(var(--kiosk-surface)) 50%,
+      hsl(var(--kiosk-bg)) 100%);
+  }
+
+  /* Button with PHYSICAL press effect */
+  .button-physical-3d {
+    box-shadow: 
+      inset 0 3px 0 hsl(0 0% 100% / 0.25),
+      inset 0 -4px 0 hsl(0 0% 0% / 0.4),
+      0 6px 0 hsl(0 0% 0% / 0.3),
+      0 8px 20px hsl(0 0% 0% / 0.5),
+      0 4px 8px hsl(0 0% 0% / 0.3);
+    transform: translateY(-2px);
+    transition: all 0.1s ease-out;
+  }
+
+  .button-physical-3d:hover {
+    box-shadow: 
+      inset 0 3px 0 hsl(0 0% 100% / 0.3),
+      inset 0 -4px 0 hsl(0 0% 0% / 0.45),
+      0 8px 0 hsl(0 0% 0% / 0.35),
+      0 12px 25px hsl(0 0% 0% / 0.55),
+      0 6px 12px hsl(0 0% 0% / 0.35);
+    transform: translateY(-3px);
+  }
+
+  .button-physical-3d:active {
+    box-shadow: 
+      inset 0 3px 6px hsl(0 0% 0% / 0.4),
+      0 1px 2px hsl(0 0% 0% / 0.2);
+    transform: translateY(2px);
+  }
+
+  /* Play button with EXTREME glow */
+  .button-play-extreme-3d {
+    box-shadow: 
+      inset 0 4px 0 hsl(0 0% 100% / 0.3),
+      inset 0 -4px 0 hsl(0 0% 0% / 0.4),
+      0 0 50px hsl(var(--kiosk-primary) / 0.6),
+      0 0 100px hsl(var(--kiosk-primary) / 0.4),
+      0 20px 40px -10px hsl(var(--kiosk-primary) / 0.7),
+      0 10px 20px -5px hsl(0 0% 0% / 0.6);
+    border: 2px solid hsl(0 0% 100% / 0.2);
+  }
+
+  .button-play-extreme-3d:hover {
+    box-shadow: 
+      inset 0 4px 0 hsl(0 0% 100% / 0.35),
+      inset 0 -4px 0 hsl(0 0% 0% / 0.45),
+      0 0 70px hsl(var(--kiosk-primary) / 0.7),
+      0 0 140px hsl(var(--kiosk-primary) / 0.5),
+      0 25px 50px -12px hsl(var(--kiosk-primary) / 0.8),
+      0 15px 30px -8px hsl(0 0% 0% / 0.7);
+  }
+
+  /* Badge with EXTREME glow */
+  .badge-extreme-glow {
+    box-shadow: 
+      inset 0 1px 0 hsl(0 0% 100% / 0.3),
+      inset 0 -1px 0 hsl(0 0% 0% / 0.3),
+      0 0 15px currentColor,
+      0 0 30px currentColor,
+      0 4px 10px hsl(0 0% 0% / 0.4);
+  }
+
+  /* Input with EXTREME inner depth */
+  .input-extreme-3d {
+    box-shadow: 
+      inset 0 4px 8px hsl(0 0% 0% / 0.5),
+      inset 0 2px 4px hsl(0 0% 0% / 0.3),
+      inset 0 0 20px hsl(0 0% 0% / 0.2),
+      0 1px 0 hsl(0 0% 100% / 0.08);
+    border: 1px solid hsl(0 0% 0% / 0.5);
+  }
+
+  /* Text with high readability */
+  .text-readable {
+    color: hsl(0 0% 92%);
+    text-shadow: 0 1px 2px hsl(0 0% 0% / 0.3);
+  }
+
+  .text-readable-secondary {
+    color: hsl(0 0% 80%);
+    text-shadow: 0 1px 1px hsl(0 0% 0% / 0.2);
+  }
+
+  .text-readable-muted {
+    color: hsl(0 0% 70%);
+  }
+
   /* Header with frosted glass 3D */
   .header-3d {
     background: linear-gradient(180deg,

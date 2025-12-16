@@ -80,7 +80,7 @@ export function PlayerControls({ isPlaying }: PlayerControlsProps) {
             "w-20 h-20 md:w-24 md:h-24 rounded-full relative z-10",
             "bg-kiosk-primary hover:bg-kiosk-primary/90",
             "text-kiosk-bg hover:text-kiosk-bg",
-            "button-primary-3d",
+            "button-play-extreme-3d",
             "transition-all duration-200"
           )}
         >

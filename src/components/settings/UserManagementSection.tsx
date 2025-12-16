@@ -225,7 +225,7 @@ export function UserManagementSection() {
 
         {/* Role Legend */}
         <div className="p-3 rounded-lg bg-muted/30 space-y-2">
-          <p className="text-xs font-medium text-muted-foreground">Níveis de Permissão:</p>
+          <p className="text-xs font-medium text-kiosk-text/90">Níveis de Permissão:</p>
           {Object.entries(roleDescriptions).map(([role, desc]) => (
             <div key={role} className="flex items-start gap-2">
               <Badge 
@@ -235,7 +235,7 @@ export function UserManagementSection() {
                 {roleConfig[role as UserRole].icon}
                 <span className="ml-1">{roleConfig[role as UserRole].label}</span>
               </Badge>
-              <span className="text-xs text-muted-foreground">{desc}</span>
+              <span className="text-xs text-kiosk-text/85">{desc}</span>
             </div>
           ))}
         </div>

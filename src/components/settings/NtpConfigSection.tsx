@@ -120,11 +120,27 @@ export function NtpConfigSection() {
     }
   };
 
+  const instructions = {
+    title: "🕐 O que é Sincronização de Hora (NTP)?",
+    steps: [
+      "NTP significa 'Protocolo de Tempo em Rede' - ele ajusta o relógio do computador automaticamente.",
+      "Por que isso importa? Backups, logs de música e conexões com Spotify precisam da hora certa!",
+      "Servidores brasileiros (pool.ntp.br) são mais rápidos e precisos para quem está no Brasil.",
+      "A sincronização acontece automaticamente em segundo plano, sem você perceber."
+    ],
+    tips: [
+      "💡 Recomendamos usar 'pool.ntp.br' para melhor precisão no Brasil",
+      "💡 Se a hora estiver muito errada, algumas conexões podem falhar",
+      "💡 A sincronização usa pouquíssima internet - não se preocupe!"
+    ]
+  };
+
   return (
     <SettingsSection
       icon={<Clock className="w-5 h-5 icon-neon-blue" />}
       title={t('ntp.title')}
       description={t('ntp.description')}
+      instructions={instructions}
       badge={
         <Badge 
           variant={config.syncStatus === 'synced' ? 'default' : 'secondary'}

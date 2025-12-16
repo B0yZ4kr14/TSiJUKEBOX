@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react';
-import { Eye, Type, Zap, Monitor } from 'lucide-react';
+import { Eye, Type, Zap, Monitor, Check, X } from 'lucide-react';
 import { SettingsSection } from './SettingsSection';
 import { Switch } from '@/components/ui/switch';
 import { Slider } from '@/components/ui/slider';
@@ -31,24 +31,46 @@ export function AccessibilitySection() {
     }
   });
 
+  const [previewSettings, setPreviewSettings] = useState<AccessibilitySettings>(settings);
+  const [hasChanges, setHasChanges] = useState(false);
+
+  // Check for changes
+  useEffect(() => {
+    const changed = 
+      previewSettings.highContrast !== settings.highContrast ||
+      previewSettings.fontSize !== settings.fontSize ||
+      previewSettings.reducedMotion !== settings.reducedMotion;
+    setHasChanges(changed);
+  }, [previewSettings, settings]);
+
   // Apply settings to document
   useEffect(() => {
     document.documentElement.setAttribute('data-high-contrast', String(settings.highContrast));
     document.documentElement.setAttribute('data-reduced-motion', String(settings.reducedMotion));
     document.documentElement.style.fontSize = `${settings.fontSize}%`;
     
-    // Save to localStorage
     localStorage.setItem(STORAGE_KEY, JSON.stringify(settings));
   }, [settings]);
 
-  const updateSetting = <K extends keyof AccessibilitySettings>(
+  const updatePreview = <K extends keyof AccessibilitySettings>(
     key: K,
     value: AccessibilitySettings[K]
   ) => {
-    setSettings(prev => ({ ...prev, [key]: value }));
+    setPreviewSettings(prev => ({ ...prev, [key]: value }));
+  };
+
+  const applyChanges = () => {
+    setSettings(previewSettings);
+    toast.success('Configurações de acessibilidade aplicadas!');
+  };
+
+  const cancelChanges = () => {
+    setPreviewSettings(settings);
+    toast.info('Alterações descartadas');
   };
 
   const resetToDefaults = () => {
+    setPreviewSettings(defaultAccessibility);
     setSettings(defaultAccessibility);
     toast.success('Configurações de acessibilidade restauradas');
   };
@@ -77,6 +99,61 @@ export function AccessibilitySection() {
       delay={0.15}
     >
       <div className="space-y-6">
+        {/* Real-time Preview Panel */}
+        <div className="card-option-dark-3d rounded-lg p-4 space-y-3">
+          <h4 className="text-label-yellow flex items-center gap-2">
+            <Eye className="w-4 h-4" />
+            Prévia das Mudanças
+          </h4>
+          
+          <div 
+            className="p-4 rounded-lg border-2 transition-all duration-300"
+            style={{
+              fontSize: `${previewSettings.fontSize}%`,
+              backgroundColor: previewSettings.highContrast ? 'hsl(0 0% 0%)' : 'hsl(var(--kiosk-bg))',
+              borderColor: previewSettings.highContrast ? 'hsl(0 0% 100%)' : 'hsl(var(--border))',
+              color: previewSettings.highContrast ? 'hsl(0 0% 100%)' : 'hsl(var(--kiosk-text))',
+            }}
+          >
+            <p className="text-lg font-bold mb-2">Título de Exemplo</p>
+            <p className="text-base mb-1">Texto normal de parágrafo demonstrativo.</p>
+            <p className="text-sm opacity-70">Texto secundário menor para detalhes.</p>
+            <div className="mt-3 flex gap-2">
+              <button 
+                className="px-3 py-1.5 rounded text-sm font-medium transition-all"
+                style={{
+                  backgroundColor: previewSettings.highContrast ? 'hsl(0 0% 100%)' : 'hsl(var(--primary))',
+                  color: previewSettings.highContrast ? 'hsl(0 0% 0%)' : 'hsl(var(--primary-foreground))',
+                }}
+              >
+                Botão Primário
+              </button>
+              <button 
+                className="px-3 py-1.5 rounded text-sm font-medium border transition-all"
+                style={{
+                  borderColor: previewSettings.highContrast ? 'hsl(0 0% 100%)' : 'hsl(var(--border))',
+                  color: previewSettings.highContrast ? 'hsl(0 0% 100%)' : 'inherit',
+                }}
+              >
+                Botão Secundário
+              </button>
+            </div>
+          </div>
+
+          {hasChanges && (
+            <div className="flex gap-2 pt-2">
+              <Button onClick={applyChanges} className="flex-1 button-primary-glow-3d">
+                <Check className="w-4 h-4 mr-2" />
+                Aplicar Mudanças
+              </Button>
+              <Button onClick={cancelChanges} variant="outline" className="button-outline-neon">
+                <X className="w-4 h-4 mr-2" />
+                Cancelar
+              </Button>
+            </div>
+          )}
+        </div>
+
         {/* High Contrast Mode */}
         <div className="card-option-dark-3d rounded-lg p-4">
           <div className="flex items-center justify-between">
@@ -90,8 +167,8 @@ export function AccessibilitySection() {
               </div>
             </div>
             <Switch
-              checked={settings.highContrast}
-              onCheckedChange={(checked) => updateSetting('highContrast', checked)}
+              checked={previewSettings.highContrast}
+              onCheckedChange={(checked) => updatePreview('highContrast', checked)}
               variant="neon"
             />
           </div>
@@ -104,16 +181,16 @@ export function AccessibilitySection() {
             <div className="flex-1">
               <Label className="text-kiosk-text font-medium">Tamanho da Fonte</Label>
               <p className="text-xs text-kiosk-text/70 mt-0.5">
-                Ajuste o tamanho do texto: {settings.fontSize}%
+                Ajuste o tamanho do texto: {previewSettings.fontSize}%
               </p>
             </div>
             <span className="text-lg font-mono text-label-yellow min-w-[4rem] text-right">
-              {settings.fontSize}%
+              {previewSettings.fontSize}%
             </span>
           </div>
           <Slider
-            value={[settings.fontSize]}
-            onValueChange={([value]) => updateSetting('fontSize', value)}
+            value={[previewSettings.fontSize]}
+            onValueChange={([value]) => updatePreview('fontSize', value)}
             min={80}
             max={150}
             step={5}
@@ -139,8 +216,8 @@ export function AccessibilitySection() {
               </div>
             </div>
             <Switch
-              checked={settings.reducedMotion}
-              onCheckedChange={(checked) => updateSetting('reducedMotion', checked)}
+              checked={previewSettings.reducedMotion}
+              onCheckedChange={(checked) => updatePreview('reducedMotion', checked)}
               variant="neon"
             />
           </div>

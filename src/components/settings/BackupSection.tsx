@@ -106,11 +106,28 @@ export function BackupSection({ isDemoMode }: BackupSectionProps) {
     }
   };
 
+  const instructions = {
+    title: "💾 O que são Backups?",
+    steps: [
+      "Backup é uma 'cópia de segurança' dos seus dados - como tirar uma foto do sistema.",
+      "Se algo der errado (computador quebrar, vírus, etc.), você pode restaurar tudo usando essa cópia.",
+      "BACKUP COMPLETO: Copia TUDO. Leva mais tempo, mas é a forma mais segura.",
+      "BACKUP INCREMENTAL: Copia apenas o que mudou desde o último backup. É mais rápido!"
+    ],
+    tips: [
+      "💡 Faça backup completo toda semana",
+      "💡 Faça backup incremental todo dia",
+      "💡 Guarde cópias em lugares diferentes (pen drive, nuvem)"
+    ],
+    warning: "⚠️ Sem backup, se o computador quebrar, você perde TUDO! Não arrisque."
+  };
+
   return (
     <SettingsSection
       icon={<Archive className="w-5 h-5 icon-neon-blue" />}
       title={t('backupLocal.title')}
       description={t('backupLocal.description')}
+      instructions={instructions}
       delay={0.2}
     >
       <div className="space-y-4">

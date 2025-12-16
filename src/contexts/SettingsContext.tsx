@@ -1,5 +1,6 @@
 import React, { createContext, useContext, useState, useEffect, useCallback } from 'react';
 import { spotifyClient, SpotifyTokens, SpotifyUser } from '@/lib/api/spotify';
+import type { Language } from '@/i18n';
 
 interface SpotifySettings {
   clientId: string;
@@ -33,6 +34,9 @@ interface SettingsContextType {
   // Weather settings
   weather: WeatherSettings;
   setWeatherConfig: (config: Partial<WeatherSettings>) => void;
+  // Language settings
+  language: Language;
+  setLanguage: (lang: Language) => void;
 }
 
 const defaultApiUrl = import.meta.env.VITE_API_URL || 'https://midiaserver.local/api';
@@ -70,6 +74,8 @@ const defaultSettings: SettingsContextType = {
   clearSpotifyAuth: () => {},
   weather: defaultWeatherSettings,
   setWeatherConfig: () => {},
+  language: 'pt-BR',
+  setLanguage: () => {},
 };
 
 const SettingsContext = createContext<SettingsContextType>(defaultSettings);
@@ -77,6 +83,7 @@ const SettingsContext = createContext<SettingsContextType>(defaultSettings);
 const STORAGE_KEY = 'tsi_jukebox_settings';
 const SPOTIFY_STORAGE_KEY = 'tsi_jukebox_spotify';
 const WEATHER_STORAGE_KEY = 'tsi_jukebox_weather';
+const LANGUAGE_STORAGE_KEY = 'tsi_jukebox_language';
 
 interface StoredSettings {
   isDemoMode?: boolean;
@@ -179,6 +186,14 @@ export function SettingsProvider({ children }: { children: React.ReactNode }) {
   });
 
   const [weatherSettings, setWeatherSettings] = useState<WeatherSettings>(() => loadWeatherSettings());
+  const [language, setLanguageState] = useState<Language>(() => {
+    try {
+      const stored = localStorage.getItem(LANGUAGE_STORAGE_KEY);
+      return (stored as Language) || 'pt-BR';
+    } catch {
+      return 'pt-BR';
+    }
+  });
 
   // Validate stored token on mount
   useEffect(() => {
@@ -273,6 +288,15 @@ export function SettingsProvider({ children }: { children: React.ReactNode }) {
     });
   }, [spotifySettings.clientId, spotifySettings.clientSecret]);
 
+  const setLanguage = useCallback((lang: Language) => {
+    setLanguageState(lang);
+    try {
+      localStorage.setItem(LANGUAGE_STORAGE_KEY, lang);
+    } catch (e) {
+      console.error('Failed to save language:', e);
+    }
+  }, []);
+
   const setWeatherConfig = useCallback((config: Partial<WeatherSettings>) => {
     setWeatherSettings(prev => {
       const updated = { ...prev, ...config };
@@ -297,6 +321,8 @@ export function SettingsProvider({ children }: { children: React.ReactNode }) {
     clearSpotifyAuth,
     weather: weatherSettings,
     setWeatherConfig,
+    language,
+    setLanguage,
   };
 
   return (

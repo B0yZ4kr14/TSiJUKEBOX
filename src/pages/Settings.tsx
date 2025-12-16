@@ -13,7 +13,7 @@ import { Badge } from '@/components/ui/badge';
 import { useSettings } from '@/contexts/SettingsContext';
 import { spotifyClient } from '@/lib/api/spotify';
 import { toast } from 'sonner';
-import { SettingsSection, CloudConnectionSection, BackendConnectionSection, DatabaseSection, DatabaseConfigSection, BackupSection, CloudBackupSection, BackupScheduleSection, UserManagementSection, AuthProviderSection, SystemUrlsSection, NtpConfigSection, WeatherConfigSection } from '@/components/settings';
+import { SettingsSection, CloudConnectionSection, BackendConnectionSection, DatabaseSection, DatabaseConfigSection, BackupSection, CloudBackupSection, BackupScheduleSection, UserManagementSection, AuthProviderSection, SystemUrlsSection, NtpConfigSection, WeatherConfigSection, LanguageSection } from '@/components/settings';
 
 export default function Settings() {
   const [searchParams, setSearchParams] = useSearchParams();

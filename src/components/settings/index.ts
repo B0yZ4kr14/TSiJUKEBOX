@@ -11,3 +11,4 @@ export { AuthProviderSection } from './AuthProviderSection';
 export { SystemUrlsSection } from './SystemUrlsSection';
 export { NtpConfigSection } from './NtpConfigSection';
 export { WeatherConfigSection } from './WeatherConfigSection';
+export { LanguageSection } from './LanguageSection';

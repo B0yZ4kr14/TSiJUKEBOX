@@ -79,7 +79,7 @@
     --kiosk-bg: 240 10% 10%;
     --kiosk-surface: 240 10% 15%;
     --kiosk-primary: 346 84% 61%;
-    --kiosk-text: 0 0% 93%;
+    --kiosk-text: 0 0% 96%;
 
     /* Genre Colors */
     --genre-rock: 0 85% 55%;
@@ -88,6 +88,19 @@
     --genre-hip-hop: 160 80% 45%;
     --genre-ballad: 210 70% 60%;
     --genre-classic-rock: 25 80% 50%;
+  }
+
+  /* High contrast text utilities */
+  .text-high-contrast {
+    color: hsl(0 0% 96%);
+  }
+  
+  .text-medium-contrast {
+    color: hsl(0 0% 80%);
+  }
+  
+  .text-low-contrast {
+    color: hsl(0 0% 65%);
   }
 }
 

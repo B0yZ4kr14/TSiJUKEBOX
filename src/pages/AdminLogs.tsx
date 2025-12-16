@@ -31,7 +31,7 @@ export default function AdminLogs() {
           <p className="text-kiosk-text/70">Visualize os logs de atividade do sistema</p>
         </div>
 
-        <Card>
+        <Card className="card-admin-extreme-3d">
           <CardHeader>
             <div className="flex items-center justify-between">
               <div>

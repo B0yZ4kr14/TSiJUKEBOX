@@ -264,6 +264,103 @@
   html {
     @apply dark;
   }
+
+  /* ========== TSiJUKEBOX LOGO STYLES ========== */
+  
+  /* Logo TSi - Azul neon intenso */
+  .logo-tsi {
+    color: hsl(210 100% 70%);
+    text-shadow: 
+      0 0 10px hsl(210 100% 60% / 0.9),
+      0 0 20px hsl(210 100% 55% / 0.7),
+      0 0 40px hsl(210 100% 50% / 0.5),
+      0 0 60px hsl(195 100% 50% / 0.4),
+      0 0 80px hsl(195 100% 45% / 0.3),
+      2px 2px 0 hsl(210 100% 30% / 0.8),
+      -1px -1px 0 hsl(210 100% 80% / 0.3);
+    letter-spacing: -0.02em;
+  }
+
+  /* Logo JUKEBOX - Azul neon com alto contraste */
+  .logo-jukebox {
+    color: hsl(195 100% 75%);
+    text-shadow: 
+      0 0 10px hsl(195 100% 65% / 0.9),
+      0 0 25px hsl(195 100% 60% / 0.7),
+      0 0 50px hsl(195 100% 55% / 0.5),
+      0 0 75px hsl(210 100% 50% / 0.4),
+      0 0 100px hsl(210 100% 45% / 0.3),
+      3px 3px 0 hsl(195 100% 25% / 0.9),
+      -1px -1px 0 hsl(195 100% 85% / 0.4);
+    letter-spacing: 0.08em;
+    margin-left: 0.1em;
+  }
+
+  /* Container 3D para o logo com profundidade extrema */
+  .logo-container-3d {
+    position: relative;
+    filter: drop-shadow(0 8px 20px hsl(210 100% 50% / 0.3))
+            drop-shadow(0 20px 40px hsl(195 100% 40% / 0.2));
+  }
+
+  /* Animação de pulsação do glow do logo */
+  .logo-animate {
+    animation: logo-pulse 3s ease-in-out infinite;
+  }
+
+  @keyframes logo-pulse {
+    0%, 100% {
+      filter: brightness(1);
+    }
+    50% {
+      filter: brightness(1.15);
+    }
+  }
+
+  /* ========== CARD ADMIN EXTREME 3D ========== */
+  
+  .card-admin-extreme-3d {
+    background: linear-gradient(
+      165deg,
+      hsl(240 10% 12%) 0%,
+      hsl(240 10% 8%) 50%,
+      hsl(240 10% 6%) 100%
+    );
+    border: 1px solid hsl(195 100% 50% / 0.25);
+    box-shadow: 
+      0 4px 6px hsl(0 0% 0% / 0.2),
+      0 10px 20px hsl(0 0% 0% / 0.25),
+      0 20px 40px hsl(0 0% 0% / 0.3),
+      0 40px 80px hsl(0 0% 0% / 0.2),
+      inset 0 1px 0 hsl(195 100% 60% / 0.1),
+      inset 0 -1px 0 hsl(0 0% 0% / 0.3),
+      0 0 30px hsl(195 100% 50% / 0.08);
+    transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+  }
+
+  .card-admin-extreme-3d:hover {
+    border-color: hsl(195 100% 55% / 0.4);
+    box-shadow: 
+      0 6px 10px hsl(0 0% 0% / 0.25),
+      0 15px 30px hsl(0 0% 0% / 0.3),
+      0 30px 60px hsl(0 0% 0% / 0.35),
+      0 50px 100px hsl(0 0% 0% / 0.25),
+      inset 0 1px 0 hsl(195 100% 65% / 0.15),
+      inset 0 -1px 0 hsl(0 0% 0% / 0.4),
+      0 0 50px hsl(195 100% 50% / 0.12),
+      0 0 80px hsl(210 100% 50% / 0.08);
+    transform: translateY(-4px);
+  }
+
+  /* Card admin com borda dourada neon sutil */
+  .card-admin-gold-border {
+    border: 1px solid hsl(45 100% 50% / 0.2);
+    box-shadow: 
+      0 4px 6px hsl(0 0% 0% / 0.2),
+      0 10px 20px hsl(0 0% 0% / 0.25),
+      0 0 25px hsl(45 100% 50% / 0.06),
+      inset 0 1px 0 hsl(45 100% 60% / 0.08);
+  }
 }
 
 @layer utilities {

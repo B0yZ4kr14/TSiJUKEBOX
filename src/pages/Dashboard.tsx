@@ -15,6 +15,7 @@ import {
 } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
+import { LogoBrand } from '@/components/ui/LogoBrand';
 import { AreaChart, Area, XAxis, YAxis, Tooltip, ResponsiveContainer, BarChart, Bar, PieChart, Pie, Cell, LineChart, Line } from 'recharts';
 import { useStatus } from '@/hooks/useStatus';
 import { useTranslation } from '@/hooks/useTranslation';
@@ -96,11 +97,21 @@ export default function Dashboard() {
 
   return (
     <div className="min-h-screen bg-kiosk-bg text-kiosk-text p-6">
+      {/* Logo centralizado no topo */}
+      <motion.div
+        className="flex justify-center mb-6"
+        initial={{ opacity: 0, y: -20 }}
+        animate={{ opacity: 1, y: 0 }}
+      >
+        <LogoBrand size="md" animate />
+      </motion.div>
+
       {/* Header */}
       <motion.header
         className="flex items-center justify-between mb-8"
         initial={{ opacity: 0, y: -20 }}
         animate={{ opacity: 1, y: 0 }}
+        transition={{ delay: 0.1 }}
       >
         <div className="flex items-center gap-4">
           <Button
@@ -146,7 +157,7 @@ export default function Dashboard() {
           animate={{ opacity: 1, y: 0 }}
           transition={{ delay: 0.1 }}
         >
-          <Card className="card-settings-3d h-full">
+          <Card className="card-admin-extreme-3d h-full">
             <CardHeader className="pb-2">
               <CardTitle className="text-lg flex items-center gap-2 text-gold-neon">
                 <Activity className="w-5 h-5 icon-neon-blue" />
@@ -205,7 +216,7 @@ export default function Dashboard() {
           animate={{ opacity: 1, y: 0 }}
           transition={{ delay: 0.2 }}
         >
-          <Card className="card-settings-3d h-full">
+          <Card className="card-admin-extreme-3d h-full">
             <CardHeader className="pb-2">
               <CardTitle className="text-lg flex items-center gap-2 text-gold-neon">
                 <PieChartIcon className="w-5 h-5 icon-neon-blue" />
@@ -252,7 +263,7 @@ export default function Dashboard() {
           animate={{ opacity: 1, y: 0 }}
           transition={{ delay: 0.3 }}
         >
-          <Card className="card-settings-3d h-full">
+          <Card className="card-admin-extreme-3d h-full">
             <CardHeader className="pb-2">
               <CardTitle className="text-lg flex items-center gap-2 text-gold-neon">
                 <Music2 className="w-5 h-5 icon-neon-blue" />
@@ -281,7 +292,7 @@ export default function Dashboard() {
           animate={{ opacity: 1, y: 0 }}
           transition={{ delay: 0.4 }}
         >
-          <Card className="card-settings-3d h-full">
+          <Card className="card-admin-extreme-3d h-full">
             <CardHeader className="pb-2">
               <CardTitle className="text-lg flex items-center gap-2 text-gold-neon">
                 <Clock className="w-5 h-5 icon-neon-blue" />
@@ -317,7 +328,7 @@ export default function Dashboard() {
           animate={{ opacity: 1, y: 0 }}
           transition={{ delay: 0.5 }}
         >
-          <Card className="card-settings-3d">
+          <Card className="card-admin-extreme-3d">
             <CardHeader className="pb-2">
               <CardTitle className="text-lg flex items-center gap-2 text-gold-neon">
                 <TrendingUp className="w-5 h-5 icon-neon-blue" />

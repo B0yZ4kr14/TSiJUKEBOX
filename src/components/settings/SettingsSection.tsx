@@ -64,7 +64,7 @@ export function SettingsSection({
                   whileHover={{ scale: 1.1 }}
                   whileTap={{ scale: 0.95 }}
                 >
-                  <HelpCircle className={`w-4 h-4 transition-colors ${showInstructions ? 'text-label-yellow' : 'text-kiosk-text/50 hover:text-kiosk-text/80'}`} />
+                  <HelpCircle className={`w-4 h-4 icon-neon-blue transition-opacity ${showInstructions ? 'opacity-100' : 'opacity-60 hover:opacity-100'}`} />
                 </motion.button>
               )}
               <motion.div

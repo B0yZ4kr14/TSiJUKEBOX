@@ -1,5 +1,5 @@
 import { useState, useEffect, useCallback } from 'react';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import { KioskLayout } from '@/components/layout/KioskLayout';
 import { NowPlaying } from '@/components/player/NowPlaying';
 import { PlayerControls } from '@/components/player/PlayerControls';
@@ -13,6 +13,7 @@ import { ProgressBar } from '@/components/player/ProgressBar';
 import { CommandDeck } from '@/components/player/CommandDeck';
 import { UserBadge } from '@/components/player/UserBadge';
 import { DigitalClock } from '@/components/player/DigitalClock';
+import { WeatherWidget } from '@/components/player/WeatherWidget';
 import { SpotifyPanel, SpotifyPanelToggle } from '@/components/spotify/SpotifyPanel';
 import { useStatus } from '@/hooks/useStatus';
 import { usePlayer } from '@/hooks/usePlayer';
@@ -28,6 +29,7 @@ import { ChevronLeft, ChevronRight, Download, Wifi, WifiOff, Disc3, Music, Setti
 import { toast } from 'sonner';
 
 export default function Index() {
+  const navigate = useNavigate();
   const { data: status, isLoading, error, connectionType } = useStatus();
   const { play, pause, next, prev } = usePlayer();
   const { setVolume } = useVolume();
@@ -218,6 +220,11 @@ export default function Index() {
             
             <div className="w-px h-8 bg-kiosk-text/20" />
             
+            {/* Weather Widget */}
+            <WeatherWidget />
+            
+            <div className="w-px h-8 bg-kiosk-text/20" />
+            
             <ConnectionIndicator 
               connectionType={isOnline ? (connectionType ?? 'polling') : 'disconnected'}
               isSpotifyActive={!!status?.playing && !!status?.track}
@@ -235,26 +242,19 @@ export default function Index() {
 
             <div className="w-px h-8 bg-kiosk-text/20" />
 
-            {/* Spotify Panel Toggle */}
-            {spotify.isConnected && (
-              <SpotifyPanelToggle 
-                onClick={() => setShowSpotifyPanel(!showSpotifyPanel)} 
-                isOpen={showSpotifyPanel}
-              />
-            )}
-
-            {/* Spotify Browser Link (when not connected) */}
-            {!spotify.isConnected && (
-              <Link to="/spotify">
-                <Button
-                  variant="ghost"
-                  size="icon"
-                  className="w-10 h-10 rounded-full button-3d text-kiosk-text/50 hover:text-kiosk-text transition-colors"
-                >
-                  <Disc3 className="w-5 h-5" />
-                </Button>
-              </Link>
-            )}
+            {/* Spotify Panel Toggle - Always visible */}
+            <SpotifyPanelToggle 
+              onClick={() => {
+                if (spotify.isConnected) {
+                  setShowSpotifyPanel(!showSpotifyPanel);
+                } else {
+                  navigate('/settings');
+                  toast.info('Configure o Spotify nas configurações');
+                }
+              }} 
+              isOpen={showSpotifyPanel}
+              isConnected={spotify.isConnected}
+            />
 
             {/* PWA Install Button */}
             {canInstall && (

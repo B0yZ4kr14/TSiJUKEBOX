@@ -35,7 +35,7 @@ export function NowPlaying({ track, isPlaying }: NowPlayingProps) {
         <motion.div 
           className={cn(
             "w-72 h-72 md:w-80 md:h-80 rounded-2xl overflow-hidden relative z-10",
-            "bg-kiosk-surface border border-white/10",
+            "bg-kiosk-bg border border-kiosk-surface/50",
             "album-frame-3d"
           )}
           initial={{ scale: 0.95, opacity: 0 }}

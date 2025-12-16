@@ -1,6 +1,7 @@
 import { useState } from 'react';
+import { useNavigate } from 'react-router-dom';
 import { motion, AnimatePresence } from 'framer-motion';
-import { Cloud, MapPin, Droplets, Wind, RefreshCw, AlertCircle, ChevronDown, ChevronUp, Thermometer } from 'lucide-react';
+import { Cloud, MapPin, Droplets, Wind, RefreshCw, AlertCircle, ChevronDown, Thermometer, Settings } from 'lucide-react';
 import { useWeather } from '@/hooks/useWeather';
 import { useWeatherForecast } from '@/hooks/useWeatherForecast';
 import { useSettings } from '@/contexts/SettingsContext';
@@ -10,6 +11,7 @@ import { AnimatedWeatherIcon } from '@/components/weather/AnimatedWeatherIcon';
 import { WeatherForecastChart } from './WeatherForecastChart';
 
 export function WeatherWidget() {
+  const navigate = useNavigate();
   const { weather: weatherSettings } = useSettings();
   const [isExpanded, setIsExpanded] = useState(false);
   
@@ -23,9 +25,29 @@ export function WeatherWidget() {
     apiKey: weatherSettings.apiKey,
   });
 
-  // Don't render if not configured
+  // Show unconfigured state instead of hiding
   if (!weatherSettings.isEnabled || !weatherSettings.apiKey || !weatherSettings.city) {
-    return null;
+    return (
+      <TooltipProvider>
+        <Tooltip>
+          <TooltipTrigger asChild>
+            <motion.button
+              onClick={() => navigate('/settings')}
+              className="flex items-center gap-2 px-3 py-2 rounded-xl weather-widget-3d cursor-pointer"
+              whileHover={{ scale: 1.02 }}
+              whileTap={{ scale: 0.98 }}
+            >
+              <Cloud className="w-5 h-5 text-kiosk-text/50" />
+              <span className="text-xs text-kiosk-text/60 font-medium">--°C</span>
+              <Settings className="w-3 h-3 text-kiosk-text/40" />
+            </motion.button>
+          </TooltipTrigger>
+          <TooltipContent side="bottom" className="bg-kiosk-surface border-kiosk-surface/50">
+            <p className="text-sm text-kiosk-text">Configure o clima nas configurações</p>
+          </TooltipContent>
+        </Tooltip>
+      </TooltipProvider>
+    );
   }
 
   if (error) {

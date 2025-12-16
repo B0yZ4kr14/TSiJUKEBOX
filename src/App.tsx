@@ -10,6 +10,7 @@ import Index from "./pages/Index";
 import Auth from "./pages/Auth";
 import Install from "./pages/Install";
 import Settings from "./pages/Settings";
+import Dashboard from "./pages/Dashboard";
 import Admin from "./pages/Admin";
 import AdminLibrary from "./pages/AdminLibrary";
 import AdminLogs from "./pages/AdminLogs";
@@ -47,6 +48,11 @@ const App = () => (
                 <ProtectedRoute requiredPermission="canAccessSettings">
                   <Settings />
                 </ProtectedRoute>
+              } />
+              
+              {/* Dashboard Route */}
+              <Route path="/dashboard" element={
+                <ProtectedRoute requiredPermission="canAccessSettings"><Dashboard /></ProtectedRoute>
               } />
               
               {/* Spotify Routes */}

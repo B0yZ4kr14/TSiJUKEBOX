@@ -1,0 +1,357 @@
+import { useState, useMemo } from 'react';
+import { Link, useNavigate } from 'react-router-dom';
+import { motion } from 'framer-motion';
+import { 
+  ArrowLeft, 
+  BarChart3, 
+  Activity, 
+  Music2, 
+  Clock, 
+  Cpu, 
+  HardDrive, 
+  Thermometer,
+  TrendingUp,
+  PieChart as PieChartIcon
+} from 'lucide-react';
+import { Button } from '@/components/ui/button';
+import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
+import { AreaChart, Area, XAxis, YAxis, Tooltip, ResponsiveContainer, BarChart, Bar, PieChart, Pie, Cell, LineChart, Line } from 'recharts';
+import { useStatus } from '@/hooks/useStatus';
+import { useTranslation } from '@/hooks/useTranslation';
+
+// Generate mock data for charts
+function generateSystemData() {
+  const now = new Date();
+  return Array.from({ length: 24 }, (_, i) => {
+    const hour = new Date(now.getTime() - (23 - i) * 60 * 60 * 1000);
+    return {
+      time: hour.toLocaleTimeString('pt-BR', { hour: '2-digit', minute: '2-digit' }),
+      cpu: Math.floor(Math.random() * 40 + 20),
+      memory: Math.floor(Math.random() * 30 + 40),
+      temp: Math.floor(Math.random() * 15 + 45),
+    };
+  });
+}
+
+function generatePlaybackData() {
+  const days = ['Seg', 'Ter', 'Qua', 'Qui', 'Sex', 'Sáb', 'Dom'];
+  return days.map((day) => ({
+    day,
+    songs: Math.floor(Math.random() * 50 + 10),
+    hours: Math.floor(Math.random() * 4 + 1),
+  }));
+}
+
+function generateGenreData() {
+  return [
+    { name: 'Rock', value: 35, color: 'hsl(0, 85%, 55%)' },
+    { name: 'Pop', value: 25, color: 'hsl(280, 85%, 65%)' },
+    { name: 'Soul', value: 15, color: 'hsl(35, 90%, 55%)' },
+    { name: 'Hip-Hop', value: 15, color: 'hsl(160, 80%, 45%)' },
+    { name: 'Ballad', value: 10, color: 'hsl(210, 70%, 60%)' },
+  ];
+}
+
+function generateHourlyActivity() {
+  return Array.from({ length: 24 }, (_, i) => ({
+    hour: `${i.toString().padStart(2, '0')}h`,
+    activity: i >= 8 && i <= 22 
+      ? Math.floor(Math.random() * 80 + 20) 
+      : Math.floor(Math.random() * 20),
+  }));
+}
+
+function generateTopTracks() {
+  return [
+    { name: 'Bohemian Rhapsody', artist: 'Queen', plays: 156 },
+    { name: 'Stairway to Heaven', artist: 'Led Zeppelin', plays: 142 },
+    { name: 'Hotel California', artist: 'Eagles', plays: 128 },
+    { name: 'Sweet Child O Mine', artist: "Guns N' Roses", plays: 115 },
+    { name: 'Back in Black', artist: 'AC/DC', plays: 103 },
+    { name: 'Smells Like Teen Spirit', artist: 'Nirvana', plays: 98 },
+    { name: 'November Rain', artist: "Guns N' Roses", plays: 94 },
+    { name: 'Wish You Were Here', artist: 'Pink Floyd', plays: 89 },
+  ];
+}
+
+export default function Dashboard() {
+  const navigate = useNavigate();
+  const { t } = useTranslation();
+  const statusResult = useStatus();
+  const status = statusResult.data;
+  
+  const systemData = useMemo(() => generateSystemData(), []);
+  const playbackData = useMemo(() => generatePlaybackData(), []);
+  const genreData = useMemo(() => generateGenreData(), []);
+  const hourlyActivity = useMemo(() => generateHourlyActivity(), []);
+  const topTracks = useMemo(() => generateTopTracks(), []);
+
+  const chartTooltipStyle = {
+    background: 'hsl(240, 10%, 15%)',
+    border: '1px solid hsl(240, 10%, 25%)',
+    borderRadius: '8px',
+    color: 'hsl(0, 0%, 93%)',
+    fontSize: '12px',
+  };
+
+  return (
+    <div className="min-h-screen bg-kiosk-bg text-kiosk-text p-6">
+      {/* Header */}
+      <motion.header
+        className="flex items-center justify-between mb-8"
+        initial={{ opacity: 0, y: -20 }}
+        animate={{ opacity: 1, y: 0 }}
+      >
+        <div className="flex items-center gap-4">
+          <Button
+            variant="ghost"
+            size="icon"
+            onClick={() => navigate('/')}
+            className="button-3d"
+          >
+            <ArrowLeft className="w-5 h-5" />
+          </Button>
+          <div>
+            <h1 className="text-2xl font-bold flex items-center gap-2">
+              <BarChart3 className="w-6 h-6 text-kiosk-primary" />
+              {t('dashboard.title')}
+            </h1>
+            <p className="text-sm text-kiosk-text/60">Estatísticas e monitoramento do sistema</p>
+          </div>
+        </div>
+        
+        {/* Live Stats */}
+        <div className="flex items-center gap-4">
+          <div className="flex items-center gap-2 px-4 py-2 rounded-xl badge-3d">
+            <Cpu className="w-4 h-4 text-cyan-400" />
+            <span className="font-mono font-bold">{status?.cpu || 0}%</span>
+          </div>
+          <div className="flex items-center gap-2 px-4 py-2 rounded-xl badge-3d">
+            <HardDrive className="w-4 h-4 text-purple-400" />
+            <span className="font-mono font-bold">{status?.memory || 0}%</span>
+          </div>
+          <div className="flex items-center gap-2 px-4 py-2 rounded-xl badge-3d">
+            <Thermometer className="w-4 h-4 text-orange-400" />
+            <span className="font-mono font-bold">{status?.temp || 0}°C</span>
+          </div>
+        </div>
+      </motion.header>
+
+      {/* Main Grid */}
+      <div className="grid grid-cols-12 gap-6">
+        {/* System Usage Chart */}
+        <motion.div
+          className="col-span-8"
+          initial={{ opacity: 0, y: 20 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ delay: 0.1 }}
+        >
+          <Card className="card-settings-3d h-full">
+            <CardHeader className="pb-2">
+              <CardTitle className="text-lg flex items-center gap-2 text-kiosk-text">
+                <Activity className="w-5 h-5 text-kiosk-primary" />
+                {t('dashboard.systemUsage')} - {t('dashboard.last24h')}
+              </CardTitle>
+            </CardHeader>
+            <CardContent>
+              <div className="h-64">
+                <ResponsiveContainer width="100%" height="100%">
+                  <AreaChart data={systemData}>
+                    <defs>
+                      <linearGradient id="cpuGradient" x1="0" y1="0" x2="0" y2="1">
+                        <stop offset="0%" stopColor="#06b6d4" stopOpacity={0.4} />
+                        <stop offset="100%" stopColor="#06b6d4" stopOpacity={0} />
+                      </linearGradient>
+                      <linearGradient id="memGradient" x1="0" y1="0" x2="0" y2="1">
+                        <stop offset="0%" stopColor="#a855f7" stopOpacity={0.4} />
+                        <stop offset="100%" stopColor="#a855f7" stopOpacity={0} />
+                      </linearGradient>
+                      <linearGradient id="tempGradient" x1="0" y1="0" x2="0" y2="1">
+                        <stop offset="0%" stopColor="#f97316" stopOpacity={0.4} />
+                        <stop offset="100%" stopColor="#f97316" stopOpacity={0} />
+                      </linearGradient>
+                    </defs>
+                    <XAxis dataKey="time" tick={{ fill: '#888', fontSize: 10 }} axisLine={false} tickLine={false} />
+                    <YAxis tick={{ fill: '#888', fontSize: 10 }} axisLine={false} tickLine={false} domain={[0, 100]} />
+                    <Tooltip contentStyle={chartTooltipStyle} />
+                    <Area type="monotone" dataKey="cpu" stroke="#06b6d4" strokeWidth={2} fill="url(#cpuGradient)" name="CPU" />
+                    <Area type="monotone" dataKey="memory" stroke="#a855f7" strokeWidth={2} fill="url(#memGradient)" name="Memória" />
+                    <Area type="monotone" dataKey="temp" stroke="#f97316" strokeWidth={2} fill="url(#tempGradient)" name="Temp °C" />
+                  </AreaChart>
+                </ResponsiveContainer>
+              </div>
+              <div className="flex justify-center gap-6 mt-4">
+                <div className="flex items-center gap-2">
+                  <div className="w-3 h-3 rounded-full bg-cyan-400" />
+                  <span className="text-xs text-kiosk-text/70">CPU</span>
+                </div>
+                <div className="flex items-center gap-2">
+                  <div className="w-3 h-3 rounded-full bg-purple-400" />
+                  <span className="text-xs text-kiosk-text/70">Memória</span>
+                </div>
+                <div className="flex items-center gap-2">
+                  <div className="w-3 h-3 rounded-full bg-orange-400" />
+                  <span className="text-xs text-kiosk-text/70">Temperatura</span>
+                </div>
+              </div>
+            </CardContent>
+          </Card>
+        </motion.div>
+
+        {/* Genre Distribution */}
+        <motion.div
+          className="col-span-4"
+          initial={{ opacity: 0, y: 20 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ delay: 0.2 }}
+        >
+          <Card className="card-settings-3d h-full">
+            <CardHeader className="pb-2">
+              <CardTitle className="text-lg flex items-center gap-2 text-kiosk-text">
+                <PieChartIcon className="w-5 h-5 text-kiosk-primary" />
+                {t('dashboard.genres')}
+              </CardTitle>
+            </CardHeader>
+            <CardContent>
+              <div className="h-48">
+                <ResponsiveContainer width="100%" height="100%">
+                  <PieChart>
+                    <Pie
+                      data={genreData}
+                      cx="50%"
+                      cy="50%"
+                      innerRadius={40}
+                      outerRadius={70}
+                      paddingAngle={5}
+                      dataKey="value"
+                    >
+                      {genreData.map((entry, index) => (
+                        <Cell key={`cell-${index}`} fill={entry.color} />
+                      ))}
+                    </Pie>
+                    <Tooltip contentStyle={chartTooltipStyle} />
+                  </PieChart>
+                </ResponsiveContainer>
+              </div>
+              <div className="flex flex-wrap justify-center gap-3 mt-2">
+                {genreData.map((genre) => (
+                  <div key={genre.name} className="flex items-center gap-1">
+                    <div className="w-2 h-2 rounded-full" style={{ background: genre.color }} />
+                    <span className="text-xs text-kiosk-text/70">{genre.name}</span>
+                  </div>
+                ))}
+              </div>
+            </CardContent>
+          </Card>
+        </motion.div>
+
+        {/* Playback Stats */}
+        <motion.div
+          className="col-span-6"
+          initial={{ opacity: 0, y: 20 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ delay: 0.3 }}
+        >
+          <Card className="card-settings-3d h-full">
+            <CardHeader className="pb-2">
+              <CardTitle className="text-lg flex items-center gap-2 text-kiosk-text">
+                <Music2 className="w-5 h-5 text-kiosk-primary" />
+                {t('dashboard.playbackStats')} - {t('dashboard.last7days')}
+              </CardTitle>
+            </CardHeader>
+            <CardContent>
+              <div className="h-48">
+                <ResponsiveContainer width="100%" height="100%">
+                  <BarChart data={playbackData}>
+                    <XAxis dataKey="day" tick={{ fill: '#888', fontSize: 11 }} axisLine={false} tickLine={false} />
+                    <YAxis tick={{ fill: '#888', fontSize: 10 }} axisLine={false} tickLine={false} />
+                    <Tooltip contentStyle={chartTooltipStyle} />
+                    <Bar dataKey="songs" fill="hsl(346, 84%, 61%)" radius={[4, 4, 0, 0]} name="Músicas" />
+                  </BarChart>
+                </ResponsiveContainer>
+              </div>
+            </CardContent>
+          </Card>
+        </motion.div>
+
+        {/* Hourly Activity */}
+        <motion.div
+          className="col-span-6"
+          initial={{ opacity: 0, y: 20 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ delay: 0.4 }}
+        >
+          <Card className="card-settings-3d h-full">
+            <CardHeader className="pb-2">
+              <CardTitle className="text-lg flex items-center gap-2 text-kiosk-text">
+                <Clock className="w-5 h-5 text-kiosk-primary" />
+                {t('dashboard.activity')} por Hora
+              </CardTitle>
+            </CardHeader>
+            <CardContent>
+              <div className="h-48">
+                <ResponsiveContainer width="100%" height="100%">
+                  <LineChart data={hourlyActivity}>
+                    <XAxis dataKey="hour" tick={{ fill: '#888', fontSize: 9 }} axisLine={false} tickLine={false} interval={2} />
+                    <YAxis tick={{ fill: '#888', fontSize: 10 }} axisLine={false} tickLine={false} />
+                    <Tooltip contentStyle={chartTooltipStyle} />
+                    <Line 
+                      type="monotone" 
+                      dataKey="activity" 
+                      stroke="hsl(346, 84%, 61%)" 
+                      strokeWidth={2}
+                      dot={false}
+                      name="Atividade"
+                    />
+                  </LineChart>
+                </ResponsiveContainer>
+              </div>
+            </CardContent>
+          </Card>
+        </motion.div>
+
+        {/* Top Tracks */}
+        <motion.div
+          className="col-span-12"
+          initial={{ opacity: 0, y: 20 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ delay: 0.5 }}
+        >
+          <Card className="card-settings-3d">
+            <CardHeader className="pb-2">
+              <CardTitle className="text-lg flex items-center gap-2 text-kiosk-text">
+                <TrendingUp className="w-5 h-5 text-kiosk-primary" />
+                {t('dashboard.topTracks')} - {t('dashboard.thisMonth')}
+              </CardTitle>
+            </CardHeader>
+            <CardContent>
+              <div className="grid grid-cols-4 gap-4">
+                {topTracks.map((track, index) => (
+                  <motion.div
+                    key={track.name}
+                    className="flex items-center gap-3 p-3 rounded-lg bg-kiosk-surface/50 border border-kiosk-surface"
+                    initial={{ opacity: 0, scale: 0.9 }}
+                    animate={{ opacity: 1, scale: 1 }}
+                    transition={{ delay: 0.5 + index * 0.05 }}
+                  >
+                    <span className="text-lg font-bold text-kiosk-primary w-6">
+                      {index + 1}
+                    </span>
+                    <div className="flex-1 min-w-0">
+                      <p className="text-sm font-medium text-kiosk-text truncate">{track.name}</p>
+                      <p className="text-xs text-kiosk-text/60 truncate">{track.artist}</p>
+                    </div>
+                    <div className="text-right">
+                      <p className="text-sm font-bold text-kiosk-text">{track.plays}</p>
+                      <p className="text-xs text-kiosk-text/50">plays</p>
+                    </div>
+                  </motion.div>
+                ))}
+              </div>
+            </CardContent>
+          </Card>
+        </motion.div>
+      </div>
+    </div>
+  );
+}

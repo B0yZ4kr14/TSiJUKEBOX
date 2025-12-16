@@ -10,6 +10,7 @@ import { Label } from '@/components/ui/label';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { Separator } from '@/components/ui/separator';
 import { Badge } from '@/components/ui/badge';
+import { LogoBrand } from '@/components/ui/LogoBrand';
 import { useSettings } from '@/contexts/SettingsContext';
 import { spotifyClient } from '@/lib/api/spotify';
 import { toast } from 'sonner';
@@ -119,23 +120,34 @@ export default function Settings() {
         initial={{ opacity: 0 }}
         animate={{ opacity: 1 }}
       >
+        {/* Logo centralizado no topo */}
+        <motion.div
+          className="flex justify-center mb-8"
+          initial={{ opacity: 0, y: -30 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.5 }}
+        >
+          <LogoBrand size="lg" animate />
+        </motion.div>
+
         {/* Header */}
         <motion.header
           className="flex items-center gap-4 mb-8"
           initial={{ y: -20, opacity: 0 }}
           animate={{ y: 0, opacity: 1 }}
+          transition={{ delay: 0.1 }}
         >
           <Link to="/">
             <Button
               variant="ghost"
               size="icon"
-              className="w-12 h-12 rounded-full bg-kiosk-surface hover:bg-kiosk-surface/80"
+              className="w-12 h-12 rounded-full bg-kiosk-surface hover:bg-kiosk-surface/80 button-3d"
             >
               <ArrowLeft className="w-6 h-6 text-kiosk-text" />
             </Button>
           </Link>
           <div>
-            <h1 className="text-2xl font-bold text-kiosk-text">Configurações</h1>
+            <h1 className="text-2xl font-bold text-gold-neon">Configurações</h1>
             <p className="text-kiosk-text/75 text-sm">Ajustes do sistema TSi JUKEBOX</p>
           </div>
         </motion.header>

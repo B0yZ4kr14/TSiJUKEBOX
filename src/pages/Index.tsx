@@ -16,6 +16,7 @@ import { UserBadge } from '@/components/player/UserBadge';
 import { DigitalClock } from '@/components/player/DigitalClock';
 import { WeatherWidget } from '@/components/player/WeatherWidget';
 import { SpotifyPanel, SpotifyPanelToggle } from '@/components/spotify/SpotifyPanel';
+import { LogoBrand } from '@/components/ui/LogoBrand';
 import { useStatus } from '@/hooks/useStatus';
 import { usePlayer } from '@/hooks/usePlayer';
 import { useVolume } from '@/hooks/useVolume';
@@ -138,16 +139,29 @@ export default function Index() {
     return (
       <KioskLayout>
         <div className="h-screen flex items-center justify-center">
-          <div className="text-center space-y-6">
-            <div className="relative mx-auto">
-              <div className="w-24 h-24 rounded-full bg-kiosk-surface flex items-center justify-center">
-                <Music className="w-12 h-12 text-kiosk-primary" />
+          <div className="text-center space-y-8">
+            <motion.div
+              initial={{ opacity: 0, scale: 0.9 }}
+              animate={{ opacity: 1, scale: 1 }}
+              transition={{ duration: 0.5 }}
+            >
+              <LogoBrand size="xl" showTagline animate />
+            </motion.div>
+            <motion.div
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              transition={{ delay: 0.3 }}
+            >
+              <div className="w-16 h-16 rounded-full bg-kiosk-surface/50 flex items-center justify-center mx-auto mb-4">
+                <motion.div
+                  animate={{ rotate: 360 }}
+                  transition={{ duration: 2, repeat: Infinity, ease: "linear" }}
+                >
+                  <Music className="w-8 h-8 text-kiosk-primary" />
+                </motion.div>
               </div>
-            </div>
-            <div>
-              <h1 className="text-2xl font-bold text-kiosk-text mb-2">TSi JUKEBOX</h1>
               <p className="text-kiosk-text/70">{t('notifications.connecting')}</p>
-            </div>
+            </motion.div>
           </div>
         </div>
       </KioskLayout>
@@ -324,9 +338,9 @@ export default function Index() {
             <p className="text-xs text-kiosk-text/40">
               {t('player.swipeHint')}
             </p>
-            <p className="text-[10px] text-kiosk-text/30 mt-1">
-              TSi JUKEBOX Enterprise v4.0
-            </p>
+            <div className="mt-2 opacity-40 hover:opacity-70 transition-opacity">
+              <LogoBrand size="sm" />
+            </div>
           </div>
         </main>
 

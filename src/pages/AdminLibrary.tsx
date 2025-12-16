@@ -60,7 +60,7 @@ export default function AdminLibrary() {
         {/* Upload Area */}
         <Card
           className={cn(
-            "border-2 border-dashed transition-colors",
+            "border-2 border-dashed transition-colors card-admin-extreme-3d",
             isDragging && "border-primary bg-primary/5"
           )}
           onDragOver={handleDragOver}
@@ -102,7 +102,7 @@ export default function AdminLibrary() {
         </Card>
 
         {/* Library Table */}
-        <Card>
+        <Card className="card-admin-extreme-3d">
           <CardHeader>
             <div className="flex items-center justify-between">
               <div>

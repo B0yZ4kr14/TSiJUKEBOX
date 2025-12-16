@@ -18,7 +18,7 @@ export default function AdminFeedback() {
           <p className="text-kiosk-text/70">Visualize as avaliações dos usuários</p>
         </div>
 
-        <Card>
+        <Card className="card-admin-extreme-3d">
           <CardHeader>
             <CardTitle className="text-gold-neon">Avaliações Recebidas</CardTitle>
             <CardDescription className="text-kiosk-text/70">

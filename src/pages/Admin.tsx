@@ -17,7 +17,7 @@ function StatCard({
   status?: 'good' | 'warning' | 'danger';
 }) {
   return (
-    <Card>
+    <Card className="card-admin-extreme-3d">
       <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
         <CardTitle className="text-sm font-medium text-label-yellow">{title}</CardTitle>
         <Icon className={cn(
@@ -81,7 +81,7 @@ export default function Admin() {
         </div>
 
         {/* Current Track */}
-        <Card>
+        <Card className="card-admin-extreme-3d">
           <CardHeader>
             <CardTitle className="flex items-center gap-2 text-gold-neon">
               <Music className="h-5 w-5 icon-neon-blue" />
@@ -117,7 +117,7 @@ export default function Admin() {
         </Card>
 
         {/* Recent Logs */}
-        <Card>
+        <Card className="card-admin-extreme-3d">
           <CardHeader>
             <CardTitle className="flex items-center gap-2 text-gold-neon">
               <AlertCircle className="h-5 w-5 icon-neon-blue" />

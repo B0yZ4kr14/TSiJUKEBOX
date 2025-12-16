@@ -72,12 +72,10 @@ export function UserManagementSection() {
   };
 
   useEffect(() => {
-    // Load users from localStorage (in production, this would come from backend)
     const saved = localStorage.getItem('app_users');
     if (saved) {
       setUsers(JSON.parse(saved));
     } else {
-      // Default users
       const defaultUsers: AppUser[] = [
         { id: 'local_tsi', username: 'tsi', role: 'admin', createdAt: new Date().toISOString() },
         { id: 'local_user', username: 'user', role: 'user', createdAt: new Date().toISOString() },
@@ -134,7 +132,6 @@ export function UserManagementSection() {
   const handleDeleteUser = () => {
     if (!userToDelete) return;
 
-    // Prevent deleting the last admin
     const admins = users.filter(u => u.role === 'admin');
     if (userToDelete.role === 'admin' && admins.length <= 1) {
       toast.error(t('users.cannotRemoveLastAdmin'));
@@ -163,7 +160,7 @@ export function UserManagementSection() {
     <SettingsSection
       title={t('users.title')}
       description={t('users.description')}
-      icon={<Users className="w-5 h-5 text-blue-400" />}
+      icon={<Users className="w-5 h-5 icon-neon-blue" />}
     >
       <div className="space-y-4">
         {/* User List */}
@@ -171,7 +168,7 @@ export function UserManagementSection() {
           {users.map((user) => (
             <div
               key={user.id}
-              className="flex items-center justify-between p-3 rounded-lg bg-background/50 border border-border/50"
+              className="flex items-center justify-between p-3 rounded-lg bg-background/50 border border-border/50 card-option-neon"
             >
               <div className="flex items-center gap-3">
                 <div className="w-8 h-8 rounded-full bg-muted flex items-center justify-center">
@@ -180,7 +177,7 @@ export function UserManagementSection() {
                   </span>
                 </div>
                 <div>
-                  <p className="font-medium text-sm">{user.username}</p>
+                  <p className="font-medium text-sm text-kiosk-text">{user.username}</p>
                   <Badge 
                     variant="outline" 
                     className={`text-[10px] ${roleConfig[user.role].color}`}
@@ -226,8 +223,8 @@ export function UserManagementSection() {
         </Button>
 
         {/* Role Legend */}
-        <div className="p-3 rounded-lg bg-muted/30 space-y-2">
-          <p className="text-xs font-medium text-kiosk-text/90">{t('users.permissionLevels')}:</p>
+        <div className="p-3 rounded-lg bg-muted/30 card-option-neon space-y-2">
+          <p className="text-xs font-medium text-label-yellow">{t('users.permissionLevels')}:</p>
           {Object.entries(roleDescriptions).map(([role, desc]) => (
             <div key={role} className="flex items-start gap-2">
               <Badge 
@@ -237,7 +234,7 @@ export function UserManagementSection() {
                 {roleConfig[role as UserRole].icon}
                 <span className="ml-1">{roleConfig[role as UserRole].label}</span>
               </Badge>
-              <span className="text-xs text-kiosk-text/85">{desc}</span>
+              <span className="text-xs text-kiosk-text/80">{desc}</span>
             </div>
           ))}
         </div>
@@ -254,7 +251,7 @@ export function UserManagementSection() {
           </DialogHeader>
           <div className="space-y-4 py-4">
             <div className="space-y-2">
-              <Label>{t('users.username')}</Label>
+              <Label className="text-label-yellow">{t('users.username')}</Label>
               <Input
                 value={formData.username}
                 onChange={(e) => setFormData({ ...formData, username: e.target.value })}
@@ -262,7 +259,7 @@ export function UserManagementSection() {
               />
             </div>
             <div className="space-y-2">
-              <Label>{t('users.password')}</Label>
+              <Label className="text-label-yellow">{t('users.password')}</Label>
               <Input
                 type="password"
                 value={formData.password}
@@ -271,7 +268,7 @@ export function UserManagementSection() {
               />
             </div>
             <div className="space-y-2">
-              <Label>{t('users.accessLevel')}</Label>
+              <Label className="text-label-yellow">{t('users.accessLevel')}</Label>
               <Select
                 value={formData.role}
                 onValueChange={(value: UserRole) => setFormData({ ...formData, role: value })}
@@ -307,7 +304,7 @@ export function UserManagementSection() {
           </DialogHeader>
           <div className="space-y-4 py-4">
             <div className="space-y-2">
-              <Label>{t('users.accessLevel')}</Label>
+              <Label className="text-label-yellow">{t('users.accessLevel')}</Label>
               <Select
                 value={formData.role}
                 onValueChange={(value: UserRole) => setFormData({ ...formData, role: value })}

@@ -271,7 +271,7 @@ export default function Settings() {
               {/* Credentials Form */}
               <div className="space-y-3">
                 <div className="space-y-2">
-                  <Label htmlFor="clientId" className="text-kiosk-text">Client ID</Label>
+                  <Label htmlFor="clientId" className="text-label-yellow">Client ID</Label>
                   <Input
                     id="clientId"
                     value={localClientId}
@@ -282,7 +282,7 @@ export default function Settings() {
                 </div>
 
                 <div className="space-y-2">
-                  <Label htmlFor="clientSecret" className="text-kiosk-text">Client Secret</Label>
+                  <Label htmlFor="clientSecret" className="text-label-yellow">Client Secret</Label>
                   <div className="relative">
                     <Input
                       id="clientSecret"
@@ -342,15 +342,22 @@ export default function Settings() {
                   </Button>
 
                   {/* Help Info */}
-                  <div className="p-3 rounded-lg bg-kiosk-background/50 border border-kiosk-border">
+                  <div className="p-3 rounded-lg bg-kiosk-background/50 border border-kiosk-border card-option-neon">
                     <div className="flex items-start gap-2">
-                      <AlertCircle className="w-4 h-4 text-kiosk-primary mt-0.5 flex-shrink-0" />
-                      <div className="text-xs text-kiosk-text/75 space-y-1">
-                        <p>Para obter as credenciais:</p>
-                        <ol className="list-decimal list-inside space-y-0.5 ml-1">
-                          <li>Acesse o <a href="https://developer.spotify.com/dashboard" target="_blank" rel="noopener noreferrer" className="text-kiosk-primary hover:underline inline-flex items-center gap-1">Spotify Developer Dashboard <ExternalLink className="w-3 h-3" /></a></li>
+                      <AlertCircle className="w-4 h-4 icon-neon-blue mt-0.5 flex-shrink-0" />
+                      <div className="text-xs text-kiosk-text/80 space-y-1.5">
+                        <p className="text-label-orange">Para obter as credenciais:</p>
+                        <ol className="list-decimal list-inside space-y-1 ml-1">
+                          <li>Acesse o <a href="https://developer.spotify.com/dashboard" target="_blank" rel="noopener noreferrer" className="text-cyan-400 hover:underline inline-flex items-center gap-1">Spotify Developer Dashboard <ExternalLink className="w-3 h-3" /></a></li>
                           <li>Crie um novo aplicativo</li>
-                          <li>Adicione <code className="bg-kiosk-surface px-1 rounded">{window.location.origin}/settings</code> como Redirect URI</li>
+                          <li>
+                            Adicione como Redirect URI:
+                            <div className="mt-1 space-y-1">
+                              <code className="block bg-kiosk-surface px-2 py-1 rounded text-cyan-400 text-[11px]">{window.location.origin}/settings</code>
+                              <span className="text-kiosk-text/60 text-[10px]">Em produção local:</span>
+                              <code className="block bg-kiosk-surface px-2 py-1 rounded text-cyan-400/80 text-[10px]">https://midiaserver.local/jukebox/settings</code>
+                            </div>
+                          </li>
                           <li>Copie o Client ID e Client Secret</li>
                         </ol>
                       </div>

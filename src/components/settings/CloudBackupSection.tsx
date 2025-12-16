@@ -17,17 +17,13 @@ type CloudProvider = 'aws' | 'gdrive' | 'dropbox' | 'mega' | 'onedrive' | 'storj
 
 interface CloudConfig {
   provider: CloudProvider | '';
-  // AWS S3
   awsBucket?: string;
   awsAccessKey?: string;
   awsSecretKey?: string;
   awsRegion?: string;
-  // MEGA
   megaEmail?: string;
   megaPassword?: string;
-  // Storj
   storjAccessGrant?: string;
-  // OAuth providers (Google Drive, Dropbox, OneDrive)
   isOAuthConnected?: boolean;
 }
 
@@ -127,7 +123,7 @@ export function CloudBackupSection({ isDemoMode }: CloudBackupSectionProps) {
 
   return (
     <SettingsSection
-      icon={<Cloud className="w-5 h-5 text-kiosk-primary" />}
+      icon={<Cloud className="w-5 h-5 icon-neon-blue" />}
       title="Backup em Nuvem"
       description="Sincronize backups com serviços de armazenamento em nuvem"
       badge={
@@ -142,7 +138,7 @@ export function CloudBackupSection({ isDemoMode }: CloudBackupSectionProps) {
       <div className="space-y-4">
         {/* Provider Selection */}
         <div className="space-y-2">
-          <Label className="text-kiosk-text">Provedor de Nuvem</Label>
+          <Label className="text-label-yellow">Provedor de Nuvem</Label>
           <Select value={config.provider} onValueChange={handleProviderChange}>
             <SelectTrigger className="bg-kiosk-background border-kiosk-border text-kiosk-text">
               <SelectValue placeholder="Selecione um provedor" />
@@ -162,9 +158,9 @@ export function CloudBackupSection({ isDemoMode }: CloudBackupSectionProps) {
 
         {/* Provider-specific Configuration */}
         {config.provider === 'aws' && (
-          <div className="space-y-3 p-3 rounded-lg bg-kiosk-background/50 border border-kiosk-border">
+          <div className="space-y-3 p-3 rounded-lg bg-kiosk-background/50 border border-kiosk-border card-option-neon">
             <div className="space-y-2">
-              <Label className="text-kiosk-text text-sm">Bucket Name</Label>
+              <Label className="text-label-yellow text-sm">Bucket Name</Label>
               <Input
                 value={config.awsBucket || ''}
                 onChange={(e) => setConfig({ ...config, awsBucket: e.target.value })}
@@ -174,7 +170,7 @@ export function CloudBackupSection({ isDemoMode }: CloudBackupSectionProps) {
               />
             </div>
             <div className="space-y-2">
-              <Label className="text-kiosk-text text-sm">Access Key ID</Label>
+              <Label className="text-label-yellow text-sm">Access Key ID</Label>
               <Input
                 value={config.awsAccessKey || ''}
                 onChange={(e) => setConfig({ ...config, awsAccessKey: e.target.value })}
@@ -184,7 +180,7 @@ export function CloudBackupSection({ isDemoMode }: CloudBackupSectionProps) {
               />
             </div>
             <div className="space-y-2">
-              <Label className="text-kiosk-text text-sm">Secret Access Key</Label>
+              <Label className="text-label-yellow text-sm">Secret Access Key</Label>
               <div className="relative">
                 <Input
                   type={showSecrets ? 'text' : 'password'}
@@ -206,7 +202,7 @@ export function CloudBackupSection({ isDemoMode }: CloudBackupSectionProps) {
               </div>
             </div>
             <div className="space-y-2">
-              <Label className="text-kiosk-text text-sm">Region</Label>
+              <Label className="text-label-yellow text-sm">Region</Label>
               <Input
                 value={config.awsRegion || ''}
                 onChange={(e) => setConfig({ ...config, awsRegion: e.target.value })}
@@ -219,9 +215,9 @@ export function CloudBackupSection({ isDemoMode }: CloudBackupSectionProps) {
         )}
 
         {config.provider === 'mega' && (
-          <div className="space-y-3 p-3 rounded-lg bg-kiosk-background/50 border border-kiosk-border">
+          <div className="space-y-3 p-3 rounded-lg bg-kiosk-background/50 border border-kiosk-border card-option-neon">
             <div className="space-y-2">
-              <Label className="text-kiosk-text text-sm">Email</Label>
+              <Label className="text-label-yellow text-sm">Email</Label>
               <Input
                 type="email"
                 value={config.megaEmail || ''}
@@ -232,7 +228,7 @@ export function CloudBackupSection({ isDemoMode }: CloudBackupSectionProps) {
               />
             </div>
             <div className="space-y-2">
-              <Label className="text-kiosk-text text-sm">Password</Label>
+              <Label className="text-label-yellow text-sm">Password</Label>
               <div className="relative">
                 <Input
                   type={showSecrets ? 'text' : 'password'}
@@ -257,9 +253,9 @@ export function CloudBackupSection({ isDemoMode }: CloudBackupSectionProps) {
         )}
 
         {config.provider === 'storj' && (
-          <div className="space-y-3 p-3 rounded-lg bg-kiosk-background/50 border border-kiosk-border">
+          <div className="space-y-3 p-3 rounded-lg bg-kiosk-background/50 border border-kiosk-border card-option-neon">
             <div className="space-y-2">
-              <Label className="text-kiosk-text text-sm">Access Grant</Label>
+              <Label className="text-label-yellow text-sm">Access Grant</Label>
               <div className="relative">
                 <Input
                   type={showSecrets ? 'text' : 'password'}
@@ -285,13 +281,13 @@ export function CloudBackupSection({ isDemoMode }: CloudBackupSectionProps) {
 
         {/* OAuth Providers */}
         {currentProvider?.needsOAuth && (
-          <div className="p-3 rounded-lg bg-kiosk-background/50 border border-kiosk-border">
+          <div className="p-3 rounded-lg bg-kiosk-background/50 border border-kiosk-border card-option-neon">
             <div className="flex items-center justify-between">
               <div>
                 <p className="text-sm text-kiosk-text">
                   {currentProvider.icon} {currentProvider.name}
                 </p>
-                <p className="text-xs text-kiosk-text/70">
+                <p className="text-xs text-kiosk-text/75">
                   {config.isOAuthConnected ? 'Conectado' : 'Clique para autenticar'}
                 </p>
               </div>
@@ -299,7 +295,7 @@ export function CloudBackupSection({ isDemoMode }: CloudBackupSectionProps) {
                 onClick={() => handleOAuthConnect(config.provider as CloudProvider)}
                 disabled={isDemoMode}
                 variant={config.isOAuthConnected ? 'outline' : 'default'}
-                className={config.isOAuthConnected ? 'border-green-500/50 text-green-500' : 'bg-kiosk-primary hover:bg-kiosk-primary/90'}
+                className={config.isOAuthConnected ? 'border-green-500/50 text-green-400' : 'bg-kiosk-primary hover:bg-kiosk-primary/90'}
               >
                 {config.isOAuthConnected ? (
                   <>
@@ -353,9 +349,9 @@ export function CloudBackupSection({ isDemoMode }: CloudBackupSectionProps) {
         )}
 
         {isDemoMode && (
-          <div className="flex items-start gap-2 p-3 rounded-lg bg-yellow-500/10 border border-yellow-500/20">
-            <AlertCircle className="w-4 h-4 text-yellow-500 mt-0.5 flex-shrink-0" />
-            <p className="text-xs text-yellow-500">
+          <div className="flex items-start gap-2 p-3 rounded-lg bg-yellow-500/10 border border-yellow-500/30">
+            <AlertCircle className="w-4 h-4 text-yellow-400 mt-0.5 flex-shrink-0" />
+            <p className="text-xs text-yellow-400">
               Configuração de nuvem indisponível no modo demo
             </p>
           </div>

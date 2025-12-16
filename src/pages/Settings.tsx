@@ -13,7 +13,7 @@ import { Badge } from '@/components/ui/badge';
 import { useSettings } from '@/contexts/SettingsContext';
 import { spotifyClient } from '@/lib/api/spotify';
 import { toast } from 'sonner';
-import { SettingsSection, CloudConnectionSection, BackendConnectionSection, DatabaseSection, BackupSection, CloudBackupSection, BackupScheduleSection, UserManagementSection, AuthProviderSection, SystemUrlsSection } from '@/components/settings';
+import { SettingsSection, CloudConnectionSection, BackendConnectionSection, DatabaseSection, DatabaseConfigSection, BackupSection, CloudBackupSection, BackupScheduleSection, UserManagementSection, AuthProviderSection, SystemUrlsSection } from '@/components/settings';
 
 export default function Settings() {
   const [searchParams, setSearchParams] = useSearchParams();
@@ -179,7 +179,10 @@ export default function Settings() {
             <span className="text-sm font-medium uppercase tracking-wider">Banco de Dados</span>
           </motion.div>
 
-          {/* Database Configuration */}
+          {/* Database Config */}
+          <DatabaseConfigSection isDemoMode={isDemoMode} />
+
+          {/* Database Maintenance */}
           <DatabaseSection isDemoMode={isDemoMode} />
 
           {/* Backup Local */}

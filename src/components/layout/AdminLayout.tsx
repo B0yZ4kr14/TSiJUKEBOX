@@ -1,6 +1,6 @@
 import { ReactNode } from 'react';
 import { Link, useLocation, useNavigate } from 'react-router-dom';
-import { useAuth } from '@/contexts/AuthContext';
+import { useUser } from '@/contexts/UserContext';
 import { Button } from '@/components/ui/button';
 import { cn } from '@/lib/utils';
 import { 
@@ -25,12 +25,12 @@ const navItems = [
 
 export function AdminLayout({ children }: AdminLayoutProps) {
   const { pathname } = useLocation();
-  const { logout } = useAuth();
+  const { logout } = useUser();
   const navigate = useNavigate();
 
-  const handleLogout = () => {
-    logout();
-    navigate('/login');
+  const handleLogout = async () => {
+    await logout();
+    navigate('/auth');
   };
 
   return (

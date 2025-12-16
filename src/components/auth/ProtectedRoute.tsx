@@ -1,16 +1,30 @@
 import { ReactNode } from 'react';
 import { Navigate } from 'react-router-dom';
-import { useAuth } from '@/contexts/AuthContext';
+import { useUser } from '@/contexts/UserContext';
+import { UserPermissions } from '@/types/user';
 
 interface ProtectedRouteProps {
   children: ReactNode;
+  requiredPermission?: keyof UserPermissions;
 }
 
-export function ProtectedRoute({ children }: ProtectedRouteProps) {
-  const { isAuthenticated } = useAuth();
+export function ProtectedRoute({ children, requiredPermission }: ProtectedRouteProps) {
+  const { isAuthenticated, isLoading, hasPermission } = useUser();
+
+  if (isLoading) {
+    return (
+      <div className="min-h-screen bg-background flex items-center justify-center">
+        <div className="animate-pulse text-muted-foreground">Carregando...</div>
+      </div>
+    );
+  }
 
   if (!isAuthenticated) {
-    return <Navigate to="/login" replace />;
+    return <Navigate to="/auth" replace />;
+  }
+
+  if (requiredPermission && !hasPermission(requiredPermission)) {
+    return <Navigate to="/" replace />;
   }
 
   return <>{children}</>;

@@ -11,6 +11,7 @@ import { AudioVisualizer } from '@/components/player/AudioVisualizer';
 import { ConnectionIndicator } from '@/components/player/ConnectionIndicator';
 import { ProgressBar } from '@/components/player/ProgressBar';
 import { CommandDeck } from '@/components/player/CommandDeck';
+import { UserBadge } from '@/components/player/UserBadge';
 import { useStatus } from '@/hooks/useStatus';
 import { usePlayer } from '@/hooks/usePlayer';
 import { useVolume } from '@/hooks/useVolume';
@@ -218,6 +219,9 @@ export default function Index() {
           </div>
           
           <div className="flex items-center gap-2">
+            {/* User Badge */}
+            <UserBadge />
+
             {/* Spotify Button */}
             <Link to="/spotify">
               <Button

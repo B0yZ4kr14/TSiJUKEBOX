@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useState, forwardRef } from 'react';
 import { X, Trash2, Music, GripVertical, Play } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { ScrollArea } from '@/components/ui/scroll-area';
@@ -34,25 +34,36 @@ interface QueuePanelProps {
   isLoading?: boolean;
 }
 
-interface QueueTrackItemProps {
+// Base component for queue track items - eliminates duplication
+interface QueueTrackItemBaseProps {
   item: QueueItem;
   onPlay?: () => void;
   onRemove?: () => void;
   showPlay?: boolean;
+  showDragHandle?: boolean;
   isDragging?: boolean;
+  dragHandleProps?: Record<string, unknown>;
 }
 
-function QueueTrackItem({ 
+function QueueTrackItemBase({ 
   item, 
   onPlay, 
   onRemove,
   showPlay = true,
+  showDragHandle = false,
   isDragging = false,
-}: QueueTrackItemProps) {
+  dragHandleProps,
+}: QueueTrackItemBaseProps) {
   return (
-    <div className={`group flex items-center gap-3 p-2 rounded-lg hover:bg-kiosk-surface/50 transition-colors ${isDragging ? 'opacity-50' : ''}`}>
+    <div className={`group flex items-center gap-3 p-2 rounded-lg hover:bg-kiosk-surface/50 transition-colors ${isDragging ? 'opacity-50 bg-kiosk-surface/30' : ''}`}>
       {/* Drag handle */}
-      <GripVertical className="w-4 h-4 text-kiosk-text/20 opacity-0 group-hover:opacity-100 cursor-grab" />
+      {showDragHandle && dragHandleProps ? (
+        <div {...dragHandleProps} className="touch-none">
+          <GripVertical className="w-4 h-4 text-kiosk-text/40 cursor-grab active:cursor-grabbing" />
+        </div>
+      ) : (
+        <GripVertical className="w-4 h-4 text-kiosk-text/20 opacity-0 group-hover:opacity-100" />
+      )}
       
       {/* Cover */}
       <div className="w-10 h-10 rounded bg-kiosk-surface flex-shrink-0 overflow-hidden">
@@ -122,57 +133,21 @@ function SortableQueueItem({
   };
 
   return (
-    <div
-      ref={setNodeRef}
-      style={style}
-      className={`group flex items-center gap-3 p-2 rounded-lg hover:bg-kiosk-surface/50 transition-colors ${isDragging ? 'opacity-50 bg-kiosk-surface/30' : ''}`}
-    >
-      {/* Drag handle */}
-      <div {...attributes} {...listeners} className="touch-none">
-        <GripVertical className="w-4 h-4 text-kiosk-text/40 cursor-grab active:cursor-grabbing" />
-      </div>
-      
-      {/* Cover */}
-      <div className="w-10 h-10 rounded bg-kiosk-surface flex-shrink-0 overflow-hidden">
-        {item.cover ? (
-          <img src={item.cover} alt={item.album} className="w-full h-full object-cover" />
-        ) : (
-          <div className="w-full h-full flex items-center justify-center">
-            <Music className="w-5 h-5 text-kiosk-text/30" />
-          </div>
-        )}
-      </div>
-      
-      {/* Info */}
-      <div className="flex-1 min-w-0">
-        <p className="text-sm font-medium text-kiosk-text truncate">{item.title}</p>
-        <p className="text-xs text-kiosk-text/60 truncate">{item.artist}</p>
-      </div>
-      
-      {/* Actions */}
-      <div className="flex items-center gap-1 opacity-0 group-hover:opacity-100 transition-opacity">
-        <Button
-          variant="ghost"
-          size="icon"
-          onClick={onPlay}
-          className="w-8 h-8 text-kiosk-text/50 hover:text-[#1DB954]"
-        >
-          <Play className="w-4 h-4" />
-        </Button>
-        <Button
-          variant="ghost"
-          size="icon"
-          onClick={onRemove}
-          className="w-8 h-8 text-kiosk-text/50 hover:text-destructive"
-        >
-          <X className="w-4 h-4" />
-        </Button>
-      </div>
+    <div ref={setNodeRef} style={style}>
+      <QueueTrackItemBase
+        item={item}
+        onPlay={onPlay}
+        onRemove={onRemove}
+        showPlay={true}
+        showDragHandle={true}
+        isDragging={isDragging}
+        dragHandleProps={{ ...attributes, ...listeners }}
+      />
     </div>
   );
 }
 
-export function QueuePanel({
+export const QueuePanel = forwardRef<HTMLDivElement, QueuePanelProps>(function QueuePanel({
   isOpen,
   onClose,
   queue,
@@ -181,9 +156,8 @@ export function QueuePanel({
   onClearQueue,
   onReorderQueue,
   isLoading,
-}: QueuePanelProps) {
+}, ref) {
   const [activeId, setActiveId] = useState<string | null>(null);
-  const [localQueue, setLocalQueue] = useState<QueueItem[]>([]);
 
   const sensors = useSensors(
     useSensor(PointerSensor, {
@@ -198,9 +172,6 @@ export function QueuePanel({
 
   const handleDragStart = (event: DragStartEvent) => {
     setActiveId(event.active.id as string);
-    if (queue) {
-      setLocalQueue([...queue.next]);
-    }
   };
 
   const handleDragEnd = (event: DragEndEvent) => {
@@ -222,7 +193,7 @@ export function QueuePanel({
   if (!isOpen) return null;
 
   return (
-    <div className="fixed inset-0 z-50 flex items-end justify-center md:items-center">
+    <div ref={ref} className="fixed inset-0 z-50 flex items-end justify-center md:items-center">
       {/* Backdrop */}
       <div 
         className="absolute inset-0 bg-black/70 backdrop-blur-sm"
@@ -324,7 +295,7 @@ export function QueuePanel({
                   <DragOverlay>
                     {activeItem && (
                       <div className="p-2 rounded-lg bg-kiosk-surface border border-kiosk-border shadow-lg">
-                        <QueueTrackItem item={activeItem} showPlay={false} />
+                        <QueueTrackItemBase item={activeItem} showPlay={false} />
                       </div>
                     )}
                   </DragOverlay>
@@ -340,7 +311,7 @@ export function QueuePanel({
                 </h3>
                 <div className="space-y-1 opacity-60">
                   {queue.history.slice(0, 5).map((item) => (
-                    <QueueTrackItem
+                    <QueueTrackItemBase
                       key={item.id}
                       item={item}
                       onPlay={() => item.uri && onPlayItem(item.uri)}
@@ -355,4 +326,4 @@ export function QueuePanel({
       </div>
     </div>
   );
-}
+});

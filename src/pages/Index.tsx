@@ -36,7 +36,7 @@ export default function Index() {
   const { canInstall, install } = usePWAInstall();
   const { isOnline, wasOffline } = useNetworkStatus();
   const { spotify } = useSettings();
-  const { shuffle, repeat, queue, toggleShuffle, toggleRepeat, removeFromQueue, clearQueue } = usePlaybackControls();
+  const { shuffle, repeat, queue, toggleShuffle, toggleRepeat, removeFromQueue, clearQueue, reorderQueue } = usePlaybackControls();
   const [swipeDirection, setSwipeDirection] = useState<'left' | 'right' | null>(null);
   const [showQueue, setShowQueue] = useState(false);
   const [showSpotifyPanel, setShowSpotifyPanel] = useState(false);
@@ -340,6 +340,7 @@ export default function Index() {
           onPlayItem={(uri) => api.playSpotifyUri(uri)}
           onRemoveItem={removeFromQueue}
           onClearQueue={clearQueue}
+          onReorderQueue={reorderQueue}
         />
 
         {/* Spotify Panel */}

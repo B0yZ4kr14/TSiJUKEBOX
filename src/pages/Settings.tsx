@@ -66,7 +66,7 @@ export default function Settings() {
         toast.success(`Conectado como ${user.displayName}`);
       }
     } catch (error) {
-      console.error('Failed to exchange code:', error);
+      if (import.meta.env.DEV) console.error('Failed to exchange code:', error);
       toast.error('Falha ao conectar com Spotify');
     } finally {
       setIsConnecting(false);
@@ -99,7 +99,7 @@ export default function Settings() {
       const { authUrl } = await spotifyClient.getAuthUrl();
       window.location.href = authUrl;
     } catch (error) {
-      console.error('Failed to get auth URL:', error);
+      if (import.meta.env.DEV) console.error('Failed to get auth URL:', error);
       toast.error('Falha ao iniciar autenticação');
       setIsConnecting(false);
     }

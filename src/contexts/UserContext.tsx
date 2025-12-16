@@ -64,7 +64,7 @@ export function UserProvider({ children }: { children: ReactNode }) {
         .single();
 
       if (error || !data) {
-        console.log('No role found, defaulting to newbie');
+        if (import.meta.env.DEV) console.log('No role found, defaulting to newbie');
         return 'newbie';
       }
 
@@ -89,7 +89,7 @@ export function UserProvider({ children }: { children: ReactNode }) {
           };
           setUser(devUser);
           setIsDevAutoLogin(true);
-          console.log('🔐 Auto-login dev ativado (tsi/admin)');
+          if (import.meta.env.DEV) console.log('🔐 Auto-login dev ativado (tsi/admin)');
           setIsLoading(false);
           return;
         }
@@ -176,13 +176,13 @@ export function UserProvider({ children }: { children: ReactNode }) {
         });
 
         if (error) {
-          console.error('Supabase login error:', error);
+          if (import.meta.env.DEV) console.error('Supabase login error:', error);
           return false;
         }
 
         return !!data.user;
       } catch (error) {
-        console.error('Login error:', error);
+        if (import.meta.env.DEV) console.error('Login error:', error);
         return false;
       }
     }

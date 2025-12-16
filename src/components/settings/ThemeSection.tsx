@@ -1,38 +1,26 @@
-import { Palette, Check, Download, Upload, Eye } from 'lucide-react';
+import { Palette, Download, Upload, Eye, Sliders } from 'lucide-react';
 import { SettingsSection } from './SettingsSection';
 import { useSettings, ThemeColor } from '@/contexts/SettingsContext';
 import { useTranslation } from '@/hooks/useTranslation';
-import { motion } from 'framer-motion';
 import { Button } from '@/components/ui/button';
 import { toast } from 'sonner';
 import { Link } from 'react-router-dom';
-
-const themes: { id: ThemeColor; name: string; color: string; gradient: string }[] = [
-  { 
-    id: 'blue', 
-    name: 'Neon Azul',
-    color: 'hsl(195 100% 50%)',
-    gradient: 'from-cyan-500 to-blue-600'
-  },
-  { 
-    id: 'green', 
-    name: 'Neon Verde',
-    color: 'hsl(145 100% 45%)',
-    gradient: 'from-emerald-500 to-green-600'
-  },
-  { 
-    id: 'purple', 
-    name: 'Neon Roxo',
-    color: 'hsl(280 100% 60%)',
-    gradient: 'from-purple-500 to-violet-600'
-  },
-];
+import { ThemeCustomizer } from './ThemeCustomizer';
+import { useState } from 'react';
+import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
+import { useThemeCustomizer, CustomThemeColors } from '@/hooks/useThemeCustomizer';
 
 interface ExportedSettings {
   version: string;
   exportDate: string;
   theme: ThemeColor;
   language: string;
+  customColors?: CustomThemeColors;
+  customPresets?: Array<{
+    id: string;
+    name: string;
+    colors: CustomThemeColors;
+  }>;
   accessibility?: {
     highContrast: boolean;
     fontSize: number;
@@ -47,30 +35,27 @@ interface ExportedSettings {
 export function ThemeSection() {
   const { theme, setTheme, language, weather } = useSettings();
   const { t } = useTranslation();
-
-  const handleThemeChange = (newTheme: ThemeColor) => {
-    // Add transitioning class for smooth morphing
-    document.documentElement.classList.add('theme-transitioning');
-    
-    setTheme(newTheme);
-    
-    // Remove class after transition completes
-    setTimeout(() => {
-      document.documentElement.classList.remove('theme-transitioning');
-    }, 600);
-  };
+  const { activeColors, customPresets, isCustomMode } = useThemeCustomizer();
+  const [activeTab, setActiveTab] = useState<string>('customize');
 
   const exportSettings = () => {
     try {
-      // Gather all settings
       const accessibilityData = localStorage.getItem('tsi_jukebox_accessibility');
       const accessibility = accessibilityData ? JSON.parse(accessibilityData) : null;
 
       const exportData: ExportedSettings = {
-        version: '1.0',
+        version: '2.0',
         exportDate: new Date().toISOString(),
         theme,
         language,
+        ...(isCustomMode && { customColors: activeColors }),
+        ...(customPresets.length > 0 && { 
+          customPresets: customPresets.map(p => ({
+            id: p.id,
+            name: p.name,
+            colors: p.colors,
+          }))
+        }),
         ...(accessibility && { accessibility }),
         weather: {
           city: weather.city,
@@ -107,17 +92,35 @@ export function ThemeSection() {
         const text = await file.text();
         const data: ExportedSettings = JSON.parse(text);
 
-        // Validate version
         if (!data.version || !data.theme) {
           throw new Error('Arquivo de configuração inválido');
         }
 
-        // Apply theme with transition
+        // Apply theme
         document.documentElement.classList.add('theme-transitioning');
         setTheme(data.theme);
         setTimeout(() => {
           document.documentElement.classList.remove('theme-transitioning');
         }, 600);
+
+        // Import custom presets if present
+        if (data.customPresets && data.customPresets.length > 0) {
+          const existingPresets = JSON.parse(localStorage.getItem('tsi_jukebox_custom_themes') || '[]');
+          const newPresets = data.customPresets.filter(
+            imported => !existingPresets.some((existing: any) => existing.id === imported.id)
+          ).map(p => ({
+            ...p,
+            isBuiltIn: false,
+            createdAt: new Date().toISOString(),
+          }));
+          
+          if (newPresets.length > 0) {
+            localStorage.setItem(
+              'tsi_jukebox_custom_themes', 
+              JSON.stringify([...existingPresets, ...newPresets])
+            );
+          }
+        }
 
         // Apply accessibility settings if present
         if (data.accessibility) {
@@ -140,15 +143,15 @@ export function ThemeSection() {
     title: "🎨 O que são Temas de Cores?",
     steps: [
       "Os temas mudam a cor principal de todo o sistema do Jukebox.",
-      "Neon Azul: Cor padrão, transmite tecnologia e modernidade.",
-      "Neon Verde: Cor vibrante, ideal para ambientes descontraídos.",
-      "Neon Roxo: Cor elegante, perfeito para ambientes sofisticados.",
-      "Você pode exportar suas configurações para usar em outro Jukebox!"
+      "Escolha um tema predefinido ou crie suas próprias combinações de cores.",
+      "Use os sliders HSL para ajuste fino de cada cor.",
+      "Salve suas criações como presets para usar depois!",
+      "Você pode exportar e importar configurações entre Jukeboxes."
     ],
     tips: [
-      "💡 Clique em 'Preview Completo' para ver todas as cores antes de escolher",
-      "💡 Use 'Exportar' para fazer backup das suas preferências",
-      "💡 A transição entre temas é suave e animada"
+      "💡 Clique em 'Personalizar' para criar seu tema único",
+      "💡 Os presets salvos ficam disponíveis mesmo após recarregar",
+      "💡 Use 'Exportar' para fazer backup das suas preferências"
     ]
   };
 
@@ -160,84 +163,61 @@ export function ThemeSection() {
       instructions={instructions}
       delay={0.15}
     >
-      <div className="space-y-4">
-        {/* Theme Selection */}
-        <div className="grid grid-cols-3 gap-3">
-          {themes.map((themeOption) => (
-            <motion.button
-              key={themeOption.id}
-              onClick={() => handleThemeChange(themeOption.id)}
-              className={`
-                relative flex flex-col items-center justify-center gap-2 p-4 rounded-xl
-                transition-all duration-300 ripple-effect
-                ${theme === themeOption.id ? 'card-option-selected-3d' : 'card-option-dark-3d'}
-              `}
-              whileHover={{ scale: 1.02 }}
-              whileTap={{ scale: 0.98 }}
-            >
-              {/* Color preview circle */}
-              <div 
-                className={`
-                  w-10 h-10 rounded-full bg-gradient-to-br ${themeOption.gradient}
-                  shadow-lg transition-all duration-300
-                `}
-                style={{
-                  boxShadow: theme === themeOption.id 
-                    ? `0 0 30px ${themeOption.color}, 0 0 60px ${themeOption.color}50`
-                    : `0 0 15px ${themeOption.color}40`
-                }}
-              />
-              
-              {/* Label */}
-              <span className={`text-xs font-medium ${theme === themeOption.id ? 'text-label-yellow' : 'text-kiosk-text/80'}`}>
-                {themeOption.name}
-              </span>
-
-              {/* Selected indicator */}
-              {theme === themeOption.id && (
-                <motion.div
-                  initial={{ scale: 0 }}
-                  animate={{ scale: 1 }}
-                  className="absolute top-2 right-2 w-5 h-5 rounded-full bg-gradient-to-br from-yellow-400 to-amber-500 flex items-center justify-center"
-                >
-                  <Check className="w-3 h-3 text-black" />
-                </motion.div>
-              )}
-            </motion.button>
-          ))}
-        </div>
-
-        {/* Preview Link */}
-        <Link to="/theme-preview">
-          <Button
-            variant="outline"
-            className="w-full button-outline-neon ripple-effect"
+      <Tabs value={activeTab} onValueChange={setActiveTab} className="w-full">
+        <TabsList className="grid w-full grid-cols-2 mb-4 bg-kiosk-surface/50">
+          <TabsTrigger 
+            value="customize" 
+            className="data-[state=active]:bg-primary/20 data-[state=active]:text-primary"
+          >
+            <Sliders className="w-4 h-4 mr-2" />
+            Personalizar
+          </TabsTrigger>
+          <TabsTrigger 
+            value="tools"
+            className="data-[state=active]:bg-primary/20 data-[state=active]:text-primary"
           >
             <Eye className="w-4 h-4 mr-2" />
-            Ver Preview Completo dos Temas
-          </Button>
-        </Link>
+            Ferramentas
+          </TabsTrigger>
+        </TabsList>
 
-        {/* Export/Import Buttons */}
-        <div className="grid grid-cols-2 gap-3">
-          <Button
-            variant="outline"
-            onClick={exportSettings}
-            className="button-action-neon ripple-effect"
-          >
-            <Download className="w-4 h-4 mr-2" />
-            Exportar
-          </Button>
-          <Button
-            variant="outline"
-            onClick={importSettings}
-            className="button-action-neon ripple-effect"
-          >
-            <Upload className="w-4 h-4 mr-2" />
-            Importar
-          </Button>
-        </div>
-      </div>
+        <TabsContent value="customize" className="space-y-4">
+          <ThemeCustomizer />
+        </TabsContent>
+
+        <TabsContent value="tools" className="space-y-4">
+          {/* Preview Link */}
+          <Link to="/theme-preview">
+            <Button
+              variant="outline"
+              className="w-full button-outline-neon ripple-effect"
+            >
+              <Eye className="w-4 h-4 mr-2" />
+              Ver Preview Completo dos Temas
+            </Button>
+          </Link>
+
+          {/* Export/Import Buttons */}
+          <div className="grid grid-cols-2 gap-3">
+            <Button
+              variant="outline"
+              onClick={exportSettings}
+              className="button-action-neon ripple-effect"
+            >
+              <Download className="w-4 h-4 mr-2" />
+              Exportar
+            </Button>
+            <Button
+              variant="outline"
+              onClick={importSettings}
+              className="button-action-neon ripple-effect"
+            >
+              <Upload className="w-4 h-4 mr-2" />
+              Importar
+            </Button>
+          </div>
+        </TabsContent>
+      </Tabs>
     </SettingsSection>
   );
 }

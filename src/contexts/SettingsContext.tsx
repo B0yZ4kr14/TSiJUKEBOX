@@ -1,8 +1,10 @@
 import React, { createContext, useContext, useState, useEffect, useCallback } from 'react';
 import { spotifyClient, SpotifyTokens, SpotifyUser } from '@/lib/api/spotify';
+import { youtubeMusicClient, YouTubeMusicTokens, YouTubeMusicUser } from '@/lib/api/youtubeMusic';
 import type { Language } from '@/i18n';
 
 export type ThemeColor = 'blue' | 'green' | 'purple' | 'orange' | 'pink' | 'custom';
+export type MusicProvider = 'spotify' | 'spicetify' | 'youtube-music' | 'local';
 
 interface SpotifySettings {
   clientId: string;
@@ -10,6 +12,18 @@ interface SpotifySettings {
   tokens: SpotifyTokens | null;
   user: SpotifyUser | null;
   isConnected: boolean;
+}
+
+interface YouTubeMusicSettings {
+  tokens: YouTubeMusicTokens | null;
+  user: YouTubeMusicUser | null;
+  isConnected: boolean;
+}
+
+interface SpicetifySettings {
+  isInstalled: boolean;
+  currentTheme: string;
+  version: string;
 }
 
 interface WeatherSettings {
@@ -33,6 +47,17 @@ interface SettingsContextType {
   setSpotifyTokens: (tokens: SpotifyTokens | null) => void;
   setSpotifyUser: (user: SpotifyUser | null) => void;
   clearSpotifyAuth: () => void;
+  // YouTube Music settings
+  youtubeMusic: YouTubeMusicSettings;
+  setYouTubeMusicTokens: (tokens: YouTubeMusicTokens | null) => void;
+  setYouTubeMusicUser: (user: YouTubeMusicUser | null) => void;
+  clearYouTubeMusicAuth: () => void;
+  // Spicetify settings
+  spicetify: SpicetifySettings;
+  setSpicetifyConfig: (config: Partial<SpicetifySettings>) => void;
+  // Music provider
+  musicProvider: MusicProvider;
+  setMusicProvider: (provider: MusicProvider) => void;
   // Weather settings
   weather: WeatherSettings;
   setWeatherConfig: (config: Partial<WeatherSettings>) => void;
@@ -51,7 +76,6 @@ interface SettingsContextType {
 
 const defaultApiUrl = import.meta.env.VITE_API_URL || 'https://midiaserver.local/api';
 const envDemoMode = import.meta.env.VITE_DEMO_MODE === 'true';
-// Enable demo mode by default in development when no backend is configured
 const shouldDefaultToDemo = import.meta.env.DEV || envDemoMode;
 
 const defaultSpotifySettings: SpotifySettings = {
@@ -60,6 +84,18 @@ const defaultSpotifySettings: SpotifySettings = {
   tokens: null,
   user: null,
   isConnected: false,
+};
+
+const defaultYouTubeMusicSettings: YouTubeMusicSettings = {
+  tokens: null,
+  user: null,
+  isConnected: false,
+};
+
+const defaultSpicetifySettings: SpicetifySettings = {
+  isInstalled: false,
+  currentTheme: '',
+  version: '',
 };
 
 const defaultWeatherSettings: WeatherSettings = {
@@ -82,6 +118,14 @@ const defaultSettings: SettingsContextType = {
   setSpotifyTokens: () => {},
   setSpotifyUser: () => {},
   clearSpotifyAuth: () => {},
+  youtubeMusic: defaultYouTubeMusicSettings,
+  setYouTubeMusicTokens: () => {},
+  setYouTubeMusicUser: () => {},
+  clearYouTubeMusicAuth: () => {},
+  spicetify: defaultSpicetifySettings,
+  setSpicetifyConfig: () => {},
+  musicProvider: 'spotify',
+  setMusicProvider: () => {},
   weather: defaultWeatherSettings,
   setWeatherConfig: () => {},
   language: 'pt-BR',
@@ -167,6 +211,26 @@ function saveWeatherSettings(settings: WeatherSettings) {
   }
 }
 
+const YOUTUBE_MUSIC_STORAGE_KEY = 'tsi_jukebox_youtube_music';
+const MUSIC_PROVIDER_STORAGE_KEY = 'tsi_jukebox_music_provider';
+
+function loadYouTubeMusicSettings(): { tokens?: YouTubeMusicTokens } {
+  try {
+    const stored = localStorage.getItem(YOUTUBE_MUSIC_STORAGE_KEY);
+    return stored ? JSON.parse(stored) : {};
+  } catch {
+    return {};
+  }
+}
+
+function saveYouTubeMusicSettings(settings: { tokens?: YouTubeMusicTokens }) {
+  try {
+    localStorage.setItem(YOUTUBE_MUSIC_STORAGE_KEY, JSON.stringify(settings));
+  } catch (e) {
+    console.error('Failed to save YouTube Music settings:', e);
+  }
+}
+
 export function SettingsProvider({ children }: { children: React.ReactNode }) {
   const [settings, setSettings] = useState<StoredSettings>(() => {
     const stored = loadSettings();
@@ -181,7 +245,6 @@ export function SettingsProvider({ children }: { children: React.ReactNode }) {
   const [spotifySettings, setSpotifySettings] = useState<SpotifySettings>(() => {
     const stored = loadSpotifySettings();
     
-    // Initialize spotifyClient with stored credentials
     if (stored.clientId && stored.clientSecret) {
       spotifyClient.setCredentials({
         clientId: stored.clientId,
@@ -189,7 +252,6 @@ export function SettingsProvider({ children }: { children: React.ReactNode }) {
       });
     }
     
-    // Initialize spotifyClient with stored tokens
     if (stored.tokens) {
       spotifyClient.setTokens(stored.tokens);
     }
@@ -201,6 +263,29 @@ export function SettingsProvider({ children }: { children: React.ReactNode }) {
       user: null,
       isConnected: !!stored.tokens?.accessToken,
     };
+  });
+
+  const [youtubeMusicSettings, setYouTubeMusicSettings] = useState<YouTubeMusicSettings>(() => {
+    const stored = loadYouTubeMusicSettings();
+    if (stored.tokens) {
+      youtubeMusicClient.setTokens(stored.tokens);
+    }
+    return {
+      tokens: stored.tokens || null,
+      user: null,
+      isConnected: !!stored.tokens?.accessToken,
+    };
+  });
+
+  const [spicetifySettings, setSpicetifySettings] = useState<SpicetifySettings>(defaultSpicetifySettings);
+
+  const [musicProvider, setMusicProviderState] = useState<MusicProvider>(() => {
+    try {
+      const stored = localStorage.getItem(MUSIC_PROVIDER_STORAGE_KEY);
+      return (stored as MusicProvider) || 'spotify';
+    } catch {
+      return 'spotify';
+    }
   });
 
   const [weatherSettings, setWeatherSettings] = useState<WeatherSettings>(() => loadWeatherSettings());
@@ -221,7 +306,6 @@ export function SettingsProvider({ children }: { children: React.ReactNode }) {
     }
   });
 
-  // Feedback settings (sound + animations)
   const [feedbackSettings, setFeedbackSettings] = useState(() => {
     try {
       const stored = localStorage.getItem(FEEDBACK_STORAGE_KEY);
@@ -371,6 +455,50 @@ export function SettingsProvider({ children }: { children: React.ReactNode }) {
     });
   }, []);
 
+  // YouTube Music callbacks
+  const setYouTubeMusicTokens = useCallback((tokens: YouTubeMusicTokens | null) => {
+    if (tokens) {
+      youtubeMusicClient.setTokens(tokens);
+    } else {
+      youtubeMusicClient.clearTokens();
+    }
+    setYouTubeMusicSettings(prev => ({
+      ...prev,
+      tokens,
+      isConnected: !!tokens?.accessToken,
+    }));
+    saveYouTubeMusicSettings({ tokens: tokens || undefined });
+  }, []);
+
+  const setYouTubeMusicUser = useCallback((user: YouTubeMusicUser | null) => {
+    setYouTubeMusicSettings(prev => ({ ...prev, user }));
+  }, []);
+
+  const clearYouTubeMusicAuth = useCallback(() => {
+    youtubeMusicClient.clearTokens();
+    setYouTubeMusicSettings({
+      tokens: null,
+      user: null,
+      isConnected: false,
+    });
+    saveYouTubeMusicSettings({});
+  }, []);
+
+  // Spicetify callbacks
+  const setSpicetifyConfig = useCallback((config: Partial<SpicetifySettings>) => {
+    setSpicetifySettings(prev => ({ ...prev, ...config }));
+  }, []);
+
+  // Music provider callback
+  const setMusicProvider = useCallback((provider: MusicProvider) => {
+    setMusicProviderState(provider);
+    try {
+      localStorage.setItem(MUSIC_PROVIDER_STORAGE_KEY, provider);
+    } catch (e) {
+      console.error('Failed to save music provider:', e);
+    }
+  }, []);
+
   const value = {
     isDemoMode: settings.isDemoMode ?? false,
     setDemoMode,
@@ -385,6 +513,14 @@ export function SettingsProvider({ children }: { children: React.ReactNode }) {
     setSpotifyTokens,
     setSpotifyUser,
     clearSpotifyAuth,
+    youtubeMusic: youtubeMusicSettings,
+    setYouTubeMusicTokens,
+    setYouTubeMusicUser,
+    clearYouTubeMusicAuth,
+    spicetify: spicetifySettings,
+    setSpicetifyConfig,
+    musicProvider,
+    setMusicProvider,
     weather: weatherSettings,
     setWeatherConfig,
     language,

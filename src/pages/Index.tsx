@@ -240,14 +240,14 @@ export default function Index() {
         {/* Header with 3D effect - Two Lines: Logo on top, Status bar below */}
         <header className="flex flex-col p-3 pt-2 header-3d backdrop-blur-sm">
           {/* LINE 1: Logo centered at absolute top */}
-          <div className="w-full flex justify-center mb-2">
+          <div className="w-full flex justify-center mb-3">
             <LogoBrand size="lg" variant="ultra" animate />
           </div>
 
-          {/* LINE 2: Status bar */}
-          <div className="flex items-center justify-between relative">
+          {/* LINE 2: Status bar with grid for perfect centering */}
+          <div className="grid grid-cols-3 items-center w-full">
             {/* Left: System Info */}
-            <div className="flex items-center gap-3">
+            <div className="flex items-center gap-3 justify-start">
               <SystemMonitor 
                 cpu={status?.cpu ?? 0} 
                 memory={status?.memory ?? 0} 
@@ -256,7 +256,6 @@ export default function Index() {
               
               <div className="w-px h-6 bg-kiosk-text/20" />
               
-              {/* Weather Widget */}
               <WeatherWidget />
               
               <div className="w-px h-6 bg-kiosk-text/20" />
@@ -267,18 +266,17 @@ export default function Index() {
               />
             </div>
 
-            {/* Center: Digital Clock */}
-            <div className="absolute left-1/2 -translate-x-1/2">
+            {/* Center: Digital Clock - truly centered via grid */}
+            <div className="flex justify-center">
               <DigitalClock showDate={true} showSeconds={false} />
             </div>
             
             {/* Right: User & Actions */}
-            <div className="flex items-center gap-3">
+            <div className="flex items-center gap-3 justify-end">
               <UserBadge />
 
               <div className="w-px h-6 bg-kiosk-text/20" />
 
-              {/* Spotify Panel Toggle - Always visible */}
               <SpotifyPanelToggle 
                 onClick={() => {
                   if (spotify.isConnected) {
@@ -292,7 +290,6 @@ export default function Index() {
                 isConnected={spotify.isConnected}
               />
 
-              {/* PWA Install Button */}
               {canInstall && (
                 <Button
                   variant="ghost"
@@ -307,33 +304,36 @@ export default function Index() {
           </div>
         </header>
 
-        {/* Main Content - increased padding to prevent CommandDeck overlap */}
-        <main className="flex-1 flex flex-col items-center justify-center gap-3 px-4 pl-20 pb-48 touch-pan-y">
-          <NowPlaying 
-            track={status?.track ?? null} 
-            isPlaying={status?.playing ?? false} 
-          />
-
-          {/* Audio Visualizer */}
-          <div className="w-full max-w-md">
-            <AudioVisualizer 
+        {/* Main Content - centralized container */}
+        <main className="flex-1 flex flex-col items-center justify-center px-4 pb-40 touch-pan-y">
+          {/* Centralized container for all player elements */}
+          <div className="w-full max-w-xl flex flex-col items-center gap-5">
+            {/* Now Playing */}
+            <NowPlaying 
+              track={status?.track ?? null} 
               isPlaying={status?.playing ?? false} 
-              barCount={48}
-              genre={status?.track?.genre}
             />
-          </div>
 
-          {/* Progress Bar */}
-          <div className="w-full max-w-md px-4">
-            <ProgressBar
-              position={status?.track?.position ?? 0}
-              duration={status?.track?.duration ?? 0}
-              genre={status?.track?.genre}
-              onSeek={handleSeek}
-            />
-          </div>
-          
-          <div className="flex items-center gap-4">
+            {/* Audio Visualizer */}
+            <div className="w-full">
+              <AudioVisualizer 
+                isPlaying={status?.playing ?? false} 
+                barCount={48}
+                genre={status?.track?.genre}
+              />
+            </div>
+
+            {/* Progress Bar */}
+            <div className="w-full">
+              <ProgressBar
+                position={status?.track?.position ?? 0}
+                duration={status?.track?.duration ?? 0}
+                genre={status?.track?.genre}
+                onSeek={handleSeek}
+              />
+            </div>
+            
+            {/* Playback Controls (shuffle, repeat, queue) */}
             <PlaybackControls
               shuffle={shuffle}
               repeat={repeat}
@@ -341,21 +341,20 @@ export default function Index() {
               onRepeatToggle={toggleRepeat}
               onQueueOpen={() => setShowQueue(true)}
             />
-          </div>
 
-          {/* Player Controls - clear separation from CommandDeck */}
-          <div className="mb-28">
+            {/* Player Controls (play/pause/prev/next) */}
             <PlayerControls isPlaying={status?.playing ?? false} />
-          </div>
-          
-          <VolumeSlider 
-            volume={status?.volume ?? 75} 
-            muted={status?.muted ?? false} 
-          />
+            
+            {/* Volume Slider */}
+            <div className="w-full max-w-sm">
+              <VolumeSlider 
+                volume={status?.volume ?? 75} 
+                muted={status?.muted ?? false} 
+              />
+            </div>
 
-          {/* Swipe hint only - logo now at top */}
-          <div className="text-center mt-2">
-            <p className="text-xs text-kiosk-text/40">
+            {/* Swipe hint */}
+            <p className="text-xs text-kiosk-text/40 text-center">
               {t('player.swipeHint')}
             </p>
           </div>

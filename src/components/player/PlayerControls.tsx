@@ -85,60 +85,29 @@ export function PlayerControls({ isPlaying }: PlayerControlsProps) {
         </Button>
       </motion.div>
 
-      {/* Play/Pause */}
-      <motion.div
-        variants={buttonVariants}
-        initial="idle"
-        whileHover="hover"
-        whileTap="tap"
-        className="relative"
-      >
-        {/* Pulse effect when playing */}
-        {isPlaying && animationsEnabled && (
-          <motion.div
-            className="absolute inset-0 rounded-full bg-kiosk-primary"
-            animate={{
-              scale: [1, 1.3],
-              opacity: [0.4, 0],
-            }}
-            transition={{
-              duration: 1.2,
-              repeat: Infinity,
-              ease: 'easeOut',
-            }}
-          />
-        )}
-        
+      {/* Play/Pause - Chrome Neon Design */}
+      <div className="relative">
         <Button
           variant="ghost"
           size="icon"
           onClick={handlePlayPause}
           disabled={isLoading}
           className={cn(
-            "w-14 h-14 md:w-16 md:h-16 rounded-full relative z-10 overflow-hidden",
-            "bg-kiosk-primary hover:bg-kiosk-primary/90",
-            "text-kiosk-bg hover:text-kiosk-bg",
-            "button-play-ultra-3d",
-            "transition-all duration-200"
+            "w-16 h-16 md:w-18 md:h-18 rounded-full relative z-10 overflow-hidden",
+            "button-play-chrome-neon",
+            "transition-all duration-300"
           )}
         >
           <RippleContainer ripples={playRipple.ripples} color="primary" />
-          <motion.div
-            key={isPlaying ? 'pause' : 'play'}
-            initial={{ scale: 0.5, opacity: 0 }}
-            animate={{ scale: 1, opacity: 1 }}
-            exit={{ scale: 0.5, opacity: 0 }}
-            transition={{ type: 'spring', stiffness: 300, damping: 20 }}
-            className="relative z-10"
-          >
+          <div className="relative z-10">
             {isPlaying ? (
-              <Pause className="w-6 h-6 md:w-7 md:h-7 drop-shadow-lg" />
+              <Pause className="w-7 h-7 md:w-8 md:h-8 text-cyan-300 drop-shadow-[0_0_8px_hsl(185_100%_60%)]" />
             ) : (
-              <Play className="w-6 h-6 md:w-7 md:h-7 ml-0.5 drop-shadow-lg" />
+              <Play className="w-7 h-7 md:w-8 md:h-8 ml-0.5 text-cyan-300 drop-shadow-[0_0_8px_hsl(185_100%_60%)]" />
             )}
-          </motion.div>
+          </div>
         </Button>
-      </motion.div>
+      </div>
 
       {/* Next */}
       <motion.div

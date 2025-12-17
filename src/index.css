@@ -2633,11 +2633,11 @@ body[data-gradient="true"] {
 .logo-tsi-mirror {
   background: linear-gradient(
     90deg,
-    hsl(185 80% 68%) 0%,
-    hsl(185 80% 68%) 42%,
-    hsl(180 90% 82%) 50%,
-    hsl(185 80% 68%) 58%,
-    hsl(185 80% 68%) 100%
+    hsl(185 80% 55%) 0%,
+    hsl(185 80% 55%) 42%,
+    hsl(180 90% 72%) 50%,
+    hsl(185 80% 55%) 58%,
+    hsl(185 80% 55%) 100%
   );
   background-size: 300% 100%;
   -webkit-background-clip: text;
@@ -2651,18 +2651,18 @@ body[data-gradient="true"] {
     drop-shadow(0 2px 3px hsl(220 40% 8% / 0.5));
   letter-spacing: -0.02em;
   font-weight: 900;
-  animation: logo-shimmer-continuous 4s ease-in-out infinite;
+  animation: logo-shimmer-continuous 6s ease-in-out infinite;
 }
 
 /* Logo JUKEBOX MIRROR - CHAMPAGNE (glow refinado + shimmer contínuo) */
 .logo-jukebox-mirror {
   background: linear-gradient(
     90deg,
-    hsl(45 45% 72%) 0%,
-    hsl(45 45% 72%) 42%,
-    hsl(48 55% 85%) 50%,
-    hsl(45 45% 72%) 58%,
-    hsl(45 45% 72%) 100%
+    hsl(45 45% 58%) 0%,
+    hsl(45 45% 58%) 42%,
+    hsl(48 55% 75%) 50%,
+    hsl(45 45% 58%) 58%,
+    hsl(45 45% 58%) 100%
   );
   background-size: 300% 100%;
   -webkit-background-clip: text;
@@ -2677,8 +2677,8 @@ body[data-gradient="true"] {
   letter-spacing: 0.06em;
   margin-left: 0.08em;
   font-weight: 900;
-  animation: logo-shimmer-continuous 4s ease-in-out infinite;
-  animation-delay: 0.5s;
+  animation: logo-shimmer-continuous 6s ease-in-out infinite;
+  animation-delay: 0.75s;
 }
 
 /* Keyframe for continuous logo shimmer */

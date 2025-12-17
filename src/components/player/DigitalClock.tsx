@@ -1,4 +1,5 @@
 import { useState, useEffect } from 'react';
+import { motion, AnimatePresence } from 'framer-motion';
 import { cn } from '@/lib/utils';
 
 interface DigitalClockProps {
@@ -37,17 +38,31 @@ export function DigitalClock({
     });
   };
 
+  const timeKey = formatTime();
+
   return (
-    <div className={cn("flex items-center gap-2 badge-3d px-3 py-1.5 rounded-xl", className)}>
-      <div className="flex flex-col items-end">
-        <span className={cn(
-          "text-lg font-mono font-bold tabular-nums tracking-wider",
-          "text-gold-neon clock-gold"
-        )}>
-          {formatTime()}
-        </span>
+    <div className={cn(
+      "flex items-center gap-4 badge-3d px-6 py-2.5 rounded-2xl min-w-[200px]",
+      className
+    )}>
+      <div className="flex flex-col items-center w-full">
+        <AnimatePresence mode="wait">
+          <motion.span
+            key={timeKey}
+            initial={{ opacity: 0.6, y: -3 }}
+            animate={{ opacity: 1, y: 0 }}
+            exit={{ opacity: 0.6, y: 3 }}
+            transition={{ duration: 0.25, ease: "easeOut" }}
+            className={cn(
+              "text-xl font-mono font-bold tabular-nums tracking-wider",
+              "text-gold-neon clock-gold"
+            )}
+          >
+            {timeKey}
+          </motion.span>
+        </AnimatePresence>
         {showDate && (
-          <span className="text-[10px] text-kiosk-text/60 uppercase tracking-wide font-medium">
+          <span className="text-[11px] uppercase tracking-wide font-medium clock-date-neon">
             {formatDate()}
           </span>
         )}

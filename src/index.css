@@ -202,6 +202,15 @@
       0 0 30px hsl(40 100% 50% / 0.3);
   }
 
+  /* Data do relógio em neon azul */
+  .clock-date-neon {
+    color: hsl(185 100% 55%);
+    text-shadow: 
+      0 0 5px hsl(185 100% 55%),
+      0 0 10px hsl(185 100% 55% / 0.7),
+      0 0 15px hsl(185 100% 55% / 0.4);
+  }
+
   .text-gold-neon-hover:hover,
   .group:hover .text-gold-neon-hover {
     color: hsl(45 100% 78%);

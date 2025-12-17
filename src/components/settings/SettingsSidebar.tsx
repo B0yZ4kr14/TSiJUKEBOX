@@ -17,7 +17,6 @@ import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from '@/components/ui/tooltip';
 import { cn } from '@/lib/utils';
-import { useSettingsStatus, StatusLevel } from '@/hooks/useSettingsStatus';
 
 export type SettingsCategory = 
   | 'dashboard'
@@ -54,7 +53,6 @@ interface SettingsSidebarProps {
 export function SettingsSidebar({ activeCategory, onCategoryChange }: SettingsSidebarProps) {
   const [isExpanded, setIsExpanded] = useState(false);
   const [searchQuery, setSearchQuery] = useState('');
-  const { getCategoryStatus } = useSettingsStatus();
 
   // Filter categories based on search
   const filteredCategories = useMemo(() => {
@@ -66,14 +64,6 @@ export function SettingsSidebar({ activeCategory, onCategoryChange }: SettingsSi
       cat.keywords.some(kw => kw.toLowerCase().includes(query))
     );
   }, [searchQuery]);
-
-  const getStatusBadgeClass = (level: StatusLevel) => {
-    switch (level) {
-      case 'ok': return 'status-badge-ok';
-      case 'warning': return 'status-badge-warning';
-      case 'error': return 'status-badge-error';
-    }
-  };
 
   return (
     <TooltipProvider delayDuration={100}>
@@ -156,7 +146,6 @@ export function SettingsSidebar({ activeCategory, onCategoryChange }: SettingsSi
           {filteredCategories.map((category, index) => {
             const Icon = category.icon;
             const isActive = activeCategory === category.id;
-            const status = category.id !== 'dashboard' ? getCategoryStatus(category.id) : null;
 
             return (
               <Tooltip key={category.id}>
@@ -164,29 +153,20 @@ export function SettingsSidebar({ activeCategory, onCategoryChange }: SettingsSi
                   <motion.button
                     onClick={() => onCategoryChange(category.id)}
                     className={cn(
-                      "settings-nav-button relative",
-                      `settings-nav-button-${category.color}`,
+                      "settings-nav-button-3d relative",
                       isActive && "active"
                     )}
                     initial={{ x: -20, opacity: 0 }}
                     animate={{ x: 0, opacity: 1 }}
                     transition={{ delay: index * 0.05 }}
-                    whileHover={{ scale: 1.05 }}
+                    whileHover={{ scale: 1.08 }}
                     whileTap={{ scale: 0.95 }}
                   >
-                    <Icon className={cn(
-                      "w-5 h-5 transition-all duration-200",
-                      isActive && "settings-nav-icon-active"
-                    )} />
-                    
-                    {/* Status Badge */}
-                    {status && category.id !== 'dashboard' && (
-                      <span className={cn("status-badge", getStatusBadgeClass(status.level))} />
-                    )}
+                    <Icon className="w-5 h-5 settings-nav-icon-3d" />
 
                     {isExpanded && (
                       <motion.span
-                        className="ml-3 text-sm font-medium whitespace-nowrap flex-1 text-left"
+                        className="ml-3 text-sm font-medium whitespace-nowrap flex-1 text-left text-kiosk-text/90"
                         initial={{ opacity: 0, x: -10 }}
                         animate={{ opacity: 1, x: 0 }}
                         transition={{ delay: 0.1 }}
@@ -198,17 +178,7 @@ export function SettingsSidebar({ activeCategory, onCategoryChange }: SettingsSi
                 </TooltipTrigger>
                 {!isExpanded && (
                   <TooltipContent side="right" className="settings-tooltip">
-                    <div className="flex items-center gap-2">
-                      {category.label}
-                      {status && (
-                        <span className={cn(
-                          "w-2 h-2 rounded-full",
-                          status.level === 'ok' && "bg-green-400",
-                          status.level === 'warning' && "bg-yellow-400",
-                          status.level === 'error' && "bg-red-400"
-                        )} />
-                      )}
-                    </div>
+                    {category.label}
                   </TooltipContent>
                 )}
               </Tooltip>

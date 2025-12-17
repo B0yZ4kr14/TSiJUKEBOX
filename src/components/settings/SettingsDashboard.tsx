@@ -53,57 +53,83 @@ const settingsGuides: SettingsGuide[] = [
     id: 'connections',
     title: 'Conexões',
     icon: Plug,
-    description: 'Configure como o sistema se comunica com o servidor',
-    longDescription: 'As configurações de conexão controlam como o jukebox se comunica com o servidor de música (Backend FastAPI). Pense nisso como conectar um cabo entre dois aparelhos - o jukebox precisa saber onde encontrar o servidor para funcionar corretamente.',
+    description: 'Comunicação com servidor e APIs',
+    longDescription: 'Configure URL da API e modo de comunicação (WebSocket/Polling).',
     quickStartSteps: [
-      'Verifique se o servidor Backend está rodando no seu computador',
-      'Confirme a URL da API (normalmente já vem configurada)',
-      'Escolha entre WebSocket (mais rápido) ou Polling (mais estável)',
-      'Use o Modo Demo para testar sem servidor'
+      'Confirme URL da API',
+      'Escolha WebSocket ou Polling',
+      'Teste a conexão'
     ],
     sections: [
-      {
-        name: 'Backend FastAPI',
-        description: 'O "cérebro" do sistema que controla a reprodução de músicas',
-        tips: ['Use WebSocket para atualizações em tempo real', 'Ative Demo Mode para testar a interface']
-      },
-      {
-        name: 'Lovable Cloud',
-        description: 'Banco de dados na nuvem (configuração automática)',
-        tips: ['Configuração automática, você não precisa fazer nada', 'Sincroniza dados entre dispositivos']
-      }
+      { name: 'Backend FastAPI', description: 'Servidor de reprodução', tips: ['Use WebSocket para tempo real'] },
+      { name: 'Lovable Cloud', description: 'Banco na nuvem (automático)', tips: ['Sincroniza dados entre dispositivos'] }
     ]
   },
   {
     id: 'data',
     title: 'Dados & Backup',
     icon: Database,
-    description: 'Gerencie backups e banco de dados',
-    longDescription: 'Aqui você configura como seus dados são armazenados e protegidos. O backup é como fazer uma cópia de segurança das suas fotos - se algo der errado, você pode recuperar tudo.',
+    description: 'Backups e banco de dados',
+    longDescription: 'Configure armazenamento e cópias de segurança.',
     quickStartSteps: [
-      'Configure o caminho do banco de dados SQLite',
-      'Agende backups automáticos (recomendado: diário)',
-      'Configure backup na nuvem para maior segurança',
-      'Teste a restauração para garantir que funciona'
+      'Configure caminho do banco',
+      'Agende backups automáticos',
+      'Configure backup na nuvem'
     ],
     sections: [
-      {
-        name: 'Banco de Dados',
-        description: 'Onde suas músicas e configurações são armazenadas',
-        tips: ['Execute "Vacuum" mensalmente para otimizar', 'Verifique integridade após quedas de energia']
-      },
-      {
-        name: 'Backup Local',
-        description: 'Cópias de segurança no seu computador',
-        tips: ['Mantenha pelo menos 3 backups recentes', 'Faça backup antes de atualizações']
-      },
-      {
-        name: 'Backup na Nuvem',
-        description: 'Cópias de segurança online (Google Drive, Dropbox, etc)',
-        tips: ['Ideal para recuperação de desastres', 'Configure sincronização automática']
-      }
+      { name: 'Banco de Dados', description: 'Armazenamento local', tips: ['Execute VACUUM mensalmente'] },
+      { name: 'Backup', description: 'Cópias de segurança', tips: ['Mantenha 3+ backups recentes'] }
     ]
   },
+  {
+    id: 'system',
+    title: 'Sistema',
+    icon: Settings2,
+    description: 'URLs e horário do sistema',
+    longDescription: 'Configure URLs de monitoramento e sincronização de horário.',
+    quickStartSteps: ['Configure URLs do Dashboard', 'Verifique sincronização NTP'],
+    sections: [
+      { name: 'URLs do Sistema', description: 'Monitoramento', tips: ['Grafana para gráficos'] },
+      { name: 'NTP', description: 'Sincronização de horário', tips: ['Mantenha ativado'] }
+    ]
+  },
+  {
+    id: 'appearance',
+    title: 'Aparência',
+    icon: Palette,
+    description: 'Temas, idioma e acessibilidade',
+    longDescription: 'Personalize cores, idioma e acessibilidade.',
+    quickStartSteps: ['Escolha um tema', 'Selecione idioma', 'Ajuste acessibilidade'],
+    sections: [
+      { name: 'Tema', description: 'Cores do sistema', tips: ['Temas escuros para pouca luz'] },
+      { name: 'Idioma', description: 'PT-BR, EN, ES', tips: ['Tradução automática'] }
+    ]
+  },
+  {
+    id: 'security',
+    title: 'Segurança',
+    icon: Shield,
+    description: 'Usuários e permissões',
+    longDescription: 'Controle acesso e crie usuários.',
+    quickStartSteps: ['Crie usuário admin', 'Configure permissões'],
+    sections: [
+      { name: 'Usuários', description: 'Gerenciar acessos', tips: ['Cada pessoa = 1 usuário'] },
+      { name: 'Chaves API', description: 'Tokens de acesso', tips: ['Nunca compartilhe'] }
+    ]
+  },
+  {
+    id: 'integrations',
+    title: 'Integrações',
+    icon: Globe,
+    description: 'Spotify e serviços externos',
+    longDescription: 'Conecte Spotify e widgets externos.',
+    quickStartSteps: ['Configure Spotify', 'Adicione widget de clima'],
+    sections: [
+      { name: 'Spotify', description: 'Acesso a músicas', tips: ['Premium para controle total'] },
+      { name: 'Clima', description: 'Widget de temperatura', tips: ['API gratuita OpenWeatherMap'] }
+    ]
+  }
+];
   {
     id: 'system',
     title: 'Sistema',

@@ -324,7 +324,7 @@ export default function Index() {
             </div>
 
             {/* Progress Bar */}
-            <div className="w-full">
+            <div className="w-full mt-1">
               <ProgressBar
                 position={status?.track?.position ?? 0}
                 duration={status?.track?.duration ?? 0}
@@ -334,19 +334,23 @@ export default function Index() {
             </div>
             
             {/* Playback Controls (shuffle, repeat, queue) */}
-            <PlaybackControls
-              shuffle={shuffle}
-              repeat={repeat}
-              onShuffleToggle={toggleShuffle}
-              onRepeatToggle={toggleRepeat}
-              onQueueOpen={() => setShowQueue(true)}
-            />
+            <div className="mt-3">
+              <PlaybackControls
+                shuffle={shuffle}
+                repeat={repeat}
+                onShuffleToggle={toggleShuffle}
+                onRepeatToggle={toggleRepeat}
+                onQueueOpen={() => setShowQueue(true)}
+              />
+            </div>
 
             {/* Player Controls (play/pause/prev/next) */}
-            <PlayerControls isPlaying={status?.playing ?? false} />
+            <div className="mt-4">
+              <PlayerControls isPlaying={status?.playing ?? false} />
+            </div>
             
             {/* Volume Slider */}
-            <div className="w-full max-w-[280px]">
+            <div className="w-full max-w-[280px] mt-4">
               <VolumeSlider 
                 volume={status?.volume ?? 75} 
                 muted={status?.muted ?? false} 

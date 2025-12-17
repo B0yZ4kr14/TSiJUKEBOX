@@ -8,6 +8,7 @@ interface AudioVisualizerProps {
   barCount?: number;
   className?: string;
   genre?: MusicGenre;
+  variant?: 'default' | 'compact';
 }
 
 // Genre-specific visual configurations
@@ -67,8 +68,10 @@ export function AudioVisualizer({
   barCount = 32,
   className,
   genre,
+  variant = 'default',
 }: AudioVisualizerProps) {
   const config = useMemo(() => genre ? genreConfig[genre] : defaultConfig, [genre]);
+  const isCompact = variant === 'compact';
   
   const [bars, setBars] = useState<number[]>(() => 
     Array(barCount).fill(0).map(() => Math.random() * 0.3 + 0.1)
@@ -134,13 +137,18 @@ export function AudioVisualizer({
 
   return (
     <div className={cn(
-      "flex items-end justify-center gap-[1px] h-6",
+      "flex items-end justify-center",
+      isCompact ? "gap-[0.5px] h-3" : "gap-[1px] h-6",
       className
     )}>
       {bars.map((height, i) => (
         <motion.div
           key={i}
-          className={cn("w-1 rounded-full bg-gradient-to-t", config.color)}
+          className={cn(
+            "rounded-full bg-gradient-to-t",
+            isCompact ? "w-[2px]" : "w-1",
+            config.color
+          )}
           initial={{ height: '10%' }}
           animate={{ 
             height: `${height * 100}%`,

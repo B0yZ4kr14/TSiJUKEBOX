@@ -2,7 +2,7 @@ import { cn } from '@/lib/utils';
 
 interface LogoBrandProps {
   size?: 'sm' | 'md' | 'lg' | 'xl';
-  variant?: 'default' | 'ultra' | 'bulge';
+  variant?: 'default' | 'ultra' | 'bulge' | 'mirror';
   showTagline?: boolean;
   centered?: boolean;
   animate?: boolean;
@@ -35,6 +35,7 @@ export function LogoBrand({
     switch (variant) {
       case 'ultra': return 'logo-container-ultra';
       case 'bulge': return 'logo-container-bulge';
+      case 'mirror': return 'logo-container-mirror';
       default: return 'logo-container-3d';
     }
   };
@@ -43,6 +44,7 @@ export function LogoBrand({
     switch (variant) {
       case 'ultra': return 'logo-animate-ultra';
       case 'bulge': return 'logo-animate-bulge';
+      case 'mirror': return 'logo-animate-mirror';
       default: return 'logo-animate';
     }
   };
@@ -51,6 +53,7 @@ export function LogoBrand({
     switch (variant) {
       case 'ultra': return 'logo-tsi-ultra';
       case 'bulge': return 'logo-tsi-bulge';
+      case 'mirror': return 'logo-tsi-mirror';
       default: return 'logo-tsi';
     }
   };
@@ -59,6 +62,7 @@ export function LogoBrand({
     switch (variant) {
       case 'ultra': return 'logo-jukebox-ultra';
       case 'bulge': return 'logo-jukebox-bulge';
+      case 'mirror': return 'logo-jukebox-mirror';
       default: return 'logo-jukebox';
     }
   };
@@ -77,6 +81,19 @@ export function LogoBrand({
         <span className={getTsiClass()}>TSi</span>
         <span className={getJukeboxClass()}>JUKEBOX</span>
       </div>
+      {/* Mirror reflection element */}
+      {variant === 'mirror' && (
+        <div 
+          className={cn(
+            "logo-mirror-reflection font-black tracking-tight select-none",
+            sizeClasses[size]
+          )}
+          aria-hidden="true"
+        >
+          <span className="logo-tsi-mirror-reflection">TSi</span>
+          <span className="logo-jukebox-mirror-reflection">JUKEBOX</span>
+        </div>
+      )}
       {showTagline && (
         <p className={cn(
           "text-kiosk-text/60 mt-1 tracking-widest uppercase",

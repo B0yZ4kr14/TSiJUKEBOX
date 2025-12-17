@@ -1,6 +1,12 @@
 import { useState, useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { cn } from '@/lib/utils';
+import { Calendar } from '@/components/ui/calendar';
+import {
+  Popover,
+  PopoverContent,
+  PopoverTrigger,
+} from '@/components/ui/popover';
 
 interface DigitalClockProps {
   showSeconds?: boolean;
@@ -14,6 +20,7 @@ export function DigitalClock({
   className = '' 
 }: DigitalClockProps) {
   const [time, setTime] = useState(new Date());
+  const [selectedDate, setSelectedDate] = useState<Date | undefined>(new Date());
 
   useEffect(() => {
     const interval = setInterval(() => setTime(new Date()), 1000);
@@ -41,32 +48,55 @@ export function DigitalClock({
   const timeKey = formatTime();
 
   return (
-    <div className={cn(
-      "flex items-center gap-4 badge-3d px-6 py-2.5 rounded-2xl min-w-[200px]",
-      className
-    )}>
-      <div className="flex flex-col items-center w-full">
-        <AnimatePresence mode="wait">
-          <motion.span
-            key={timeKey}
-            initial={{ opacity: 0.6, y: -3 }}
-            animate={{ opacity: 1, y: 0 }}
-            exit={{ opacity: 0.6, y: 3 }}
-            transition={{ duration: 0.25, ease: "easeOut" }}
-            className={cn(
-              "text-xl font-mono font-bold tabular-nums tracking-wider",
-              "text-gold-neon clock-gold"
+    <Popover>
+      <PopoverTrigger asChild>
+        <motion.div 
+          className={cn(
+            "flex items-center gap-3 badge-3d px-4 py-1.5 rounded-xl min-w-[180px] cursor-pointer",
+            "hover:scale-105 transition-transform duration-200",
+            className
+          )}
+          whileHover={{ scale: 1.02 }}
+          whileTap={{ scale: 0.98 }}
+        >
+          <div className="flex items-center gap-3 w-full justify-center">
+            <AnimatePresence mode="wait">
+              <motion.span
+                key={timeKey}
+                initial={{ opacity: 0.6, y: -2 }}
+                animate={{ opacity: 1, y: 0 }}
+                exit={{ opacity: 0.6, y: 2 }}
+                transition={{ duration: 0.2, ease: "easeOut" }}
+                className="text-lg font-mono font-bold tabular-nums tracking-wider text-gold-neon clock-gold"
+              >
+                {timeKey}
+              </motion.span>
+            </AnimatePresence>
+            
+            {showDate && (
+              <>
+                <div className="w-px h-4 bg-cyan-500/30" />
+                <span className="text-[10px] uppercase tracking-wide font-medium clock-date-neon whitespace-nowrap">
+                  {formatDate()}
+                </span>
+              </>
             )}
-          >
-            {timeKey}
-          </motion.span>
-        </AnimatePresence>
-        {showDate && (
-          <span className="text-[11px] uppercase tracking-wide font-medium clock-date-neon">
-            {formatDate()}
-          </span>
-        )}
-      </div>
-    </div>
+          </div>
+        </motion.div>
+      </PopoverTrigger>
+      <PopoverContent 
+        className="w-auto p-0 bg-slate-900/95 border-cyan-500/40 backdrop-blur-sm" 
+        align="center"
+        sideOffset={8}
+      >
+        <Calendar
+          mode="single"
+          selected={selectedDate}
+          onSelect={setSelectedDate}
+          className="calendar-neon pointer-events-auto"
+          initialFocus
+        />
+      </PopoverContent>
+    </Popover>
   );
 }

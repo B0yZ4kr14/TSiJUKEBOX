@@ -41,40 +41,40 @@ interface DeckButtonProps {
 
 const colorClasses = {
   cyan: {
-    bg: 'bg-gradient-to-b from-slate-700 to-slate-800',
-    border: 'border-cyan-500/40',
-    text: 'text-cyan-400',
-    glow: 'shadow-cyan-500/30',
-    hover: 'hover:border-cyan-400/60 hover:shadow-cyan-500/40',
-    icon: 'text-cyan-400 drop-shadow-[0_0_10px_rgba(34,211,238,0.6)]',
-    pulseClass: 'deck-button-cyan',
+    bg: 'bg-gradient-to-b from-slate-600 via-slate-700 to-slate-800',
+    border: 'border-cyan-400/50',
+    text: 'text-cyan-300',
+    glow: 'shadow-[0_0_30px_hsl(185_100%_50%/0.3)]',
+    hover: 'hover:border-cyan-300/80 hover:shadow-[0_0_45px_hsl(185_100%_50%/0.5)]',
+    icon: 'text-cyan-300 drop-shadow-[0_0_15px_rgba(34,211,238,0.8)]',
+    pulseClass: 'deck-button-cyan deck-button-3d-ultra',
   },
   amber: {
-    bg: 'bg-gradient-to-b from-slate-700 to-slate-800',
-    border: 'border-amber-500/40',
-    text: 'text-amber-400',
-    glow: 'shadow-amber-500/30',
-    hover: 'hover:border-amber-400/60 hover:shadow-amber-500/40',
-    icon: 'text-amber-400 drop-shadow-[0_0_10px_rgba(251,191,36,0.6)]',
-    pulseClass: 'deck-button-amber',
+    bg: 'bg-gradient-to-b from-slate-600 via-slate-700 to-slate-800',
+    border: 'border-amber-400/50',
+    text: 'text-amber-300',
+    glow: 'shadow-[0_0_30px_hsl(30_100%_50%/0.3)]',
+    hover: 'hover:border-amber-300/80 hover:shadow-[0_0_45px_hsl(30_100%_50%/0.5)]',
+    icon: 'text-amber-300 drop-shadow-[0_0_15px_rgba(251,191,36,0.8)]',
+    pulseClass: 'deck-button-amber deck-button-3d-ultra',
   },
   white: {
-    bg: 'bg-gradient-to-b from-slate-700 to-slate-800',
-    border: 'border-white/30',
+    bg: 'bg-gradient-to-b from-slate-600 via-slate-700 to-slate-800',
+    border: 'border-white/40',
     text: 'text-white',
-    glow: 'shadow-white/20',
-    hover: 'hover:border-white/50 hover:shadow-white/30',
-    icon: 'text-white drop-shadow-[0_0_10px_rgba(255,255,255,0.5)]',
-    pulseClass: 'deck-button-white',
+    glow: 'shadow-[0_0_25px_hsl(0_0%_100%/0.25)]',
+    hover: 'hover:border-white/60 hover:shadow-[0_0_40px_hsl(0_0%_100%/0.4)]',
+    icon: 'text-white drop-shadow-[0_0_12px_rgba(255,255,255,0.7)]',
+    pulseClass: 'deck-button-white deck-button-3d-ultra',
   },
   red: {
-    bg: 'bg-gradient-to-b from-slate-700 to-slate-800',
-    border: 'border-red-500/40',
-    text: 'text-red-400',
-    glow: 'shadow-red-500/30',
-    hover: 'hover:border-red-400/60 hover:shadow-red-500/40',
-    icon: 'text-red-400 drop-shadow-[0_0_10px_rgba(239,68,68,0.6)]',
-    pulseClass: 'deck-button-red',
+    bg: 'bg-gradient-to-b from-slate-600 via-slate-700 to-slate-800',
+    border: 'border-red-400/50',
+    text: 'text-red-300',
+    glow: 'shadow-[0_0_30px_hsl(0_100%_50%/0.3)]',
+    hover: 'hover:border-red-300/80 hover:shadow-[0_0_45px_hsl(0_100%_50%/0.5)]',
+    icon: 'text-red-300 drop-shadow-[0_0_15px_rgba(239,68,68,0.8)]',
+    pulseClass: 'deck-button-red deck-button-3d-ultra',
   },
 };
 
@@ -98,22 +98,26 @@ function DeckButton({ icon, label, tooltip, onClick, color, disabled }: DeckButt
             onClick={handleClick}
             disabled={disabled}
             className={`
-              relative flex flex-col items-center justify-center gap-2
-              w-20 h-20 rounded-2xl overflow-hidden
+              relative flex flex-col items-center justify-center gap-2.5
+              w-[88px] h-[88px] rounded-2xl overflow-hidden
               ${colors.bg} border-2 ${colors.border}
               ${colors.pulseClass}
-              transition-all duration-150
+              transition-all duration-200
               disabled:opacity-50 disabled:cursor-not-allowed
-              shadow-lg ${colors.glow} ${colors.hover}
+              ${colors.glow} ${colors.hover}
             `}
-            whileHover={{ x: 4 }}
-            whileTap={{ scale: 0.95 }}
+            whileHover={{ y: -8, scale: 1.05 }}
+            whileTap={{ y: 3, scale: 0.97 }}
+            transition={{ type: "spring", stiffness: 400, damping: 20 }}
           >
             {/* Ripple effect */}
             <RippleContainer ripples={ripples} color={color} />
             
-            {/* Top highlight for 3D bevel */}
-            <div className="absolute inset-x-3 top-1.5 h-0.5 bg-gradient-to-r from-transparent via-white/30 to-transparent rounded-full z-10" />
+            {/* Top highlight for extreme 3D bevel */}
+            <div className="absolute inset-x-2 top-1.5 h-1 bg-gradient-to-r from-transparent via-white/40 to-transparent rounded-full z-10" />
+            
+            {/* Left edge highlight */}
+            <div className="absolute left-1.5 inset-y-3 w-0.5 bg-gradient-to-b from-white/30 via-white/15 to-transparent rounded-full z-10" />
             
             {/* Icon with glow */}
             <span className={`${colors.icon} relative z-10`}>{icon}</span>
@@ -123,8 +127,11 @@ function DeckButton({ icon, label, tooltip, onClick, color, disabled }: DeckButt
               {label}
             </span>
 
-            {/* Bottom shadow for 3D depth */}
-            <div className="absolute inset-x-3 bottom-1.5 h-0.5 bg-black/60 rounded-full z-10" />
+            {/* Bottom shadow for extreme 3D depth */}
+            <div className="absolute inset-x-2 bottom-1.5 h-1.5 bg-gradient-to-r from-transparent via-black/70 to-transparent rounded-full z-10" />
+            
+            {/* Right edge shadow */}
+            <div className="absolute right-1.5 inset-y-3 w-0.5 bg-gradient-to-b from-black/20 via-black/40 to-black/20 rounded-full z-10" />
           </motion.button>
         </TooltipTrigger>
         <TooltipContent side="right" className="bg-slate-900 border-slate-600 text-white shadow-2xl">
@@ -251,15 +258,19 @@ export function CommandDeck({ disabled = false }: CommandDeckProps) {
 
   return (
     <>
-      {/* Vertical Command Deck - Left Side */}
+      {/* Vertical Command Deck - Left Side - Positioned near top for full visibility */}
       <motion.div
-        className="fixed left-0 top-1/2 -translate-y-1/2 z-50 flex items-center"
-        initial={{ x: -100 }}
-        animate={{ x: isExpanded ? 20 : -88 }}
-        transition={{ type: 'spring', stiffness: 300, damping: 30 }}
+        className="fixed left-0 top-8 z-50 flex items-center"
+        initial={{ x: -120, rotateY: -10 }}
+        animate={{ 
+          x: isExpanded ? 16 : -96,
+          rotateY: isExpanded ? 0 : -5 
+        }}
+        transition={{ type: 'spring', stiffness: 280, damping: 28 }}
+        style={{ perspective: 1200 }}
       >
-        {/* Deck Container */}
-        <div className="command-deck-vertical flex flex-col gap-3 p-4 rounded-r-2xl">
+        {/* Deck Container - Ultra 3D Professional */}
+        <div className="command-deck-vertical flex flex-col gap-4 p-5 rounded-r-3xl">
           {/* Admin Badge */}
           <div className="text-center mb-1">
             <span className="text-[10px] font-semibold text-label-yellow uppercase tracking-[0.2em]">

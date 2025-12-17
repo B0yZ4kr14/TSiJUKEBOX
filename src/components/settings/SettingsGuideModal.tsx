@@ -1,10 +1,10 @@
-import { LucideIcon, X, ArrowRight, Lightbulb, CheckCircle2, BookOpen } from 'lucide-react';
+import { LucideIcon, ArrowRight, Lightbulb, CheckCircle2, BookOpen, ImageIcon } from 'lucide-react';
 import { Dialog, DialogContent, DialogHeader, DialogTitle } from '@/components/ui/dialog';
 import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
 import { ScrollArea } from '@/components/ui/scroll-area';
 import { motion } from 'framer-motion';
-import { cn } from '@/lib/utils';
+import { SettingsIllustration, IllustrationType } from './SettingsIllustration';
 
 interface GuideSection {
   name: string;
@@ -29,10 +29,21 @@ interface SettingsGuideModalProps {
   onNavigate: () => void;
 }
 
+// Map guide IDs to illustration types
+const illustrationMap: Record<string, IllustrationType> = {
+  connections: 'connections',
+  data: 'data',
+  system: 'system',
+  appearance: 'appearance',
+  security: 'security',
+  integrations: 'integrations'
+};
+
 export function SettingsGuideModal({ guide, isOpen, onClose, onNavigate }: SettingsGuideModalProps) {
   if (!guide) return null;
 
   const Icon = guide.icon;
+  const illustrationType = illustrationMap[guide.id];
 
   return (
     <Dialog open={isOpen} onOpenChange={(open) => !open && onClose()}>
@@ -53,6 +64,18 @@ export function SettingsGuideModal({ guide, isOpen, onClose, onNavigate }: Setti
 
         <ScrollArea className="max-h-[60vh] px-6">
           <div className="space-y-6 py-4">
+            {/* Illustration */}
+            {illustrationType && (
+              <motion.div 
+                className="flex justify-center p-4 rounded-lg bg-kiosk-background/30 border border-kiosk-border/50"
+                initial={{ opacity: 0, scale: 0.95 }}
+                animate={{ opacity: 1, scale: 1 }}
+                transition={{ duration: 0.3 }}
+              >
+                <SettingsIllustration type={illustrationType} size="lg" animated />
+              </motion.div>
+            )}
+
             {/* Long Description */}
             <div className="p-4 rounded-lg bg-kiosk-background/50 border border-kiosk-border">
               <div className="flex items-center gap-2 mb-2">

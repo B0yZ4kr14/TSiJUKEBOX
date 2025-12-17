@@ -21,3 +21,6 @@ export { SettingsBreadcrumb } from './SettingsBreadcrumb';
 export { ConfigBackupSection } from './ConfigBackupSection';
 export { SettingsGuideCard } from './SettingsGuideCard';
 export { SettingsGuideModal } from './SettingsGuideModal';
+export { SettingsFAQ } from './SettingsFAQ';
+export { SettingsIllustration } from './SettingsIllustration';
+export { SettingsNotificationBanner, SettingsNotificationBadge } from './SettingsNotificationBanner';

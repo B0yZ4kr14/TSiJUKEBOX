@@ -16,13 +16,13 @@ import {
   CheckCircle2,
   AlertTriangle,
   XCircle,
-  TrendingUp
+  TrendingUp,
+  Rocket
 } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Card } from '@/components/ui/card';
 import { Input } from '@/components/ui/input';
 import { Progress } from '@/components/ui/progress';
-import { useSettings } from '@/contexts/SettingsContext';
 import { useSettingsStatus, SettingsCategoryId, StatusLevel } from '@/hooks/useSettingsStatus';
 import { useNavigate } from 'react-router-dom';
 import { cn } from '@/lib/utils';
@@ -30,6 +30,8 @@ import { PieChart, Pie, Cell, ResponsiveContainer, Tooltip } from 'recharts';
 import { SettingsGuideCard } from './SettingsGuideCard';
 import { SettingsGuideModal } from './SettingsGuideModal';
 import { ConfigBackupSection } from './ConfigBackupSection';
+import { SettingsFAQ } from './SettingsFAQ';
+import { SettingsNotificationBanner } from './SettingsNotificationBanner';
 
 interface SettingsGuide {
   id: SettingsCategoryId;
@@ -253,6 +255,9 @@ export function SettingsDashboard({ onNavigateToCategory }: SettingsDashboardPro
 
   return (
     <div className="space-y-6">
+      {/* Notifications Banner */}
+      <SettingsNotificationBanner onNavigateToCategory={onNavigateToCategory} />
+
       {/* Header */}
       <motion.div 
         className="text-center"
@@ -427,17 +432,34 @@ export function SettingsDashboard({ onNavigateToCategory }: SettingsDashboardPro
         <ConfigBackupSection />
       </motion.div>
 
-      {/* Quick Actions */}
+      {/* FAQ Section */}
       <motion.div
         initial={{ opacity: 0, y: 10 }}
         animate={{ opacity: 1, y: 0 }}
         transition={{ delay: 0.4 }}
       >
+        <SettingsFAQ />
+      </motion.div>
+
+      {/* Quick Actions */}
+      <motion.div
+        initial={{ opacity: 0, y: 10 }}
+        animate={{ opacity: 1, y: 0 }}
+        transition={{ delay: 0.5 }}
+      >
         <h3 className="text-sm font-semibold text-kiosk-text/60 mb-3 flex items-center gap-2">
           <Zap className="w-4 h-4" />
           AÇÕES RÁPIDAS
         </h3>
-        <div className="grid grid-cols-2 md:grid-cols-3 gap-3">
+        <div className="grid grid-cols-2 md:grid-cols-4 gap-3">
+          <Button
+            variant="outline"
+            className="h-auto py-3 flex-col gap-2 border-kiosk-border hover:border-green-500/50 hover:bg-green-500/5"
+            onClick={() => navigate('/setup')}
+          >
+            <Rocket className="w-5 h-5 text-green-400" />
+            <span className="text-xs">Wizard de Setup</span>
+          </Button>
           <Button
             variant="outline"
             className="h-auto py-3 flex-col gap-2 border-kiosk-border hover:border-cyan-500/50 hover:bg-cyan-500/5"

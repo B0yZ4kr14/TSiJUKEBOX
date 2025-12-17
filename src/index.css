@@ -100,13 +100,13 @@
       hsl(210 20% 22%) 75%,
       hsl(210 15% 30%) 100%
     );
-    border: 3px solid hsl(195 100% 50%);
+    border: 3px solid hsl(195 100% 55%);
     box-shadow:
-      /* Blue neon glow - outer layers */
-      0 0 15px hsl(195 100% 50% / 0.8),
-      0 0 30px hsl(195 100% 50% / 0.5),
-      0 0 60px hsl(195 100% 50% / 0.3),
-      0 0 100px hsl(195 100% 50% / 0.15),
+      /* Blue neon glow - intensified outer layers */
+      0 0 20px hsl(195 100% 55% / 0.95),
+      0 0 40px hsl(195 100% 55% / 0.7),
+      0 0 80px hsl(195 100% 50% / 0.5),
+      0 0 120px hsl(195 100% 50% / 0.3),
       /* 3D depth shadows */
       0 8px 20px hsl(220 30% 5% / 0.6),
       0 4px 8px hsl(220 30% 5% / 0.4),
@@ -131,13 +131,13 @@
   }
 
   .button-play-chrome-neon:hover {
-    border-color: hsl(195 100% 60%);
+    border-color: hsl(195 100% 65%);
     box-shadow:
-      /* Intensified blue neon glow */
-      0 0 20px hsl(195 100% 55% / 1),
-      0 0 40px hsl(195 100% 55% / 0.7),
-      0 0 80px hsl(195 100% 55% / 0.4),
-      0 0 120px hsl(195 100% 55% / 0.2),
+      /* Intensified blue neon glow - maximum */
+      0 0 25px hsl(195 100% 60% / 1),
+      0 0 50px hsl(195 100% 60% / 0.85),
+      0 0 100px hsl(195 100% 55% / 0.6),
+      0 0 150px hsl(195 100% 55% / 0.4),
       /* Elevated shadows */
       0 12px 30px hsl(220 30% 5% / 0.7),
       0 6px 12px hsl(220 30% 5% / 0.5),

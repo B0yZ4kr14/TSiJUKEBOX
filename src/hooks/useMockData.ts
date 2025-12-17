@@ -135,7 +135,7 @@ function generateMockMetrics() {
 export function useMockStatus(isDemoMode: boolean) {
   const [mockStatus, setMockStatus] = useState<SystemStatus>(() => ({
     ...generateMockMetrics(),
-    playing: true,
+    playing: false,
     volume: 75,
     muted: false,
     shuffle: false,

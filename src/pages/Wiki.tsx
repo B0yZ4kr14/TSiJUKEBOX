@@ -1,27 +1,36 @@
 import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { motion } from 'framer-motion';
-import { ArrowLeft, Book, FileText } from 'lucide-react';
+import { ArrowLeft, Book, FileText, Printer, Star, Trash2 } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { ScrollArea } from '@/components/ui/scroll-area';
+import { Badge } from '@/components/ui/badge';
 import { LogoBrand } from '@/components/ui/LogoBrand';
 import { WikiNavigation } from '@/components/wiki/WikiNavigation';
 import { WikiArticleView } from '@/components/wiki/WikiArticle';
 import { WikiSearch } from '@/components/wiki/WikiSearch';
 import { wikiCategories, findArticleById, getTotalArticleCount } from '@/components/wiki/wikiData';
+import { useWikiBookmarks } from '@/hooks/useWikiBookmarks';
+import { toast } from 'sonner';
 
 export default function Wiki() {
   const navigate = useNavigate();
   const [selectedArticle, setSelectedArticle] = useState<string | null>(null);
   const [selectedCategory, setSelectedCategory] = useState<string | null>(null);
+  const { bookmarks, toggleBookmark, isBookmarked, clearBookmarks } = useWikiBookmarks();
 
   const article = selectedArticle ? findArticleById(selectedArticle) : null;
   const totalArticles = getTotalArticleCount();
 
+  const handlePrint = () => {
+    window.print();
+    toast.success('Preparando impressão...');
+  };
+
   return (
     <div className="min-h-screen bg-kiosk-bg">
       {/* Header */}
-      <div className="sticky top-0 z-40 bg-kiosk-bg/95 backdrop-blur border-b border-border">
+      <div className="sticky top-0 z-40 bg-kiosk-bg/95 backdrop-blur border-b border-border no-print">
         <div className="p-4">
           <div className="flex items-center justify-between max-w-7xl mx-auto">
             <div className="flex items-center gap-4">
@@ -48,6 +57,15 @@ export default function Wiki() {
               <div className="w-80">
                 <WikiSearch onSelectArticle={setSelectedArticle} />
               </div>
+              <Button
+                variant="outline"
+                size="sm"
+                onClick={handlePrint}
+                className="button-outline-neon"
+              >
+                <Printer className="w-4 h-4 mr-2" />
+                Imprimir / PDF
+              </Button>
               <LogoBrand size="sm" />
             </div>
           </div>
@@ -57,9 +75,53 @@ export default function Wiki() {
       <div className="max-w-7xl mx-auto p-4">
         <div className="grid grid-cols-1 lg:grid-cols-4 gap-6">
           {/* Navigation Sidebar */}
-          <div className="lg:col-span-1">
-            <div className="sticky top-24">
-              <h2 className="text-sm font-semibold text-label-yellow mb-3 px-3">NAVEGAÇÃO</h2>
+          <div className="lg:col-span-1 no-print">
+            <div className="sticky top-24 space-y-4">
+              {/* Bookmarks Section */}
+              {bookmarks.length > 0 && (
+                <div className="p-3 rounded-xl bg-yellow-500/10 border border-yellow-500/30">
+                  <div className="flex items-center justify-between mb-2">
+                    <div className="flex items-center gap-2">
+                      <Star className="w-4 h-4 text-yellow-500 fill-yellow-500" />
+                      <span className="text-sm font-medium text-yellow-400">Favoritos</span>
+                    </div>
+                    <Button
+                      variant="ghost"
+                      size="sm"
+                      onClick={() => {
+                        clearBookmarks();
+                        toast.success('Favoritos limpos');
+                      }}
+                      className="h-6 w-6 p-0 text-kiosk-text/50 hover:text-red-400"
+                    >
+                      <Trash2 className="w-3 h-3" />
+                    </Button>
+                  </div>
+                  <div className="flex flex-wrap gap-1">
+                    {bookmarks.slice(0, 5).map(id => {
+                      const art = findArticleById(id);
+                      if (!art) return null;
+                      return (
+                        <Badge
+                          key={id}
+                          variant="secondary"
+                          className="cursor-pointer text-xs bg-yellow-500/20 hover:bg-yellow-500/30 text-yellow-300"
+                          onClick={() => setSelectedArticle(id)}
+                        >
+                          {art.title.length > 15 ? art.title.slice(0, 15) + '...' : art.title}
+                        </Badge>
+                      );
+                    })}
+                    {bookmarks.length > 5 && (
+                      <Badge variant="outline" className="text-xs">
+                        +{bookmarks.length - 5}
+                      </Badge>
+                    )}
+                  </div>
+                </div>
+              )}
+
+              <h2 className="text-sm font-semibold text-label-yellow px-3">NAVEGAÇÃO</h2>
               <WikiNavigation
                 selectedArticle={selectedArticle}
                 onSelectArticle={setSelectedArticle}
@@ -70,12 +132,17 @@ export default function Wiki() {
           </div>
 
           {/* Content Area */}
-          <div className="lg:col-span-3">
+          <div className="lg:col-span-3 wiki-content">
             <ScrollArea className="h-[calc(100vh-180px)]">
               {article ? (
                 <WikiArticleView 
                   article={article} 
                   onSelectArticle={setSelectedArticle}
+                  isBookmarked={isBookmarked(article.id)}
+                  onToggleBookmark={() => {
+                    toggleBookmark(article.id);
+                    toast.success(isBookmarked(article.id) ? 'Removido dos favoritos' : 'Adicionado aos favoritos');
+                  }}
                 />
               ) : selectedCategory ? (
                 <CategoryOverview 

@@ -5,14 +5,14 @@ import {
   ListOrdered, 
   Link2,
   Play,
-  Pause,
   SkipForward,
   SkipBack,
   Volume2,
   Settings,
   Music,
   Hand,
-  Keyboard
+  Keyboard,
+  Bookmark
 } from 'lucide-react';
 import { WikiArticle as WikiArticleType, findArticleById, getArticlePath } from './wikiData';
 import { Button } from '@/components/ui/button';
@@ -21,6 +21,8 @@ import { Badge } from '@/components/ui/badge';
 interface WikiArticleProps {
   article: WikiArticleType;
   onSelectArticle: (articleId: string) => void;
+  isBookmarked?: boolean;
+  onToggleBookmark?: () => void;
 }
 
 // Simple illustration components
@@ -152,7 +154,7 @@ const illustrations: Record<string, React.ReactNode> = {
   deck: <SettingsIllustration />,
 };
 
-export function WikiArticleView({ article, onSelectArticle }: WikiArticleProps) {
+export function WikiArticleView({ article, onSelectArticle, isBookmarked, onToggleBookmark }: WikiArticleProps) {
   const path = getArticlePath(article.id);
 
   return (
@@ -175,9 +177,21 @@ export function WikiArticleView({ article, onSelectArticle }: WikiArticleProps) 
       )}
 
       {/* Header */}
-      <header className="space-y-2">
-        <h1 className="text-2xl font-bold text-gold-neon">{article.title}</h1>
-        <p className="text-kiosk-text/70">{article.description}</p>
+      <header className="flex items-start justify-between gap-4">
+        <div className="space-y-2">
+          <h1 className="text-2xl font-bold text-gold-neon">{article.title}</h1>
+          <p className="text-kiosk-text/70">{article.description}</p>
+        </div>
+        {onToggleBookmark && (
+          <Button
+            variant="ghost"
+            size="icon"
+            onClick={onToggleBookmark}
+            className={`shrink-0 ${isBookmarked ? 'text-yellow-500' : 'text-kiosk-text/40 hover:text-yellow-500'}`}
+          >
+            <Bookmark className={`w-5 h-5 ${isBookmarked ? 'fill-yellow-500' : ''}`} />
+          </Button>
+        )}
       </header>
 
       {/* Illustration */}

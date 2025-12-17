@@ -12,7 +12,11 @@ import {
   Sparkles,
   Volume2,
   Trophy,
-  Star
+  Star,
+  Globe,
+  Server,
+  Music2,
+  SkipForward
 } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { RadioGroup, RadioGroupItem } from '@/components/ui/radio-group';
@@ -24,6 +28,7 @@ import { LogoBrand } from '@/components/ui/LogoBrand';
 import { useSettings } from '@/contexts/SettingsContext';
 import { STORAGE_KEYS } from '@/lib/constants';
 import { toast } from 'sonner';
+import { SettingsIllustration } from '@/components/settings/SettingsIllustration';
 
 type ThemeColor = 'blue' | 'green' | 'purple';
 
@@ -51,6 +56,13 @@ const steps: WizardStep[] = [
     icon: <Music className="w-8 h-8" />,
   },
   {
+    id: 'language',
+    title: 'Escolha o Idioma',
+    description: 'Selecione seu idioma preferido',
+    icon: <Globe className="w-8 h-8" />,
+    achievementId: 'multilingual',
+  },
+  {
     id: 'theme',
     title: 'Escolha seu Tema',
     description: 'Personalize as cores do sistema',
@@ -65,11 +77,25 @@ const steps: WizardStep[] = [
     achievementId: 'accessible',
   },
   {
-    id: 'connections',
-    title: 'Conexões',
-    description: 'Configure Spotify e Clima',
+    id: 'backend',
+    title: 'Conexão com Servidor',
+    description: 'Configure como se conectar ao servidor',
+    icon: <Server className="w-8 h-8" />,
+    achievementId: 'networked',
+  },
+  {
+    id: 'spotify',
+    title: 'Spotify',
+    description: 'Conecte sua conta do Spotify',
+    icon: <Music2 className="w-8 h-8" />,
+    achievementId: 'music_lover',
+  },
+  {
+    id: 'weather',
+    title: 'Widget de Clima',
+    description: 'Configure a previsão do tempo',
     icon: <Cloud className="w-8 h-8" />,
-    achievementId: 'connected',
+    achievementId: 'weather_aware',
   },
   {
     id: 'complete',
@@ -81,37 +107,55 @@ const steps: WizardStep[] = [
 ];
 
 const initialAchievements: Achievement[] = [
+  { id: 'multilingual', title: '🌍 Poliglota', description: 'Escolheu um idioma', icon: <Globe className="w-4 h-4" />, unlocked: false },
   { id: 'designer', title: '🎨 Designer', description: 'Escolheu um tema', icon: <Palette className="w-4 h-4" />, unlocked: false },
   { id: 'accessible', title: '👁️ Acessível', description: 'Configurou acessibilidade', icon: <Eye className="w-4 h-4" />, unlocked: false },
-  { id: 'connected', title: '🔗 Conectado', description: 'Configurou conexões', icon: <Cloud className="w-4 h-4" />, unlocked: false },
+  { id: 'networked', title: '🔌 Conectado', description: 'Configurou o servidor', icon: <Server className="w-4 h-4" />, unlocked: false },
+  { id: 'music_lover', title: '🎵 Melômano', description: 'Configurou Spotify', icon: <Music2 className="w-4 h-4" />, unlocked: false },
+  { id: 'weather_aware', title: '🌤️ Meteorologista', description: 'Configurou clima', icon: <Cloud className="w-4 h-4" />, unlocked: false },
   { id: 'master', title: '🏆 Mestre', description: 'Completou o setup', icon: <Trophy className="w-4 h-4" />, unlocked: false },
+];
+
+const languages = [
+  { code: 'pt-BR', name: 'Português (Brasil)', flag: '🇧🇷' },
+  { code: 'en', name: 'English', flag: '🇺🇸' },
+  { code: 'es', name: 'Español', flag: '🇪🇸' },
 ];
 
 export default function SetupWizard() {
   const navigate = useNavigate();
-  const { theme, setTheme, weather, setWeatherConfig } = useSettings();
+  const { theme, setTheme, weather, setWeatherConfig, language, setLanguage, isDemoMode } = useSettings();
   const [currentStep, setCurrentStep] = useState(0);
   const [direction, setDirection] = useState(1);
   const [achievements, setAchievements] = useState<Achievement[]>(initialAchievements);
   const [showAchievement, setShowAchievement] = useState<Achievement | null>(null);
   const [wizardData, setWizardData] = useState<{
+    language: string;
     theme: ThemeColor;
     highContrast: boolean;
     fontSize: number;
+    backendUrl: string;
+    useDemoMode: boolean;
     spotifyClientId: string;
+    spotifyClientSecret: string;
     weatherApiKey: string;
     weatherCity: string;
   }>({
+    language: language || 'pt-BR',
     theme: (theme as ThemeColor) || 'blue',
     highContrast: false,
     fontSize: 100,
+    backendUrl: 'https://midiaserver.local/api',
+    useDemoMode: true,
     spotifyClientId: '',
+    spotifyClientSecret: '',
     weatherApiKey: '',
     weatherCity: 'Montes Claros, MG',
   });
 
   const isFirstStep = currentStep === 0;
   const isLastStep = currentStep === steps.length - 1;
+  const progressPercent = Math.round((currentStep / (steps.length - 1)) * 100);
 
   const unlockAchievement = (achievementId: string) => {
     const achievement = achievements.find(a => a.id === achievementId);
@@ -145,7 +189,14 @@ export default function SetupWizard() {
     }
   };
 
+  const skipToEnd = () => {
+    setCurrentStep(steps.length - 1);
+  };
+
   const completeSetup = () => {
+    // Apply language
+    setLanguage(wizardData.language as 'pt-BR' | 'en' | 'es');
+    
     // Apply theme
     setTheme(wizardData.theme as 'blue' | 'green' | 'purple');
     
@@ -157,6 +208,18 @@ export default function SetupWizard() {
       fontSize: wizardData.fontSize,
       reducedMotion: false,
     }));
+
+    // Apply backend settings - store in localStorage
+    localStorage.setItem('demo_mode', String(wizardData.useDemoMode));
+    if (!wizardData.useDemoMode && wizardData.backendUrl) {
+      localStorage.setItem('api_url', wizardData.backendUrl);
+    }
+
+    // Apply Spotify settings
+    if (wizardData.spotifyClientId && wizardData.spotifyClientSecret) {
+      localStorage.setItem('spotify_client_id', wizardData.spotifyClientId);
+      localStorage.setItem('spotify_client_secret', wizardData.spotifyClientSecret);
+    }
 
     // Apply weather config if provided
     if (wizardData.weatherApiKey) {
@@ -212,13 +275,49 @@ export default function SetupWizard() {
                 O TSi JUKEBOX é seu sistema de música inteligente.
               </p>
               <p className="text-kiosk-text/70">
-                Nas próximas telas, vamos configurar o visual, acessibilidade e conexões
+                Nas próximas telas, vamos configurar idioma, visual, conexões e integrações
                 para deixar tudo do seu jeito.
               </p>
             </div>
             <div className="flex items-center justify-center gap-4 pt-4">
               <Volume2 className="w-12 h-12 text-primary animate-pulse" />
             </div>
+          </div>
+        );
+
+      case 'language':
+        return (
+          <div className="space-y-6">
+            <div className="flex justify-center mb-4">
+              <SettingsIllustration type="appearance" size="md" animated />
+            </div>
+            <p className="text-center text-kiosk-text/70">
+              Escolha o idioma da interface:
+            </p>
+            <RadioGroup
+              value={wizardData.language}
+              onValueChange={(value) => setWizardData(prev => ({ ...prev, language: value }))}
+              className="space-y-3"
+            >
+              {languages.map((lang) => (
+                <Label
+                  key={lang.code}
+                  htmlFor={lang.code}
+                  className={`flex items-center gap-4 p-4 rounded-lg cursor-pointer transition-all ${
+                    wizardData.language === lang.code
+                      ? 'card-option-selected-3d'
+                      : 'card-option-dark-3d'
+                  }`}
+                >
+                  <RadioGroupItem value={lang.code} id={lang.code} className="sr-only" />
+                  <span className="text-3xl">{lang.flag}</span>
+                  <span className="flex-1 text-kiosk-text font-medium">{lang.name}</span>
+                  {wizardData.language === lang.code && (
+                    <Check className="w-5 h-5 text-cyan-400" />
+                  )}
+                </Label>
+              ))}
+            </RadioGroup>
           </div>
         );
 
@@ -307,41 +406,155 @@ export default function SetupWizard() {
           </div>
         );
 
-      case 'connections':
+      case 'backend':
         return (
           <div className="space-y-6">
+            <div className="flex justify-center mb-4">
+              <SettingsIllustration type="connections" size="md" animated />
+            </div>
             <p className="text-center text-kiosk-text/70">
-              Configure suas conexões (opcional):
+              Configure a conexão com o servidor de música:
             </p>
 
             <div className="space-y-4">
-              {/* Weather Config */}
-              <div className="p-4 rounded-lg card-option-dark-3d space-y-3">
-                <div className="flex items-center gap-2">
-                  <Cloud className="w-5 h-5 icon-neon-blue" />
-                  <Label className="text-label-yellow">Widget de Clima</Label>
-                </div>
-                <Input
-                  placeholder="Chave API OpenWeatherMap (opcional)"
-                  value={wizardData.weatherApiKey}
-                  onChange={(e) => setWizardData(prev => ({ ...prev, weatherApiKey: e.target.value }))}
-                  className="bg-background/50"
-                />
-                <Input
-                  placeholder="Cidade (ex: São Paulo, BR)"
-                  value={wizardData.weatherCity}
-                  onChange={(e) => setWizardData(prev => ({ ...prev, weatherCity: e.target.value }))}
-                  className="bg-background/50"
-                />
-                <p className="text-xs text-kiosk-text/50">
-                  Obtenha sua chave gratuita em openweathermap.org
-                </p>
+              {/* Connection Mode */}
+              <div className="grid grid-cols-2 gap-3">
+                <button
+                  onClick={() => setWizardData(prev => ({ ...prev, useDemoMode: false }))}
+                  className={`p-4 rounded-lg text-left transition-all ${
+                    !wizardData.useDemoMode ? 'card-option-selected-3d' : 'card-option-dark-3d'
+                  }`}
+                >
+                  <Server className="w-6 h-6 mb-2 text-cyan-400" />
+                  <p className="font-medium text-kiosk-text">Servidor Real</p>
+                  <p className="text-xs text-kiosk-text/60">Conectar ao backend</p>
+                </button>
+                <button
+                  onClick={() => setWizardData(prev => ({ ...prev, useDemoMode: true }))}
+                  className={`p-4 rounded-lg text-left transition-all ${
+                    wizardData.useDemoMode ? 'card-option-selected-3d' : 'card-option-dark-3d'
+                  }`}
+                >
+                  <Sparkles className="w-6 h-6 mb-2 text-yellow-400" />
+                  <p className="font-medium text-kiosk-text">Modo Demo</p>
+                  <p className="text-xs text-kiosk-text/60">Usar dados simulados</p>
+                </button>
               </div>
 
-              <p className="text-xs text-center text-kiosk-text/50">
-                Você pode configurar mais opções depois em Configurações.
+              {!wizardData.useDemoMode && (
+                <motion.div
+                  initial={{ opacity: 0, height: 0 }}
+                  animate={{ opacity: 1, height: 'auto' }}
+                  className="p-4 rounded-lg card-option-dark-3d space-y-3"
+                >
+                  <Label className="text-label-yellow">URL do Servidor</Label>
+                  <Input
+                    placeholder="https://midiaserver.local/api"
+                    value={wizardData.backendUrl}
+                    onChange={(e) => setWizardData(prev => ({ ...prev, backendUrl: e.target.value }))}
+                    className="bg-background/50"
+                  />
+                  <p className="text-xs text-kiosk-text/50">
+                    Endereço do servidor FastAPI que controla a reprodução
+                  </p>
+                </motion.div>
+              )}
+
+              {wizardData.useDemoMode && (
+                <div className="p-4 rounded-lg bg-yellow-500/10 border border-yellow-500/30 text-sm text-kiosk-text/80">
+                  💡 <strong>Modo Demo:</strong> Perfeito para testar a interface. Você pode conectar ao servidor real depois nas Configurações.
+                </div>
+              )}
+            </div>
+          </div>
+        );
+
+      case 'spotify':
+        return (
+          <div className="space-y-6">
+            <div className="flex justify-center mb-4">
+              <SettingsIllustration type="integrations" size="md" animated />
+            </div>
+            <p className="text-center text-kiosk-text/70">
+              Conecte sua conta do Spotify (opcional):
+            </p>
+
+            <div className="p-4 rounded-lg card-option-dark-3d space-y-4">
+              <div className="flex items-center gap-2 mb-2">
+                <Music2 className="w-5 h-5 text-green-400" />
+                <Label className="text-label-yellow">Credenciais Spotify</Label>
+              </div>
+              
+              <div className="space-y-3">
+                <div>
+                  <Label className="text-xs text-kiosk-text/70">Client ID</Label>
+                  <Input
+                    placeholder="Cole seu Client ID aqui"
+                    value={wizardData.spotifyClientId}
+                    onChange={(e) => setWizardData(prev => ({ ...prev, spotifyClientId: e.target.value }))}
+                    className="bg-background/50 mt-1"
+                  />
+                </div>
+                <div>
+                  <Label className="text-xs text-kiosk-text/70">Client Secret</Label>
+                  <Input
+                    type="password"
+                    placeholder="Cole seu Client Secret aqui"
+                    value={wizardData.spotifyClientSecret}
+                    onChange={(e) => setWizardData(prev => ({ ...prev, spotifyClientSecret: e.target.value }))}
+                    className="bg-background/50 mt-1"
+                  />
+                </div>
+              </div>
+
+              <div className="p-3 rounded bg-kiosk-background/50 text-xs text-kiosk-text/60 space-y-1">
+                <p><strong>Como obter:</strong></p>
+                <ol className="list-decimal list-inside space-y-0.5">
+                  <li>Acesse developer.spotify.com</li>
+                  <li>Crie um novo aplicativo</li>
+                  <li>Copie Client ID e Client Secret</li>
+                </ol>
+              </div>
+            </div>
+
+            <p className="text-xs text-center text-kiosk-text/50">
+              Você pode pular e configurar depois em Configurações → Integrações
+            </p>
+          </div>
+        );
+
+      case 'weather':
+        return (
+          <div className="space-y-6">
+            <p className="text-center text-kiosk-text/70">
+              Configure o widget de clima (opcional):
+            </p>
+
+            <div className="p-4 rounded-lg card-option-dark-3d space-y-3">
+              <div className="flex items-center gap-2">
+                <Cloud className="w-5 h-5 icon-neon-blue" />
+                <Label className="text-label-yellow">Widget de Clima</Label>
+              </div>
+              <Input
+                placeholder="Chave API OpenWeatherMap"
+                value={wizardData.weatherApiKey}
+                onChange={(e) => setWizardData(prev => ({ ...prev, weatherApiKey: e.target.value }))}
+                className="bg-background/50"
+              />
+              <Input
+                placeholder="Cidade (ex: São Paulo, BR)"
+                value={wizardData.weatherCity}
+                onChange={(e) => setWizardData(prev => ({ ...prev, weatherCity: e.target.value }))}
+                className="bg-background/50"
+              />
+              <p className="text-xs text-kiosk-text/50">
+                Obtenha sua chave gratuita em openweathermap.org
               </p>
             </div>
+
+            <p className="text-xs text-center text-kiosk-text/50">
+              Você pode pular e configurar depois em Configurações.
+            </p>
           </div>
         );
 
@@ -360,11 +573,26 @@ export default function SetupWizard() {
             <div className="p-4 rounded-lg card-option-dark-3d text-left space-y-2">
               <p className="text-sm text-label-yellow">Resumo:</p>
               <ul className="text-sm text-kiosk-text/70 space-y-1">
+                <li>• Idioma: {languages.find(l => l.code === wizardData.language)?.name}</li>
                 <li>• Tema: {wizardData.theme === 'blue' ? 'Azul Neon' : wizardData.theme === 'green' ? 'Verde Tech' : 'Roxo Vibrante'}</li>
                 <li>• Fonte: {wizardData.fontSize}%</li>
                 <li>• Alto Contraste: {wizardData.highContrast ? 'Ativado' : 'Desativado'}</li>
+                <li>• Servidor: {wizardData.useDemoMode ? 'Modo Demo' : wizardData.backendUrl}</li>
+                <li>• Spotify: {wizardData.spotifyClientId ? 'Configurado' : 'Não configurado'}</li>
                 <li>• Clima: {wizardData.weatherApiKey ? 'Configurado' : 'Não configurado'}</li>
               </ul>
+            </div>
+            
+            {/* Achievements earned */}
+            <div className="p-4 rounded-lg bg-yellow-500/10 border border-yellow-500/30">
+              <p className="text-sm text-yellow-400 mb-2">🏆 Conquistas desbloqueadas:</p>
+              <div className="flex flex-wrap gap-2 justify-center">
+                {achievements.filter(a => a.unlocked).map(a => (
+                  <span key={a.id} className="text-xs bg-yellow-500/20 px-2 py-1 rounded-full">
+                    {a.title}
+                  </span>
+                ))}
+              </div>
             </div>
           </div>
         );
@@ -378,11 +606,28 @@ export default function SetupWizard() {
     <div className="min-h-screen bg-kiosk-bg flex flex-col">
       {/* Progress Bar */}
       <div className="p-4">
-        <div className="flex items-center justify-between mb-2">
+        {/* Progress percentage */}
+        <div className="flex items-center justify-between mb-2 px-2">
+          <span className="text-xs text-kiosk-text/50">Progresso</span>
+          <span className="text-xs font-medium text-cyan-400">{progressPercent}%</span>
+        </div>
+        
+        {/* Progress track */}
+        <div className="h-2 bg-kiosk-surface rounded-full overflow-hidden mb-4">
+          <motion.div 
+            className="h-full bg-gradient-to-r from-cyan-500 to-green-500"
+            initial={{ width: 0 }}
+            animate={{ width: `${progressPercent}%` }}
+            transition={{ duration: 0.3 }}
+          />
+        </div>
+
+        {/* Step indicators */}
+        <div className="flex items-center justify-between">
           {steps.map((step, index) => (
             <div key={step.id} className="flex items-center">
               <div
-                className={`w-10 h-10 rounded-full flex items-center justify-center transition-all ${
+                className={`w-8 h-8 rounded-full flex items-center justify-center transition-all text-xs ${
                   index < currentStep
                     ? 'bg-primary text-primary-foreground'
                     : index === currentStep
@@ -391,17 +636,17 @@ export default function SetupWizard() {
                 }`}
               >
                 {index < currentStep ? (
-                  <Check className="w-5 h-5" />
+                  <Check className="w-4 h-4" />
                 ) : (
-                  <span className="text-sm font-medium">{index + 1}</span>
+                  <span>{index + 1}</span>
                 )}
               </div>
               {index < steps.length - 1 && (
                 <div
-                  className={`w-full h-1 mx-2 rounded ${
+                  className={`w-full h-0.5 mx-1 rounded ${
                     index < currentStep ? 'bg-primary' : 'bg-kiosk-surface'
                   }`}
-                  style={{ width: '60px' }}
+                  style={{ width: '20px' }}
                 />
               )}
             </div>
@@ -469,7 +714,7 @@ export default function SetupWizard() {
 
           {/* Achievements mini display */}
           <div className="flex items-center gap-1">
-            {achievements.map((a) => (
+            {achievements.slice(0, 5).map((a) => (
               <div
                 key={a.id}
                 className={`w-6 h-6 rounded-full flex items-center justify-center text-xs transition-all ${
@@ -484,19 +729,31 @@ export default function SetupWizard() {
             ))}
           </div>
 
-          <Button onClick={handleNext} className="button-primary-glow-3d">
-            {isLastStep ? (
-              <>
-                Começar a Usar
-                <Trophy className="w-4 h-4 ml-2" />
-              </>
-            ) : (
-              <>
-                Próximo
-                <ChevronRight className="w-4 h-4 ml-2" />
-              </>
+          <div className="flex items-center gap-2">
+            {!isLastStep && currentStep > 0 && (
+              <Button
+                variant="ghost"
+                onClick={skipToEnd}
+                className="text-xs text-kiosk-text/50 hover:text-kiosk-text"
+              >
+                <SkipForward className="w-3 h-3 mr-1" />
+                Pular para o fim
+              </Button>
             )}
-          </Button>
+            <Button onClick={handleNext} className="button-primary-glow-3d">
+              {isLastStep ? (
+                <>
+                  Começar a Usar
+                  <Trophy className="w-4 h-4 ml-2" />
+                </>
+              ) : (
+                <>
+                  Continuar
+                  <ChevronRight className="w-4 h-4 ml-2" />
+                </>
+              )}
+            </Button>
+          </div>
         </div>
       </div>
 
@@ -507,17 +764,13 @@ export default function SetupWizard() {
             initial={{ opacity: 0, y: 50, scale: 0.9 }}
             animate={{ opacity: 1, y: 0, scale: 1 }}
             exit={{ opacity: 0, y: -20, scale: 0.9 }}
-            className="fixed bottom-24 left-1/2 -translate-x-1/2 z-50"
+            className="fixed bottom-32 left-1/2 -translate-x-1/2 z-50"
           >
-            <div className="px-6 py-3 rounded-xl bg-gradient-to-r from-yellow-500/20 to-amber-500/20 border border-yellow-500/50 shadow-lg shadow-yellow-500/20">
-              <div className="flex items-center gap-3">
-                <div className="w-10 h-10 rounded-full bg-yellow-500/30 flex items-center justify-center">
-                  <Trophy className="w-5 h-5 text-yellow-400" />
-                </div>
-                <div>
-                  <p className="text-xs text-yellow-400/80">Conquista Desbloqueada!</p>
-                  <p className="text-sm font-bold text-yellow-300">{showAchievement.title}</p>
-                </div>
+            <div className="bg-yellow-500/90 text-black px-6 py-3 rounded-xl shadow-xl flex items-center gap-3">
+              <Trophy className="w-6 h-6" />
+              <div>
+                <p className="font-bold">{showAchievement.title}</p>
+                <p className="text-sm opacity-80">{showAchievement.description}</p>
               </div>
             </div>
           </motion.div>

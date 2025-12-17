@@ -15,3 +15,4 @@ export { WeatherConfigSection } from './WeatherConfigSection';
 export { LanguageSection } from './LanguageSection';
 export { AccessibilitySection } from './AccessibilitySection';
 export { KeysManagementSection } from './KeysManagementSection';
+export { SettingsSidebar, type SettingsCategory } from './SettingsSidebar';

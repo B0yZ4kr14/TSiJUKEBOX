@@ -2966,3 +2966,154 @@ body[data-gradient="true"] {
   -webkit-text-fill-color: transparent;
   background-clip: text;
 }
+
+/* ========================================
+   SETTINGS SIDEBAR - Menu Lateral Fixo
+   ======================================== */
+
+.settings-sidebar {
+  position: fixed;
+  left: 0;
+  top: 0;
+  bottom: 0;
+  width: 72px;
+  background: linear-gradient(
+    180deg,
+    hsl(220 25% 8%) 0%,
+    hsl(220 30% 6%) 100%
+  );
+  border-right: 1px solid hsl(185 60% 40% / 0.15);
+  display: flex;
+  flex-direction: column;
+  padding: 16px 8px;
+  z-index: 40;
+  box-shadow:
+    4px 0 20px hsl(0 0% 0% / 0.3),
+    inset -1px 0 0 hsl(185 60% 50% / 0.1);
+  transition: width 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.settings-sidebar-expanded {
+  width: 200px;
+}
+
+.settings-sidebar-toggle {
+  width: 32px;
+  height: 32px;
+  border-radius: 8px;
+  background: hsl(220 25% 12%);
+  border: 1px solid hsl(185 60% 40% / 0.2);
+  color: hsl(185 100% 70%);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-left: auto;
+  transition: all 0.2s ease;
+}
+
+.settings-sidebar-toggle:hover {
+  background: hsl(185 60% 40% / 0.15);
+  border-color: hsl(185 60% 50% / 0.4);
+  box-shadow: 0 0 12px hsl(185 100% 50% / 0.2);
+}
+
+/* Navigation Buttons */
+.settings-nav-button {
+  width: 100%;
+  min-height: 48px;
+  padding: 12px;
+  border-radius: 12px;
+  display: flex;
+  align-items: center;
+  background: transparent;
+  border: 1px solid transparent;
+  color: hsl(0 0% 60%);
+  cursor: pointer;
+  transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.settings-nav-button:hover {
+  background: hsl(220 25% 14%);
+  border-color: hsl(185 60% 40% / 0.2);
+  color: hsl(0 0% 85%);
+}
+
+.settings-nav-button.active {
+  background: hsl(185 60% 40% / 0.12);
+  border-color: hsl(185 60% 50% / 0.4);
+  color: hsl(185 100% 75%);
+  box-shadow:
+    0 0 20px hsl(185 100% 50% / 0.15),
+    inset 0 1px 0 hsl(185 60% 60% / 0.1);
+}
+
+.settings-nav-icon-active {
+  filter: drop-shadow(0 0 6px hsl(185 100% 60% / 0.8));
+}
+
+/* Color variants for nav buttons */
+.settings-nav-button-cyan.active {
+  background: hsl(185 60% 40% / 0.12);
+  border-color: hsl(185 60% 50% / 0.4);
+  color: hsl(185 100% 75%);
+  box-shadow: 0 0 20px hsl(185 100% 50% / 0.15);
+}
+
+.settings-nav-button-amber.active {
+  background: hsl(38 60% 40% / 0.12);
+  border-color: hsl(38 60% 50% / 0.4);
+  color: hsl(38 100% 70%);
+  box-shadow: 0 0 20px hsl(38 100% 50% / 0.15);
+}
+
+.settings-nav-button-purple.active {
+  background: hsl(270 60% 40% / 0.12);
+  border-color: hsl(270 60% 50% / 0.4);
+  color: hsl(270 100% 80%);
+  box-shadow: 0 0 20px hsl(270 100% 50% / 0.15);
+}
+
+.settings-nav-button-pink.active {
+  background: hsl(330 60% 40% / 0.12);
+  border-color: hsl(330 60% 50% / 0.4);
+  color: hsl(330 100% 80%);
+  box-shadow: 0 0 20px hsl(330 100% 50% / 0.15);
+}
+
+.settings-nav-button-green.active {
+  background: hsl(141 60% 35% / 0.12);
+  border-color: hsl(141 60% 45% / 0.4);
+  color: hsl(141 100% 70%);
+  box-shadow: 0 0 20px hsl(141 100% 45% / 0.15);
+}
+
+.settings-nav-button-blue.active {
+  background: hsl(210 60% 40% / 0.12);
+  border-color: hsl(210 60% 50% / 0.4);
+  color: hsl(210 100% 75%);
+  box-shadow: 0 0 20px hsl(210 100% 50% / 0.15);
+}
+
+/* Tooltip Styling */
+.settings-tooltip {
+  background: hsl(220 25% 12%) !important;
+  border: 1px solid hsl(185 60% 40% / 0.3) !important;
+  color: hsl(185 100% 80%) !important;
+  font-size: 0.75rem;
+  padding: 6px 10px;
+  border-radius: 8px;
+  box-shadow: 0 4px 12px hsl(0 0% 0% / 0.4);
+}
+
+/* Content Area */
+.settings-content-area {
+  margin-left: 72px;
+  min-height: 100vh;
+  overflow-y: auto;
+  transition: margin-left 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.settings-sidebar-expanded + .settings-content-area,
+.settings-sidebar-expanded ~ main.settings-content-area {
+  margin-left: 200px;
+}

@@ -1,6 +1,9 @@
+import { useState, useMemo } from 'react';
 import { Play, Disc3 } from 'lucide-react';
+import { motion, AnimatePresence } from 'framer-motion';
 import { SpotifyAlbum } from '@/lib/api/spotify';
 import { cn } from '@/lib/utils';
+import { useSettings } from '@/contexts/SettingsContext';
 
 interface AlbumCardProps {
   album: SpotifyAlbum;
@@ -9,15 +12,64 @@ interface AlbumCardProps {
   className?: string;
 }
 
+// Partícula individual para efeito hover
+const HoverParticle = ({ delay, x, color }: { delay: number; x: number; color: 'green' | 'cyan' | 'gold' }) => {
+  const colorClasses = {
+    green: 'bg-[#1DB954] shadow-[0_0_8px_#1DB954]',
+    cyan: 'bg-cyan-400 shadow-[0_0_8px_hsl(185_100%_60%)]',
+    gold: 'bg-amber-400 shadow-[0_0_8px_hsl(45_100%_60%)]',
+  };
+
+  return (
+    <motion.div
+      className={`absolute w-1.5 h-1.5 rounded-full ${colorClasses[color]} pointer-events-none z-10`}
+      style={{ left: `${x}%`, bottom: '10%' }}
+      initial={{ y: 0, opacity: 0, scale: 0 }}
+      animate={{
+        y: [0, -80, -120],
+        opacity: [0, 1, 0],
+        scale: [0, 1.2, 0.5],
+        x: [(Math.random() - 0.5) * 30],
+      }}
+      transition={{
+        duration: 1.5 + Math.random(),
+        delay,
+        ease: 'easeOut',
+      }}
+    />
+  );
+};
+
 export function AlbumCard({ album, onClick, onPlay, className }: AlbumCardProps) {
+  const [isHovered, setIsHovered] = useState(false);
+  const { animationsEnabled } = useSettings();
+
+  const hoverParticles = useMemo(() => 
+    Array.from({ length: 12 }, (_, i) => ({
+      id: i,
+      x: Math.random() * 100,
+      delay: Math.random() * 0.5,
+      color: ['green', 'cyan', 'gold'][i % 3] as 'green' | 'cyan' | 'gold',
+    })),
+  []);
+
   return (
     <div
       className={cn(
-        "group relative bg-kiosk-surface/50 rounded-lg p-4 cursor-pointer transition-all hover:bg-kiosk-surface hover:scale-[1.02]",
+        "group relative bg-kiosk-surface/50 rounded-lg p-4 cursor-pointer transition-all hover:bg-kiosk-surface hover:scale-[1.02] overflow-hidden",
         className
       )}
       onClick={onClick}
+      onMouseEnter={() => setIsHovered(true)}
+      onMouseLeave={() => setIsHovered(false)}
     >
+      {/* Partículas flutuantes no hover */}
+      <AnimatePresence>
+        {isHovered && animationsEnabled && hoverParticles.map(p => (
+          <HoverParticle key={p.id} x={p.x} delay={p.delay} color={p.color} />
+        ))}
+      </AnimatePresence>
+
       {/* Album Art */}
       <div className="relative aspect-square mb-4 rounded-md overflow-hidden bg-kiosk-surface">
         {album.imageUrl ? (

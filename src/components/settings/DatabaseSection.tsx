@@ -139,20 +139,20 @@ export function DatabaseSection({ isDemoMode }: DatabaseSectionProps) {
           </div>
           <div className="grid grid-cols-2 gap-2 text-xs">
             <div className="flex justify-between">
-              <span className="text-label-orange">{t('database.size')}:</span>
-              <span className="text-kiosk-text">{dbInfo.size}</span>
+              <span className="text-label-neon">{t('database.size')}:</span>
+              <span className="text-neon-white">{dbInfo.size}</span>
             </div>
             <div className="flex justify-between">
-              <span className="text-label-orange">{t('database.tables')}:</span>
-              <span className="text-kiosk-text">{dbInfo.tables}</span>
+              <span className="text-label-neon">{t('database.tables')}:</span>
+              <span className="text-neon-white">{dbInfo.tables}</span>
             </div>
             <div className="flex justify-between">
-              <span className="text-label-orange">{t('database.version')}:</span>
-              <span className="text-kiosk-text">{dbInfo.version}</span>
+              <span className="text-label-neon">{t('database.version')}:</span>
+              <span className="text-neon-white">{dbInfo.version}</span>
             </div>
             <div className="flex justify-between">
-              <span className="text-label-orange">{t('database.modified')}:</span>
-              <span className="text-kiosk-text">
+              <span className="text-label-neon">{t('database.modified')}:</span>
+              <span className="text-neon-white">
                 {new Date(dbInfo.lastModified).toLocaleDateString()}
               </span>
             </div>

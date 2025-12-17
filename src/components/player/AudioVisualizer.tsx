@@ -134,7 +134,7 @@ export function AudioVisualizer({
 
   return (
     <div className={cn(
-      "flex items-end justify-center gap-[2px] h-16",
+      "flex items-end justify-center gap-[2px] h-8",
       className
     )}>
       {bars.map((height, i) => (

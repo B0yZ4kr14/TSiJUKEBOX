@@ -56,7 +56,7 @@ export function PlayerControls({ isPlaying }: PlayerControlsProps) {
 
   return (
     <motion.div 
-      className="flex items-center justify-center gap-4 md:gap-6"
+      className="flex items-center justify-center gap-3 md:gap-4"
       initial={{ opacity: 0, y: 20 }}
       animate={{ opacity: 1, y: 0 }}
       transition={{ duration: 0.5, delay: 0.2 }}
@@ -74,14 +74,14 @@ export function PlayerControls({ isPlaying }: PlayerControlsProps) {
           onClick={handlePrev}
           disabled={isLoading}
           className={cn(
-            "w-14 h-14 md:w-16 md:h-16 rounded-full relative overflow-hidden",
+            "w-11 h-11 md:w-12 md:h-12 rounded-full relative overflow-hidden",
             "button-control-extreme-3d",
             "text-kiosk-text hover:text-kiosk-primary",
             "transition-all duration-200"
           )}
         >
           <RippleContainer ripples={prevRipple.ripples} color="cyan" />
-          <SkipBack className="w-6 h-6 md:w-7 md:h-7 drop-shadow-lg relative z-10" />
+          <SkipBack className="w-5 h-5 md:w-5 md:h-5 drop-shadow-lg relative z-10" />
         </Button>
       </motion.div>
 
@@ -115,7 +115,7 @@ export function PlayerControls({ isPlaying }: PlayerControlsProps) {
           onClick={handlePlayPause}
           disabled={isLoading}
           className={cn(
-            "w-20 h-20 md:w-24 md:h-24 rounded-full relative z-10 overflow-hidden",
+            "w-14 h-14 md:w-16 md:h-16 rounded-full relative z-10 overflow-hidden",
             "bg-kiosk-primary hover:bg-kiosk-primary/90",
             "text-kiosk-bg hover:text-kiosk-bg",
             "button-play-ultra-3d",
@@ -132,9 +132,9 @@ export function PlayerControls({ isPlaying }: PlayerControlsProps) {
             className="relative z-10"
           >
             {isPlaying ? (
-              <Pause className="w-8 h-8 md:w-10 md:h-10 drop-shadow-lg" />
+              <Pause className="w-6 h-6 md:w-7 md:h-7 drop-shadow-lg" />
             ) : (
-              <Play className="w-8 h-8 md:w-10 md:h-10 ml-1 drop-shadow-lg" />
+              <Play className="w-6 h-6 md:w-7 md:h-7 ml-0.5 drop-shadow-lg" />
             )}
           </motion.div>
         </Button>
@@ -153,14 +153,14 @@ export function PlayerControls({ isPlaying }: PlayerControlsProps) {
           onClick={handleNext}
           disabled={isLoading}
           className={cn(
-            "w-14 h-14 md:w-16 md:h-16 rounded-full relative overflow-hidden",
+            "w-11 h-11 md:w-12 md:h-12 rounded-full relative overflow-hidden",
             "button-control-extreme-3d",
             "text-kiosk-text hover:text-kiosk-primary",
             "transition-all duration-200"
           )}
         >
           <RippleContainer ripples={nextRipple.ripples} color="cyan" />
-          <SkipForward className="w-6 h-6 md:w-7 md:h-7 drop-shadow-lg relative z-10" />
+          <SkipForward className="w-5 h-5 md:w-5 md:h-5 drop-shadow-lg relative z-10" />
         </Button>
       </motion.div>
 
@@ -177,14 +177,14 @@ export function PlayerControls({ isPlaying }: PlayerControlsProps) {
           onClick={handleStop}
           disabled={isLoading}
           className={cn(
-            "w-12 h-12 rounded-full relative overflow-hidden",
+            "w-9 h-9 rounded-full relative overflow-hidden",
             "button-stop-extreme-3d",
             "text-kiosk-text/50 hover:text-destructive",
             "transition-all duration-200"
           )}
         >
           <RippleContainer ripples={stopRipple.ripples} color="stop" />
-          <Square className="w-5 h-5 drop-shadow-md relative z-10" />
+          <Square className="w-4 h-4 drop-shadow-md relative z-10" />
         </Button>
       </motion.div>
     </motion.div>

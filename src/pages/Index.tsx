@@ -238,10 +238,10 @@ export default function Index() {
         )}
 
         {/* Header with 3D effect - Two Lines: Logo on top, Status bar below */}
-        <header className="flex flex-col p-3 pt-2 header-3d backdrop-blur-sm">
+        <header className="flex flex-col p-2 pt-1.5 header-3d backdrop-blur-sm">
           {/* LINE 1: Logo centered at absolute top */}
-          <div className="w-full flex justify-center mb-3">
-            <LogoBrand size="lg" variant="ultra" animate />
+          <div className="w-full flex justify-center mb-2">
+            <LogoBrand size="md" variant="ultra" animate />
           </div>
 
           {/* LINE 2: Status bar with grid for perfect centering */}
@@ -305,9 +305,9 @@ export default function Index() {
         </header>
 
         {/* Main Content - centralized container */}
-        <main className="flex-1 flex flex-col items-center justify-center px-4 pb-40 touch-pan-y">
+        <main className="flex-1 flex flex-col items-center justify-center gap-2 px-4 pb-32 touch-pan-y">
           {/* Centralized container for all player elements */}
-          <div className="w-full max-w-xl flex flex-col items-center gap-5">
+          <div className="w-full max-w-md flex flex-col items-center gap-3">
             {/* Now Playing */}
             <NowPlaying 
               track={status?.track ?? null} 
@@ -346,7 +346,7 @@ export default function Index() {
             <PlayerControls isPlaying={status?.playing ?? false} />
             
             {/* Volume Slider */}
-            <div className="w-full max-w-sm">
+            <div className="w-full max-w-[280px]">
               <VolumeSlider 
                 volume={status?.volume ?? 75} 
                 muted={status?.muted ?? false} 

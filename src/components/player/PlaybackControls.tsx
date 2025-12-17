@@ -30,7 +30,7 @@ export function PlaybackControls({
 
   return (
     <TooltipProvider>
-      <div className="flex items-center gap-3">
+      <div className="flex items-center gap-2">
         {/* Shuffle */}
         <Tooltip>
           <TooltipTrigger asChild>
@@ -45,14 +45,14 @@ export function PlaybackControls({
                 onClick={onShuffleToggle}
                 disabled={disabled}
                 className={cn(
-                  "w-12 h-12 rounded-full transition-all duration-300 relative",
+                  "w-9 h-9 rounded-full transition-all duration-300 relative",
                   shuffle
                     ? "text-[#1DB954] hover:text-[#1DB954]/80 bg-[#1DB954]/15 hover:bg-[#1DB954]/25 shadow-[0_0_20px_rgba(29,185,84,0.4)] border border-[#1DB954]/30"
                     : "text-kiosk-text/50 hover:text-kiosk-text hover:bg-kiosk-surface/50"
                 )}
               >
                 <Shuffle className={cn(
-                  "w-5 h-5 transition-all duration-300",
+                  "w-4 h-4 transition-all duration-300",
                   shuffle && "drop-shadow-[0_0_8px_rgba(29,185,84,0.6)]"
                 )} />
                 {shuffle && (
@@ -85,17 +85,17 @@ export function PlaybackControls({
                 onClick={onRepeatToggle}
                 disabled={disabled}
                 className={cn(
-                  "w-12 h-12 rounded-full transition-all duration-300 relative",
+                  "w-9 h-9 rounded-full transition-all duration-300 relative",
                   repeat !== 'off'
                     ? "text-[#1DB954] hover:text-[#1DB954]/80 bg-[#1DB954]/15 hover:bg-[#1DB954]/25 shadow-[0_0_20px_rgba(29,185,84,0.4)] border border-[#1DB954]/30"
                     : "text-kiosk-text/50 hover:text-kiosk-text hover:bg-kiosk-surface/50"
                 )}
               >
                 {repeat === 'track' ? (
-                  <Repeat1 className="w-5 h-5 drop-shadow-[0_0_8px_rgba(29,185,84,0.6)]" />
+                  <Repeat1 className="w-4 h-4 drop-shadow-[0_0_8px_rgba(29,185,84,0.6)]" />
                 ) : (
                   <Repeat className={cn(
-                    "w-5 h-5 transition-all duration-300",
+                    "w-4 h-4 transition-all duration-300",
                     repeat !== 'off' && "drop-shadow-[0_0_8px_rgba(29,185,84,0.6)]"
                   )} />
                 )}
@@ -135,9 +135,9 @@ export function PlaybackControls({
                 size="icon"
                 onClick={onQueueOpen}
                 disabled={disabled}
-                className="w-12 h-12 rounded-full text-kiosk-text/50 hover:text-kiosk-text hover:bg-kiosk-surface/50 transition-all duration-200"
+                className="w-9 h-9 rounded-full text-kiosk-text/50 hover:text-kiosk-text hover:bg-kiosk-surface/50 transition-all duration-200"
               >
-                <ListMusic className="w-5 h-5" />
+                <ListMusic className="w-4 h-4" />
               </Button>
             </motion.div>
           </TooltipTrigger>

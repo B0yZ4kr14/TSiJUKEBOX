@@ -118,6 +118,110 @@ export default function ThemePreview() {
         </motion.header>
 
         <div className="max-w-6xl mx-auto space-y-8 pb-8">
+          {/* Logo Variants Comparison Section */}
+          <motion.div
+            initial={{ y: 20, opacity: 0 }}
+            animate={{ y: 0, opacity: 1 }}
+            transition={{ delay: 0.08 }}
+          >
+            <h2 className="text-label-yellow font-semibold mb-4 flex items-center gap-2">
+              <Sparkles className="w-5 h-5 icon-neon-blue" />
+              Variantes da Logo
+            </h2>
+            
+            {/* Main Comparison: Mirror vs Mirror-Dark */}
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mb-6">
+              {/* MIRROR - Fundo escuro (uso padrão) */}
+              <Card className="overflow-hidden card-neon-border">
+                <div className="bg-[hsl(220_25%_8%)] p-8 flex flex-col items-center justify-center min-h-[180px]">
+                  <LogoBrand size="lg" variant="mirror" animate />
+                  <p className="mt-4 text-cyan-400/80 text-sm">Fundo Escuro (Padrão)</p>
+                </div>
+                <div className="bg-kiosk-surface p-3 text-center">
+                  <Badge variant="outline" className="border-cyan-500/50 text-cyan-400">
+                    variant="mirror"
+                  </Badge>
+                </div>
+              </Card>
+              
+              {/* MIRROR-DARK - Fundo claro (alto contraste) */}
+              <Card className="overflow-hidden card-neon-border">
+                <div className="bg-[hsl(220_20%_85%)] p-8 flex flex-col items-center justify-center min-h-[180px]">
+                  <LogoBrand size="lg" variant="mirror-dark" animate />
+                  <p className="mt-4 text-gray-700 text-sm">Fundo Claro (Alto Contraste)</p>
+                </div>
+                <div className="bg-kiosk-surface p-3 text-center">
+                  <Badge variant="outline" className="border-amber-500/50 text-amber-400">
+                    variant="mirror-dark"
+                  </Badge>
+                </div>
+              </Card>
+            </div>
+
+            {/* Extended Contrast Testing Grid */}
+            <h3 className="text-kiosk-text/80 text-sm font-medium mb-3">Teste de Contraste (mirror-dark)</h3>
+            <div className="grid grid-cols-2 md:grid-cols-4 gap-4 mb-6">
+              {/* Fundo branco puro */}
+              <div className="bg-white rounded-xl p-6 flex flex-col items-center justify-center shadow-lg">
+                <LogoBrand size="md" variant="mirror-dark" animate />
+                <p className="mt-2 text-gray-600 text-xs">Branco #FFFFFF</p>
+              </div>
+              
+              {/* Fundo cinza claro */}
+              <div className="bg-gray-200 rounded-xl p-6 flex flex-col items-center justify-center shadow-lg">
+                <LogoBrand size="md" variant="mirror-dark" animate />
+                <p className="mt-2 text-gray-600 text-xs">Cinza Claro</p>
+              </div>
+              
+              {/* Fundo azul claro */}
+              <div className="bg-sky-100 rounded-xl p-6 flex flex-col items-center justify-center shadow-lg">
+                <LogoBrand size="md" variant="mirror-dark" animate />
+                <p className="mt-2 text-gray-600 text-xs">Azul Claro</p>
+              </div>
+              
+              {/* Fundo amarelo claro */}
+              <div className="bg-amber-50 rounded-xl p-6 flex flex-col items-center justify-center shadow-lg">
+                <LogoBrand size="md" variant="mirror-dark" animate />
+                <p className="mt-2 text-gray-600 text-xs">Amarelo Claro</p>
+              </div>
+            </div>
+
+            {/* Side-by-Side Comparison */}
+            <Card className="overflow-hidden card-admin-extreme-3d">
+              <CardHeader className="pb-2">
+                <CardTitle className="text-gold-neon text-base">
+                  Comparação Direta: Mirror vs Mirror-Dark
+                </CardTitle>
+              </CardHeader>
+              <CardContent className="p-0">
+                <div className="grid grid-cols-2">
+                  {/* Coluna Mirror */}
+                  <div className="space-y-0">
+                    <div className="bg-[hsl(220_25%_8%)] p-4 flex justify-center border-r border-border">
+                      <LogoBrand size="sm" variant="mirror" animate />
+                    </div>
+                    <div className="bg-white p-4 flex justify-center border-r border-border">
+                      <LogoBrand size="sm" variant="mirror" animate />
+                    </div>
+                  </div>
+                  
+                  {/* Coluna Mirror-Dark */}
+                  <div className="space-y-0">
+                    <div className="bg-[hsl(220_25%_8%)] p-4 flex justify-center">
+                      <LogoBrand size="sm" variant="mirror-dark" animate />
+                    </div>
+                    <div className="bg-white p-4 flex justify-center">
+                      <LogoBrand size="sm" variant="mirror-dark" animate />
+                    </div>
+                  </div>
+                </div>
+                <div className="grid grid-cols-2 text-center border-t border-border bg-kiosk-surface/50">
+                  <div className="p-2 text-xs text-cyan-400/80 border-r border-border">mirror</div>
+                  <div className="p-2 text-xs text-amber-400/80">mirror-dark</div>
+                </div>
+              </CardContent>
+            </Card>
+          </motion.div>
           {/* Solid Themes Section */}
           <motion.div
             initial={{ y: 20, opacity: 0 }}

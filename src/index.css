@@ -3017,88 +3017,71 @@ body[data-gradient="true"] {
   box-shadow: 0 0 12px hsl(185 100% 50% / 0.2);
 }
 
-/* Navigation Buttons */
-.settings-nav-button {
+/* Navigation Buttons - 3D Neon Blue */
+.settings-nav-button-3d {
   width: 100%;
   min-height: 48px;
   padding: 12px;
   border-radius: 12px;
   display: flex;
   align-items: center;
-  background: transparent;
-  border: 1px solid transparent;
-  color: hsl(0 0% 60%);
+  background: linear-gradient(145deg, hsl(220 25% 14%) 0%, hsl(220 30% 10%) 100%);
+  border: 1px solid hsl(185 80% 50% / 0.25);
   cursor: pointer;
-  transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
-}
-
-.settings-nav-button:hover {
-  background: hsl(220 25% 14%);
-  border-color: hsl(185 60% 40% / 0.2);
-  color: hsl(0 0% 85%);
-}
-
-.settings-nav-button.active {
-  background: hsl(185 60% 40% / 0.12);
-  border-color: hsl(185 60% 50% / 0.4);
-  color: hsl(185 100% 75%);
+  transition: all 0.25s cubic-bezier(0.4, 0, 0.2, 1);
   box-shadow:
-    0 0 20px hsl(185 100% 50% / 0.15),
-    inset 0 1px 0 hsl(185 60% 60% / 0.1);
+    0 2px 8px hsl(0 0% 0% / 0.3),
+    0 0 12px hsl(185 100% 50% / 0.08),
+    inset 0 1px 0 hsl(0 0% 100% / 0.05);
 }
 
-.settings-nav-icon-active {
-  filter: drop-shadow(0 0 6px hsl(185 100% 60% / 0.8));
+.settings-nav-button-3d:hover {
+  background: linear-gradient(145deg, hsl(185 40% 18%) 0%, hsl(185 35% 12%) 100%);
+  border-color: hsl(185 80% 55% / 0.5);
+  box-shadow:
+    0 4px 16px hsl(0 0% 0% / 0.4),
+    0 0 25px hsl(185 100% 50% / 0.2),
+    inset 0 1px 0 hsl(0 0% 100% / 0.08);
+  transform: translateY(-2px);
 }
 
-/* Color variants for nav buttons */
-.settings-nav-button-gold.active {
-  background: hsl(45 60% 40% / 0.12);
-  border-color: hsl(45 60% 50% / 0.4);
-  color: hsl(45 100% 70%);
-  box-shadow: 0 0 20px hsl(45 100% 50% / 0.15);
+.settings-nav-button-3d.active {
+  background: linear-gradient(145deg, hsl(185 50% 16%) 0%, hsl(185 45% 10%) 100%);
+  border-color: hsl(185 90% 55% / 0.7);
+  box-shadow:
+    0 0 30px hsl(185 100% 50% / 0.35),
+    0 4px 20px hsl(0 0% 0% / 0.5),
+    inset 0 0 20px hsl(185 100% 50% / 0.08),
+    inset 0 1px 0 hsl(185 80% 70% / 0.15);
 }
 
-.settings-nav-button-cyan.active {
-  background: hsl(185 60% 40% / 0.12);
-  border-color: hsl(185 60% 50% / 0.4);
+/* 3D Neon Blue Icons in Sidebar */
+.settings-nav-icon-3d {
+  color: hsl(185 100% 65%);
+  filter: 
+    drop-shadow(0 0 4px hsl(185 100% 60% / 0.7))
+    drop-shadow(0 0 8px hsl(185 100% 55% / 0.5))
+    drop-shadow(0 2px 4px hsl(220 30% 5% / 0.5));
+  transition: all 0.25s ease;
+}
+
+.settings-nav-button-3d:hover .settings-nav-icon-3d {
   color: hsl(185 100% 75%);
-  box-shadow: 0 0 20px hsl(185 100% 50% / 0.15);
+  filter: 
+    drop-shadow(0 0 6px hsl(185 100% 65% / 0.9))
+    drop-shadow(0 0 14px hsl(185 100% 60% / 0.7))
+    drop-shadow(0 0 24px hsl(185 100% 55% / 0.4))
+    drop-shadow(0 2px 4px hsl(220 30% 5% / 0.6));
+  transform: scale(1.1);
 }
 
-.settings-nav-button-amber.active {
-  background: hsl(38 60% 40% / 0.12);
-  border-color: hsl(38 60% 50% / 0.4);
-  color: hsl(38 100% 70%);
-  box-shadow: 0 0 20px hsl(38 100% 50% / 0.15);
-}
-
-.settings-nav-button-purple.active {
-  background: hsl(270 60% 40% / 0.12);
-  border-color: hsl(270 60% 50% / 0.4);
-  color: hsl(270 100% 80%);
-  box-shadow: 0 0 20px hsl(270 100% 50% / 0.15);
-}
-
-.settings-nav-button-pink.active {
-  background: hsl(330 60% 40% / 0.12);
-  border-color: hsl(330 60% 50% / 0.4);
-  color: hsl(330 100% 80%);
-  box-shadow: 0 0 20px hsl(330 100% 50% / 0.15);
-}
-
-.settings-nav-button-green.active {
-  background: hsl(141 60% 35% / 0.12);
-  border-color: hsl(141 60% 45% / 0.4);
-  color: hsl(141 100% 70%);
-  box-shadow: 0 0 20px hsl(141 100% 45% / 0.15);
-}
-
-.settings-nav-button-blue.active {
-  background: hsl(210 60% 40% / 0.12);
-  border-color: hsl(210 60% 50% / 0.4);
-  color: hsl(210 100% 75%);
-  box-shadow: 0 0 20px hsl(210 100% 50% / 0.15);
+.settings-nav-button-3d.active .settings-nav-icon-3d {
+  color: hsl(185 100% 80%);
+  filter: 
+    drop-shadow(0 0 8px hsl(185 100% 70% / 1))
+    drop-shadow(0 0 18px hsl(185 100% 65% / 0.8))
+    drop-shadow(0 0 30px hsl(185 100% 55% / 0.5))
+    drop-shadow(0 3px 6px hsl(220 30% 5% / 0.7));
 }
 
 /* Status Badges */

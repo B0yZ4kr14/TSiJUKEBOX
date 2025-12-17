@@ -16,7 +16,11 @@ import {
   Globe,
   Server,
   Music2,
-  SkipForward
+  SkipForward,
+  Loader2,
+  CheckCircle2,
+  XCircle,
+  Wifi
 } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { RadioGroup, RadioGroupItem } from '@/components/ui/radio-group';
@@ -153,9 +157,74 @@ export default function SetupWizard() {
     weatherCity: 'Montes Claros, MG',
   });
 
+  // Validation states
+  const [testingBackend, setTestingBackend] = useState(false);
+  const [backendTestResult, setBackendTestResult] = useState<'success' | 'error' | null>(null);
+  const [testingWeather, setTestingWeather] = useState(false);
+  const [weatherTestResult, setWeatherTestResult] = useState<'success' | 'error' | null>(null);
+
   const isFirstStep = currentStep === 0;
   const isLastStep = currentStep === steps.length - 1;
   const progressPercent = Math.round((currentStep / (steps.length - 1)) * 100);
+
+  // Test backend connection
+  const testBackendConnection = async () => {
+    if (!wizardData.backendUrl) return;
+    
+    setTestingBackend(true);
+    setBackendTestResult(null);
+    
+    try {
+      const controller = new AbortController();
+      const timeout = setTimeout(() => controller.abort(), 5000);
+      
+      const response = await fetch(`${wizardData.backendUrl}/status`, {
+        method: 'GET',
+        signal: controller.signal
+      });
+      
+      clearTimeout(timeout);
+      
+      if (response.ok) {
+        setBackendTestResult('success');
+        toast.success('✅ Conexão com servidor OK!');
+      } else {
+        throw new Error('Server error');
+      }
+    } catch (error) {
+      setBackendTestResult('error');
+      toast.error('❌ Não foi possível conectar ao servidor');
+    } finally {
+      setTestingBackend(false);
+    }
+  };
+
+  // Test weather API
+  const testWeatherAPI = async () => {
+    if (!wizardData.weatherApiKey || !wizardData.weatherCity) return;
+    
+    setTestingWeather(true);
+    setWeatherTestResult(null);
+    
+    try {
+      const response = await fetch(
+        `https://api.openweathermap.org/data/2.5/weather?q=${encodeURIComponent(wizardData.weatherCity)}&appid=${wizardData.weatherApiKey}`
+      );
+      
+      if (response.ok) {
+        const data = await response.json();
+        setWeatherTestResult('success');
+        toast.success(`✅ API funcionando! Clima em ${data.name}: ${Math.round(data.main.temp - 273.15)}°C`);
+      } else {
+        throw new Error('Invalid response');
+      }
+    } catch (error) {
+      setWeatherTestResult('error');
+      toast.error('❌ Erro na API - Verifique a chave e cidade');
+    } finally {
+      setTestingWeather(false);
+    }
+  };
 
   const unlockAchievement = (achievementId: string) => {
     const achievement = achievements.find(a => a.id === achievementId);
@@ -451,9 +520,43 @@ export default function SetupWizard() {
                   <Input
                     placeholder="https://midiaserver.local/api"
                     value={wizardData.backendUrl}
-                    onChange={(e) => setWizardData(prev => ({ ...prev, backendUrl: e.target.value }))}
+                    onChange={(e) => {
+                      setWizardData(prev => ({ ...prev, backendUrl: e.target.value }));
+                      setBackendTestResult(null);
+                    }}
                     className="bg-background/50"
                   />
+                  
+                  {/* Test Connection Button */}
+                  <Button
+                    onClick={testBackendConnection}
+                    disabled={testingBackend || !wizardData.backendUrl}
+                    variant="outline"
+                    className="w-full button-outline-neon"
+                  >
+                    {testingBackend ? (
+                      <>
+                        <Loader2 className="w-4 h-4 mr-2 animate-spin" />
+                        Testando conexão...
+                      </>
+                    ) : backendTestResult === 'success' ? (
+                      <>
+                        <CheckCircle2 className="w-4 h-4 mr-2 text-green-400" />
+                        Conexão OK!
+                      </>
+                    ) : backendTestResult === 'error' ? (
+                      <>
+                        <XCircle className="w-4 h-4 mr-2 text-red-400" />
+                        Falhou - Tentar novamente
+                      </>
+                    ) : (
+                      <>
+                        <Wifi className="w-4 h-4 mr-2" />
+                        Testar Conexão
+                      </>
+                    )}
+                  </Button>
+                  
                   <p className="text-xs text-kiosk-text/50">
                     Endereço do servidor FastAPI que controla a reprodução
                   </p>
@@ -538,15 +641,52 @@ export default function SetupWizard() {
               <Input
                 placeholder="Chave API OpenWeatherMap"
                 value={wizardData.weatherApiKey}
-                onChange={(e) => setWizardData(prev => ({ ...prev, weatherApiKey: e.target.value }))}
+                onChange={(e) => {
+                  setWizardData(prev => ({ ...prev, weatherApiKey: e.target.value }));
+                  setWeatherTestResult(null);
+                }}
                 className="bg-background/50"
               />
               <Input
                 placeholder="Cidade (ex: São Paulo, BR)"
                 value={wizardData.weatherCity}
-                onChange={(e) => setWizardData(prev => ({ ...prev, weatherCity: e.target.value }))}
+                onChange={(e) => {
+                  setWizardData(prev => ({ ...prev, weatherCity: e.target.value }));
+                  setWeatherTestResult(null);
+                }}
                 className="bg-background/50"
               />
+              
+              {/* Test Weather API Button */}
+              <Button
+                onClick={testWeatherAPI}
+                disabled={testingWeather || !wizardData.weatherApiKey || !wizardData.weatherCity}
+                variant="outline"
+                className="w-full button-outline-neon"
+              >
+                {testingWeather ? (
+                  <>
+                    <Loader2 className="w-4 h-4 mr-2 animate-spin" />
+                    Testando API...
+                  </>
+                ) : weatherTestResult === 'success' ? (
+                  <>
+                    <CheckCircle2 className="w-4 h-4 mr-2 text-green-400" />
+                    API Funcionando!
+                  </>
+                ) : weatherTestResult === 'error' ? (
+                  <>
+                    <XCircle className="w-4 h-4 mr-2 text-red-400" />
+                    Erro - Verificar dados
+                  </>
+                ) : (
+                  <>
+                    <Cloud className="w-4 h-4 mr-2" />
+                    Testar API de Clima
+                  </>
+                )}
+              </Button>
+              
               <p className="text-xs text-kiosk-text/50">
                 Obtenha sua chave gratuita em openweathermap.org
               </p>

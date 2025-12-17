@@ -391,27 +391,24 @@ export function SettingsDashboard({ onNavigateToCategory }: SettingsDashboardPro
 
           {/* Guide Cards Grid */}
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-3">
-            {filteredGuides.map((guide, index) => {
-              const status = statuses[guide.id];
-              return (
-                <motion.div
-                  key={guide.id}
-                  initial={{ opacity: 0, y: 10 }}
-                  animate={{ opacity: 1, y: 0 }}
-                  transition={{ delay: 0.1 + index * 0.05 }}
-                >
-                  <SettingsGuideCard
-                    id={guide.id}
-                    title={guide.title}
-                    description={guide.description}
-                    icon={guide.icon}
-                    status={status?.level || 'error'}
-                    statusMessage={status?.message || 'Não configurado'}
-                    onClick={() => setSelectedGuide(guide)}
-                  />
-                </motion.div>
-              );
-            })}
+          {filteredGuides.map((guide, index) => {
+            return (
+              <motion.div
+                key={guide.id}
+                initial={{ opacity: 0, y: 10 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ delay: 0.1 + index * 0.05 }}
+              >
+                <SettingsGuideCard
+                  id={guide.id}
+                  title={guide.title}
+                  description={guide.description}
+                  icon={guide.icon}
+                  onClick={() => setSelectedGuide(guide)}
+                />
+              </motion.div>
+            );
+          })}
           </div>
 
           {filteredGuides.length === 0 && (

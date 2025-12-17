@@ -253,7 +253,7 @@ export function CommandDeck({ disabled = false }: CommandDeckProps) {
   return (
     <>
       {/* Fixed container */}
-      <div className="fixed left-0 top-12 z-50 flex items-center">
+      <div className="fixed left-0 top-1/2 -translate-y-1/2 z-50 flex items-center">
         {/* Circular Toggle Button - Always visible */}
         <motion.button
           onClick={() => {

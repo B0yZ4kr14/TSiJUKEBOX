@@ -14,6 +14,7 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { RadioGroup, RadioGroupItem } from '@/components/ui/radio-group';
 import { toast } from 'sonner';
 import { cn } from '@/lib/utils';
+import { DatabaseConnectionHistory, addConnectionHistoryEntry } from './DatabaseConnectionHistory';
 
 type DatabaseEngine = 'sqlite' | 'postgresql' | 'mariadb' | 'firebird';
 
@@ -526,6 +527,13 @@ export function AdvancedDatabaseSection({ isDemoMode }: AdvancedDatabaseSectionP
     setConnectionStatus(result);
     setIsTesting(false);
     
+    // Add to connection history
+    addConnectionHistoryEntry({
+      latency: result.latency,
+      success: result.success,
+      engine: selectedEngine
+    });
+    
     if (result.success) {
       toast.success(`Conexão ${engine.name} estabelecida com sucesso`);
     } else {
@@ -822,6 +830,11 @@ export function AdvancedDatabaseSection({ isDemoMode }: AdvancedDatabaseSectionP
                 </code>
               </div>
             ))}
+          </div>
+
+          {/* Connection History Chart */}
+          <div className="mt-6">
+            <DatabaseConnectionHistory engine={selectedEngine} />
           </div>
         </TabsContent>
 

@@ -231,6 +231,42 @@ export default function SystemDiagnostics() {
         toast.success('Modo Demo ativado automaticamente');
       }
     },
+    'backend-status': {
+      id: 'reconnect-backend',
+      label: 'Reconectar',
+      description: 'Tentar reconexão automática ao servidor',
+      severity: 'auto',
+      action: async () => {
+        toast.info('Tentando reconexão...');
+        const test = diagnosticTests.find(t => t.id === 'backend-status');
+        if (test) {
+          setResults(prev => ({ ...prev, 'backend-status': { status: 'running', message: 'Reconectando...' } }));
+          await new Promise(r => setTimeout(r, 1500));
+          const result = await test.test();
+          setResults(prev => ({ ...prev, 'backend-status': result }));
+          if (result.status === 'success') {
+            toast.success('Reconexão bem-sucedida!');
+          } else {
+            toast.error('Falha na reconexão');
+          }
+        }
+      }
+    },
+    'lovable-cloud': {
+      id: 'retry-cloud',
+      label: 'Reconectar Cloud',
+      description: 'Tentar reconexão com Lovable Cloud',
+      severity: 'auto',
+      action: async () => {
+        toast.info('Reconectando ao Cloud...');
+        const test = diagnosticTests.find(t => t.id === 'lovable-cloud');
+        if (test) {
+          setResults(prev => ({ ...prev, 'lovable-cloud': { status: 'running', message: 'Testando...' } }));
+          const result = await test.test();
+          setResults(prev => ({ ...prev, 'lovable-cloud': result }));
+        }
+      }
+    },
     'spotify-auth': {
       id: 'config-spotify',
       label: 'Configurar Spotify',
@@ -270,14 +306,17 @@ export default function SystemDiagnostics() {
       severity: 'auto',
       action: async () => {
         try {
-          const keysToKeep = ['theme', 'language'];
+          const keysToKeep = ['theme', 'language', 'tsi_api_url'];
           const allKeys = Object.keys(localStorage);
+          let cleared = 0;
           allKeys.forEach(key => {
             if (!keysToKeep.includes(key)) {
               localStorage.removeItem(key);
+              cleared++;
             }
           });
-          toast.success('Cache limpo com sucesso');
+          sessionStorage.clear();
+          toast.success(`Cache limpo: ${cleared} itens removidos`);
         } catch (e) {
           toast.error('Erro ao limpar cache');
         }

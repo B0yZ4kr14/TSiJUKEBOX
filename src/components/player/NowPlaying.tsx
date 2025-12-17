@@ -65,7 +65,7 @@ export function NowPlaying({ track, isPlaying }: NowPlayingProps) {
   []);
 
   return (
-    <div className="flex flex-col items-center gap-6 relative">
+    <div className="flex flex-col items-center gap-3 relative">
       {/* Floating particles container - only shows when playing and animations enabled */}
       <AnimatePresence>
         {isPlaying && animationsEnabled && (
@@ -93,7 +93,7 @@ export function NowPlaying({ track, isPlaying }: NowPlayingProps) {
       <div className="relative">
         {/* Outer glow when playing */}
         <motion.div
-          className="absolute -inset-8 rounded-3xl bg-kiosk-primary/20 blur-3xl"
+          className="absolute -inset-5 rounded-2xl bg-kiosk-primary/20 blur-2xl"
           animate={{
             opacity: isPlaying ? [0.15, 0.35, 0.15] : 0.05,
             scale: isPlaying ? [1, 1.05, 1] : 1,
@@ -106,13 +106,13 @@ export function NowPlaying({ track, isPlaying }: NowPlayingProps) {
         />
 
         {/* Multiple shadow layers for extreme depth */}
-        <div className="absolute -inset-1 rounded-2xl bg-black/60 blur-2xl" />
-        <div className="absolute -inset-3 rounded-2xl bg-kiosk-primary/10 blur-3xl" />
+        <div className="absolute -inset-1 rounded-xl bg-black/60 blur-xl" />
+        <div className="absolute -inset-2 rounded-xl bg-kiosk-primary/10 blur-2xl" />
 
         {/* Main album cover - 3D Frame with SOLID dark background */}
         <motion.div 
           className={cn(
-            "w-72 h-72 md:w-80 md:h-80 rounded-2xl overflow-hidden relative z-10",
+            "w-48 h-48 md:w-52 md:h-52 rounded-xl overflow-hidden relative z-10",
             "album-frame-extreme-3d"
           )}
           initial={{ scale: 0.95, opacity: 0 }}
@@ -146,7 +146,7 @@ export function NowPlaying({ track, isPlaying }: NowPlayingProps) {
                 animate={{ opacity: 1 }}
                 exit={{ opacity: 0 }}
               >
-                <Music className="w-24 h-24 text-kiosk-primary/40" />
+                <Music className="w-14 h-14 text-kiosk-primary/40" />
               </motion.div>
             )}
           </AnimatePresence>
@@ -155,17 +155,17 @@ export function NowPlaying({ track, isPlaying }: NowPlayingProps) {
           <div className="absolute inset-0 bg-gradient-to-t from-[#050508]/60 via-transparent to-[#050508]/40 pointer-events-none z-20" />
           
           {/* Inner shadow for extreme inset effect */}
-          <div className="absolute inset-0 shadow-[inset_0_0_80px_rgba(0,0,0,0.7)] pointer-events-none rounded-2xl z-20" />
+          <div className="absolute inset-0 shadow-[inset_0_0_50px_rgba(0,0,0,0.7)] pointer-events-none rounded-xl z-20" />
         </motion.div>
 
       </div>
 
       {/* Track Info with 3D text shadow */}
-      <div className="text-center space-y-2 max-w-md">
+      <div className="text-center space-y-1 max-w-sm">
         <AnimatePresence mode="wait">
           <motion.h2 
             key={track?.title || 'no-track'}
-            className="text-2xl md:text-3xl font-bold text-kiosk-text drop-shadow-[0_2px_4px_rgba(0,0,0,0.5)]"
+            className="text-lg md:text-xl font-bold text-kiosk-text drop-shadow-[0_2px_4px_rgba(0,0,0,0.5)]"
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
             exit={{ opacity: 0, y: -20 }}
@@ -178,7 +178,7 @@ export function NowPlaying({ track, isPlaying }: NowPlayingProps) {
         <AnimatePresence mode="wait">
           <motion.p 
             key={track?.artist || 'no-artist'}
-            className="text-lg text-kiosk-text/70 drop-shadow-[0_1px_2px_rgba(0,0,0,0.3)]"
+            className="text-sm text-kiosk-text/70 drop-shadow-[0_1px_2px_rgba(0,0,0,0.3)]"
             initial={{ opacity: 0, y: 10 }}
             animate={{ opacity: 1, y: 0 }}
             exit={{ opacity: 0, y: -10 }}

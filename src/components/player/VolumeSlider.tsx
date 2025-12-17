@@ -24,7 +24,7 @@ export function VolumeSlider({ volume, muted }: VolumeSliderProps) {
 
   return (
     <motion.div 
-      className="flex items-center gap-4 w-full max-w-md px-4"
+      className="flex items-center gap-3 w-full max-w-xs px-3"
       initial={{ opacity: 0, y: 20 }}
       animate={{ opacity: 1, y: 0 }}
       transition={{ duration: 0.5, delay: 0.3 }}
@@ -39,7 +39,7 @@ export function VolumeSlider({ volume, muted }: VolumeSliderProps) {
           onClick={() => toggleMute(!muted)}
           disabled={isLoading}
           className={cn(
-            "w-12 h-12 rounded-full shrink-0",
+            "w-9 h-9 rounded-full shrink-0",
             "button-control-3d",
             "text-kiosk-text/70 hover:text-kiosk-text",
             "transition-all duration-200",
@@ -52,7 +52,7 @@ export function VolumeSlider({ volume, muted }: VolumeSliderProps) {
             animate={{ scale: 1, opacity: 1 }}
             transition={{ type: 'spring', stiffness: 300 }}
           >
-            <VolumeIcon className="w-5 h-5 drop-shadow-md" />
+            <VolumeIcon className="w-4 h-4 drop-shadow-md" />
           </motion.div>
         </Button>
       </motion.div>
@@ -81,8 +81,8 @@ export function VolumeSlider({ volume, muted }: VolumeSliderProps) {
 
       <motion.span 
         className={cn(
-          "text-sm font-bold text-kiosk-text/70 w-14 text-right tabular-nums",
-          "badge-3d px-2 py-1 rounded-lg"
+          "text-xs font-bold text-kiosk-text/70 w-10 text-right tabular-nums",
+          "badge-3d px-1.5 py-0.5 rounded-md"
         )}
         key={muted ? 0 : volume}
         initial={{ opacity: 0, y: -5 }}

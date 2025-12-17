@@ -2629,96 +2629,68 @@ body[data-gradient="true"] {
   /* SEM background, SEM border */
 }
 
-/* Logo TSi MIRROR - CIANO ULTRA (destaque vibrante + glow intenso) */
+/* Logo TSi MIRROR - CIANO (glow refinado + shimmer contínuo) */
 .logo-tsi-mirror {
-  background: linear-gradient(
-    180deg,
-    hsl(185 80% 68%) 0%,      /* Topo: Ciano luminoso +10% */
-    hsl(190 75% 55%) 20%,     /* Transição vibrante */
-    hsl(195 70% 45%) 50%,     /* Core ciano +5% */
-    hsl(200 60% 35%) 80%,     /* Profundidade */
-    hsl(210 50% 28%) 100%     /* Base azul escuro */
-  );
-  -webkit-background-clip: text;
-  -webkit-text-fill-color: transparent;
-  background-clip: text;
-  filter: 
-    drop-shadow(0 0 4px hsl(185 100% 75% / 1))
-    drop-shadow(0 0 12px hsl(190 100% 65% / 0.85))
-    drop-shadow(0 0 24px hsl(195 95% 55% / 0.6))
-    drop-shadow(0 0 40px hsl(195 90% 50% / 0.35))
-    drop-shadow(0 2px 4px hsl(220 40% 8% / 0.8));
-  letter-spacing: -0.02em;
-  font-weight: 900;
-  transition: filter 0.3s ease;
-}
-
-/* Shimmer effect on hover - TSi */
-.logo-tsi-mirror:hover {
   background: linear-gradient(
     90deg,
     hsl(185 80% 68%) 0%,
-    hsl(185 80% 68%) 40%,
-    hsl(180 95% 88%) 50%,
-    hsl(185 80% 68%) 60%,
+    hsl(185 80% 68%) 42%,
+    hsl(180 90% 82%) 50%,
+    hsl(185 80% 68%) 58%,
     hsl(185 80% 68%) 100%
   );
-  background-size: 200% 100%;
-  -webkit-background-clip: text;
-  -webkit-text-fill-color: transparent;
-  background-clip: text;
-  animation: logo-shimmer 1.5s ease-in-out;
-}
-
-/* Logo JUKEBOX MIRROR - CHAMPAGNE ULTRA (elegante + glow intenso) */
-.logo-jukebox-mirror {
-  background: linear-gradient(
-    180deg,
-    hsl(45 45% 75%) 0%,       /* Topo: Champagne luminoso +7% */
-    hsl(42 42% 62%) 20%,      /* Transição rica */
-    hsl(40 38% 50%) 50%,      /* Core champagne +5% */
-    hsl(36 34% 40%) 80%,      /* Bronze suave */
-    hsl(32 30% 32%) 100%      /* Base bronze escuro */
-  );
+  background-size: 300% 100%;
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
   background-clip: text;
   filter: 
-    drop-shadow(0 0 4px hsl(45 70% 75% / 1))
-    drop-shadow(0 0 12px hsl(42 65% 65% / 0.8))
-    drop-shadow(0 0 20px hsl(40 55% 55% / 0.5))
-    drop-shadow(0 0 35px hsl(38 50% 50% / 0.3))
-    drop-shadow(0 2px 4px hsl(30 30% 10% / 0.7));
-  letter-spacing: 0.06em;
-  margin-left: 0.08em;
+    drop-shadow(0 0 2px hsl(185 100% 75% / 0.8))
+    drop-shadow(0 0 6px hsl(190 100% 65% / 0.5))
+    drop-shadow(0 0 12px hsl(195 95% 55% / 0.3))
+    drop-shadow(0 0 20px hsl(195 90% 50% / 0.15))
+    drop-shadow(0 2px 3px hsl(220 40% 8% / 0.5));
+  letter-spacing: -0.02em;
   font-weight: 900;
-  transition: filter 0.3s ease;
+  animation: logo-shimmer-continuous 4s ease-in-out infinite;
 }
 
-/* Shimmer effect on hover - JUKEBOX */
-.logo-jukebox-mirror:hover {
+/* Logo JUKEBOX MIRROR - CHAMPAGNE (glow refinado + shimmer contínuo) */
+.logo-jukebox-mirror {
   background: linear-gradient(
     90deg,
-    hsl(45 45% 75%) 0%,
-    hsl(45 45% 75%) 40%,
-    hsl(48 60% 92%) 50%,
-    hsl(45 45% 75%) 60%,
-    hsl(45 45% 75%) 100%
+    hsl(45 45% 72%) 0%,
+    hsl(45 45% 72%) 42%,
+    hsl(48 55% 85%) 50%,
+    hsl(45 45% 72%) 58%,
+    hsl(45 45% 72%) 100%
   );
-  background-size: 200% 100%;
+  background-size: 300% 100%;
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
   background-clip: text;
-  animation: logo-shimmer 1.5s ease-in-out;
+  filter: 
+    drop-shadow(0 0 2px hsl(45 70% 75% / 0.75))
+    drop-shadow(0 0 6px hsl(42 65% 65% / 0.45))
+    drop-shadow(0 0 12px hsl(40 55% 55% / 0.25))
+    drop-shadow(0 0 18px hsl(38 50% 50% / 0.12))
+    drop-shadow(0 2px 3px hsl(30 30% 10% / 0.4));
+  letter-spacing: 0.06em;
+  margin-left: 0.08em;
+  font-weight: 900;
+  animation: logo-shimmer-continuous 4s ease-in-out infinite;
+  animation-delay: 0.5s;
 }
 
-/* Keyframe for logo shimmer animation */
-@keyframes logo-shimmer {
+/* Keyframe for continuous logo shimmer */
+@keyframes logo-shimmer-continuous {
   0% {
-    background-position: -200% center;
+    background-position: 100% center;
+  }
+  50% {
+    background-position: 0% center;
   }
   100% {
-    background-position: 200% center;
+    background-position: 100% center;
   }
 }
 

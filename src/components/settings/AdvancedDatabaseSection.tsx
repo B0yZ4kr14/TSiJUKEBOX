@@ -3,7 +3,7 @@ import {
   Database, HardDrive, Server, Flame, 
   Settings, Wrench, ArrowLeftRight, FileCode, BookOpen,
   Play, RefreshCw, Check, AlertTriangle, Download, Upload,
-  FileText, Table, Copy, ExternalLink
+  FileText, Table, Copy, ExternalLink, CheckCircle2, XCircle, Loader2
 } from 'lucide-react';
 import { SettingsSection } from './SettingsSection';
 import { Button } from '@/components/ui/button';
@@ -296,6 +296,20 @@ END` },
   },
 ];
 
+interface ConnectionTestResult {
+  success: boolean;
+  latency: number;
+  serverVersion?: string;
+  error?: string;
+  details?: {
+    maxConnections?: number;
+    currentConnections?: number;
+    databaseSize?: string;
+    uptime?: string;
+    encoding?: string;
+  };
+}
+
 interface AdvancedDatabaseSectionProps {
   isDemoMode?: boolean;
 }
@@ -311,11 +325,14 @@ export function AdvancedDatabaseSection({ isDemoMode }: AdvancedDatabaseSectionP
   });
   const [activeTab, setActiveTab] = useState('engine');
   const [isRunningTool, setIsRunningTool] = useState<string | null>(null);
+  const [connectionStatus, setConnectionStatus] = useState<ConnectionTestResult | null>(null);
+  const [isTesting, setIsTesting] = useState(false);
 
   const engine = databaseEngines.find(e => e.id === selectedEngine)!;
 
   const handleEngineChange = (engineId: DatabaseEngine) => {
     setSelectedEngine(engineId);
+    setConnectionStatus(null);
     localStorage.setItem('db_engine', engineId);
     toast.success(`Motor de banco alterado para ${databaseEngines.find(e => e.id === engineId)?.name}`);
   };
@@ -323,16 +340,196 @@ export function AdvancedDatabaseSection({ isDemoMode }: AdvancedDatabaseSectionP
   const handleConfigChange = (key: string, value: string) => {
     const newConfig = { ...connectionConfig, [key]: value };
     setConnectionConfig(newConfig);
+    setConnectionStatus(null);
     localStorage.setItem('db_connection_config', JSON.stringify(newConfig));
   };
 
-  const handleTestConnection = async () => {
-    toast.info('Testando conexão...');
-    await new Promise(resolve => setTimeout(resolve, 1500));
+  const testDatabaseConnection = async (): Promise<ConnectionTestResult> => {
+    const start = Date.now();
+    
+    // In demo mode, simulate successful connection
     if (isDemoMode) {
-      toast.success('Conexão simulada bem-sucedida (modo demo)');
+      await new Promise(resolve => setTimeout(resolve, 1000));
+      return {
+        success: true,
+        latency: Date.now() - start,
+        serverVersion: `${engine.name} (Demo Mode)`,
+        details: {
+          databaseSize: '256 MB',
+          uptime: '7 dias, 4 horas',
+          encoding: 'UTF-8'
+        }
+      };
+    }
+    
+    try {
+      const apiUrl = localStorage.getItem('tsi_api_url') || 'http://localhost:8000/api';
+      
+      switch (selectedEngine) {
+        case 'sqlite': {
+          const response = await fetch(`${apiUrl}/database/test/sqlite`, {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ path: connectionConfig.path || '/var/lib/jukebox/data.db' })
+          });
+          
+          if (!response.ok) {
+            const errorData = await response.json().catch(() => ({}));
+            return {
+              success: false,
+              latency: Date.now() - start,
+              error: errorData.detail || `Erro HTTP ${response.status}`
+            };
+          }
+          
+          const data = await response.json();
+          return {
+            success: true,
+            latency: Date.now() - start,
+            serverVersion: `SQLite ${data.version || '3.x'}`,
+            details: {
+              databaseSize: data.size || 'N/A',
+              encoding: data.encoding || 'UTF-8'
+            }
+          };
+        }
+        
+        case 'postgresql': {
+          const response = await fetch(`${apiUrl}/database/test/postgresql`, {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({
+              host: connectionConfig.host || 'localhost',
+              port: parseInt(connectionConfig.port) || 5432,
+              database: connectionConfig.database || 'jukebox',
+              username: connectionConfig.username || 'postgres',
+              password: connectionConfig.password || ''
+            })
+          });
+          
+          if (!response.ok) {
+            const errorData = await response.json().catch(() => ({}));
+            return {
+              success: false,
+              latency: Date.now() - start,
+              error: errorData.detail || `Erro de conexão: ${response.status}`
+            };
+          }
+          
+          const data = await response.json();
+          return {
+            success: true,
+            latency: Date.now() - start,
+            serverVersion: data.version || 'PostgreSQL',
+            details: {
+              maxConnections: data.max_connections,
+              currentConnections: data.current_connections,
+              databaseSize: data.size,
+              uptime: data.uptime,
+              encoding: data.encoding
+            }
+          };
+        }
+        
+        case 'mariadb': {
+          const response = await fetch(`${apiUrl}/database/test/mariadb`, {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({
+              host: connectionConfig.host || 'localhost',
+              port: parseInt(connectionConfig.port) || 3306,
+              database: connectionConfig.database || 'jukebox',
+              username: connectionConfig.username || 'root',
+              password: connectionConfig.password || ''
+            })
+          });
+          
+          if (!response.ok) {
+            const errorData = await response.json().catch(() => ({}));
+            return {
+              success: false,
+              latency: Date.now() - start,
+              error: errorData.detail || `Erro de conexão: ${response.status}`
+            };
+          }
+          
+          const data = await response.json();
+          return {
+            success: true,
+            latency: Date.now() - start,
+            serverVersion: data.version || 'MariaDB',
+            details: {
+              maxConnections: data.max_connections,
+              currentConnections: data.threads_connected,
+              databaseSize: data.size,
+              uptime: data.uptime
+            }
+          };
+        }
+        
+        case 'firebird': {
+          const response = await fetch(`${apiUrl}/database/test/firebird`, {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({
+              host: connectionConfig.host || 'localhost',
+              port: parseInt(connectionConfig.port) || 3050,
+              database: connectionConfig.database || '/var/lib/firebird/jukebox.fdb',
+              username: connectionConfig.username || 'SYSDBA',
+              password: connectionConfig.password || ''
+            })
+          });
+          
+          if (!response.ok) {
+            const errorData = await response.json().catch(() => ({}));
+            return {
+              success: false,
+              latency: Date.now() - start,
+              error: errorData.detail || `Erro de conexão: ${response.status}`
+            };
+          }
+          
+          const data = await response.json();
+          return {
+            success: true,
+            latency: Date.now() - start,
+            serverVersion: data.version || 'Firebird',
+            details: {
+              databaseSize: data.size,
+              encoding: data.charset
+            }
+          };
+        }
+        
+        default:
+          return {
+            success: false,
+            latency: Date.now() - start,
+            error: 'Motor de banco não suportado'
+          };
+      }
+    } catch (error) {
+      return {
+        success: false,
+        latency: Date.now() - start,
+        error: error instanceof Error ? error.message : 'Erro de conexão'
+      };
+    }
+  };
+
+  const handleTestConnection = async () => {
+    setIsTesting(true);
+    setConnectionStatus(null);
+    toast.info(`Testando conexão ${engine.name}...`);
+    
+    const result = await testDatabaseConnection();
+    setConnectionStatus(result);
+    setIsTesting(false);
+    
+    if (result.success) {
+      toast.success(`Conexão ${engine.name} estabelecida com sucesso`);
     } else {
-      toast.success('Conexão estabelecida com sucesso');
+      toast.error(`Falha na conexão: ${result.error}`);
     }
   };
 
@@ -497,17 +694,98 @@ export function AdvancedDatabaseSection({ isDemoMode }: AdvancedDatabaseSectionP
           </div>
 
           <div className="flex gap-2">
-            <Button onClick={handleTestConnection} className="flex-1 button-primary-glow-3d">
-              <Play className="w-4 h-4 mr-2" />
-              Testar Conexão
+            <Button 
+              onClick={handleTestConnection} 
+              disabled={isTesting}
+              className="flex-1 button-primary-glow-3d"
+            >
+              {isTesting ? (
+                <>
+                  <Loader2 className="w-4 h-4 mr-2 animate-spin" />
+                  Testando {engine.name}...
+                </>
+              ) : (
+                <>
+                  <Play className="w-4 h-4 mr-2" />
+                  Testar Conexão {engine.name}
+                </>
+              )}
             </Button>
           </div>
+
+          {/* Connection Status Display */}
+          {connectionStatus && (
+            <div className={cn(
+              "p-4 rounded-lg border mt-4 space-y-3",
+              connectionStatus.success 
+                ? "bg-green-500/10 border-green-500/30" 
+                : "bg-red-500/10 border-red-500/30"
+            )}>
+              <div className="flex items-center gap-2">
+                {connectionStatus.success ? (
+                  <CheckCircle2 className="w-5 h-5 text-green-400" />
+                ) : (
+                  <XCircle className="w-5 h-5 text-red-400" />
+                )}
+                <span className={cn(
+                  "font-medium",
+                  connectionStatus.success ? "text-green-400" : "text-red-400"
+                )}>
+                  {connectionStatus.success ? 'Conexão bem-sucedida!' : 'Falha na conexão'}
+                </span>
+                <span className="text-xs text-kiosk-text/50 ml-auto">
+                  {connectionStatus.latency}ms
+                </span>
+              </div>
+              
+              {connectionStatus.success && connectionStatus.serverVersion && (
+                <div className="grid grid-cols-2 gap-2 text-sm">
+                  <div className="space-y-1">
+                    <p className="text-kiosk-text/60 text-xs">Servidor</p>
+                    <p className="text-kiosk-text font-mono">{connectionStatus.serverVersion}</p>
+                  </div>
+                  {connectionStatus.details?.databaseSize && (
+                    <div className="space-y-1">
+                      <p className="text-kiosk-text/60 text-xs">Tamanho</p>
+                      <p className="text-kiosk-text font-mono">{connectionStatus.details.databaseSize}</p>
+                    </div>
+                  )}
+                  {connectionStatus.details?.uptime && (
+                    <div className="space-y-1">
+                      <p className="text-kiosk-text/60 text-xs">Uptime</p>
+                      <p className="text-kiosk-text font-mono">{connectionStatus.details.uptime}</p>
+                    </div>
+                  )}
+                  {connectionStatus.details?.encoding && (
+                    <div className="space-y-1">
+                      <p className="text-kiosk-text/60 text-xs">Encoding</p>
+                      <p className="text-kiosk-text font-mono">{connectionStatus.details.encoding}</p>
+                    </div>
+                  )}
+                  {connectionStatus.details?.maxConnections && (
+                    <div className="space-y-1">
+                      <p className="text-kiosk-text/60 text-xs">Conexões</p>
+                      <p className="text-kiosk-text font-mono">
+                        {connectionStatus.details.currentConnections} / {connectionStatus.details.maxConnections}
+                      </p>
+                    </div>
+                  )}
+                </div>
+              )}
+              
+              {connectionStatus.error && (
+                <div className="p-2 rounded bg-red-500/10 border border-red-500/20">
+                  <p className="text-sm text-red-400 font-mono">{connectionStatus.error}</p>
+                </div>
+              )}
+            </div>
+          )}
 
           {isDemoMode && (
             <div className="p-3 rounded-lg bg-amber-500/10 border border-amber-500/30">
               <p className="text-xs text-amber-400">
                 <AlertTriangle className="w-4 h-4 inline mr-1" />
-                Modo Demo: Alterações não serão persistidas no backend
+                Modo Demo: Conexão será simulada
               </p>
             </div>
           )}

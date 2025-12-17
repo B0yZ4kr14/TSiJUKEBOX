@@ -18,7 +18,10 @@ import {
   Clock,
   Wifi,
   Database,
-  Zap
+  Zap,
+  Wrench,
+  Settings,
+  ExternalLink
 } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Card } from '@/components/ui/card';
@@ -37,6 +40,14 @@ interface DiagnosticResult {
   details?: string;
 }
 
+interface RepairAction {
+  id: string;
+  label: string;
+  description: string;
+  severity: 'auto' | 'manual';
+  action: () => Promise<void>;
+}
+
 interface DiagnosticTest {
   id: string;
   name: string;
@@ -48,7 +59,7 @@ interface DiagnosticTest {
 
 export default function SystemDiagnostics() {
   const navigate = useNavigate();
-  const { apiUrl, weather, spotify, isDemoMode } = useSettings();
+  const { apiUrl, weather, spotify, isDemoMode, setDemoMode } = useSettings();
   const [results, setResults] = useState<Record<string, DiagnosticResult>>({});
   const [isRunning, setIsRunning] = useState(false);
   const [progress, setProgress] = useState(0);
@@ -207,6 +218,99 @@ export default function SystemDiagnostics() {
       }
     },
   ];
+
+  // Repair actions for each test
+  const repairActions: Record<string, RepairAction> = {
+    'backend-health': {
+      id: 'enable-demo',
+      label: 'Ativar Modo Demo',
+      description: 'Usar dados simulados enquanto servidor está offline',
+      severity: 'auto',
+      action: async () => {
+        setDemoMode(true);
+        toast.success('Modo Demo ativado automaticamente');
+      }
+    },
+    'spotify-auth': {
+      id: 'config-spotify',
+      label: 'Configurar Spotify',
+      description: 'Abrir configurações do Spotify',
+      severity: 'manual',
+      action: async () => {
+        navigate('/settings', { state: { category: 'integrations' } });
+      }
+    },
+    'weather-api': {
+      id: 'config-weather',
+      label: 'Configurar Clima',
+      description: 'Adicionar chave OpenWeatherMap',
+      severity: 'manual',
+      action: async () => {
+        navigate('/settings', { state: { category: 'integrations' } });
+      }
+    },
+    'network': {
+      id: 'retry-network',
+      label: 'Tentar Novamente',
+      description: 'Refazer teste de rede',
+      severity: 'auto',
+      action: async () => {
+        const test = diagnosticTests.find(t => t.id === 'network');
+        if (test) {
+          setResults(prev => ({ ...prev, 'network': { status: 'running', message: 'Testando...' } }));
+          const result = await test.test();
+          setResults(prev => ({ ...prev, 'network': result }));
+        }
+      }
+    },
+    'local-storage': {
+      id: 'clear-storage',
+      label: 'Limpar Cache',
+      description: 'Limpar dados do localStorage',
+      severity: 'auto',
+      action: async () => {
+        try {
+          const keysToKeep = ['theme', 'language'];
+          const allKeys = Object.keys(localStorage);
+          allKeys.forEach(key => {
+            if (!keysToKeep.includes(key)) {
+              localStorage.removeItem(key);
+            }
+          });
+          toast.success('Cache limpo com sucesso');
+        } catch (e) {
+          toast.error('Erro ao limpar cache');
+        }
+      }
+    }
+  };
+
+  const handleRepairAll = async () => {
+    const failedTests = Object.entries(results)
+      .filter(([, r]) => r.status === 'error' || r.status === 'warning')
+      .map(([id]) => id);
+
+    let repaired = 0;
+    for (const testId of failedTests) {
+      const repair = repairActions[testId];
+      if (repair && repair.severity === 'auto') {
+        try {
+          await repair.action();
+          repaired++;
+        } catch (e) {
+          console.error(`Erro ao reparar ${testId}:`, e);
+        }
+      }
+    }
+
+    if (repaired > 0) {
+      toast.success(`${repaired} problema(s) corrigido(s) automaticamente`);
+      // Re-run tests after repairs
+      setTimeout(() => runAllTests(), 500);
+    } else {
+      toast.info('Nenhum problema pode ser corrigido automaticamente');
+    }
+  };
 
   const runAllTests = useCallback(async () => {
     setIsRunning(true);
@@ -388,11 +492,23 @@ export default function SystemDiagnostics() {
                   variant="outline"
                   onClick={exportReport}
                   disabled={Object.keys(results).length === 0}
-                  className="border-cyan-500/30 hover:border-cyan-500/50"
+                  className="border-cyan-500/30 hover:border-cyan-500/50 text-foreground"
                 >
                   <Download className="w-4 h-4 mr-2" />
                   Exportar Relatório
                 </Button>
+                
+                {summary.error > 0 && (
+                  <Button
+                    variant="outline"
+                    onClick={handleRepairAll}
+                    disabled={isRunning}
+                    className="border-amber-500/30 hover:border-amber-500/50 text-amber-400"
+                  >
+                    <Wrench className="w-4 h-4 mr-2" />
+                    Reparar Todos ({summary.error})
+                  </Button>
+                )}
               </div>
               
               {lastRun && (
@@ -430,7 +546,10 @@ export default function SystemDiagnostics() {
               <div className="space-y-2">
                 {categorizedTests.connection.map(test => {
                   const result = results[test.id];
+                  const repair = repairActions[test.id];
                   const Icon = test.icon;
+                  const showRepair = result && (result.status === 'error' || result.status === 'warning') && repair;
+                  
                   return (
                     <div
                       key={test.id}
@@ -445,7 +564,7 @@ export default function SystemDiagnostics() {
                           <p className="text-xs text-kiosk-text/50">{test.description}</p>
                         </div>
                       </div>
-                      <div className="flex items-center gap-3">
+                      <div className="flex items-center gap-2">
                         {result?.latency && (
                           <span className="text-xs text-kiosk-text/50">{result.latency}ms</span>
                         )}
@@ -460,6 +579,22 @@ export default function SystemDiagnostics() {
                             <Clock className="w-4 h-4" />
                             <span className="ml-1">Aguardando</span>
                           </Badge>
+                        )}
+                        {showRepair && (
+                          <Button
+                            size="sm"
+                            variant="outline"
+                            onClick={() => repair.action()}
+                            className="h-7 text-xs border-amber-500/50 text-amber-400 hover:bg-amber-500/10"
+                            title={repair.description}
+                          >
+                            {repair.severity === 'auto' ? (
+                              <Wrench className="w-3 h-3 mr-1" />
+                            ) : (
+                              <Settings className="w-3 h-3 mr-1" />
+                            )}
+                            {repair.label}
+                          </Button>
                         )}
                       </div>
                     </div>
@@ -483,7 +618,10 @@ export default function SystemDiagnostics() {
               <div className="space-y-2">
                 {categorizedTests.api.map(test => {
                   const result = results[test.id];
+                  const repair = repairActions[test.id];
                   const Icon = test.icon;
+                  const showRepair = result && (result.status === 'error' || result.status === 'warning') && repair;
+                  
                   return (
                     <div
                       key={test.id}
@@ -498,7 +636,7 @@ export default function SystemDiagnostics() {
                           <p className="text-xs text-kiosk-text/50">{test.description}</p>
                         </div>
                       </div>
-                      <div className="flex items-center gap-3">
+                      <div className="flex items-center gap-2">
                         {result?.latency && (
                           <span className="text-xs text-kiosk-text/50">{result.latency}ms</span>
                         )}
@@ -513,6 +651,22 @@ export default function SystemDiagnostics() {
                             <Clock className="w-4 h-4" />
                             <span className="ml-1">Aguardando</span>
                           </Badge>
+                        )}
+                        {showRepair && (
+                          <Button
+                            size="sm"
+                            variant="outline"
+                            onClick={() => repair.action()}
+                            className="h-7 text-xs border-amber-500/50 text-amber-400 hover:bg-amber-500/10"
+                            title={repair.description}
+                          >
+                            {repair.severity === 'auto' ? (
+                              <Wrench className="w-3 h-3 mr-1" />
+                            ) : (
+                              <Settings className="w-3 h-3 mr-1" />
+                            )}
+                            {repair.label}
+                          </Button>
                         )}
                       </div>
                     </div>
@@ -536,7 +690,10 @@ export default function SystemDiagnostics() {
               <div className="space-y-2">
                 {categorizedTests.system.map(test => {
                   const result = results[test.id];
+                  const repair = repairActions[test.id];
                   const Icon = test.icon;
+                  const showRepair = result && (result.status === 'error' || result.status === 'warning') && repair;
+                  
                   return (
                     <div
                       key={test.id}
@@ -551,7 +708,7 @@ export default function SystemDiagnostics() {
                           <p className="text-xs text-kiosk-text/50">{test.description}</p>
                         </div>
                       </div>
-                      <div className="flex items-center gap-3">
+                      <div className="flex items-center gap-2">
                         {result?.latency && (
                           <span className="text-xs text-kiosk-text/50">{result.latency}ms</span>
                         )}
@@ -566,6 +723,22 @@ export default function SystemDiagnostics() {
                             <Clock className="w-4 h-4" />
                             <span className="ml-1">Aguardando</span>
                           </Badge>
+                        )}
+                        {showRepair && (
+                          <Button
+                            size="sm"
+                            variant="outline"
+                            onClick={() => repair.action()}
+                            className="h-7 text-xs border-amber-500/50 text-amber-400 hover:bg-amber-500/10"
+                            title={repair.description}
+                          >
+                            {repair.severity === 'auto' ? (
+                              <Wrench className="w-3 h-3 mr-1" />
+                            ) : (
+                              <Settings className="w-3 h-3 mr-1" />
+                            )}
+                            {repair.label}
+                          </Button>
                         )}
                       </div>
                     </div>

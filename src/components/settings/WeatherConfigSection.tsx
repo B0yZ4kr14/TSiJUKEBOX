@@ -241,7 +241,7 @@ export function WeatherConfigSection() {
           <div className="flex items-start gap-2">
             <AlertCircle className="w-4 h-4 icon-neon-blue mt-0.5 flex-shrink-0" />
             <div className="text-xs text-settings-hint space-y-1">
-              <p className="text-label-orange">{t('weatherConfig.helpTitle')}</p>
+              <p className="text-label-neon">{t('weatherConfig.helpTitle')}</p>
               <ol className="list-decimal list-inside space-y-0.5 ml-1">
                 <li>{t('weatherConfig.helpStep1')} <a href="https://openweathermap.org/api" target="_blank" rel="noopener noreferrer" className="text-cyan-400 hover:underline inline-flex items-center gap-1">OpenWeatherMap <ExternalLink className="w-3 h-3" /></a></li>
                 <li>{t('weatherConfig.helpStep2')}</li>

@@ -191,13 +191,42 @@ export function CommandDeck({ disabled = false }: CommandDeckProps) {
     return null;
   }
 
+  const containerVariants = {
+    hidden: { opacity: 1 },
+    visible: {
+      opacity: 1,
+      transition: {
+        staggerChildren: 0.08,
+        delayChildren: 0.1,
+      }
+    }
+  };
+
+  const buttonVariants = {
+    hidden: { 
+      opacity: 0, 
+      x: -20,
+      scale: 0.8 
+    },
+    visible: { 
+      opacity: 1, 
+      x: 0,
+      scale: 1,
+      transition: {
+        type: "spring",
+        stiffness: 400,
+        damping: 25
+      }
+    }
+  };
+
   return (
     <>
       {/* Vertical Command Deck - Left Side */}
       <motion.div
         className="fixed left-0 top-1/2 -translate-y-1/2 z-50 flex items-center"
         initial={{ x: -100 }}
-        animate={{ x: isExpanded ? 12 : -88 }}
+        animate={{ x: isExpanded ? 20 : -88 }}
         transition={{ type: 'spring', stiffness: 300, damping: 30 }}
       >
         {/* Deck Container */}
@@ -209,69 +238,93 @@ export function CommandDeck({ disabled = false }: CommandDeckProps) {
             </span>
           </div>
 
-          {/* Info Buttons (Cyan) */}
-          <DeckButton
-            icon={<LineChart className="w-6 h-6" />}
-            label={t('commandDeck.dashboard')}
-            tooltip={t('commandDeck.tooltips.dashboard')}
-            onClick={handleDashboard}
-            color="cyan"
-            disabled={disabled}
-          />
-          <DeckButton
-            icon={<Activity className="w-6 h-6" />}
-            label={t('commandDeck.datasource')}
-            tooltip={t('commandDeck.tooltips.datasource')}
-            onClick={handleDatasource}
-            color="cyan"
-            disabled={disabled}
-          />
+          {/* Buttons with cascade animation */}
+          <motion.div 
+            className="flex flex-col gap-3"
+            variants={containerVariants}
+            initial="hidden"
+            animate={isExpanded ? "visible" : "hidden"}
+          >
+            {/* Info Buttons (Cyan) */}
+            <motion.div variants={buttonVariants}>
+              <DeckButton
+                icon={<LineChart className="w-6 h-6" />}
+                label={t('commandDeck.dashboard')}
+                tooltip={t('commandDeck.tooltips.dashboard')}
+                onClick={handleDashboard}
+                color="cyan"
+                disabled={disabled}
+              />
+            </motion.div>
+            <motion.div variants={buttonVariants}>
+              <DeckButton
+                icon={<Activity className="w-6 h-6" />}
+                label={t('commandDeck.datasource')}
+                tooltip={t('commandDeck.tooltips.datasource')}
+                onClick={handleDatasource}
+                color="cyan"
+                disabled={disabled}
+              />
+            </motion.div>
 
-          {/* Divider */}
-          <div className="h-px bg-gradient-to-r from-transparent via-cyan-500/30 to-transparent my-1" />
+            {/* Divider */}
+            <motion.div variants={buttonVariants}>
+              <div className="h-px bg-gradient-to-r from-transparent via-cyan-500/30 to-transparent my-1" />
+            </motion.div>
 
-          {/* Action Button (Amber) */}
-          <DeckButton
-            icon={<RefreshCw className={`w-6 h-6 ${isReloading ? 'animate-spin' : ''}`} />}
-            label={t('commandDeck.reload')}
-            tooltip={t('commandDeck.tooltips.reload')}
-            onClick={handleReload}
-            color="amber"
-            disabled={disabled || isReloading}
-          />
+            {/* Action Button (Amber) */}
+            <motion.div variants={buttonVariants}>
+              <DeckButton
+                icon={<RefreshCw className={`w-6 h-6 ${isReloading ? 'animate-spin' : ''}`} />}
+                label={t('commandDeck.reload')}
+                tooltip={t('commandDeck.tooltips.reload')}
+                onClick={handleReload}
+                color="amber"
+                disabled={disabled || isReloading}
+              />
+            </motion.div>
 
-          {/* Setup Button (White) */}
-          <DeckButton
-            icon={<SlidersHorizontal className="w-6 h-6" />}
-            label={t('commandDeck.setup')}
-            tooltip={t('commandDeck.tooltips.setup')}
-            onClick={handleSetup}
-            color="white"
-            disabled={disabled}
-          />
+            {/* Setup Button (White) */}
+            <motion.div variants={buttonVariants}>
+              <DeckButton
+                icon={<SlidersHorizontal className="w-6 h-6" />}
+                label={t('commandDeck.setup')}
+                tooltip={t('commandDeck.tooltips.setup')}
+                onClick={handleSetup}
+                color="white"
+                disabled={disabled}
+              />
+            </motion.div>
 
-          {/* Help Button (White) */}
-          <DeckButton
-            icon={<HelpCircle className="w-6 h-6" />}
-            label={t('commandDeck.help')}
-            tooltip={t('commandDeck.tooltips.help')}
-            onClick={() => navigate('/help')}
-            color="white"
-            disabled={disabled}
-          />
+            {/* Help Button (White) */}
+            <motion.div variants={buttonVariants}>
+              <DeckButton
+                icon={<HelpCircle className="w-6 h-6" />}
+                label={t('commandDeck.help')}
+                tooltip={t('commandDeck.tooltips.help')}
+                onClick={() => navigate('/help')}
+                color="white"
+                disabled={disabled}
+              />
+            </motion.div>
 
-          {/* Divider */}
-          <div className="h-px bg-gradient-to-r from-transparent via-red-500/30 to-transparent my-1" />
+            {/* Divider */}
+            <motion.div variants={buttonVariants}>
+              <div className="h-px bg-gradient-to-r from-transparent via-red-500/30 to-transparent my-1" />
+            </motion.div>
 
-          {/* Critical Button (Red) */}
-          <DeckButton
-            icon={<Power className="w-6 h-6" />}
-            label={t('commandDeck.reboot')}
-            tooltip={t('commandDeck.tooltips.reboot')}
-            onClick={() => setShowRebootDialog(true)}
-            color="red"
-            disabled={disabled}
-          />
+            {/* Critical Button (Red) */}
+            <motion.div variants={buttonVariants}>
+              <DeckButton
+                icon={<Power className="w-6 h-6" />}
+                label={t('commandDeck.reboot')}
+                tooltip={t('commandDeck.tooltips.reboot')}
+                onClick={() => setShowRebootDialog(true)}
+                color="red"
+                disabled={disabled}
+              />
+            </motion.div>
+          </motion.div>
         </div>
 
         {/* Toggle Tab */}

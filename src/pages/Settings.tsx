@@ -502,7 +502,7 @@ export default function Settings() {
                 localStorage.removeItem('tsi_jukebox_spotify');
                 window.location.reload();
               }}
-              className="border-kiosk-border text-kiosk-text hover:bg-kiosk-surface"
+              className="button-outline-neon"
             >
               Restaurar Padrões
             </Button>

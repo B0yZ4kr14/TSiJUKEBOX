@@ -15,7 +15,13 @@ import {
   RotateCcw,
   Keyboard,
   Hand,
-  Palette
+  Palette,
+  MessageCircleQuestion,
+  Wifi,
+  Volume2,
+  Monitor,
+  Printer,
+  BookOpen
 } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
@@ -23,6 +29,7 @@ import { ScrollArea } from '@/components/ui/scroll-area';
 import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from '@/components/ui/accordion';
 import { LogoBrand } from '@/components/ui/LogoBrand';
 import { resetTour } from '@/components/tour/GuidedTour';
+import { InteractiveTestMode } from '@/components/help/InteractiveTestMode';
 import { toast } from 'sonner';
 
 interface HelpSection {
@@ -79,88 +86,31 @@ const helpSections: HelpSection[] = [
       {
         id: 'playback-shortcuts',
         question: 'Quais são os atalhos para controlar a reprodução de música?',
-        answer: 'O TSi JUKEBOX oferece atalhos de teclado intuitivos para controle completo da reprodução sem precisar tocar na tela. Esses atalhos funcionam quando o player está em foco e são ideais para uso com teclados externos, controles remotos ou em ambientes onde a tela de toque não é prática. Os atalhos foram projetados para serem simples e memoráveis, usando teclas comuns encontradas em qualquer teclado.',
+        answer: 'O TSi JUKEBOX oferece atalhos de teclado intuitivos para controle completo da reprodução sem precisar tocar na tela.',
         steps: [
-          'Barra de Espaço (Space): Esta é a tecla mais importante. Pressione uma vez para alternar entre Play e Pause. Quando a música está tocando, pressionar a barra de espaço irá pausar imediatamente. Quando a música está pausada, pressionar espaço retoma a reprodução do ponto exato onde parou. A resposta é instantânea e funciona mesmo durante transições de faixa.',
-          'Seta para Direita (→): Avança imediatamente para a próxima faixa na fila de reprodução. A transição é suave e a nova música começa do início. Se você estiver na última música da fila, o comportamento depende da configuração de repetição: pode parar, repetir a fila, ou continuar com recomendações.',
-          'Seta para Esquerda (←): Volta para a faixa anterior. O comportamento inteligente considera o tempo atual: nos primeiros 3 segundos da música, volta para a faixa anterior. Após 3 segundos, reinicia a música atual do início. Isso permite "voltar" rapidamente ou "recomeçar" conforme sua intenção.',
-          'Seta para Cima (↑) ou tecla +: Aumenta o volume em incrementos de 5%. Cada pressionamento sobe de 0% a 5%, de 5% a 10%, e assim por diante até o máximo de 100%. Uma notificação visual temporária mostra o novo nível de volume para confirmação.',
-          'Seta para Baixo (↓) ou tecla -: Diminui o volume em incrementos de 5%. Funciona de forma análoga ao aumento. O volume mínimo é 0% (silêncio completo), mas a música continua tocando - apenas sem som audível.'
+          'Barra de Espaço (Space): Alternar entre Play e Pause',
+          'Seta para Direita (→): Avançar para a próxima faixa',
+          'Seta para Esquerda (←): Voltar para a faixa anterior',
+          'Seta para Cima (↑) ou tecla +: Aumenta o volume em 5%',
+          'Seta para Baixo (↓) ou tecla -: Diminui o volume em 5%'
         ],
         tips: [
-          'Os atalhos funcionam mesmo quando o Command Deck está expandido ou recolhido',
-          'Se os atalhos não responderem, clique uma vez na área do player para garantir que ele está em foco',
-          'Você pode pressionar e segurar as teclas de volume para ajuste rápido contínuo (hold)',
-          'Em modo kiosk (tela cheia), os atalhos de teclado são frequentemente a forma mais rápida de controlar a música',
-          'Teclados numéricos: as teclas + e - do teclado numérico funcionam igual às setas de volume',
-          'Laptops: em alguns modelos, Fn + setas pode ser necessário se as setas estiverem mapeadas para outras funções'
+          'Os atalhos funcionam mesmo quando o Command Deck está expandido',
+          'Você pode pressionar e segurar as teclas de volume para ajuste rápido contínuo'
         ]
       },
       {
         id: 'volume-precision',
         question: 'Como ajustar o volume com precisão máxima usando o teclado?',
-        answer: 'O sistema de volume do TSi JUKEBOX permite ajuste fino em incrementos de 5%, oferecendo 21 níveis distintos de volume (0%, 5%, 10%, 15%... até 100%). Isso garante controle preciso sem precisar usar o slider de volume na tela, que pode ser difícil de acertar em telas de toque ou com controles remotos. Cada incremento é cuidadosamente calibrado para ser perceptível ao ouvido humano sem ser excessivamente dramático.',
+        answer: 'O sistema de volume permite ajuste fino em incrementos de 5%, oferecendo 21 níveis distintos (0% a 100%).',
         steps: [
-          'Pressione ↑ ou + uma única vez para aumentar exatamente 5% - útil para ajustes finos quando você quer apenas um pouco mais de volume',
-          'Pressione ↓ ou - uma única vez para diminuir exatamente 5% - perfeito para reduzir ligeiramente quando algo está muito alto',
-          'Segure qualquer tecla de volume pressionada para ajuste rápido contínuo - o volume mudará a cada ~200ms enquanto a tecla estiver pressionada',
-          'O nível atual é exibido temporariamente na tela após cada ajuste (desaparece após 2 segundos)',
-          'A barra de volume visual na interface atualiza em tempo real para refletir o nível atual'
+          'Pressione ↑ ou + uma única vez para aumentar 5%',
+          'Pressione ↓ ou - uma única vez para diminuir 5%',
+          'Segure a tecla para ajuste rápido contínuo'
         ],
         tips: [
-          'Volume 0% silencia completamente sem parar a música - útil para atender uma ligação rapidamente',
-          'O volume é automaticamente salvo e restaurado entre sessões - ao reabrir o app, você terá o mesmo volume de antes',
-          'Em ambientes ruidosos (bares, festas), recomendamos manter o volume acima de 60% para clareza',
-          'Para ambientes silenciosos (residências à noite), volumes entre 20-40% são geralmente confortáveis',
-          'O sistema protege contra mudanças bruscas: mesmo que você pressione rapidamente, há um limite de velocidade'
-        ]
-      },
-      {
-        id: 'navigation-shortcuts',
-        question: 'Como navegar rapidamente entre faixas usando apenas o teclado?',
-        answer: 'A navegação entre faixas é feita exclusivamente pelas setas horizontais (esquerda e direita). Diferente de alguns players que têm dezenas de atalhos, o TSi JUKEBOX foi projetado com simplicidade em mente - apenas duas teclas para navegação. Não há atalhos para "pular para música específica" ou "ir para posição X" via teclado, pois isso mantém a experiência limpa e intuitiva para todos os usuários, especialmente em modo kiosk.',
-        steps: [
-          'Seta Direita (→): Próxima música - pula instantaneamente para a próxima faixa na fila. A transição inclui uma animação suave de fade entre faixas.',
-          'Seta Esquerda (←): Música anterior - comportamento inteligente baseado no tempo de reprodução atual:',
-          '  • Nos primeiros 3 segundos: Volta para a música anterior completa',
-          '  • Após 3 segundos: Reinicia a música atual do início',
-          '  • Este comportamento imita players de CD e é intuitivo para a maioria dos usuários'
-        ],
-        tips: [
-          'O limiar de 3 segundos não é configurável atualmente - é baseado em estudos de UX de players populares',
-          'Feedback visual: uma seta animada aparece brevemente indicando a direção da navegação',
-          'Se você segurar a seta pressionada, ela NÃO avança múltiplas faixas - apenas uma por pressionamento',
-          'Durante a transição entre faixas (~500ms), novos comandos são ignorados para evitar "pulos acidentais"',
-          'Dica de poder: combine com barra de espaço para "pausar antes de pular" se precisar de mais controle'
-        ]
-      },
-      {
-        id: 'accessibility-shortcuts',
-        question: 'Quais atalhos especiais existem para acessibilidade?',
-        answer: 'O TSi JUKEBOX foi projetado com acessibilidade como prioridade. Os atalhos principais são deliberadamente simples e consistentes, usando apenas 5 teclas diferentes (Espaço, 4 Setas). Isso facilita enormemente o uso por pessoas com dificuldades motoras, visuais ou cognitivas. Não há combinações complexas como Ctrl+Shift+X - cada função importante tem uma tecla única dedicada.',
-        steps: [
-          'Todas as 5 teclas principais (Espaço, ↑, ↓, ←, →) são grandes e fáceis de localizar em qualquer teclado',
-          'Não há necessidade de pressionar teclas modificadoras (Ctrl, Alt, Shift) para nenhuma função básica',
-          'O feedback é sempre multimodal: visual (na tela), sonoro (se habilitado nas configurações), e tátil (em dispositivos compatíveis)',
-          'Leitores de tela (screen readers) são compatíveis com a interface - os atalhos não conflitam com comandos do leitor'
-        ],
-        tips: [
-          'Modo Alto Contraste: pode ser ativado em Configurações > Acessibilidade para melhor visibilidade',
-          'Tamanho de Fonte: aumentável globalmente em Configurações > Acessibilidade',
-          'Reduzir Animações: disponível para usuários sensíveis a movimento',
-          'Notificações toast aparecem em tamanho maior no modo acessibilidade para facilitar leitura',
-          'Se você usa dispositivos adaptativos (switches, eye-tracking), os atalhos de teclado funcionam através de emuladores de teclado'
-        ]
-      },
-      {
-        id: 'system-shortcuts',
-        question: 'Existem atalhos para funções do sistema (não relacionadas à música)?',
-        answer: 'Atualmente, o TSi JUKEBOX reserva atalhos de teclado exclusivamente para controle de reprodução de música. Funções administrativas como abrir configurações, acessar dashboard, ou reiniciar o sistema não têm atalhos de teclado dedicados. Isso é intencional: em modo kiosk, queremos evitar que usuários não autorizados acessem funções administrativas através de combinações de teclas. Todas as funções administrativas são acessíveis através do Command Deck (barra inferior) ou menu de configurações.',
-        tips: [
-          'Se você precisa de acesso rápido às configurações, use o botão SETUP no Command Deck',
-          'Em Chromium kiosk mode, as teclas F1-F12 são desabilitadas por padrão para segurança',
-          'Administradores podem configurar atalhos de sistema no nível do Openbox (fora do TSi JUKEBOX)',
-          'Para acessibilidade: navegação via Tab funciona em todos os elementos interativos da interface'
+          'Volume 0% silencia sem parar a música',
+          'O volume é salvo e restaurado entre sessões'
         ]
       }
     ]
@@ -172,103 +122,26 @@ const helpSections: HelpSection[] = [
     items: [
       {
         id: 'basic-gestures',
-        question: 'Quais gestos de toque estão disponíveis no TSi JUKEBOX?',
-        answer: 'O TSi JUKEBOX suporta gestos de deslizar (swipe) para controle rápido da reprodução sem precisar tocar em botões específicos. Os gestos funcionam em qualquer área da tela do player principal (onde aparece a capa do álbum e informações da música). Isso permite interação fluida e natural, especialmente útil em telas grandes ou quando você não quer procurar um botão específico. Os gestos foram calibrados para evitar ativações acidentais durante uso normal.',
+        question: 'Quais gestos de toque estão disponíveis?',
+        answer: 'O TSi JUKEBOX suporta gestos de deslizar (swipe) para controle rápido da reprodução.',
         steps: [
-          'Deslizar para Esquerda (← Swipe Left): Avança para a próxima música. Coloque um dedo na tela, mantenha contato, e arraste horizontalmente para a esquerda por pelo menos 50 pixels (aproximadamente 1-2 centímetros na maioria das telas). Ao soltar, a próxima música começará imediatamente.',
-          'Deslizar para Direita (→ Swipe Right): Volta para a música anterior. Coloque um dedo na tela, mantenha contato, e arraste horizontalmente para a direita por pelo menos 50 pixels. O comportamento é idêntico à tecla de seta esquerda (volta completa ou reinicia dependendo do tempo).',
-          'Toque Simples (Tap): Todos os botões na interface respondem a toques simples. Basta tocar uma vez no centro do botão. Um efeito visual de "ripple" (ondulação) confirma que o toque foi registrado.',
-          'Toque e Segurar (Long Press) no Volume: Mantenha o dedo pressionado sobre o slider de volume para entrar em modo de ajuste contínuo. Arraste para cima/baixo para ajustar. Solte para confirmar o nível.'
+          'Deslizar para Esquerda (← Swipe Left): Avança para a próxima música',
+          'Deslizar para Direita (→ Swipe Right): Volta para a música anterior',
+          'Toque Simples (Tap): Todos os botões respondem a toques simples'
         ],
         tips: [
-          'O limiar mínimo de 50 pixels foi escolhido para evitar gestos acidentais durante toques normais',
-          'Feedback visual: uma seta animada (chevron) aparece indicando a direção do gesto reconhecido',
-          'Gestos funcionam mesmo quando você toca sobre a imagem da capa do álbum',
-          'Em caso de dúvida, os botões são sempre uma alternativa confiável - eles são grandes (56-64px) e fáceis de acertar',
-          'Gestos não funcionam sobre o Command Deck ou outras áreas de controle específicas'
+          'O limiar mínimo é de 50 pixels para evitar gestos acidentais',
+          'Feedback visual indica a direção do gesto reconhecido'
         ]
       },
       {
         id: 'swipe-sensitivity',
-        question: 'Como funciona a sensibilidade dos gestos? Por que meu gesto às vezes não é reconhecido?',
-        answer: 'A sensibilidade dos gestos foi cuidadosamente calibrada para funcionar bem em telas de diferentes tamanhos (desde tablets de 10" até TVs de 55"+). O sistema usa um algoritmo que distingue entre gestos intencionais horizontais e movimentos acidentais ou diagonais. O reconhecimento prioriza precisão sobre velocidade - preferimos ignorar um gesto válido do que ativar um gesto acidental.',
+        question: 'Como funciona a sensibilidade dos gestos?',
+        answer: 'A sensibilidade foi calibrada para funcionar bem em telas de diferentes tamanhos. O sistema distingue entre gestos intencionais horizontais e movimentos acidentais.',
         steps: [
-          'Início do Gesto (touchstart): O sistema registra a posição X e Y exatas onde seu dedo tocou a tela. Este é o ponto de referência.',
-          'Durante o Movimento (touchmove): A posição é atualizada continuamente enquanto seu dedo se move. O sistema monitora tanto o deslocamento horizontal quanto o vertical.',
-          'Fim do Gesto (touchend): Quando você levanta o dedo, o sistema calcula: (1) distância horizontal total, (2) distância vertical total, (3) direção dominante.',
-          'Validação: O gesto é aceito SOMENTE se: distância horizontal > 50px E distância horizontal > distância vertical. Isso garante que gestos diagonais ou verticais não sejam interpretados como "próxima/anterior".'
-        ],
-        tips: [
-          'Se seu gesto foi diagonal demais, o sistema ignora para evitar ação incorreta',
-          'Movimentos muito curtos (< 50px) são sempre ignorados - são considerados "toques" não "gestos"',
-          'A velocidade do gesto NÃO afeta o resultado - apenas a distância e direção importam',
-          'Use sempre um único dedo para gestos. Multi-touch (pinch, rotate) não é suportado atualmente',
-          'Telas com películas muito grossas ou dedos muito secos podem reduzir a sensibilidade do touch'
-        ]
-      },
-      {
-        id: 'gesture-feedback',
-        question: 'Como sei se meu gesto foi reconhecido corretamente pelo sistema?',
-        answer: 'O TSi JUKEBOX fornece três tipos de feedback simultâneos para confirmar que seu gesto foi reconhecido e está sendo processado. Isso é especialmente importante em ambientes ruidosos ou quando você não está olhando diretamente para a tela. O feedback é imediato (< 100ms após o fim do gesto) para dar sensação de responsividade.',
-        steps: [
-          'Feedback Visual Imediato: Uma seta animada (ícone chevron) aparece brevemente no centro da tela indicando a direção. Seta apontando para direita = próxima música. Seta apontando para esquerda = música anterior. A seta usa animação de fade-in/fade-out que dura 300ms.',
-          'Notificação Toast: Uma pequena mensagem aparece no canto da tela confirmando a ação em texto: "Próxima faixa" ou "Faixa anterior". O toast desaparece automaticamente após 2 segundos.',
-          'Mudança de Conteúdo: A capa do álbum, título da música, nome do artista e barra de progresso atualizam para refletir a nova faixa. Esta é a confirmação definitiva de que a ação foi executada.',
-          'Animação de Transição: A interface realiza uma transição suave (crossfade) entre as informações da faixa antiga e nova, dando feedback visual adicional de que algo mudou.'
-        ],
-        tips: [
-          'Se você viu a seta mas a música não mudou, pode haver um problema de conexão com o backend',
-          'Se nenhum feedback apareceu, o gesto não atingiu o limiar mínimo - tente um movimento mais longo e horizontal',
-          'O feedback visual pode ser desabilitado em Configurações > Acessibilidade se for uma distração',
-          'Em caso de falha, a música atual simplesmente continua tocando - nenhum dado é perdido'
-        ]
-      },
-      {
-        id: 'gesture-vs-buttons',
-        question: 'Quando devo usar gestos e quando devo usar os botões na tela?',
-        answer: 'Gestos e botões são complementares - ambos existem para que você possa escolher o método mais conveniente para cada situação. Nenhum é "melhor" que o outro de forma absoluta. A escolha depende do contexto de uso, do tamanho da tela, de suas preferências pessoais, e se você precisa de confirmação visual antes de agir.',
-        steps: [
-          'USE GESTOS quando: Você quer trocar de música rapidamente sem procurar um botão. Você está segurando algo com uma mão e só tem uma mão livre. A tela é grande e os botões estão longe do centro. Você já está familiarizado com a interface e não precisa de confirmação visual.',
-          'USE BOTÕES quando: Você quer controle preciso de volume (o slider é mais preciso que qualquer gesto). Você precisa pausar/retomar (não há gesto para isso). Você está acessando funções administrativas (shuffle, repeat, queue). Você prefere confirmação visual antes de agir.',
-          'COMBINE AMBOS: Muitos usuários usam gestos para navegação (próxima/anterior) e botões para controle (play/pause/volume). Esta é a forma mais eficiente de operar o sistema.'
-        ],
-        tips: [
-          'Em telas menores (tablets 10"), gestos são frequentemente mais práticos que localizar botões pequenos',
-          'Em telas grandes (TV 55"+), os botões são mais visíveis e fáceis de acertar',
-          'Se você tem dificuldades motoras, botões grandes são geralmente mais acessíveis que gestos',
-          'Gestos são silenciosos e discretos - úteis em ambientes onde você não quer chamar atenção para suas ações'
-        ]
-      },
-      {
-        id: 'troubleshooting-gestures',
-        question: 'Meus gestos não estão funcionando. O que pode estar errado e como resolver?',
-        answer: 'Se os gestos de toque não estão sendo reconhecidos, há várias causas possíveis - desde problemas de hardware até configurações de software. Siga este guia sistemático de solução de problemas para identificar e resolver a causa. Na maioria dos casos, o problema é simples de resolver.',
-        steps: [
-          '1. ÁREA INCORRETA: Gestos só funcionam na área central do player (onde aparece a capa do álbum). Verifique se você está tocando nessa região específica, não no Command Deck, não na barra de progresso, não nos botões.',
-          '2. DIREÇÃO INCORRETA: O gesto precisa ser predominantemente horizontal. Se seu movimento é diagonal ou vertical, ele será ignorado. Tente fazer um movimento mais "reto" da esquerda para direita ou vice-versa.',
-          '3. DISTÂNCIA INSUFICIENTE: O deslize precisa ter no mínimo ~50 pixels (aproximadamente 1-2cm dependendo da tela). Se o movimento for muito curto, é interpretado como "toque" não "gesto".',
-          '4. MÚLTIPLOS DEDOS: Use apenas UM dedo para gestos. Multi-touch (dois ou mais dedos) pode causar comportamento inesperado ou ser completamente ignorado.',
-          '5. TELA SUJA OU OLEOSA: Limpe a tela com um pano de microfibra. Sujeira, oleosidade ou umidade podem interferir na detecção de toque.',
-          '6. PROBLEMA DE HARDWARE: Algumas telas têm "zonas mortas" onde o touch não funciona bem. Teste diferentes áreas da tela para ver se o problema é localizado.',
-          '7. REINICIE O NAVEGADOR: Se o problema persistir, feche e reabra o navegador/aplicativo. Às vezes o listener de eventos de touch pode travar.',
-          '8. MODO DEMO: Se você está em modo demo (sem backend conectado), os gestos podem ter comportamento simulado diferente do modo produção.'
-        ],
-        tips: [
-          'Luvas de tecido ou dedos muito secos podem não ser detectados por telas capacitivas',
-          'Películas de proteção muito grossas (> 0.5mm) podem reduzir a sensibilidade do touch',
-          'Em caso de dúvida, os BOTÕES na tela sempre funcionam como alternativa confiável',
-          'Se nada funcionar, reporte o problema com detalhes do seu hardware em GitHub Issues'
-        ]
-      },
-      {
-        id: 'multitouch-support',
-        question: 'O TSi JUKEBOX suporta gestos multi-toque (pinch, zoom, rotate)?',
-        answer: 'Atualmente, o TSi JUKEBOX suporta apenas gestos de um único dedo (single-touch). Gestos multi-toque como pinch-to-zoom, rotate, ou three-finger swipe não são implementados. Esta é uma decisão de design deliberada para manter a interface simples e evitar conflitos com os controles existentes. O modo kiosk também desabilita zoom para manter a escala fixa.',
-        tips: [
-          'Pinch-to-zoom é desabilitado em modo kiosk para manter o layout consistente',
-          'Rotate e outros gestos complexos não têm função no contexto de um player de música',
-          'Se você precisa de zoom para acessibilidade, use a configuração de tamanho de fonte em Configurações',
-          'Multi-toque pode ser adicionado em versões futuras se houver demanda suficiente'
+          'O gesto é aceito se: distância horizontal > 50px',
+          'E distância horizontal > distância vertical',
+          'Gestos diagonais são ignorados para evitar ação incorreta'
         ]
       }
     ]
@@ -279,80 +152,45 @@ const helpSections: HelpSection[] = [
     icon: <Settings className="w-5 h-5 icon-neon-blue" />,
     items: [
       {
-        id: 'theme',
-        question: 'Como mudar o tema de cores?',
-        answer: 'Acesse Configurações > Tema e escolha entre Azul Neon, Verde Tech ou Roxo Vibrante. A mudança é aplicada instantaneamente com uma transição suave.',
+        id: 'theme-settings',
+        question: 'Como personalizar o tema visual?',
+        answer: 'Acesse Configurações > Tema para escolher entre temas sólidos ou com gradiente.',
         steps: [
-          'Abra o menu de Configurações',
-          'Encontre a seção "Tema"',
-          'Clique na cor desejada',
-          'A mudança é automática!'
+          'Vá em Configurações',
+          'Na seção Tema, escolha a cor principal',
+          'Opcionalmente, ative gradientes personalizados'
         ]
       },
       {
-        id: 'theme-preview',
-        question: 'Como visualizar todos os temas antes de escolher?',
-        answer: 'O TSi JUKEBOX oferece uma página dedicada de Preview de Temas onde você pode ver todos os 8 presets disponíveis (5 temas sólidos + 3 temas com gradiente) e testar como cada componente da interface ficará antes de aplicar.',
-        steps: [
-          'Acesse Configurações > Tema',
-          'Clique no botão "Preview de Temas" ou navegue para /theme-preview',
-          'Explore os temas sólidos: Azul, Verde, Roxo, Laranja e Rosa',
-          'Explore os temas com gradiente: Aurora Boreal, Pôr do Sol e Oceano Profundo',
-          'Clique em qualquer tema para pré-visualizar os componentes',
-          'Use o botão "Aplicar Tema" para confirmar sua escolha'
-        ],
-        tips: [
-          'Temas com gradiente criam um fundo com transição suave de cores',
-          'Você pode criar seus próprios temas customizados na seção Personalizador de Tema'
-        ]
-      },
-      {
-        id: 'accessibility',
-        question: 'Como ajustar a acessibilidade?',
-        answer: 'Em Configurações > Acessibilidade você pode ativar modo de alto contraste, aumentar o tamanho das fontes e reduzir animações para uma experiência mais confortável.',
-        tips: [
-          'Use o preview em tempo real para ver como ficará',
-          'O modo alto contraste é ideal para ambientes muito iluminados',
-          'Reduza animações se sentir desconforto com movimentos'
-        ]
-      },
-      {
-        id: 'backup',
-        question: 'Como fazer backup dos dados?',
-        answer: 'Backups protegem suas configurações e dados importantes. Você pode fazer backup completo (tudo) ou incremental (apenas mudanças).',
-        steps: [
-          'Acesse Configurações > Backup Local',
-          'Clique em "Backup Completo" para a primeira vez',
-          'Use "Backup Incremental" para atualizações diárias',
-          'Os backups ficam listados abaixo para restauração'
-        ],
-        tips: ['Faça backup completo semanalmente', 'Backups incrementais são mais rápidos']
+        id: 'accessibility-settings',
+        question: 'Quais opções de acessibilidade estão disponíveis?',
+        answer: 'O sistema oferece modo de alto contraste, ajuste de tamanho de fonte e opção de reduzir animações.',
+        tips: ['Essas configurações são salvas localmente no navegador']
       }
     ]
   },
   {
     id: 'spotify',
     title: 'Spotify',
-    icon: <Music className="w-5 h-5 icon-neon-blue" />,
+    icon: <Music className="w-5 h-5 text-[#1DB954]" />,
     items: [
       {
-        id: 'connect-spotify',
+        id: 'spotify-connect',
         question: 'Como conectar minha conta Spotify?',
-        answer: 'Para usar o Spotify, você precisa criar um app no Spotify Developer Dashboard e obter as credenciais Client ID e Client Secret.',
+        answer: 'Para conectar ao Spotify, você precisa criar um aplicativo no Spotify Developer Dashboard.',
         steps: [
-          'Acesse developer.spotify.com e faça login',
+          'Acesse developer.spotify.com/dashboard',
           'Crie um novo aplicativo',
-          'Copie o Client ID e Client Secret',
-          'Cole nas Configurações > Spotify do TSi JUKEBOX',
-          'Clique em "Conectar com Spotify"'
-        ],
-        tips: ['A conexão é segura via OAuth', 'Suas credenciais ficam salvas localmente']
+          'Adicione a URL de redirecionamento',
+          'Copie Client ID e Client Secret',
+          'Cole as credenciais em Configurações > Spotify'
+        ]
       },
       {
-        id: 'spotify-controls',
-        question: 'Como controlar a música?',
-        answer: 'Use os botões centrais para Play/Pause, as setas para próxima/anterior, e o slider para volume. Você também pode usar gestos de deslizar.',
-        tips: ['Deslize para direita = próxima música', 'Deslize para esquerda = música anterior']
+        id: 'spotify-library',
+        question: 'Como acessar minha biblioteca do Spotify?',
+        answer: 'Após conectar sua conta, você terá acesso a playlists, músicas curtidas, álbuns e artistas.',
+        tips: ['A biblioteca é sincronizada automaticamente']
       }
     ]
   },
@@ -362,20 +200,14 @@ const helpSections: HelpSection[] = [
     icon: <Database className="w-5 h-5 icon-neon-blue" />,
     items: [
       {
-        id: 'what-is-db',
-        question: 'O que é o banco de dados?',
-        answer: 'O banco de dados é onde todas as suas configurações, histórico de músicas e preferências são guardados de forma segura. Pense nele como uma "caixa organizadora digital".',
-      },
-      {
-        id: 'db-types',
-        question: 'Quais tipos de banco são suportados?',
-        answer: 'O TSi JUKEBOX suporta SQLite (local ou remoto) e Lovable Cloud. Para uso doméstico, SQLite local é suficiente. Para estabelecimentos, Lovable Cloud oferece backup automático.',
-      },
-      {
-        id: 'db-maintenance',
-        question: 'Como fazer manutenção do banco?',
-        answer: 'Em Configurações > Banco de Dados você encontra ferramentas como Vacuum (otimização), Verificar Integridade, e Reindexar.',
-        tips: ['Execute Vacuum mensalmente para melhor desempenho', 'Sempre faça backup antes de manutenções']
+        id: 'database-maintenance',
+        question: 'Como fazer manutenção do banco de dados?',
+        answer: 'Acesse Configurações > Banco de Dados para executar operações de manutenção como VACUUM e verificação de integridade.',
+        steps: [
+          'Vá em Configurações > Banco de Dados',
+          'Use VACUUM para otimizar o espaço',
+          'Execute verificação de integridade periodicamente'
+        ]
       }
     ]
   },
@@ -385,48 +217,266 @@ const helpSections: HelpSection[] = [
     icon: <Shield className="w-5 h-5 icon-neon-blue" />,
     items: [
       {
-        id: 'ssh-keys',
-        question: 'O que são chaves SSH?',
-        answer: 'Chaves SSH são como "senhas especiais" que permitem conexões seguras entre computadores. A chave privada é secreta (nunca compartilhe!), enquanto a pública pode ser compartilhada.',
-        tips: [
-          'Use o comando ssh-keygen -t ed25519 para criar novas chaves',
-          'O tipo ed25519 é mais seguro e rápido que RSA',
-          'Sempre proteja sua chave privada com senha'
-        ]
-      },
-      {
-        id: 'gpg-keys',
-        question: 'Para que serve GPG?',
-        answer: 'GPG serve para "assinar" e criptografar arquivos. No contexto do JUKEBOX, é usado para garantir que seus backups não foram alterados.',
-      },
-      {
         id: 'user-roles',
-        question: 'Como funcionam os níveis de usuário?',
-        answer: 'Existem três níveis: Newbie (apenas ouve música), User (pode modificar fila), e Admin (acesso total incluindo configurações).',
+        question: 'Como funcionam os níveis de permissão?',
+        answer: 'O sistema possui três níveis: Newbie (apenas ouvir), User (gerenciar fila) e Admin (acesso total).',
+        tips: ['Apenas admins podem alterar configurações do sistema']
       }
     ]
   },
   {
     id: 'cloud',
-    title: 'Nuvem e Backup',
+    title: 'Cloud & Backup',
     icon: <Cloud className="w-5 h-5 icon-neon-blue" />,
     items: [
       {
-        id: 'cloud-backup',
-        question: 'Como configurar backup na nuvem?',
-        answer: 'Em Configurações > Backup na Nuvem você pode conectar serviços como Google Drive, Dropbox, ou Amazon S3 para guardar cópias dos seus dados.',
+        id: 'backup-local',
+        question: 'Como fazer backup local do banco de dados?',
+        answer: 'Acesse Configurações > Backup para criar backups completos ou incrementais.',
         steps: [
-          'Escolha o serviço de nuvem desejado',
-          'Insira as credenciais de acesso',
-          'Configure a frequência de sincronização',
-          'Clique em "Sincronizar Agora" para testar'
+          'Vá em Configurações > Backup',
+          'Clique em "Backup Completo" ou "Backup Incremental"',
+          'Os backups são salvos no servidor'
         ]
       },
       {
-        id: 'schedule-backup',
-        question: 'Como agendar backups automáticos?',
-        answer: 'Em Configurações > Agendamento de Backup você define quando os backups devem ocorrer automaticamente.',
-        tips: ['Recomendamos backup diário às 3h da manhã', 'Mantenha pelo menos 7 backups anteriores']
+        id: 'backup-cloud',
+        question: 'Como configurar backup na nuvem?',
+        answer: 'O sistema suporta backup para diversos provedores: AWS S3, Google Drive, Dropbox, MEGA, OneDrive e Storj.',
+        tips: ['Configure as credenciais do provedor escolhido em Configurações > Cloud Backup']
+      }
+    ]
+  },
+  {
+    id: 'faq',
+    title: 'FAQ - Problemas Comuns',
+    icon: <MessageCircleQuestion className="w-5 h-5 icon-neon-blue" />,
+    items: [
+      {
+        id: 'faq-eternal-connecting',
+        question: 'O sistema mostra "Conectando ao servidor..." eternamente',
+        answer: 'Este problema ocorre quando o frontend não consegue estabelecer comunicação com o backend FastAPI. Pode ser causado por serviço inativo, firewall ou URL incorreta.',
+        steps: [
+          'Verifique se o serviço backend está rodando: systemctl status tsi-jukebox-api',
+          'Confirme que a URL da API está correta em Configurações',
+          'Teste a conexão acessando a URL da API diretamente no navegador',
+          'Verifique logs do backend: journalctl -u tsi-jukebox-api -f',
+          'Se necessário, reinicie o serviço: systemctl restart tsi-jukebox-api'
+        ],
+        tips: [
+          'Em modo demo, o sistema funciona sem backend',
+          'Verifique se não há firewall bloqueando a porta 8000'
+        ]
+      },
+      {
+        id: 'faq-backend-unavailable',
+        question: 'Erro "Backend não disponível" aparece constantemente',
+        answer: 'O frontend não consegue se comunicar com a API REST. Isso pode indicar problemas de rede, serviço parado ou configuração incorreta.',
+        steps: [
+          'Verifique a conectividade de rede do servidor',
+          'Confirme que o processo FastAPI está ativo',
+          'Teste com curl: curl http://localhost:8000/api/status',
+          'Verifique se o Nginx está configurado corretamente como proxy reverso'
+        ],
+        tips: [
+          'Ative o modo demo temporariamente para continuar usando a interface',
+          'O indicador de conexão no canto mostra o status em tempo real'
+        ]
+      },
+      {
+        id: 'faq-websocket-disconnect',
+        question: 'WebSocket desconecta frequentemente',
+        answer: 'Desconexões frequentes do WebSocket podem ser causadas por instabilidade de rede, timeout do servidor ou limite de conexões.',
+        steps: [
+          'Mude para modo Polling em Configurações se o problema persistir',
+          'Verifique a estabilidade da rede local',
+          'Aumente o timeout do WebSocket no backend se necessário',
+          'Verifique logs para identificar o motivo das desconexões'
+        ],
+        tips: [
+          'O sistema automaticamente tenta reconectar',
+          'Polling é mais estável mas tem maior latência'
+        ]
+      },
+      {
+        id: 'faq-music-stops',
+        question: 'Música para de tocar após alguns minutos',
+        answer: 'A reprodução pode parar por timeout do Spotify, perda de conexão com o backend ou hibernação do sistema.',
+        steps: [
+          'Verifique se o Spotify ainda está autenticado (token pode ter expirado)',
+          'Confirme que o sistema não está entrando em modo de economia de energia',
+          'Verifique se há erros no log do playerctl',
+          'Reconecte a conta Spotify se necessário'
+        ],
+        tips: [
+          'O sistema tenta renovar tokens automaticamente',
+          'Desative o protetor de tela em sistemas kiosk'
+        ]
+      },
+      {
+        id: 'faq-spotify-connect-fail',
+        question: 'Não consigo conectar ao Spotify',
+        answer: 'Falhas na conexão OAuth podem ocorrer por credenciais incorretas, URL de redirecionamento errada ou conta Spotify sem Premium.',
+        steps: [
+          'Verifique se Client ID e Client Secret estão corretos',
+          'Confirme que a URL de redirecionamento no Spotify Dashboard é exata',
+          'Verifique se sua conta Spotify está ativa',
+          'Tente limpar cookies e reconectar'
+        ],
+        tips: [
+          'Algumas funcionalidades requerem Spotify Premium',
+          'A URL de redirecionamento deve incluir /settings'
+        ]
+      },
+      {
+        id: 'faq-no-sound',
+        question: 'Não ouço nenhum som, mesmo com volume no máximo',
+        answer: 'Ausência de áudio pode ter várias causas: volume do sistema, saída de áudio incorreta, Spotify não rodando ou problemas de hardware.',
+        steps: [
+          'Verifique o volume do sistema operacional (alsamixer ou pavucontrol)',
+          'Confirme que a saída de áudio correta está selecionada',
+          'Verifique se o Spotify está rodando: pgrep spotify',
+          'Teste o áudio com outro aplicativo',
+          'Verifique conexões físicas dos alto-falantes'
+        ],
+        tips: [
+          'Em modo demo, nenhum áudio real é reproduzido',
+          'O volume do TSi JUKEBOX é independente do volume do sistema'
+        ]
+      },
+      {
+        id: 'faq-volume-not-changing',
+        question: 'O volume não muda quando ajusto o slider',
+        answer: 'O controle de volume do TSi JUKEBOX comunica-se com o Spotify via MPRIS/playerctl. Se não funcionar, pode haver problema na comunicação.',
+        steps: [
+          'Teste playerctl diretamente: playerctl volume 0.5',
+          'Verifique se o Spotify está respondendo a comandos MPRIS',
+          'Reinicie o Spotify e o backend',
+          'Verifique permissões do usuário para controlar o player'
+        ],
+        tips: [
+          'O volume é um valor entre 0 e 100%',
+          'Alguns sistemas podem ter bloqueio de controle de volume'
+        ]
+      },
+      {
+        id: 'faq-delay-response',
+        question: 'Há atraso entre os comandos e a resposta',
+        answer: 'Latência pode ser causada por polling lento, rede congestionada ou processamento do backend.',
+        steps: [
+          'Mude de Polling para WebSocket em Configurações para menor latência',
+          'Reduza o intervalo de polling se usar esse modo',
+          'Verifique a carga do servidor',
+          'Otimize a rede local'
+        ],
+        tips: [
+          'WebSocket oferece resposta quase instantânea',
+          'Em redes lentas, atrasos de 1-2 segundos são normais com polling'
+        ]
+      },
+      {
+        id: 'faq-black-white-screen',
+        question: 'A tela está toda preta ou branca',
+        answer: 'Tela completamente preta ou branca geralmente indica erro de JavaScript, CSS não carregado ou problema de renderização.',
+        steps: [
+          'Abra o console do navegador (F12) e verifique erros',
+          'Tente recarregar a página (Ctrl+Shift+R para forçar)',
+          'Verifique se todos os arquivos estão sendo servidos corretamente',
+          'Limpe o cache do navegador'
+        ],
+        tips: [
+          'Em modo kiosk, F12 pode estar desabilitado - use SSH para diagnóstico',
+          'Verifique se o tema não está configurado com cores inválidas'
+        ]
+      },
+      {
+        id: 'faq-buttons-not-responding',
+        question: 'Os botões não respondem ao toque',
+        answer: 'Botões não responsivos podem indicar JavaScript travado, overlay invisível bloqueando cliques ou problema do driver de touch.',
+        steps: [
+          'Verifique se há algum modal ou overlay aberto',
+          'Recarregue a página',
+          'Teste se o teclado funciona (indica se é problema de touch específico)',
+          'Verifique driver da tela de toque: xinput list'
+        ],
+        tips: [
+          'Alguns gestos acidentais podem abrir menus invisíveis',
+          'Tente usar Tab para navegar e Enter para ativar botões'
+        ]
+      },
+      {
+        id: 'faq-album-cover-missing',
+        question: 'A capa do álbum não aparece',
+        answer: 'Capas não carregando podem ser causadas por URLs inválidas, CORS, ou o Spotify não retornando imagem.',
+        steps: [
+          'Verifique a conexão com internet',
+          'Confirme que a música tem capa no Spotify',
+          'Verifique se há erros de CORS no console',
+          'Teste com outra música para comparar'
+        ],
+        tips: [
+          'Músicas locais (não Spotify) podem não ter capa',
+          'Uma imagem placeholder é mostrada quando não há capa'
+        ]
+      },
+      {
+        id: 'faq-slow-animations',
+        question: 'As animações estão lentas ou travando',
+        answer: 'Performance de animação depende do hardware. Sistemas mais antigos ou com GPU limitada podem ter dificuldade.',
+        steps: [
+          'Ative "Reduzir Animações" em Configurações > Acessibilidade',
+          'Verifique uso de CPU/GPU durante operação',
+          'Feche outras aplicações consumindo recursos',
+          'Considere usar hardware com melhor GPU'
+        ],
+        tips: [
+          'O modo de animações reduzidas mantém funcionalidade sem efeitos visuais',
+          'Raspberry Pi 4 ou superior é recomendado para experiência fluida'
+        ]
+      },
+      {
+        id: 'faq-settings-not-saving',
+        question: 'Não consigo salvar as configurações',
+        answer: 'Configurações são salvas no localStorage do navegador. Problemas podem ocorrer por localStorage cheio ou modo privado.',
+        steps: [
+          'Verifique se não está em modo de navegação privada',
+          'Limpe dados antigos do localStorage',
+          'Verifique permissões de armazenamento do site',
+          'Tente um navegador diferente'
+        ],
+        tips: [
+          'O localStorage tem limite de ~5MB por domínio',
+          'Configurações são específicas por navegador/dispositivo'
+        ]
+      },
+      {
+        id: 'faq-theme-reset',
+        question: 'O tema volta ao padrão após reiniciar',
+        answer: 'Se o tema não persiste, há problema na leitura/escrita do localStorage ou o cache está sendo limpo.',
+        steps: [
+          'Verifique se o navegador não está limpando dados ao fechar',
+          'Desative extensões que possam limpar cookies/storage',
+          'Em modo kiosk, configure o Chromium para persistir dados'
+        ],
+        tips: [
+          'Use flag --user-data-dir no Chromium para persistir dados',
+          'Verifique se não há script limpando localStorage'
+        ]
+      },
+      {
+        id: 'faq-weather-error',
+        question: 'O widget de clima mostra erro ou não carrega',
+        answer: 'O widget de clima usa a API OpenWeatherMap. Erros podem indicar API key inválida, cidade não encontrada ou limite de requisições.',
+        steps: [
+          'Verifique se a API Key está configurada em Configurações > Clima',
+          'Confirme que o nome da cidade está correto',
+          'Teste a API key diretamente no site da OpenWeatherMap',
+          'Verifique se não excedeu o limite de chamadas da API'
+        ],
+        tips: [
+          'O plano gratuito permite 1000 chamadas/dia',
+          'Use o formato "Cidade,Código do País" para maior precisão'
+        ]
       }
     ]
   }
@@ -436,6 +486,7 @@ export default function Help() {
   const navigate = useNavigate();
   const [searchQuery, setSearchQuery] = useState('');
   const [selectedSection, setSelectedSection] = useState<string | null>(null);
+  const [showInteractiveTest, setShowInteractiveTest] = useState<'keyboard' | 'gestures' | null>(null);
 
   const filteredSections = useMemo(() => {
     if (!searchQuery.trim()) return helpSections;
@@ -457,13 +508,25 @@ export default function Help() {
     ? helpSections.find(s => s.id === selectedSection)
     : null;
 
-  // Calculate total articles
   const totalArticles = helpSections.reduce((acc, section) => acc + section.items.length, 0);
 
+  const handlePrint = () => {
+    window.print();
+    toast.success('Preparando impressão...');
+  };
+
   return (
-    <div className="min-h-screen bg-kiosk-bg">
+    <div className="min-h-screen bg-kiosk-bg help-content">
+      {/* Interactive Test Mode Modal */}
+      {showInteractiveTest && (
+        <InteractiveTestMode 
+          mode={showInteractiveTest} 
+          onClose={() => setShowInteractiveTest(null)} 
+        />
+      )}
+
       {/* Header */}
-      <div className="p-4 border-b border-border">
+      <div className="p-4 border-b border-border no-print">
         <div className="flex items-center justify-between max-w-6xl mx-auto">
           <div className="flex items-center gap-4">
             <Button
@@ -482,7 +545,23 @@ export default function Help() {
               </div>
             </div>
           </div>
-          <div className="flex items-center gap-3">
+          <div className="flex items-center gap-2">
+            <Button
+              onClick={() => navigate('/wiki')}
+              variant="outline"
+              className="button-outline-neon"
+            >
+              <BookOpen className="w-4 h-4 mr-2 icon-neon-blue" />
+              Wiki Completa
+            </Button>
+            <Button
+              onClick={handlePrint}
+              variant="outline"
+              className="button-outline-neon"
+            >
+              <Printer className="w-4 h-4 mr-2 icon-neon-blue" />
+              Imprimir
+            </Button>
             <Button
               onClick={() => navigate('/theme-preview')}
               variant="outline"
@@ -510,7 +589,7 @@ export default function Help() {
 
       <div className="max-w-6xl mx-auto p-4">
         {/* Search */}
-        <div className="relative mb-6">
+        <div className="relative mb-6 no-print">
           <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-5 h-5 text-kiosk-text/50" />
           <Input
             placeholder="Buscar no manual..."
@@ -522,7 +601,7 @@ export default function Help() {
 
         <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
           {/* Index Sidebar */}
-          <div className="lg:col-span-1">
+          <div className="lg:col-span-1 no-print">
             <div className="sticky top-4 space-y-2">
               <h2 className="text-sm font-semibold text-label-yellow mb-3">ÍNDICE</h2>
               {filteredSections.map((section) => (
@@ -562,6 +641,37 @@ export default function Help() {
                       <p className="text-sm text-kiosk-text/70">{selectedSectionData.items.length} artigos</p>
                     </div>
                   </div>
+
+                  {/* Interactive Test Buttons */}
+                  {selectedSection === 'keyboard-shortcuts' && (
+                    <div className="p-4 rounded-xl bg-primary/10 border border-primary/30 mb-4 no-print">
+                      <p className="text-sm text-kiosk-text/80 mb-3">
+                        Experimente os atalhos em tempo real:
+                      </p>
+                      <Button 
+                        onClick={() => setShowInteractiveTest('keyboard')}
+                        className="button-primary-glow-3d"
+                      >
+                        <Keyboard className="w-4 h-4 mr-2" />
+                        🎹 Testar Atalhos de Teclado
+                      </Button>
+                    </div>
+                  )}
+
+                  {selectedSection === 'touch-gestures' && (
+                    <div className="p-4 rounded-xl bg-primary/10 border border-primary/30 mb-4 no-print">
+                      <p className="text-sm text-kiosk-text/80 mb-3">
+                        Pratique gestos de toque:
+                      </p>
+                      <Button 
+                        onClick={() => setShowInteractiveTest('gestures')}
+                        className="button-primary-glow-3d"
+                      >
+                        <Hand className="w-4 h-4 mr-2" />
+                        👆 Testar Gestos de Toque
+                      </Button>
+                    </div>
+                  )}
 
                   <Accordion type="single" collapsible className="space-y-2">
                     {selectedSectionData.items.map((item) => (

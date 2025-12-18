@@ -85,7 +85,7 @@ export function CloudConnectionSection() {
           <div className="text-center py-6">
             <Cloud className="w-12 h-12 text-kiosk-text/20 mx-auto mb-3" />
             <p className="text-settings-hint mb-4">Lovable Cloud não está configurado</p>
-            <Button variant="outline" className="border-kiosk-border text-kiosk-text">
+            <Button variant="kiosk-outline" className="border-kiosk-border text-kiosk-text">
               <ExternalLink className="w-4 h-4 mr-2" />
               Saiba mais
             </Button>

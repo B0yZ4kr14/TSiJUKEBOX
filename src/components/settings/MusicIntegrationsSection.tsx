@@ -245,7 +245,7 @@ export function MusicIntegrationsSection() {
         {/* Quick Links */}
         <div className="flex flex-wrap gap-2">
           <Button
-            variant="outline"
+            variant="kiosk-outline"
             size="sm"
             onClick={() => navigate('/spotify')}
             className="gap-2"
@@ -255,7 +255,7 @@ export function MusicIntegrationsSection() {
             Abrir Spotify Browser
           </Button>
           <Button
-            variant="outline"
+            variant="kiosk-outline"
             size="sm"
             onClick={() => navigate('/youtube-music')}
             className="gap-2"

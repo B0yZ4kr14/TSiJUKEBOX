@@ -137,7 +137,7 @@ export function PlaylistCard({ playlist, onClick, onPlay, className, isPlaying }
           />
         ) : (
           <div className="w-full h-full flex items-center justify-center">
-            <Music className="w-12 h-12 text-kiosk-text/50" />
+            <Music className="w-12 h-12 text-kiosk-text/85" />
           </div>
         )}
         
@@ -162,7 +162,7 @@ export function PlaylistCard({ playlist, onClick, onPlay, className, isPlaying }
       {/* Info */}
       <div className="space-y-1">
         <h3 className="font-semibold text-kiosk-text truncate">{playlist.name}</h3>
-        <p className="text-sm text-kiosk-text/60 truncate">
+        <p className="text-sm text-kiosk-text/85 truncate">
           {playlist.owner} • {playlist.tracksTotal} faixas
         </p>
       </div>

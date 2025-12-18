@@ -37,7 +37,7 @@ export default function SpotifyLibraryPage() {
               <Heart className="w-10 h-10 text-[#1DB954]" />
             </div>
             <h1 className="text-2xl font-bold text-kiosk-text">Conecte-se ao Spotify</h1>
-            <p className="text-kiosk-text/60">
+            <p className="text-kiosk-text/85">
               Para acessar sua biblioteca, conecte sua conta do Spotify.
             </p>
             <Link to="/settings">
@@ -97,14 +97,14 @@ export default function SpotifyLibraryPage() {
                   </div>
                   <div>
                     <h2 className="text-2xl font-bold text-kiosk-text">Músicas Curtidas</h2>
-                    <p className="text-kiosk-text/60">{likedTracksTotal} músicas</p>
+                    <p className="text-kiosk-text/85">{likedTracksTotal} músicas</p>
                   </div>
                 </div>
 
                 {likedTracks.length === 0 ? (
                   <div className="text-center py-12 bg-kiosk-surface/30 rounded-lg">
-                    <Heart className="w-12 h-12 text-kiosk-text/50 mx-auto mb-4" />
-                    <p className="text-kiosk-text/60">Você ainda não curtiu nenhuma música</p>
+                  <Heart className="w-12 h-12 text-kiosk-text/85 mx-auto mb-4" />
+                  <p className="text-kiosk-text/85">Você ainda não curtiu nenhuma música</p>
                   </div>
                 ) : (
                   <div className="bg-kiosk-surface/30 rounded-lg overflow-hidden">
@@ -126,8 +126,8 @@ export default function SpotifyLibraryPage() {
               <TabsContent value="albums">
                 {albums.length === 0 ? (
                   <div className="text-center py-12 bg-kiosk-surface/30 rounded-lg">
-                    <Disc3 className="w-12 h-12 text-kiosk-text/30 mx-auto mb-4" />
-                    <p className="text-kiosk-text/60">Você ainda não salvou nenhum álbum</p>
+                    <Disc3 className="w-12 h-12 text-kiosk-text/80 mx-auto mb-4" />
+                    <p className="text-kiosk-text/85">Você ainda não salvou nenhum álbum</p>
                   </div>
                 ) : (
                   <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 xl:grid-cols-6 gap-4">
@@ -141,8 +141,8 @@ export default function SpotifyLibraryPage() {
               <TabsContent value="artists">
                 {artists.length === 0 ? (
                   <div className="text-center py-12 bg-kiosk-surface/30 rounded-lg">
-                    <User className="w-12 h-12 text-kiosk-text/30 mx-auto mb-4" />
-                    <p className="text-kiosk-text/60">Você ainda não segue nenhum artista</p>
+                    <User className="w-12 h-12 text-kiosk-text/80 mx-auto mb-4" />
+                    <p className="text-kiosk-text/85">Você ainda não segue nenhum artista</p>
                   </div>
                 ) : (
                   <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 xl:grid-cols-6 gap-4">

@@ -137,7 +137,7 @@ export function AlbumCard({ album, onClick, onPlay, className, isPlaying }: Albu
           />
         ) : (
           <div className="w-full h-full flex items-center justify-center">
-            <Disc3 className="w-12 h-12 text-kiosk-text/30" />
+            <Disc3 className="w-12 h-12 text-kiosk-text/80" />
           </div>
         )}
         
@@ -167,7 +167,7 @@ export function AlbumCard({ album, onClick, onPlay, className, isPlaying }: Albu
       {/* Info */}
       <div className="space-y-1">
         <h3 className="font-semibold text-kiosk-text truncate">{album.name}</h3>
-        <p className="text-sm text-kiosk-text/60 truncate">
+        <p className="text-sm text-kiosk-text/85 truncate">
           {album.releaseDate.split('-')[0]} • {album.artist}
         </p>
       </div>

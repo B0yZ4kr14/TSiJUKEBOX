@@ -43,7 +43,7 @@ export function TrackItem({
       <div className="w-8 text-center">
         {index !== undefined ? (
           <>
-            <span className="text-kiosk-text/50 text-sm group-hover:hidden">{index + 1}</span>
+            <span className="text-kiosk-text/85 text-sm group-hover:hidden">{index + 1}</span>
             <button
               className="hidden group-hover:block text-kiosk-text hover:text-[#1DB954]"
               onClick={onPlay}
@@ -53,7 +53,7 @@ export function TrackItem({
           </>
         ) : (
           <button
-            className="text-kiosk-text/50 hover:text-[#1DB954]"
+            className="text-kiosk-text/85 hover:text-[#1DB954]"
             onClick={onPlay}
           >
             <Play className="w-4 h-4 fill-current" />
@@ -73,7 +73,7 @@ export function TrackItem({
             />
           ) : (
             <div className="w-full h-full flex items-center justify-center">
-              <span className="text-kiosk-text/50">♪</span>
+              <span className="text-kiosk-text/85">♪</span>
             </div>
           )}
         </div>
@@ -84,18 +84,18 @@ export function TrackItem({
         <p className="text-kiosk-text font-medium truncate">
           {track.name}
           {track.explicit && (
-            <span className="ml-2 text-[10px] px-1.5 py-0.5 bg-kiosk-text/20 rounded text-kiosk-text/70">
+            <span className="ml-2 text-[10px] px-1.5 py-0.5 bg-kiosk-text/20 rounded text-kiosk-text/90">
               E
             </span>
           )}
         </p>
-        <p className="text-sm text-kiosk-text/60 truncate">{track.artist}</p>
+        <p className="text-sm text-kiosk-text/85 truncate">{track.artist}</p>
       </div>
 
       {/* Album */}
       {showAlbum && (
         <div className="hidden md:block flex-1 min-w-0">
-          <p className="text-sm text-kiosk-text/60 truncate">{track.album}</p>
+          <p className="text-sm text-kiosk-text/85 truncate">{track.album}</p>
         </div>
       )}
 
@@ -106,7 +106,7 @@ export function TrackItem({
           size="icon"
           className={cn(
             "w-8 h-8",
-            isLiked ? "text-[#1DB954]" : "text-kiosk-text/50 hover:text-kiosk-text"
+            isLiked ? "text-[#1DB954]" : "text-kiosk-text/85 hover:text-kiosk-text"
           )}
           onClick={onLike}
         >
@@ -115,7 +115,7 @@ export function TrackItem({
         <Button
           variant="ghost"
           size="icon"
-          className="w-8 h-8 text-kiosk-text/50 hover:text-kiosk-text"
+          className="w-8 h-8 text-kiosk-text/85 hover:text-kiosk-text"
           onClick={onAddToPlaylist}
         >
           <Plus className="w-4 h-4" />
@@ -123,7 +123,7 @@ export function TrackItem({
       </div>
 
       {/* Duration */}
-      <span className="text-sm text-kiosk-text/50 w-12 text-right">
+      <span className="text-sm text-kiosk-text/85 w-12 text-right">
         {formatDuration(track.durationMs)}
       </span>
     </div>

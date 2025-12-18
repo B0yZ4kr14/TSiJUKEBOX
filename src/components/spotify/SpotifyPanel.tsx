@@ -60,7 +60,7 @@ function TrackRow({ track, onPlay, onAddToQueue }: {
           />
         ) : (
           <div className="w-full h-full bg-kiosk-surface rounded flex items-center justify-center">
-            <Music2 className="w-4 h-4 text-kiosk-text/50" />
+            <Music2 className="w-4 h-4 text-kiosk-text/85" />
           </div>
         )}
         <button
@@ -104,7 +104,7 @@ function AlbumCard({ album, onPlay, isPlaying }: { album: SpotifyAlbum; onPlay: 
           />
         ) : (
           <div className="w-full h-full bg-kiosk-surface flex items-center justify-center">
-            <Disc3 className="w-8 h-8 text-kiosk-text/50" />
+            <Disc3 className="w-8 h-8 text-kiosk-text/85" />
           </div>
         )}
         {isPlaying ? (
@@ -140,7 +140,7 @@ function PlaylistCard({ playlist, onPlay, isPlaying }: { playlist: SpotifyPlayli
           />
         ) : (
           <div className="w-full h-full bg-kiosk-surface flex items-center justify-center">
-            <ListMusic className="w-8 h-8 text-kiosk-text/50" />
+            <ListMusic className="w-8 h-8 text-kiosk-text/85" />
           </div>
         )}
         {isPlaying ? (
@@ -261,13 +261,13 @@ export function SpotifyPanel({ isOpen, onClose, currentTrackId, currentAlbumId, 
       {/* Search */}
       <form onSubmit={handleSearch} className="p-4 border-b border-kiosk-surface">
         <div className="relative">
-          <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-kiosk-text/50" />
+          <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-kiosk-text/85" />
           <Input
             type="text"
             placeholder="Buscar músicas, artistas..."
             value={searchQuery}
             onChange={(e) => setSearchQuery(e.target.value)}
-            className="pl-10 bg-kiosk-surface border-kiosk-surface/50 text-kiosk-text placeholder:text-kiosk-text/40 progress-track-3d"
+            className="pl-10 bg-kiosk-surface border-kiosk-surface/50 text-kiosk-text placeholder:text-kiosk-text/80 progress-track-3d"
           />
         </div>
       </form>
@@ -324,14 +324,14 @@ export function SpotifyPanel({ isOpen, onClose, currentTrackId, currentAlbumId, 
                             <img src={playlist.imageUrl} alt={playlist.name} className="w-10 h-10 object-cover rounded shadow-lg" />
                           ) : (
                             <div className="w-10 h-10 bg-kiosk-surface rounded flex items-center justify-center">
-                              <ListMusic className="w-4 h-4 text-kiosk-text/60" />
+                              <ListMusic className="w-4 h-4 text-kiosk-text/85" />
                             </div>
                           )}
                           <div className="flex-1 min-w-0">
                             <p className="text-sm font-medium text-kiosk-text truncate">{playlist.name}</p>
                             <p className="text-xs text-kiosk-text/75">{playlist.tracksTotal} músicas</p>
                           </div>
-                          <Play className="w-4 h-4 text-kiosk-text/60" />
+                          <Play className="w-4 h-4 text-kiosk-text/85" />
                         </button>
                       ))}
                     </div>

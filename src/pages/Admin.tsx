@@ -52,7 +52,7 @@ export default function Admin() {
           <LogoBrand size="sm" variant="metal" centered={false} animate={false} />
           <div>
             <h2 className="text-3xl font-bold tracking-tight text-gold-neon">Dashboard</h2>
-            <p className="text-kiosk-text/70">Visão geral do sistema</p>
+            <p className="text-kiosk-text/90">Visão geral do sistema</p>
           </div>
         </div>
 

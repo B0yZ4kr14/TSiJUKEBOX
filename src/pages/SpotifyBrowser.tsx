@@ -30,7 +30,7 @@ export default function SpotifyBrowser() {
               <Disc3 className="w-10 h-10 text-[#1DB954]" />
             </div>
             <h1 className="text-2xl font-bold text-kiosk-text">Conecte-se ao Spotify</h1>
-            <p className="text-kiosk-text/60">
+            <p className="text-kiosk-text/85">
               Para acessar suas playlists, músicas curtidas e recomendações, conecte sua conta do Spotify.
             </p>
             <Link to="/settings">
@@ -94,22 +94,22 @@ export default function SpotifyBrowser() {
                     <Heart className="w-6 h-6 text-purple-400" />
                     <div>
                       <p className="font-semibold text-kiosk-text">Curtidas</p>
-                      <p className="text-xs text-kiosk-text/60">{likedTracksTotal} músicas</p>
+                      <p className="text-xs text-kiosk-text/85">{likedTracksTotal} músicas</p>
                     </div>
                   </div>
                 </Link>
                 <div className="flex items-center gap-3 p-4 bg-gradient-to-r from-blue-600/30 to-blue-800/30 rounded-lg cursor-pointer">
                   <Clock className="w-6 h-6 text-blue-400" />
                   <div>
-                    <p className="font-semibold text-kiosk-text">Recentes</p>
-                    <p className="text-xs text-kiosk-text/60">{recentlyPlayed.length} músicas</p>
+                      <p className="font-semibold text-kiosk-text">Recentes</p>
+                      <p className="text-xs text-kiosk-text/85">{recentlyPlayed.length} músicas</p>
                   </div>
                 </div>
                 <div className="flex items-center gap-3 p-4 bg-gradient-to-r from-green-600/30 to-green-800/30 rounded-lg cursor-pointer">
                   <TrendingUp className="w-6 h-6 text-green-400" />
                   <div>
-                    <p className="font-semibold text-kiosk-text">Top Músicas</p>
-                    <p className="text-xs text-kiosk-text/60">{topTracks.length} músicas</p>
+                      <p className="font-semibold text-kiosk-text">Top Músicas</p>
+                      <p className="text-xs text-kiosk-text/85">{topTracks.length} músicas</p>
                   </div>
                 </div>
                 <Link to="/spotify/search">
@@ -117,7 +117,7 @@ export default function SpotifyBrowser() {
                     <Search className="w-6 h-6 text-orange-400" />
                     <div>
                       <p className="font-semibold text-kiosk-text">Buscar</p>
-                      <p className="text-xs text-kiosk-text/60">Músicas e mais</p>
+                      <p className="text-xs text-kiosk-text/85">Músicas e mais</p>
                     </div>
                   </div>
                 </Link>
@@ -128,12 +128,12 @@ export default function SpotifyBrowser() {
             <section>
               <div className="flex items-center justify-between mb-4">
                 <h2 className="text-lg font-bold text-kiosk-text">Suas Playlists</h2>
-                <span className="text-sm text-kiosk-text/60">{playlists.length} playlists</span>
+                <span className="text-sm text-kiosk-text/85">{playlists.length} playlists</span>
               </div>
               {playlists.length === 0 ? (
                 <div className="text-center py-12 bg-kiosk-surface/30 rounded-lg">
-                  <Music className="w-12 h-12 text-kiosk-text/50 mx-auto mb-4" />
-                  <p className="text-kiosk-text/60 mb-4">Você ainda não tem playlists</p>
+                  <Music className="w-12 h-12 text-kiosk-text/85 mx-auto mb-4" />
+                  <p className="text-kiosk-text/85 mb-4">Você ainda não tem playlists</p>
                   <Button
                     onClick={() => setShowCreateModal(true)}
                     className="bg-[#1DB954] hover:bg-[#1ed760] text-black"

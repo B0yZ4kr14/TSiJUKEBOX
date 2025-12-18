@@ -172,6 +172,56 @@ const PROHIBITED_PATTERNS = [
     message: 'HTML element missing lang attribute',
     severity: 'serious'
   },
+  
+  // === FORM CONTROLS WITHOUT LABELS ===
+  { 
+    pattern: /<Switch[^>]*(?!aria-label|aria-labelledby|id=)[^>]*\/>/gi, 
+    message: 'Switch component may be missing accessible label - add aria-label or associated label',
+    severity: 'moderate'
+  },
+  { 
+    pattern: /<Slider[^>]*(?!aria-label|aria-labelledby)[^>]*\/>/gi, 
+    message: 'Slider component may be missing accessible label',
+    severity: 'moderate'
+  },
+  { 
+    pattern: /<Checkbox[^>]*(?!aria-label|id=)[^>]*\/>/gi, 
+    message: 'Checkbox may be missing accessible label',
+    severity: 'moderate'
+  },
+  
+  // === AUTO-PLAYING MEDIA ===
+  { 
+    pattern: /<(video|audio)[^>]*autoplay[^>]*(?!controls)[^>]*>/gi, 
+    message: 'Auto-playing media should have controls attribute for user control',
+    severity: 'serious'
+  },
+  
+  // === EMPTY INTERACTIVE ELEMENTS ===
+  { 
+    pattern: /<(button|Button)[^>]*>\s*<\/(button|Button)>/gi, 
+    message: 'Empty button element - add content or aria-label',
+    severity: 'serious'
+  },
+  { 
+    pattern: /<a[^>]*>\s*<\/a>/gi, 
+    message: 'Empty link element - add content or aria-label',
+    severity: 'serious'
+  },
+  
+  // === TOAST/NOTIFICATION TIMING ===
+  { 
+    pattern: /toast\.\w+\([^)]*duration:\s*[12]\d{2}[^)]*\)/gi, 
+    message: 'Very short toast duration (under 3000ms) may not give enough time to read',
+    severity: 'minor'
+  },
+  
+  // === MOTION/ANIMATION CONCERNS ===
+  { 
+    pattern: /animate-spin(?![^"]*motion-reduce)/g, 
+    message: 'Spinning animation should respect prefers-reduced-motion',
+    severity: 'minor'
+  },
 ];
 
 // Positive patterns to count (accessibility best practices found)

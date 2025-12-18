@@ -234,7 +234,7 @@ export function CloudProviderHelp({ provider }: CloudProviderHelpProps) {
 
             {/* Steps */}
             <div className="space-y-2">
-              <h3 className="text-sm font-semibold text-label-yellow">📋 Setup Steps</h3>
+              <h3 className="text-sm font-semibold text-section-cyan">📋 Setup Steps</h3>
               <div className="bg-kiosk-bg/50 rounded-lg p-3 border border-kiosk-border">
                 {info.steps.map((step, idx) => (
                   <p key={idx} className="text-sm text-white/90 py-1">{step}</p>
@@ -244,7 +244,7 @@ export function CloudProviderHelp({ provider }: CloudProviderHelpProps) {
 
             {/* Required Fields */}
             <div className="space-y-2">
-              <h3 className="text-sm font-semibold text-label-yellow">🔧 Required Fields</h3>
+              <h3 className="text-sm font-semibold text-section-cyan">🔧 Required Fields</h3>
               <div className="space-y-2">
                 {info.fields.map((field, idx) => (
                   <div key={idx} className="bg-kiosk-bg/50 rounded-lg p-3 border border-kiosk-border">
@@ -272,7 +272,7 @@ export function CloudProviderHelp({ provider }: CloudProviderHelpProps) {
 
             {/* Links */}
             <div className="space-y-2">
-              <h3 className="text-sm font-semibold text-label-yellow">🔗 Documentation</h3>
+              <h3 className="text-sm font-semibold text-section-cyan">🔗 Documentation</h3>
               <div className="flex flex-wrap gap-2">
                 {info.links.map((link, idx) => (
                   <a

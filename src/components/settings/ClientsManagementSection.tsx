@@ -260,8 +260,8 @@ export function ClientsManagementSection() {
     <div className="space-y-4 py-4 max-h-[60vh] overflow-y-auto">
       {/* Establishment Info */}
       <div className="space-y-3">
-        <h4 className="text-sm font-medium text-label-yellow flex items-center gap-2">
-          <Building2 className="w-4 h-4" />
+        <h4 className="text-sm text-section-cyan flex items-center gap-2">
+          <Building2 className="w-4 h-4 icon-neon-blue" />
           Informações do Estabelecimento
         </h4>
         <div className="space-y-2">
@@ -295,8 +295,8 @@ export function ClientsManagementSection() {
 
       {/* API Connection */}
       <div className="space-y-3">
-        <h4 className="text-sm font-medium text-label-yellow flex items-center gap-2">
-          <Globe className="w-4 h-4" />
+        <h4 className="text-sm text-section-cyan flex items-center gap-2">
+          <Globe className="w-4 h-4 icon-neon-blue" />
           Conexão API
         </h4>
         <div className="space-y-2">
@@ -312,8 +312,8 @@ export function ClientsManagementSection() {
 
       {/* SSH Access */}
       <div className="space-y-3">
-        <h4 className="text-sm font-medium text-label-yellow flex items-center gap-2">
-          <Server className="w-4 h-4" />
+        <h4 className="text-sm text-section-cyan flex items-center gap-2">
+          <Server className="w-4 h-4 icon-neon-blue" />
           Acesso SSH
         </h4>
         <div className="grid grid-cols-2 gap-3">
@@ -359,8 +359,8 @@ export function ClientsManagementSection() {
 
       {/* Security */}
       <div className="space-y-3">
-        <h4 className="text-sm font-medium text-label-yellow flex items-center gap-2">
-          <Shield className="w-4 h-4" />
+        <h4 className="text-sm text-section-cyan flex items-center gap-2">
+          <Shield className="w-4 h-4 icon-neon-blue" />
           Segurança
         </h4>
         <div className="space-y-2">

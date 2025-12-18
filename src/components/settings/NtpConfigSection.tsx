@@ -156,7 +156,7 @@ export function NtpConfigSection() {
         <div className="space-y-2">
           <Label className="text-label-yellow">{t('ntp.server')}</Label>
           <Select value={config.server} onValueChange={handleServerChange}>
-            <SelectTrigger data-tour="ntp-server" className="bg-background/50 border-border">
+            <SelectTrigger data-tour="ntp-server" className="bg-kiosk-surface/50 border-kiosk-border">
               <SelectValue placeholder={t('ntp.selectServer')} />
             </SelectTrigger>
             <SelectContent>
@@ -180,7 +180,7 @@ export function NtpConfigSection() {
               value={config.customServer}
               onChange={(e) => handleCustomServerChange(e.target.value)}
               placeholder="ntp.example.com"
-              className="bg-background/50 border-border font-mono"
+              className="bg-kiosk-surface/50 border-kiosk-border font-mono text-kiosk-text"
             />
           </div>
         )}

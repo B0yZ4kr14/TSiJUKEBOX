@@ -270,7 +270,7 @@ export function ClientsManagementSection() {
             value={formData.name}
             onChange={(e) => setFormData({ ...formData, name: e.target.value })}
             placeholder="Loja Centro"
-            className="bg-background/50"
+            className="bg-kiosk-surface/50 border-kiosk-border text-kiosk-text"
           />
         </div>
         <div className="space-y-2">
@@ -279,7 +279,7 @@ export function ClientsManagementSection() {
             value={formData.address}
             onChange={(e) => setFormData({ ...formData, address: e.target.value })}
             placeholder="Av. Principal, 123"
-            className="bg-background/50"
+            className="bg-kiosk-surface/50 border-kiosk-border text-kiosk-text"
           />
         </div>
         <div className="space-y-2">
@@ -288,7 +288,7 @@ export function ClientsManagementSection() {
             value={formData.city}
             onChange={(e) => setFormData({ ...formData, city: e.target.value })}
             placeholder="Montes Claros - MG"
-            className="bg-background/50"
+            className="bg-kiosk-surface/50 border-kiosk-border text-kiosk-text"
           />
         </div>
       </div>
@@ -305,7 +305,7 @@ export function ClientsManagementSection() {
             value={formData.apiUrl}
             onChange={(e) => setFormData({ ...formData, apiUrl: e.target.value })}
             placeholder="https://loja-centro.local/api"
-            className="bg-background/50 font-mono text-sm"
+            className="bg-kiosk-surface/50 border-kiosk-border font-mono text-sm text-kiosk-text"
           />
         </div>
       </div>
@@ -323,7 +323,7 @@ export function ClientsManagementSection() {
               value={formData.sshHost}
               onChange={(e) => setFormData({ ...formData, sshHost: e.target.value })}
               placeholder="192.168.1.10"
-              className="bg-background/50 font-mono text-sm"
+              className="bg-kiosk-surface/50 border-kiosk-border font-mono text-sm text-kiosk-text"
             />
           </div>
           <div className="space-y-2">
@@ -333,7 +333,7 @@ export function ClientsManagementSection() {
               value={formData.sshPort}
               onChange={(e) => setFormData({ ...formData, sshPort: parseInt(e.target.value) || 22 })}
               placeholder="22"
-              className="bg-background/50"
+              className="bg-kiosk-surface/50 border-kiosk-border text-kiosk-text"
             />
           </div>
         </div>
@@ -343,7 +343,7 @@ export function ClientsManagementSection() {
             value={formData.sshUser}
             onChange={(e) => setFormData({ ...formData, sshUser: e.target.value })}
             placeholder="admin"
-            className="bg-background/50"
+            className="bg-kiosk-surface/50 border-kiosk-border text-kiosk-text"
           />
         </div>
         <div className="space-y-2">
@@ -352,7 +352,7 @@ export function ClientsManagementSection() {
             value={formData.sshKeyPath}
             onChange={(e) => setFormData({ ...formData, sshKeyPath: e.target.value })}
             placeholder="~/.ssh/id_ed25519"
-            className="bg-background/50 font-mono text-sm"
+            className="bg-kiosk-surface/50 border-kiosk-border font-mono text-sm text-kiosk-text"
           />
         </div>
       </div>
@@ -369,7 +369,7 @@ export function ClientsManagementSection() {
             value={formData.gpgKeyId}
             onChange={(e) => setFormData({ ...formData, gpgKeyId: e.target.value })}
             placeholder="A1B2C3D4E5F6"
-            className="bg-background/50 font-mono text-sm"
+            className="bg-kiosk-surface/50 border-kiosk-border font-mono text-sm text-kiosk-text"
           />
         </div>
         <div className="space-y-2">
@@ -380,7 +380,7 @@ export function ClientsManagementSection() {
               value={formData.rootPassword}
               onChange={(e) => setFormData({ ...formData, rootPassword: e.target.value })}
               placeholder="••••••••"
-              className="bg-background/50 pr-10"
+              className="bg-kiosk-surface/50 border-kiosk-border pr-10 text-kiosk-text"
             />
             <Button
               type="button"
@@ -428,9 +428,8 @@ export function ClientsManagementSection() {
           
           <Button
             size="sm"
-            variant="outline"
+            variant="kiosk-outline"
             onClick={toggleSelectAll}
-            className="button-outline-neon"
           >
             {clients.every(c => c.isSelected) ? (
               <Square className="w-4 h-4 mr-1" />
@@ -554,36 +553,33 @@ export function ClientsManagementSection() {
             </h4>
             <div className="grid grid-cols-2 gap-2">
               <Button
-                variant="outline"
+                variant="kiosk-outline"
                 size="sm"
                 onClick={() => setShowReplicateDialog(true)}
-                className="button-action-neon"
               >
                 <Copy className="w-4 h-4 mr-2" />
                 Aplicar Configurações
               </Button>
               <Button
-                variant="outline"
+                variant="kiosk-outline"
                 size="sm"
                 onClick={handleResetSelected}
-                className="button-outline-neon"
               >
                 <RotateCcw className="w-4 h-4 mr-2" />
                 Resetar para Padrão
               </Button>
               <Button
-                variant="outline"
+                variant="kiosk-outline"
                 size="sm"
                 onClick={handleUpdateVersion}
-                className="button-action-neon"
               >
                 <Upload className="w-4 h-4 mr-2" />
                 Atualizar Versão
               </Button>
               <Button
-                variant="outline"
+                variant="kiosk-outline"
                 size="sm"
-                className="button-destructive-neon"
+                className="text-destructive hover:text-destructive"
               >
                 <Lock className="w-4 h-4 mr-2" />
                 Resetar Senhas
@@ -607,7 +603,7 @@ export function ClientsManagementSection() {
           </DialogHeader>
           <ClientForm />
           <DialogFooter>
-            <Button variant="outline" onClick={() => setShowAddDialog(false)}>
+            <Button variant="kiosk-outline" onClick={() => setShowAddDialog(false)}>
               Cancelar
             </Button>
             <Button onClick={handleAddClient} className="button-primary-glow-3d">
@@ -632,7 +628,7 @@ export function ClientsManagementSection() {
           </DialogHeader>
           <ClientForm />
           <DialogFooter>
-            <Button variant="outline" onClick={() => setEditingClient(null)}>
+            <Button variant="kiosk-outline" onClick={() => setEditingClient(null)}>
               Cancelar
             </Button>
             <Button onClick={handleEditClient} className="button-primary-glow-3d">
@@ -683,7 +679,7 @@ export function ClientsManagementSection() {
           </div>
 
           <DialogFooter>
-            <Button variant="outline" onClick={() => setShowReplicateDialog(false)}>
+            <Button variant="kiosk-outline" onClick={() => setShowReplicateDialog(false)}>
               Cancelar
             </Button>
             <Button onClick={handleReplicateToSelected} className="button-primary-glow-3d">

@@ -1,0 +1,67 @@
+name: Accessibility Check
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+    branches: [main]
+
+jobs:
+  a11y-check:
+    runs-on: ubuntu-latest
+    
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+      
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+          cache: 'npm'
+          
+      - name: Install dependencies
+        run: npm ci
+        
+      - name: Build project
+        run: npm run build
+        
+      - name: Install serve
+        run: npm install -g serve
+        
+      - name: Start preview server
+        run: serve -s dist -l 4173 &
+        
+      - name: Wait for server
+        run: sleep 5
+        
+      - name: Install axe-core CLI
+        run: npm install -g @axe-core/cli
+        
+      - name: Run axe accessibility tests
+        run: |
+          axe http://localhost:4173 \
+            --tags wcag2a,wcag2aa \
+            --save accessibility-report.json \
+            --exit
+        continue-on-error: true
+        
+      - name: Upload accessibility report
+        uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: accessibility-report
+          path: accessibility-report.json
+          retention-days: 30
+          
+      - name: Check for critical issues
+        run: |
+          if [ -f accessibility-report.json ]; then
+            violations=$(cat accessibility-report.json | jq '.violations | length')
+            if [ "$violations" -gt 0 ]; then
+              echo "⚠️ Found $violations accessibility violations"
+              cat accessibility-report.json | jq '.violations[] | {id, impact, description}'
+            else
+              echo "✅ No accessibility violations found"
+            fi
+          fi

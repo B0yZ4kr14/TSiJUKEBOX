@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react';
-import { Eye, Type, Zap, Monitor, Check, X, Volume2, VolumeX, Sparkles } from 'lucide-react';
+import { Eye, Type, Zap, Monitor, Check, X, Volume2, VolumeX, Sparkles, Bug } from 'lucide-react';
 import { SettingsSection } from './SettingsSection';
 import { Switch } from '@/components/ui/switch';
 import { Slider } from '@/components/ui/slider';
@@ -7,6 +7,7 @@ import { Label } from '@/components/ui/label';
 import { Button } from '@/components/ui/button';
 import { toast } from 'sonner';
 import { useSettings } from '@/contexts/SettingsContext';
+import { useContrastDebug } from '@/hooks/useContrastDebug';
 
 interface AccessibilitySettings {
   highContrast: boolean;
@@ -27,6 +28,8 @@ export function AccessibilitySection() {
     soundEnabled, setSoundEnabled, 
     animationsEnabled, setAnimationsEnabled 
   } = useSettings();
+  
+  const { isEnabled: contrastDebugEnabled, setIsEnabled: setContrastDebugEnabled } = useContrastDebug();
 
   const [settings, setSettings] = useState<AccessibilitySettings>(() => {
     try {
@@ -278,11 +281,33 @@ export function AccessibilitySection() {
           </div>
         </div>
 
+        {/* Contrast Debug Mode - Dev/Admin only */}
+        {import.meta.env.DEV && (
+          <div className="card-option-dark-3d rounded-lg p-4 border border-purple-500/30">
+            <div className="flex items-center justify-between">
+              <div className="flex items-center gap-3">
+                <Bug className="w-5 h-5 text-purple-400" />
+                <div>
+                  <Label className="text-purple-400 font-medium">Modo Debug de Contraste</Label>
+                  <p className="text-xs text-settings-hint mt-0.5">
+                    Detecta problemas de contraste WCAG (Ctrl+Shift+C)
+                  </p>
+                </div>
+              </div>
+              <Switch
+                checked={contrastDebugEnabled}
+                onCheckedChange={setContrastDebugEnabled}
+                variant="neon"
+              />
+            </div>
+          </div>
+        )}
+
         {/* Reset Button */}
         <Button
           variant="outline"
           onClick={resetToDefaults}
-          className="w-full button-outline-neon ripple-effect"
+          className="w-full button-outline-neon text-label-yellow ripple-effect"
         >
           Restaurar Padrões
         </Button>

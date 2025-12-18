@@ -265,7 +265,7 @@ export function ConfigBackupSection() {
           <Button
             onClick={() => fileInputRef.current?.click()}
             disabled={isImporting}
-            variant="outline"
+            variant="kiosk-outline"
             className="w-full border-blue-500/50 text-blue-400 hover:bg-blue-500/10"
           >
             {isImporting ? (

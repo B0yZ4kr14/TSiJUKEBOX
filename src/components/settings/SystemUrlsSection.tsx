@@ -100,7 +100,7 @@ export function SystemUrlsSection() {
               className="input-3d bg-kiosk-bg border-kiosk-surface text-kiosk-text font-mono text-sm flex-1"
             />
             <Button
-              variant="outline"
+              variant="kiosk-outline"
               size="icon"
               onClick={() => handleTestUrl(urls.dashboardUrl, 'Dashboard')}
               className="card-neon-border text-cyan-400 hover:bg-cyan-500/10"
@@ -132,7 +132,7 @@ export function SystemUrlsSection() {
               className="input-3d bg-kiosk-bg border-kiosk-surface text-kiosk-text font-mono text-sm flex-1"
             />
             <Button
-              variant="outline"
+              variant="kiosk-outline"
               size="icon"
               onClick={() => handleTestUrl(urls.datasourceUrl, 'Datasource')}
               className="card-neon-border text-cyan-400 hover:bg-cyan-500/10"

@@ -812,7 +812,7 @@ export function AdvancedDatabaseSection({ isDemoMode }: AdvancedDatabaseSectionP
                   <h5 className="text-sm font-medium text-label-yellow">{tool.name}</h5>
                   <Button
                     size="sm"
-                    variant="outline"
+                    variant="kiosk-outline"
                     onClick={() => handleRunTool(tool.id, tool.name)}
                     disabled={isRunningTool === tool.id}
                     className="h-7 text-xs button-action-neon"
@@ -845,12 +845,12 @@ export function AdvancedDatabaseSection({ isDemoMode }: AdvancedDatabaseSectionP
           </p>
 
           <div className="grid grid-cols-2 gap-3">
-            <Button variant="outline" className="h-auto py-4 flex-col gap-2 button-action-neon">
+            <Button variant="kiosk-outline" className="h-auto py-4 flex-col gap-2 button-action-neon">
               <Download className="w-6 h-6" />
               <span className="text-sm">Exportar Dados</span>
               <span className="text-xs text-kiosk-text/60">JSON/SQL</span>
             </Button>
-            <Button variant="outline" className="h-auto py-4 flex-col gap-2 button-action-neon">
+            <Button variant="kiosk-outline" className="h-auto py-4 flex-col gap-2 button-action-neon">
               <Upload className="w-6 h-6" />
               <span className="text-sm">Importar Dados</span>
               <span className="text-xs text-kiosk-text/60">De outro banco</span>
@@ -873,7 +873,7 @@ export function AdvancedDatabaseSection({ isDemoMode }: AdvancedDatabaseSectionP
                 ))}
               </select>
             </div>
-            <Button variant="outline" className="w-full button-outline-neon">
+            <Button variant="kiosk-outline" className="w-full button-outline-neon">
               Iniciar Migração
             </Button>
           </div>
@@ -885,7 +885,7 @@ export function AdvancedDatabaseSection({ isDemoMode }: AdvancedDatabaseSectionP
             <p className="text-sm text-kiosk-text/70">
               Templates de tabelas para {engine.name}
             </p>
-            <Button size="sm" variant="outline" onClick={handleExportSchema} className="button-action-neon">
+            <Button size="sm" variant="kiosk-outline" onClick={handleExportSchema} className="button-action-neon">
               <FileText className="w-4 h-4 mr-2" />
               Exportar Schema
             </Button>
@@ -901,7 +901,7 @@ export function AdvancedDatabaseSection({ isDemoMode }: AdvancedDatabaseSectionP
                   </div>
                   <Button
                     size="sm"
-                    variant="outline"
+                    variant="kiosk-outline"
                     onClick={() => handleCopySQL(template.sql, template.name)}
                     className="h-7 text-xs button-action-neon"
                   >

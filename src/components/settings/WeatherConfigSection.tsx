@@ -222,7 +222,7 @@ export function WeatherConfigSection() {
             </Button>
           )}
           <Button
-            variant="outline"
+            variant="kiosk-outline"
             onClick={handleTest}
             disabled={isTesting || !localApiKey || !localCity}
             className="button-3d card-neon-border text-kiosk-text hover:bg-kiosk-surface"

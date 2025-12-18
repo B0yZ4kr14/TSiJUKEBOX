@@ -148,7 +148,7 @@ export function SettingsGuideModal({ guide, isOpen, onClose, onNavigate }: Setti
         <div className="p-6 pt-4 border-t border-kiosk-border">
           <div className="flex gap-3">
             <Button
-              variant="outline"
+              variant="kiosk-outline"
               onClick={onClose}
               className="flex-1 border-kiosk-border text-kiosk-text hover:bg-kiosk-surface"
             >

@@ -174,7 +174,7 @@ export function DatabaseSection({ isDemoMode }: DatabaseSectionProps) {
               return (
                 <Button
                   key={tool.id}
-                  variant="outline"
+                  variant="kiosk-outline"
                   onClick={() => runMaintenance(tool.label, tool.endpoint)}
                   disabled={isDemoMode || loading}
                   className="h-auto py-3 px-4 flex flex-col items-start gap-1 card-neon-border bg-kiosk-bg/30 hover:bg-kiosk-surface/50"

@@ -17,8 +17,8 @@ export default defineConfig(({ mode }) => ({
       registerType: "autoUpdate",
       includeAssets: ["favicon.ico", "pwa-192x192.png", "pwa-512x512.png"],
       manifest: {
-        name: "TSi JUKEBOX Enterprise",
-        short_name: "TSi JUKEBOX",
+        name: "TSiJUKEBOX Enterprise",
+        short_name: "TSiJUKEBOX",
         description: "Sistema de música kiosk com Spotify",
         theme_color: "#1a1a2e",
         background_color: "#1a1a2e",

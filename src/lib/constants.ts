@@ -1,5 +1,5 @@
 /**
- * Centralized localStorage keys for TSi JUKEBOX
+ * Centralized localStorage keys for TSiJUKEBOX
  * Eliminates duplication across components
  */
 

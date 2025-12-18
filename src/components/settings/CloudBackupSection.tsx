@@ -57,7 +57,7 @@ export function CloudBackupSection({ isDemoMode }: CloudBackupSectionProps) {
 
     const exportData = {
       version: '1.0',
-      application: 'TSi JUKEBOX',
+      application: 'TSiJUKEBOX',
       exportedAt: new Date().toISOString(),
       provider: config.provider,
       config: {

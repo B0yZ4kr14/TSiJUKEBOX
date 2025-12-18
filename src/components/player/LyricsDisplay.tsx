@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useRef } from 'react';
 import { Music, Mic2, AlertCircle } from 'lucide-react';
 import { ScrollArea } from '@/components/ui/scroll-area';
 import { useTranslation } from '@/hooks/useTranslation';
@@ -28,6 +28,7 @@ export function LyricsDisplay({
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const [currentLineIndex, setCurrentLineIndex] = useState(0);
+  const lineRefs = useRef<(HTMLParagraphElement | null)[]>([]);
 
   // Simulated lyrics fetch - replace with real API
   useEffect(() => {
@@ -77,11 +78,21 @@ export function LyricsDisplay({
     }
   }, [position, lyrics, currentLineIndex]);
 
+  // Auto-scroll to current line
+  useEffect(() => {
+    if (lineRefs.current[currentLineIndex]) {
+      lineRefs.current[currentLineIndex]?.scrollIntoView({
+        behavior: 'smooth',
+        block: 'center'
+      });
+    }
+  }, [currentLineIndex]);
+
   if (!trackId || !trackName) {
     return (
       <div className="flex flex-col items-center justify-center h-full text-kiosk-text/60 p-8">
         <Music className="w-16 h-16 mb-4 opacity-40" />
-        <p className="text-center">Selecione uma música para ver as letras</p>
+        <p className="text-center">{t('lyrics.selectTrack')}</p>
       </div>
     );
   }
@@ -90,7 +101,7 @@ export function LyricsDisplay({
     return (
       <div className="flex flex-col items-center justify-center h-full p-8">
         <div className="w-12 h-12 rounded-full border-2 border-cyan-500 border-t-transparent animate-spin mb-4" />
-        <p className="text-kiosk-text/70">Carregando letras...</p>
+        <p className="text-kiosk-text/70">{t('lyrics.loading')}</p>
       </div>
     );
   }
@@ -110,7 +121,7 @@ export function LyricsDisplay({
       <div className="p-4 border-b border-cyan-500/10">
         <div className="flex items-center gap-2 text-label-yellow">
           <Mic2 className="w-4 h-4" />
-          <span className="text-sm font-semibold">Letras</span>
+          <span className="text-sm font-semibold">{t('lyrics.title')}</span>
         </div>
         <p className="text-sm text-kiosk-text/90 mt-1 truncate">{trackName}</p>
         <p className="text-xs text-kiosk-text/60 truncate">{artistName}</p>
@@ -122,6 +133,7 @@ export function LyricsDisplay({
           {lyrics.map((line, index) => (
             <p
               key={index}
+              ref={(el) => { lineRefs.current[index] = el; }}
               className={`text-center transition-all duration-300 ${
                 index === currentLineIndex
                   ? 'text-xl font-bold text-kiosk-text scale-105'
@@ -156,7 +168,7 @@ export function LyricsDisplay({
               />
             ))}
           </div>
-          <span className="text-xs text-kiosk-text/60">Sincronizado</span>
+          <span className="text-xs text-kiosk-text/60">{t('lyrics.synced')}</span>
         </div>
       )}
     </div>

@@ -148,7 +148,7 @@ export function AudioWaveformPreview({ file, isOpen, onClose, onConfirm }: Audio
         <DialogHeader>
           <DialogTitle className="flex items-center gap-2 text-gold-neon">
             <FileAudio className="w-5 h-5 icon-neon-blue" />
-            Preview de Áudio
+            {t('upload.audioPreview')}
           </DialogTitle>
         </DialogHeader>
 
@@ -243,7 +243,7 @@ export function AudioWaveformPreview({ file, isOpen, onClose, onConfirm }: Audio
           </Button>
           <Button onClick={handleConfirm} disabled={isAnalyzing}>
             <Check className="w-4 h-4 mr-2" />
-            Confirmar Upload
+            {t('upload.confirmUpload')}
           </Button>
         </DialogFooter>
       </DialogContent>

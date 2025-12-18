@@ -273,6 +273,7 @@ export function InteractiveTestMode({ mode, onClose }: InteractiveTestModeProps)
               >
                 <div className="absolute inset-0 flex items-center justify-center">
                   <div className="text-center space-y-2">
+                    {/* WCAG Exception: Decorative gesture demo icons at /40, not critical for comprehension */}
                     <div className="flex items-center justify-center gap-4 text-kiosk-text/40">
                       <ChevronLeft className="w-8 h-8 animate-pulse" />
                       <Hand className="w-12 h-12" />

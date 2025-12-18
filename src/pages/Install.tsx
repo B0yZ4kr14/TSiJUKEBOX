@@ -91,7 +91,7 @@ export default function Install() {
           animate={{ opacity: 1, y: 0 }}
         >
           <Link to="/">
-            <Button variant="ghost" size="icon" className="text-kiosk-text/70 hover:text-kiosk-text" aria-label="Voltar ao player">
+            <Button variant="ghost" size="icon" className="text-kiosk-text/90 hover:text-kiosk-text" aria-label="Voltar ao player">
               <ArrowLeft className="w-5 h-5" />
             </Button>
           </Link>

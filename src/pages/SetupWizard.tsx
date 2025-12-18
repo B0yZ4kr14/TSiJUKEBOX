@@ -863,7 +863,7 @@ export default function SetupWizard() {
                     ? 'bg-primary text-primary-foreground'
                     : index === currentStep
                     ? 'bg-primary/20 text-primary border-2 border-primary'
-                    : 'bg-kiosk-surface text-kiosk-text/50'
+                    : 'bg-kiosk-surface text-kiosk-text/85'
                 }`}
               >
                 {index < currentStep ? (
@@ -965,7 +965,7 @@ export default function SetupWizard() {
               <Button
                 variant="ghost"
                 onClick={skipToEnd}
-                className="text-xs text-kiosk-text/50 hover:text-kiosk-text"
+                className="text-xs text-kiosk-text/85 hover:text-kiosk-text"
               >
                 <SkipForward className="w-3 h-3 mr-1" />
                 Pular para o fim

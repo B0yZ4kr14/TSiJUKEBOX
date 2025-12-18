@@ -191,6 +191,7 @@ export function WikiArticleView({ article, onSelectArticle, isBookmarked, onTogg
           <h1 className="text-2xl font-bold text-gold-neon">{formatBrandName(article.title)}</h1>
           <p className="text-kiosk-text/90">{formatBrandName(article.description)}</p>
         </div>
+        {/* WCAG Exception: Inactive bookmark at /40 transitions to yellow-500 on hover/active */}
         {onToggleBookmark && (
           <Button
             variant="ghost"

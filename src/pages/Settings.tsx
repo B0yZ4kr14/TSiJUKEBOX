@@ -418,7 +418,7 @@ export default function Settings() {
                         type="button"
                         variant="ghost"
                         size="icon"
-                        className="absolute right-0 top-0 h-full px-3 text-kiosk-text/50 hover:text-kiosk-text"
+                        className="absolute right-0 top-0 h-full px-3 text-kiosk-text/85 hover:text-kiosk-text"
                         onClick={() => setShowClientSecret(!showClientSecret)}
                       >
                         {showClientSecret ? <EyeOff className="w-4 h-4" /> : <Eye className="w-4 h-4" />}
@@ -476,7 +476,7 @@ export default function Settings() {
                               Adicione como Redirect URI:
                               <div className="mt-1 space-y-1">
                                 <code className="block bg-kiosk-surface px-2 py-1 rounded text-cyan-400 text-[11px]">{window.location.origin}/settings</code>
-                                <span className="text-kiosk-text/60 text-[10px]">Em produção local:</span>
+                                <span className="text-kiosk-text/85 text-[10px]">Em produção local:</span>
                                 <code className="block bg-kiosk-surface px-2 py-1 rounded text-cyan-400/80 text-[10px]">https://midiaserver.local/jukebox/settings</code>
                               </div>
                             </li>
@@ -490,7 +490,7 @@ export default function Settings() {
 
                 {/* Token Info */}
                 {spotify.tokens && (
-                  <div className="text-xs text-kiosk-text/40 space-y-1">
+                  <div className="text-xs text-kiosk-text/80 space-y-1">
                     <p>Token expira em: {new Date(spotify.tokens.expiresAt).toLocaleString()}</p>
                     <p>Renovação automática ativa ✓</p>
                   </div>

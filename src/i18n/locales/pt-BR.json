@@ -616,7 +616,9 @@
     "source": "Fonte",
     "error": "Erro ao buscar",
     "lines": "linhas",
-    "providedBy": "Fornecido por"
+    "providedBy": "Fornecido por",
+    "textOnly": "Apenas texto",
+    "notSyncedGenius": "Letras via Genius (sem sincronização)"
   },
   "upload": {
     "audioPreview": "Preview de Áudio",

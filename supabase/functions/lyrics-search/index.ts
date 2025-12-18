@@ -235,6 +235,130 @@ async function searchLRCLIB(trackName: string, artistName: string): Promise<Lyri
   }
 }
 
+// Fetch from Genius API as fallback (requires GENIUS_API_KEY)
+async function fetchFromGenius(trackName: string, artistName: string): Promise<LyricsResponse | null> {
+  const geniusApiKey = Deno.env.get('GENIUS_API_KEY');
+  
+  if (!geniusApiKey) {
+    console.log('GENIUS_API_KEY not configured, skipping Genius fallback');
+    return null;
+  }
+  
+  try {
+    // Step 1: Search for the song
+    const query = `${trackName} ${artistName}`;
+    const searchUrl = `https://api.genius.com/search?q=${encodeURIComponent(query)}`;
+    
+    console.log('Searching Genius for:', query);
+    
+    const searchResponse = await fetch(searchUrl, {
+      headers: {
+        'Authorization': `Bearer ${geniusApiKey}`,
+      },
+    });
+    
+    if (!searchResponse.ok) {
+      console.log('Genius search failed:', searchResponse.status);
+      return null;
+    }
+    
+    const searchData = await searchResponse.json();
+    const hits = searchData.response?.hits;
+    
+    if (!hits || hits.length === 0) {
+      console.log('No Genius results found');
+      return null;
+    }
+    
+    // Get the best match (first result)
+    const song = hits[0].result;
+    const songUrl = song.url;
+    const songTitle = song.title;
+    const songArtist = song.primary_artist?.name;
+    
+    console.log('Found Genius song:', songTitle, 'by', songArtist);
+    
+    // Step 2: Scrape lyrics from the song page
+    const pageResponse = await fetch(songUrl, {
+      headers: {
+        'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36',
+      },
+    });
+    
+    if (!pageResponse.ok) {
+      console.log('Failed to fetch Genius page:', pageResponse.status);
+      return null;
+    }
+    
+    const html = await pageResponse.text();
+    
+    // Extract lyrics using multiple patterns (Genius changes their HTML structure)
+    let lyricsText = '';
+    
+    // Pattern 1: data-lyrics-container
+    const containerMatches = html.match(/data-lyrics-container="true"[^>]*>([\s\S]*?)<\/div>/g);
+    if (containerMatches) {
+      lyricsText = containerMatches.join('\n');
+    }
+    
+    // Pattern 2: Lyrics__Container class
+    if (!lyricsText) {
+      const classMatch = html.match(/class="Lyrics__Container[^"]*"[^>]*>([\s\S]*?)<\/div>/g);
+      if (classMatch) {
+        lyricsText = classMatch.join('\n');
+      }
+    }
+    
+    if (!lyricsText) {
+      console.log('Could not extract lyrics from Genius page');
+      return null;
+    }
+    
+    // Clean HTML tags and decode entities
+    let plainText = lyricsText
+      .replace(/<br\s*\/?>/gi, '\n')
+      .replace(/<[^>]+>/g, '')
+      .replace(/&amp;/g, '&')
+      .replace(/&lt;/g, '<')
+      .replace(/&gt;/g, '>')
+      .replace(/&quot;/g, '"')
+      .replace(/&#x27;/g, "'")
+      .replace(/&#39;/g, "'")
+      .replace(/&nbsp;/g, ' ')
+      .replace(/\[.*?\]/g, '') // Remove section headers like [Verse 1]
+      .replace(/\n\n+/g, '\n\n')
+      .trim();
+    
+    // Convert to lines (not synced, estimate 4 seconds per line)
+    const lines = plainText.split('\n')
+      .filter(line => line.trim())
+      .map((text, index) => ({
+        time: index * 4,
+        text: text.trim(),
+      }));
+    
+    if (lines.length === 0) {
+      console.log('No lyrics lines extracted from Genius');
+      return null;
+    }
+    
+    console.log(`Extracted ${lines.length} lines from Genius`);
+    
+    return {
+      source: 'genius',
+      synced: false, // Genius doesn't provide timestamps
+      lines,
+      plainText,
+      trackName: songTitle || trackName,
+      artistName: songArtist || artistName,
+    };
+    
+  } catch (error) {
+    console.error('Genius fetch error:', error);
+    return null;
+  }
+}
+
 serve(async (req) => {
   // Handle CORS preflight
   if (req.method === 'OPTIONS') {
@@ -258,8 +382,14 @@ serve(async (req) => {
     
     // If no exact match, try search
     if (!lyrics) {
-      console.log('No exact match, trying search...');
+      console.log('No exact match, trying LRCLIB search...');
       lyrics = await searchLRCLIB(trackName, artistName);
+    }
+    
+    // If still no lyrics, try Genius as fallback
+    if (!lyrics) {
+      console.log('LRCLIB failed, trying Genius fallback...');
+      lyrics = await fetchFromGenius(trackName, artistName);
     }
     
     if (lyrics) {

@@ -616,7 +616,9 @@
     "source": "Source",
     "error": "Error fetching",
     "lines": "lines",
-    "providedBy": "Provided by"
+    "providedBy": "Provided by",
+    "textOnly": "Text only",
+    "notSyncedGenius": "Lyrics via Genius (not synced)"
   },
   "upload": {
     "audioPreview": "Audio Preview",

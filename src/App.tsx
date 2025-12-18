@@ -38,6 +38,7 @@ const YouTubeMusicSearchPage = lazy(() => import("./pages/YouTubeMusicSearch"));
 const YouTubeMusicPlaylistPage = lazy(() => import("./pages/YouTubeMusicPlaylist"));
 const SystemDiagnostics = lazy(() => import("./pages/SystemDiagnostics"));
 const ClientsMonitorDashboard = lazy(() => import("./pages/ClientsMonitorDashboard"));
+const WcagExceptions = lazy(() => import("./pages/WcagExceptions"));
 
 const queryClient = new QueryClient({
   defaultOptions: {
@@ -80,6 +81,7 @@ function AppRoutes() {
         <Route path="/install" element={<Install />} />
         <Route path="/help" element={<Help />} />
         <Route path="/wiki" element={<Wiki />} />
+        <Route path="/wcag-exceptions" element={<WcagExceptions />} />
         
         {/* Protected Routes - Lazy loaded */}
         <Route path="/settings" element={

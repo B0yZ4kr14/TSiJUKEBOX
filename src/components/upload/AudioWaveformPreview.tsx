@@ -160,7 +160,7 @@ export function AudioWaveformPreview({ file, isOpen, onClose, onConfirm }: Audio
             </div>
             <div className="flex-1 min-w-0">
               <p className="font-semibold text-kiosk-text truncate">{file?.name}</p>
-              <div className="flex gap-3 text-sm text-kiosk-text/60 mt-1">
+              <div className="flex gap-3 text-sm text-kiosk-text/85 mt-1">
                 <span>{formatFileSize(file?.size || 0)}</span>
                 <span>•</span>
                 <span>{formatTime(duration)}</span>
@@ -213,7 +213,7 @@ export function AudioWaveformPreview({ file, isOpen, onClose, onConfirm }: Audio
             </div>
 
             {/* Time Display */}
-            <div className="flex justify-between text-sm text-kiosk-text/70">
+            <div className="flex justify-between text-sm text-kiosk-text/85">
               <span>{formatTime(currentTime)}</span>
               <span>{formatTime(duration)}</span>
             </div>

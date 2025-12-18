@@ -161,7 +161,7 @@ export default function LyricsTest() {
             <CardContent className="space-y-6">
               {/* Track Selector */}
               <div className="space-y-2">
-                <label className="text-sm text-kiosk-text/70">{t('lyrics.selectTrackLabel')}</label>
+                <label className="text-sm text-kiosk-text/85 font-medium">{t('lyrics.selectTrackLabel')}</label>
                 <Select
                   value={selectedTrack.id}
                   onValueChange={(id) => {
@@ -185,7 +185,7 @@ export default function LyricsTest() {
               {/* Now Playing Info */}
               <div className="p-4 bg-kiosk-bg rounded-lg border border-cyan-500/20">
                 <p className="font-semibold text-kiosk-text">{selectedTrack.name}</p>
-                <p className="text-sm text-kiosk-text/70">{selectedTrack.artist}</p>
+                <p className="text-sm text-kiosk-text/85">{selectedTrack.artist}</p>
               </div>
               
               {/* Playback Controls */}
@@ -214,7 +214,7 @@ export default function LyricsTest() {
               
               {/* Progress */}
               <div className="space-y-2">
-                <div className="flex justify-between text-sm text-kiosk-text/70">
+                <div className="flex justify-between text-sm text-kiosk-text/85">
                   <span>{formatTime(position)}</span>
                   <span>{formatTime(selectedTrack.duration)}</span>
                 </div>
@@ -229,7 +229,7 @@ export default function LyricsTest() {
               
               {/* Playback Speed */}
               <div className="space-y-2">
-                <label className="text-sm text-kiosk-text/70">{t('lyrics.speed')}: {playbackSpeed}x</label>
+                <label className="text-sm text-kiosk-text/85">{t('lyrics.speed')}: {playbackSpeed}x</label>
                 <Slider
                   value={[playbackSpeed]}
                   min={0.5}
@@ -241,7 +241,7 @@ export default function LyricsTest() {
               
               {/* Lyrics Info */}
               <div className="space-y-2">
-                <p className="text-sm text-kiosk-text/70">{t('lyrics.source')}:</p>
+                <p className="text-sm text-kiosk-text/85 font-medium">{t('lyrics.source')}:</p>
                 {isLoading ? (
                   <Badge variant="outline">{t('lyrics.loading')}</Badge>
                 ) : error ? (
@@ -280,9 +280,9 @@ export default function LyricsTest() {
                     className="h-full"
                   />
                 ) : (
-                  <div className="flex items-center justify-center h-full text-kiosk-text/60">
+                  <div className="flex items-center justify-center h-full text-kiosk-text/85">
                     <div className="text-center">
-                      <Mic2 className="w-16 h-16 mx-auto mb-4 opacity-40" />
+                      <Mic2 className="w-16 h-16 mx-auto mb-4 opacity-50" />
                       <p>{isLoading ? t('lyrics.loading') : t('lyrics.notAvailable')}</p>
                     </div>
                   </div>

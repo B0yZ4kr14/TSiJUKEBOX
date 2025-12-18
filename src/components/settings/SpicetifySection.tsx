@@ -145,12 +145,12 @@ export function SpicetifySection() {
 
                     <div className="flex items-center justify-between p-3 rounded-lg bg-kiosk-surface/50 border border-cyan-500/20">
                       <span className="text-label-yellow font-semibold">{t('spicetify.spotifyPath')}</span>
-                      <span className="text-kiosk-text/80 text-xs font-mono">{config?.spotify_path || 'N/A'}</span>
+                      <span className="text-kiosk-text/90 text-xs font-mono">{config?.spotify_path || 'N/A'}</span>
                     </div>
 
                     <div className="flex items-center justify-between p-3 rounded-lg bg-kiosk-surface/50 border border-cyan-500/20">
                       <span className="text-label-yellow font-semibold">{t('spicetify.prefsPath')}</span>
-                      <span className="text-kiosk-text/80 text-xs font-mono">{config?.prefs_path || 'N/A'}</span>
+                      <span className="text-kiosk-text/90 text-xs font-mono">{config?.prefs_path || 'N/A'}</span>
                     </div>
 
                     {/* Config Toggles */}
@@ -203,7 +203,7 @@ export function SpicetifySection() {
                 )}
 
                 {error && (
-                  <p className="text-sm text-kiosk-text/90 p-3 rounded-lg bg-red-500/10 border border-red-500/20">
+                    <p className="text-sm text-kiosk-text/90 p-3 rounded-lg bg-red-500/10 border border-red-500/20">
                     {error}. <a href="https://spicetify.app" target="_blank" rel="noopener noreferrer" className="text-cyan-400 hover:underline font-semibold">{t('spicetify.installSpicetify')}</a>
                   </p>
                 )}
@@ -213,9 +213,9 @@ export function SpicetifySection() {
             {/* THEMES TAB */}
             <TabsContent value="themes" className="space-y-4 mt-4">
               {!isInstalled ? (
-                <p className="text-kiosk-text/80 text-center py-8">{t('spicetify.installToManageThemes')}</p>
+                <p className="text-kiosk-text/90 text-center py-8">{t('spicetify.installToManageThemes')}</p>
               ) : themes.length === 0 ? (
-                <p className="text-kiosk-text/80 text-center py-8">{t('spicetify.noThemes')}</p>
+                <p className="text-kiosk-text/90 text-center py-8">{t('spicetify.noThemes')}</p>
               ) : (
                 <ScrollArea className="h-[400px]">
                   <div className="grid grid-cols-2 md:grid-cols-3 gap-3">
@@ -231,9 +231,9 @@ export function SpicetifySection() {
                           {theme.preview && (
                             <img src={theme.preview} alt={theme.name} className="w-full h-20 object-cover rounded mb-2" />
                           )}
-                          <p className="font-bold text-kiosk-text/90">{theme.name}</p>
+                          <p className="font-bold text-kiosk-text/95">{theme.name}</p>
                           {theme.author && (
-                            <p className="text-xs text-kiosk-text/70">{t('spicetify.by')} {theme.author}</p>
+                            <p className="text-xs text-kiosk-text/85">{t('spicetify.by')} {theme.author}</p>
                           )}
                           {theme.isActive && (
                             <Badge className="mt-2 bg-primary/20 text-primary">
@@ -251,9 +251,9 @@ export function SpicetifySection() {
             {/* EXTENSIONS TAB */}
             <TabsContent value="extensions" className="space-y-4 mt-4">
               {!isInstalled ? (
-                <p className="text-kiosk-text/80 text-center py-8">{t('spicetify.installToManageExtensions')}</p>
+                <p className="text-kiosk-text/90 text-center py-8">{t('spicetify.installToManageExtensions')}</p>
               ) : extensions.length === 0 ? (
-                <p className="text-kiosk-text/80 text-center py-8">{t('spicetify.noExtensions')}</p>
+                <p className="text-kiosk-text/90 text-center py-8">{t('spicetify.noExtensions')}</p>
               ) : (
                 <ScrollArea className="h-[400px]">
                   <div className="space-y-3">
@@ -262,10 +262,10 @@ export function SpicetifySection() {
                         <div className="flex-1">
                           <div className="flex items-center gap-2">
                             <Puzzle className="w-4 h-4 icon-neon-blue" />
-                            <p className="font-bold text-kiosk-text/90">{ext.name}</p>
+                            <p className="font-bold text-kiosk-text/95">{ext.name}</p>
                           </div>
                           {ext.description && (
-                            <p className="text-sm text-kiosk-text/70 mt-1">{ext.description}</p>
+                            <p className="text-sm text-kiosk-text/85 mt-1">{ext.description}</p>
                           )}
                         </div>
                         <div className="flex items-center gap-3">
@@ -293,7 +293,7 @@ export function SpicetifySection() {
             {/* SNIPPETS TAB */}
             <TabsContent value="snippets" className="space-y-4 mt-4">
               {!isInstalled ? (
-                <p className="text-kiosk-text/80 text-center py-8">{t('spicetify.installToManageSnippets')}</p>
+                <p className="text-kiosk-text/90 text-center py-8">{t('spicetify.installToManageSnippets')}</p>
               ) : (
                 <>
                   {/* Add new snippet */}
@@ -333,7 +333,7 @@ export function SpicetifySection() {
                           <div className="flex items-center justify-between mb-2">
                             <div className="flex items-center gap-2">
                               <FileCode className="w-4 h-4 icon-neon-blue" />
-                              <p className="font-bold text-kiosk-text/90">{snippet.name}</p>
+                              <p className="font-bold text-kiosk-text/95">{snippet.name}</p>
                             </div>
                             <div className="flex items-center gap-2">
                               <Button 
@@ -351,13 +351,13 @@ export function SpicetifySection() {
                               />
                             </div>
                           </div>
-                          <pre className="text-xs text-kiosk-text/70 bg-black/30 p-2 rounded overflow-x-auto">
+                          <pre className="text-xs text-kiosk-text/85 bg-black/30 p-2 rounded overflow-x-auto">
                             {snippet.code.substring(0, 200)}{snippet.code.length > 200 ? '...' : ''}
                           </pre>
                         </div>
                       ))}
                       {snippets.length === 0 && (
-                        <p className="text-kiosk-text/60 text-center py-4">{t('spicetify.noSnippets')}</p>
+                        <p className="text-kiosk-text/85 text-center py-4">{t('spicetify.noSnippets')}</p>
                       )}
                     </div>
                   </ScrollArea>

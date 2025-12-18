@@ -95,8 +95,8 @@ export function LyricsDisplay({
 
   if (!trackId || !trackName) {
     return (
-      <div className="flex flex-col items-center justify-center h-full text-kiosk-text/60 p-8">
-        <Music className="w-16 h-16 mb-4 opacity-40" />
+      <div className="flex flex-col items-center justify-center h-full text-kiosk-text/85 p-8">
+        <Music className="w-16 h-16 mb-4 opacity-50" />
         <p className="text-center">{t('lyrics.selectTrack')}</p>
       </div>
     );
@@ -106,15 +106,15 @@ export function LyricsDisplay({
     return (
       <div className="flex flex-col items-center justify-center h-full p-8">
         <div className="w-12 h-12 rounded-full border-2 border-cyan-500 border-t-transparent animate-spin mb-4" />
-        <p className="text-kiosk-text/70">{t('lyrics.loading')}</p>
+        <p className="text-kiosk-text/85">{t('lyrics.loading')}</p>
       </div>
     );
   }
 
   if (error) {
     return (
-      <div className="flex flex-col items-center justify-center h-full text-kiosk-text/60 p-8">
-        <AlertCircle className="w-12 h-12 mb-4 text-red-400/60" />
+      <div className="flex flex-col items-center justify-center h-full text-kiosk-text/85 p-8">
+        <AlertCircle className="w-12 h-12 mb-4 text-red-400/80" />
         <p className="text-center">{error}</p>
       </div>
     );
@@ -143,7 +143,7 @@ export function LyricsDisplay({
           <Button
             variant="ghost"
             size="icon"
-            className="h-8 w-8 text-kiosk-text/60 hover:text-kiosk-text"
+            className="h-8 w-8 text-kiosk-text/80 hover:text-kiosk-text"
             onClick={() => setIsFullscreen(true)}
             title={t('lyrics.fullscreen')}
           >
@@ -151,7 +151,7 @@ export function LyricsDisplay({
           </Button>
         </div>
         <p className="text-sm text-kiosk-text/90 mt-1 truncate">{trackName}</p>
-        <p className="text-xs text-kiosk-text/60 truncate">{artistName}</p>
+        <p className="text-xs text-kiosk-text/80 truncate">{artistName}</p>
       </div>
 
       {/* Lyrics Content */}
@@ -165,8 +165,8 @@ export function LyricsDisplay({
                 index === currentLineIndex
                   ? 'text-xl font-bold text-kiosk-text scale-105'
                   : index < currentLineIndex
-                  ? 'text-base text-kiosk-text/40'
-                  : 'text-base text-kiosk-text/60'
+                  ? 'text-base text-kiosk-text/75'
+                  : 'text-base text-kiosk-text/85'
               }`}
               style={{
                 textShadow: index === currentLineIndex 
@@ -195,7 +195,7 @@ export function LyricsDisplay({
               />
             ))}
           </div>
-          <span className="text-xs text-kiosk-text/60">{t('lyrics.synced')}</span>
+          <span className="text-xs text-kiosk-text/85">{t('lyrics.synced')}</span>
         </div>
       )}
     </div>

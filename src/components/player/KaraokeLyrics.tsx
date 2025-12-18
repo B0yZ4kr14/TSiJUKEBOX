@@ -75,7 +75,7 @@ export function KaraokeLyrics({ lines, position, className }: KaraokeLyricsProps
                           'inline-block mx-0.5 transition-all duration-150',
                           state === 'past' && 'text-cyan-400',
                           state === 'current' && 'text-kiosk-text font-bold scale-110 drop-shadow-[0_0_8px_hsl(var(--kiosk-primary))]',
-                          state === 'future' && 'text-kiosk-text/50'
+                          state === 'future' && 'text-kiosk-text/85'
                         )}
                         style={{
                           textShadow: state === 'current' 
@@ -89,7 +89,7 @@ export function KaraokeLyrics({ lines, position, className }: KaraokeLyricsProps
                   })}
                 </p>
               ) : (
-                <p className="text-kiosk-text/30">♪</p>
+                <p className="text-kiosk-text/75">♪</p>
               )}
             </div>
           );

@@ -80,6 +80,7 @@ function TrackRow({ track, onPlay, onAddToQueue }: {
         size="icon"
         className="h-8 w-8 opacity-0 group-hover:opacity-100 transition-opacity button-3d relative overflow-hidden"
         onClick={handleQueue}
+        aria-label="Adicionar à fila"
       >
         <RippleContainer ripples={queueRipple.ripples} color="spotify" />
         <Plus className="w-4 h-4 relative z-10" />
@@ -252,7 +253,7 @@ export function SpotifyPanel({ isOpen, onClose, currentTrackId, currentAlbumId, 
           <Music2 className="w-5 h-5 text-[#1DB954]" />
           Spotify
         </h2>
-        <Button variant="ghost" size="icon" onClick={onClose} className="h-8 w-8 button-3d">
+        <Button variant="ghost" size="icon" onClick={onClose} className="h-8 w-8 button-3d" aria-label="Fechar painel">
           <X className="w-4 h-4" />
         </Button>
       </div>

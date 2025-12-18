@@ -261,6 +261,7 @@ export function ThemeCustomizer() {
           <Switch
             checked={editingColors.gradientEnabled}
             onCheckedChange={(checked) => handleColorChange('gradientEnabled', checked)}
+            aria-label="Habilitar fundo com degradê"
           />
         </div>
 
@@ -303,6 +304,7 @@ export function ThemeCustomizer() {
                   min={0}
                   max={360}
                   step={5}
+                  aria-label="Ângulo do degradê em graus"
                 />
               </div>
               

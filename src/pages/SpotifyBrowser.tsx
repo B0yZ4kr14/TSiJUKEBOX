@@ -54,7 +54,7 @@ export default function SpotifyBrowser() {
           <div className="flex items-center justify-between p-4">
             <div className="flex items-center gap-4">
               <Link to="/">
-                <Button variant="ghost" size="icon" className="text-kiosk-text">
+                <Button variant="ghost" size="icon" className="text-kiosk-text" aria-label="Voltar ao player">
                   <ArrowLeft className="w-5 h-5" />
                 </Button>
               </Link>
@@ -65,7 +65,7 @@ export default function SpotifyBrowser() {
             </div>
             <div className="flex items-center gap-2">
               <Link to="/spotify/search">
-                <Button variant="ghost" size="icon" className="text-kiosk-text">
+                <Button variant="ghost" size="icon" className="text-kiosk-text" aria-label="Buscar músicas">
                   <Search className="w-5 h-5" />
                 </Button>
               </Link>

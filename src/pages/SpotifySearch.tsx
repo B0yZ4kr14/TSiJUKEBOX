@@ -54,7 +54,7 @@ export default function SpotifySearchPage() {
         <header className="sticky top-0 z-40 bg-kiosk-bg/95 backdrop-blur-md border-b border-kiosk-border p-4">
           <div className="flex items-center gap-4">
             <Link to="/spotify">
-              <Button variant="ghost" size="icon" className="text-kiosk-text">
+              <Button variant="ghost" size="icon" className="text-kiosk-text" aria-label="Voltar ao Spotify">
                 <ArrowLeft className="w-5 h-5" />
               </Button>
             </Link>
@@ -72,6 +72,7 @@ export default function SpotifySearchPage() {
                 <button
                   onClick={clearSearch}
                   className="absolute right-3 top-1/2 -translate-y-1/2 text-kiosk-text/50 hover:text-kiosk-text"
+                  aria-label="Limpar busca"
                 >
                   <X className="w-5 h-5" />
                 </button>

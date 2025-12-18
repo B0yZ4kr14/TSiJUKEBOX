@@ -269,7 +269,7 @@ export default function Settings() {
               <div className="space-y-2">
                 <div className="flex justify-between text-sm">
                   <span className="text-kiosk-text/60">Versão</span>
-                  <span className="text-kiosk-text">TSiJUKEBOX Enterprise v4.0</span>
+                  <span className="text-kiosk-text"><span className="text-brand-inline">TSiJUKEBOX</span> Enterprise v4.0</span>
                 </div>
                 <div className="flex justify-between text-sm">
                   <span className="text-kiosk-text/60">Modo</span>
@@ -532,7 +532,7 @@ export default function Settings() {
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.4 }}
           >
-            <LogoBrand size="md" animate />
+            <LogoBrand size="lg" variant="metal" animate={false} />
           </motion.div>
 
           {/* Breadcrumb */}
@@ -561,7 +561,7 @@ export default function Settings() {
             </Link>
             <div>
               <h1 className="text-xl font-bold text-gold-neon">{categoryTitles[activeCategory]}</h1>
-              <p className="text-kiosk-text/60 text-sm">Configurações do TSiJUKEBOX</p>
+              <p className="text-kiosk-text/60 text-sm">Configurações do <span className="text-brand-inline">TSiJUKEBOX</span></p>
             </div>
           </motion.header>
 

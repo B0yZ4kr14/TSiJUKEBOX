@@ -274,6 +274,16 @@
       0 0 12px hsl(200 25% 50% / 0.2);
   }
 
+  /* TSiJUKEBOX inline text - negrito + azul neon */
+  .text-brand-inline {
+    font-weight: 700;
+    color: hsl(195 100% 65%);
+    text-shadow: 
+      0 0 5px hsl(195 100% 55% / 0.6),
+      0 0 10px hsl(195 100% 50% / 0.4),
+      0 0 15px hsl(195 100% 45% / 0.3);
+  }
+
   /* Botão outline neon com boa visibilidade */
   .button-outline-neon {
     background: linear-gradient(145deg, hsl(220 25% 16%) 0%, hsl(220 30% 10%) 100%);

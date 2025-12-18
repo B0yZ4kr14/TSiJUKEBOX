@@ -140,7 +140,7 @@ export function DistributedBackupSection() {
     <SettingsSection
       icon={<Cloud className="w-5 h-5 icon-neon-blue" />}
       title="Backup Distribuído"
-      description="Redundância entre clientes TSiJUKEBOX"
+      description={<>Redundância entre clientes <span className="text-brand-inline">TSiJUKEBOX</span></>}
     >
       <div className="space-y-4">
         {/* Enable Toggle */}
@@ -367,7 +367,7 @@ export function DistributedBackupSection() {
             {clients.length === 0 && (
               <p className="text-xs text-amber-400 flex items-center gap-1">
                 <AlertTriangle className="w-3 h-3" />
-                Cadastre clientes TSiJUKEBOX para usar backup distribuído
+                Cadastre clientes <span className="text-brand-inline">TSiJUKEBOX</span> para usar backup distribuído
               </p>
             )}
           </>

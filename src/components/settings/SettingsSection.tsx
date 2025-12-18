@@ -13,8 +13,8 @@ interface Instructions {
 
 interface SettingsSectionProps {
   icon: ReactNode;
-  title: string;
-  description?: string;
+  title: ReactNode;
+  description?: ReactNode;
   badge?: ReactNode;
   children: ReactNode;
   defaultOpen?: boolean;

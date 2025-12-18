@@ -324,7 +324,7 @@ export function SettingsFAQ({ filterCategory }: SettingsFAQProps) {
                 "h-8 px-3 text-xs transition-all",
                 selectedCategory === cat
                   ? "bg-cyan-500/20 text-cyan-400 border border-cyan-500/30"
-                  : "bg-kiosk-background/30 text-kiosk-text/60 hover:text-kiosk-text hover:bg-kiosk-background/50"
+                  : "bg-kiosk-background/30 text-kiosk-text/85 hover:text-kiosk-text hover:bg-kiosk-background/50"
               )}
             >
               {cat === 'all' ? (
@@ -374,9 +374,9 @@ export function SettingsFAQ({ filterCategory }: SettingsFAQProps) {
                       {item.question}
                     </span>
                     {isExpanded ? (
-                      <ChevronUp className="w-4 h-4 text-kiosk-text/50" />
+                      <ChevronUp className="w-4 h-4 text-kiosk-text/85" />
                     ) : (
-                      <ChevronDown className="w-4 h-4 text-kiosk-text/50" />
+                      <ChevronDown className="w-4 h-4 text-kiosk-text/85" />
                     )}
                   </button>
 
@@ -400,7 +400,7 @@ export function SettingsFAQ({ filterCategory }: SettingsFAQProps) {
                               {item.tips.map((tip, index) => (
                                 <div key={index} className="flex items-start gap-2">
                                   <Lightbulb className="w-3 h-3 text-yellow-400 flex-shrink-0 mt-0.5" />
-                                  <span className="text-xs text-kiosk-text/60">{tip}</span>
+                                  <span className="text-xs text-kiosk-text/85">{tip}</span>
                                 </div>
                               ))}
                             </div>
@@ -412,7 +412,7 @@ export function SettingsFAQ({ filterCategory }: SettingsFAQProps) {
                               <Badge 
                                 key={tag} 
                                 variant="outline" 
-                                className="text-[10px] px-1.5 py-0 border-kiosk-border/50 text-kiosk-text/50"
+                                className="text-[10px] px-1.5 py-0 border-kiosk-border/50 text-kiosk-text/85"
                               >
                                 {tag}
                               </Badge>
@@ -429,7 +429,7 @@ export function SettingsFAQ({ filterCategory }: SettingsFAQProps) {
         </AnimatePresence>
 
         {filteredItems.length === 0 && (
-          <div className="text-center py-8 text-kiosk-text/60">
+          <div className="text-center py-8 text-kiosk-text/85">
             <HelpCircle className="w-8 h-8 mx-auto mb-2 opacity-50" />
             <p>Nenhuma pergunta encontrada</p>
             <p className="text-xs mt-1">Tente outros termos de busca</p>

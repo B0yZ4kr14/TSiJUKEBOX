@@ -42,13 +42,13 @@ function PlayerIllustration() {
       </div>
       <div className="flex items-center justify-center gap-4 mt-6">
         <div className="w-12 h-12 rounded-full bg-kiosk-surface flex items-center justify-center">
-          <SkipBack className="w-5 h-5 text-kiosk-text/70" />
+          <SkipBack className="w-5 h-5 text-kiosk-text/90" />
         </div>
         <div className="w-16 h-16 rounded-full bg-primary flex items-center justify-center">
           <Play className="w-8 h-8 text-primary-foreground ml-1" />
         </div>
         <div className="w-12 h-12 rounded-full bg-kiosk-surface flex items-center justify-center">
-          <SkipForward className="w-5 h-5 text-kiosk-text/70" />
+          <SkipForward className="w-5 h-5 text-kiosk-text/90" />
         </div>
       </div>
     </div>
@@ -93,9 +93,9 @@ function GestureIllustration() {
           <div className="w-16 h-16 rounded-full bg-kiosk-surface flex items-center justify-center mb-2">
             <Hand className="w-8 h-8 text-primary" />
           </div>
-          <span className="text-xs text-kiosk-text/70">Toque</span>
+          <span className="text-xs text-kiosk-text/90">Toque</span>
         </div>
-        <div className="flex items-center gap-2 text-kiosk-text/50">
+        <div className="flex items-center gap-2 text-kiosk-text/85">
           <span>←</span>
           <div className="w-20 h-1 bg-gradient-to-r from-transparent via-primary to-transparent" />
           <span>→</span>
@@ -104,7 +104,7 @@ function GestureIllustration() {
           <div className="w-16 h-16 rounded-full bg-kiosk-surface flex items-center justify-center mb-2">
             <ChevronRight className="w-8 h-8 text-primary" />
           </div>
-          <span className="text-xs text-kiosk-text/70">Deslizar</span>
+          <span className="text-xs text-kiosk-text/90">Deslizar</span>
         </div>
       </div>
     </div>
@@ -174,7 +174,7 @@ export function WikiArticleView({ article, onSelectArticle, isBookmarked, onTogg
     >
       {/* Breadcrumb */}
       {path && (
-        <div className="flex items-center gap-2 text-xs text-kiosk-text/60">
+        <div className="flex items-center gap-2 text-xs text-kiosk-text/85">
           <span>Wiki</span>
           <ChevronRight className="w-3 h-3" />
           <span>{path.category.title}</span>
@@ -189,7 +189,7 @@ export function WikiArticleView({ article, onSelectArticle, isBookmarked, onTogg
       <header className="flex items-start justify-between gap-4">
         <div className="space-y-2">
           <h1 className="text-2xl font-bold text-gold-neon">{formatBrandName(article.title)}</h1>
-          <p className="text-kiosk-text/70">{formatBrandName(article.description)}</p>
+          <p className="text-kiosk-text/90">{formatBrandName(article.description)}</p>
         </div>
         {onToggleBookmark && (
           <Button
@@ -244,7 +244,7 @@ export function WikiArticleView({ article, onSelectArticle, isBookmarked, onTogg
           </div>
           <ul className="space-y-1">
             {article.tips.map((tip, i) => (
-              <li key={i} className="flex gap-2 text-sm text-kiosk-text/70">
+              <li key={i} className="flex gap-2 text-sm text-kiosk-text/90">
                 <span className="text-primary">•</span>
                 <span>{formatBrandName(tip)}</span>
               </li>
@@ -256,7 +256,7 @@ export function WikiArticleView({ article, onSelectArticle, isBookmarked, onTogg
       {/* Related Articles */}
       {article.relatedArticles && article.relatedArticles.length > 0 && (
         <div className="space-y-3 pt-4 border-t border-border">
-          <div className="flex items-center gap-2 text-kiosk-text/70">
+          <div className="flex items-center gap-2 text-kiosk-text/90">
             <Link2 className="w-4 h-4" />
             <h3 className="text-sm font-medium">Artigos Relacionados</h3>
           </div>

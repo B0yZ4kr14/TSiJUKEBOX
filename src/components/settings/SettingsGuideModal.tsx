@@ -56,7 +56,7 @@ export function SettingsGuideModal({ guide, isOpen, onClose, onNavigate }: Setti
               </div>
               <div>
                 <DialogTitle className="text-xl text-gold-neon">{guide.title}</DialogTitle>
-                <p className="text-sm text-kiosk-text/60 mt-1">{guide.description}</p>
+                <p className="text-sm text-kiosk-text/85 mt-1">{guide.description}</p>
               </div>
             </div>
           </div>
@@ -125,14 +125,14 @@ export function SettingsGuideModal({ guide, isOpen, onClose, onNavigate }: Setti
                       className="p-4 rounded-lg bg-kiosk-background/30 border border-kiosk-border/50"
                     >
                       <h4 className="text-sm font-medium text-kiosk-text mb-1">{section.name}</h4>
-                      <p className="text-xs text-kiosk-text/60 mb-3">{section.description}</p>
+                      <p className="text-xs text-kiosk-text/85 mb-3">{section.description}</p>
                       
                       {section.tips.length > 0 && (
                         <div className="space-y-1">
                           {section.tips.map((tip, tipIndex) => (
                             <div key={tipIndex} className="flex items-start gap-2">
                               <Lightbulb className="w-3 h-3 text-yellow-400 flex-shrink-0 mt-0.5" />
-                              <span className="text-xs text-kiosk-text/70">{tip}</span>
+                              <span className="text-xs text-kiosk-text/90">{tip}</span>
                             </div>
                           ))}
                         </div>

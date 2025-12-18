@@ -204,7 +204,7 @@ export function InteractiveTestMode({ mode, onClose }: InteractiveTestModeProps)
             <>
               {/* Keyboard Visual */}
               <div className="p-6 rounded-xl bg-kiosk-bg border border-border">
-                <p className="text-center text-kiosk-text/70 mb-6">
+                <p className="text-center text-kiosk-text/90 mb-6">
                   Pressione qualquer tecla de atalho para testar
                 </p>
                 
@@ -278,8 +278,8 @@ export function InteractiveTestMode({ mode, onClose }: InteractiveTestModeProps)
                       <Hand className="w-12 h-12" />
                       <ChevronRight className="w-8 h-8 animate-pulse" />
                     </div>
-                    <p className="text-kiosk-text/60">Deslize horizontalmente para testar</p>
-                    <p className="text-xs text-kiosk-text/40">Mínimo: {GESTURE_THRESHOLD}px</p>
+                    <p className="text-kiosk-text/85">Deslize horizontalmente para testar</p>
+                    <p className="text-xs text-kiosk-text/80">Mínimo: {GESTURE_THRESHOLD}px</p>
                   </div>
                 </div>
                 
@@ -317,7 +317,7 @@ export function InteractiveTestMode({ mode, onClose }: InteractiveTestModeProps)
               {gestureEvents[0] && (
                 <div className="grid grid-cols-4 gap-3 p-4 rounded-lg bg-kiosk-bg">
                   <div className="text-center">
-                    <p className="text-xs text-kiosk-text/50">Direção</p>
+                    <p className="text-xs text-kiosk-text/85">Direção</p>
                     <p className="text-sm font-medium text-kiosk-text">
                       {gestureEvents[0].direction === 'left' && '← Esquerda'}
                       {gestureEvents[0].direction === 'right' && '→ Direita'}
@@ -327,17 +327,17 @@ export function InteractiveTestMode({ mode, onClose }: InteractiveTestModeProps)
                     </p>
                   </div>
                   <div className="text-center">
-                    <p className="text-xs text-kiosk-text/50">Delta X</p>
+                    <p className="text-xs text-kiosk-text/85">Delta X</p>
                     <p className={`text-sm font-medium ${Math.abs(gestureEvents[0].deltaX) >= GESTURE_THRESHOLD ? 'text-green-400' : 'text-kiosk-text'}`}>
                       {gestureEvents[0].deltaX}px
                     </p>
                   </div>
                   <div className="text-center">
-                    <p className="text-xs text-kiosk-text/50">Delta Y</p>
+                    <p className="text-xs text-kiosk-text/85">Delta Y</p>
                     <p className="text-sm font-medium text-kiosk-text">{gestureEvents[0].deltaY}px</p>
                   </div>
                   <div className="text-center">
-                    <p className="text-xs text-kiosk-text/50">Duração</p>
+                    <p className="text-xs text-kiosk-text/85">Duração</p>
                     <p className="text-sm font-medium text-kiosk-text">{gestureEvents[0].duration}ms</p>
                   </div>
                 </div>
@@ -370,7 +370,7 @@ export function InteractiveTestMode({ mode, onClose }: InteractiveTestModeProps)
               <div className="p-2 space-y-1">
                 {mode === 'keyboard' ? (
                   keyEvents.length === 0 ? (
-                    <p className="text-center text-kiosk-text/50 py-4">Nenhum evento registrado</p>
+                    <p className="text-center text-kiosk-text/85 py-4">Nenhum evento registrado</p>
                   ) : (
                     keyEvents.map((event, i) => (
                       <motion.div
@@ -387,8 +387,8 @@ export function InteractiveTestMode({ mode, onClose }: InteractiveTestModeProps)
                           <XCircle className="w-4 h-4 text-red-400" />
                         )}
                         <span className="font-mono text-sm text-kiosk-text">{event.key}</span>
-                        <span className="text-sm text-kiosk-text/70">→ {event.action}</span>
-                        <span className="ml-auto text-xs text-kiosk-text/50">
+                        <span className="text-sm text-kiosk-text/90">→ {event.action}</span>
+                        <span className="ml-auto text-xs text-kiosk-text/85">
                           {event.timestamp.toLocaleTimeString()}
                         </span>
                       </motion.div>
@@ -396,7 +396,7 @@ export function InteractiveTestMode({ mode, onClose }: InteractiveTestModeProps)
                   )
                 ) : (
                   gestureEvents.length === 0 ? (
-                    <p className="text-center text-kiosk-text/50 py-4">Nenhum gesto registrado</p>
+                    <p className="text-center text-kiosk-text/85 py-4">Nenhum gesto registrado</p>
                   ) : (
                     gestureEvents.map((event, i) => (
                       <motion.div

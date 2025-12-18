@@ -40,7 +40,7 @@ export function AdminLayout({ children }: AdminLayoutProps) {
       <aside className="fixed left-0 top-0 h-full w-64 bg-sidebar border-r border-sidebar-border">
         <div className="p-4 border-b border-sidebar-border">
           <LogoBrand size="sm" variant="metal" animate={false} centered={false} />
-          <p className="text-sm text-kiosk-text/70 mt-1">Painel Admin</p>
+          <p className="text-sm text-kiosk-text/90 mt-1">Painel Admin</p>
         </div>
         
         <nav className="p-2 space-y-1">

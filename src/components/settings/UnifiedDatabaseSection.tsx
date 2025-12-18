@@ -150,7 +150,7 @@ export function UnifiedDatabaseSection({ isDemoMode }: UnifiedDatabaseSectionPro
                 <HardDrive className="w-5 h-5 icon-neon-blue" />
                 <div>
                   <p className="font-medium text-kiosk-text">SQLite Local</p>
-                  <p className="text-sm text-kiosk-text/75">Arquivo no servidor local - Simples e rápido</p>
+                  <p className="text-sm text-kiosk-text/90">Arquivo no servidor local - Simples e rápido</p>
                 </div>
               </Label>
             </div>
@@ -167,7 +167,7 @@ export function UnifiedDatabaseSection({ isDemoMode }: UnifiedDatabaseSectionPro
                 <Server className="w-5 h-5 icon-neon-blue" />
                 <div>
                   <p className="font-medium text-kiosk-text">SQLite Remoto</p>
-                  <p className="text-sm text-kiosk-text/75">Arquivo em servidor externo via SSH</p>
+                  <p className="text-sm text-kiosk-text/90">Arquivo em servidor externo via SSH</p>
                 </div>
               </Label>
             </div>
@@ -184,7 +184,7 @@ export function UnifiedDatabaseSection({ isDemoMode }: UnifiedDatabaseSectionPro
                 <Cloud className="w-5 h-5 icon-neon-blue" />
                 <div>
                   <p className="font-medium text-kiosk-text">Lovable Cloud</p>
-                  <p className="text-sm text-kiosk-text/75">100% gerenciado - Zero configuração</p>
+                  <p className="text-sm text-kiosk-text/90">100% gerenciado - Zero configuração</p>
                 </div>
               </Label>
             </div>
@@ -276,10 +276,10 @@ export function UnifiedDatabaseSection({ isDemoMode }: UnifiedDatabaseSectionPro
                 <CheckCircle2 className="w-6 h-6 text-green-400" />
                 <div>
                   <p className="font-medium text-green-400">✨ Conectado ao Lovable Cloud</p>
-                  <p className="text-sm text-kiosk-text/75 mt-1">
+                  <p className="text-sm text-kiosk-text/90 mt-1">
                     Banco de dados gerenciado automaticamente. Nenhuma configuração necessária!
                   </p>
-                  <ul className="mt-2 text-xs text-kiosk-text/60 space-y-1">
+                  <ul className="mt-2 text-xs text-kiosk-text/85 space-y-1">
                     <li>• Backup automático diário</li>
                     <li>• Escalabilidade ilimitada</li>
                     <li>• Segurança de nível empresarial</li>

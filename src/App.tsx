@@ -56,7 +56,7 @@ function PageLoader() {
         <div className="w-16 h-16 rounded-full bg-kiosk-surface/50 flex items-center justify-center mx-auto animate-pulse">
           <Music className="w-8 h-8 text-kiosk-primary" />
         </div>
-        <p className="text-kiosk-text/60 text-sm">Carregando...</p>
+        <p className="text-kiosk-text/85 text-sm">Carregando...</p>
       </div>
     </div>
   );

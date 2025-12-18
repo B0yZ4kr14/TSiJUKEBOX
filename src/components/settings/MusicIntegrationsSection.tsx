@@ -131,10 +131,10 @@ export function MusicIntegrationsSection() {
                           </Badge>
                         )}
                       </div>
-                      <p className="text-sm text-kiosk-text/70">{provider.description}</p>
+                      <p className="text-sm text-kiosk-text/90">{provider.description}</p>
                     </div>
                   </div>
-                  <ChevronRight className="w-5 h-5 text-kiosk-text/50" />
+                  <ChevronRight className="w-5 h-5 text-kiosk-text/85" />
                 </div>
               </Card>
             </motion.div>
@@ -144,7 +144,7 @@ export function MusicIntegrationsSection() {
         {/* Default Provider Selection */}
         <div className="space-y-3 p-4 rounded-lg bg-kiosk-surface/50 border border-kiosk-border">
           <Label className="text-label-yellow">Provedor Padrão</Label>
-          <p className="text-sm text-kiosk-text/60 mb-3">
+          <p className="text-sm text-kiosk-text/85 mb-3">
             Selecione o provedor principal para reprodução de música
           </p>
           <RadioGroup
@@ -183,7 +183,7 @@ export function MusicIntegrationsSection() {
           <div className="flex items-center justify-between">
             <div>
               <Label className="text-label-yellow">Fallback Automático</Label>
-              <p className="text-sm text-kiosk-text/60">
+              <p className="text-sm text-kiosk-text/85">
                 Muda automaticamente para outro provedor se o principal falhar
               </p>
             </div>

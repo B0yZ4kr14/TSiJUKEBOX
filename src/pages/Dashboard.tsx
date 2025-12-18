@@ -127,7 +127,7 @@ export default function Dashboard() {
               <BarChart3 className="w-6 h-6 icon-neon-blue" />
               {t('dashboard.title')}
             </h1>
-            <p className="text-sm text-kiosk-text/70">Estatísticas e monitoramento do sistema</p>
+            <p className="text-sm text-kiosk-text/90">Estatísticas e monitoramento do sistema</p>
           </div>
         </div>
         
@@ -194,15 +194,15 @@ export default function Dashboard() {
               <div className="flex justify-center gap-6 mt-4">
                 <div className="flex items-center gap-2">
                   <div className="w-3 h-3 rounded-full bg-cyan-400" />
-                  <span className="text-xs text-kiosk-text/70">CPU</span>
+                  <span className="text-xs text-kiosk-text/90">CPU</span>
                 </div>
                 <div className="flex items-center gap-2">
                   <div className="w-3 h-3 rounded-full bg-purple-400" />
-                  <span className="text-xs text-kiosk-text/70">Memória</span>
+                  <span className="text-xs text-kiosk-text/90">Memória</span>
                 </div>
                 <div className="flex items-center gap-2">
                   <div className="w-3 h-3 rounded-full bg-orange-400" />
-                  <span className="text-xs text-kiosk-text/70">Temperatura</span>
+                  <span className="text-xs text-kiosk-text/90">Temperatura</span>
                 </div>
               </div>
             </CardContent>
@@ -248,7 +248,7 @@ export default function Dashboard() {
                 {genreData.map((genre) => (
                   <div key={genre.name} className="flex items-center gap-1">
                     <div className="w-2 h-2 rounded-full" style={{ background: genre.color }} />
-                    <span className="text-xs text-kiosk-text/70">{genre.name}</span>
+                    <span className="text-xs text-kiosk-text/90">{genre.name}</span>
                   </div>
                 ))}
               </div>

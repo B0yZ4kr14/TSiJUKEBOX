@@ -94,16 +94,16 @@ export function WeatherForecastChart({ forecast, className }: WeatherForecastCha
             animate={{ opacity: 1, scale: 1 }}
             transition={{ delay: index * 0.1 }}
           >
-            <span className="text-xs font-medium text-kiosk-text/80">
+            <span className="text-xs font-medium text-kiosk-text/85">
               {day.dayName}
             </span>
             <AnimatedWeatherIcon conditionCode={day.conditionCode} size="sm" />
             <div className="flex items-center gap-1 text-xs">
               <span className="text-kiosk-primary font-bold">{day.tempMax}°</span>
-              <span className="text-kiosk-text/50">/</span>
+              <span className="text-kiosk-text/85">/</span>
               <span className="text-blue-400">{day.tempMin}°</span>
             </div>
-            <span className="text-[10px] text-kiosk-text/50">{day.precipitation}%</span>
+            <span className="text-[10px] text-kiosk-text/85">{day.precipitation}%</span>
           </motion.div>
         ))}
       </div>

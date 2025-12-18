@@ -249,7 +249,7 @@ export function CloudProviderHelp({ provider }: CloudProviderHelpProps) {
                 {info.fields.map((field, idx) => (
                   <div key={idx} className="bg-kiosk-bg/50 rounded-lg p-3 border border-kiosk-border">
                     <p className="text-sm font-medium text-cyan-400">{field.name}</p>
-                    <p className="text-xs text-kiosk-text/70 mt-1">{field.description}</p>
+                    <p className="text-xs text-kiosk-text/90 mt-1">{field.description}</p>
                     {field.example && (
                       <code className="text-xs text-green-400 mt-1 block font-mono bg-black/30 px-2 py-1 rounded">
                         Example: {field.example}

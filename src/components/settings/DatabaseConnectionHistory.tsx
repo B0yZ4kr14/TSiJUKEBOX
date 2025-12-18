@@ -76,11 +76,11 @@ export function DatabaseConnectionHistory({ engine }: DatabaseConnectionHistoryP
     return (
       <Card className="p-4 bg-kiosk-surface/30 border-cyan-500/20">
         <div className="text-center py-6">
-          <Activity className="w-8 h-8 mx-auto text-kiosk-text/50 mb-2" />
+          <Activity className="w-8 h-8 mx-auto text-kiosk-text/85 mb-2" />
           <p className="text-sm text-settings-hint">
             Nenhum histórico de conexão disponível
           </p>
-          <p className="text-xs text-kiosk-text/50 mt-1">
+          <p className="text-xs text-kiosk-text/85 mt-1">
             Execute um teste de conexão para começar
           </p>
         </div>
@@ -132,11 +132,11 @@ export function DatabaseConnectionHistory({ engine }: DatabaseConnectionHistoryP
             ) : latencyTrend < 0 ? (
               <TrendingDown className="w-4 h-4 text-green-400" />
             ) : (
-              <Activity className="w-4 h-4 text-kiosk-text/50" />
+              <Activity className="w-4 h-4 text-kiosk-text/85" />
             )}
             <span className={cn(
               "text-lg font-bold",
-              latencyTrend > 0 ? "text-red-400" : latencyTrend < 0 ? "text-green-400" : "text-kiosk-text/50"
+              latencyTrend > 0 ? "text-red-400" : latencyTrend < 0 ? "text-green-400" : "text-kiosk-text/85"
             )}>
               {latencyTrend > 0 ? '+' : ''}{latencyTrend}ms
             </span>

@@ -4,8 +4,9 @@
  * Uses axe-core to test WCAG 2.1 AA compliance across multiple routes
  * 
  * Usage:
- *   npm run a11y         - Run audit with colored output
+ *   npm run a11y         - Run audit with colored output (requires Puppeteer)
  *   npm run a11y:ci      - Run audit in CI mode with JSON output
+ *   npm run a11y:simple  - Run lightweight CSS/code checks (no Puppeteer)
  */
 
 const fs = require('fs');
@@ -43,6 +44,35 @@ const IMPACT_COLORS = {
   minor: COLORS.dim,
 };
 
+// Prohibited patterns for simple mode
+const PROHIBITED_PATTERNS = [
+  { 
+    pattern: /className="[^"]*\bbg-white\b[^"]*"/g, 
+    message: 'Use bg-kiosk-surface or bg-kiosk-bg instead of bg-white',
+    severity: 'serious'
+  },
+  { 
+    pattern: /className="[^"]*\btext-black\b[^"]*"/g, 
+    message: 'Use text-kiosk-text instead of text-black',
+    severity: 'serious'
+  },
+  { 
+    pattern: /className="[^"]*\bbg-background(?!\/)[^"]*"/g, 
+    message: 'Use bg-kiosk-surface instead of bg-background (may be light in some themes)',
+    severity: 'moderate'
+  },
+  { 
+    pattern: /variant="outline"(?![^>]*button-outline-neon)/g, 
+    message: 'Use variant="kiosk-outline" or add button-outline-neon class',
+    severity: 'moderate'
+  },
+  { 
+    pattern: /<(button|Button)[^>]*>[\s]*<[^>]*Icon[^>]*\/>[\s]*<\/(button|Button)>/g, 
+    message: 'Icon-only button may be missing aria-label',
+    severity: 'serious'
+  },
+];
+
 /**
  * Format violation for terminal output
  */
@@ -52,8 +82,13 @@ function formatViolation(violation, index) {
   
   let output = `\n${color}${COLORS.bold}${index + 1}. [${impact.toUpperCase()}] ${violation.id}${COLORS.reset}\n`;
   output += `   ${violation.description}\n`;
-  output += `   ${COLORS.cyan}Help: ${violation.helpUrl}${COLORS.reset}\n`;
-  output += `   ${COLORS.dim}Affected: ${violation.nodes.length} element(s)${COLORS.reset}`;
+  if (violation.helpUrl) {
+    output += `   ${COLORS.cyan}Help: ${violation.helpUrl}${COLORS.reset}\n`;
+  }
+  if (violation.file) {
+    output += `   ${COLORS.dim}File: ${violation.file}:${violation.line}${COLORS.reset}\n`;
+  }
+  output += `   ${COLORS.dim}Affected: ${violation.nodes?.length || 1} element(s)${COLORS.reset}`;
   
   return output;
 }
@@ -80,7 +115,7 @@ function printRouteSummary(result) {
 /**
  * Generate JSON report
  */
-function generateReport(results) {
+function generateReport(results, mode = 'full') {
   const totalViolations = results.reduce((sum, r) => sum + r.violations.length, 0);
   const criticalViolations = results.reduce((sum, r) => 
     sum + r.violations.filter(v => v.impact === 'critical' || v.impact === 'serious').length, 0
@@ -88,39 +123,138 @@ function generateReport(results) {
   
   return {
     timestamp: new Date().toISOString(),
-    wcagTags: WCAG_TAGS,
+    mode,
+    wcagTags: mode === 'full' ? WCAG_TAGS : ['css-check'],
     routesTested: results.length,
     totalViolations,
     criticalViolations,
     passed: totalViolations === 0,
     routes: results.map(r => ({
-      path: r.route,
+      path: r.route || r.file,
       name: r.name,
       violationCount: r.violations.length,
-      passCount: r.passes,
-      incompleteCount: r.incomplete.length,
+      passCount: r.passes || 0,
+      incompleteCount: r.incomplete?.length || 0,
       violations: r.violations.map(v => ({
         id: v.id,
         impact: v.impact,
         description: v.description,
         helpUrl: v.helpUrl,
-        affectedNodes: v.nodes.length,
+        file: v.file,
+        line: v.line,
+        affectedNodes: v.nodes?.length || 1,
       })),
     })),
   };
 }
 
 /**
- * Main audit function using axe-core CLI approach (lighter weight)
+ * Simple mode: Scan source files for accessibility issues without Puppeteer
  */
-async function runAudit() {
+async function runSimpleAudit() {
+  console.log(`${COLORS.bold}${COLORS.cyan}`);
+  console.log('╔═══════════════════════════════════════════════════╗');
+  console.log('║     TSiJUKEBOX Accessibility Audit                ║');
+  console.log('║     Simple Mode (CSS/Code Patterns)               ║');
+  console.log('╚═══════════════════════════════════════════════════╝');
+  console.log(`${COLORS.reset}`);
+  console.log(`${COLORS.dim}Scanning source files for accessibility patterns...${COLORS.reset}\n`);
+
+  const srcDir = path.join(process.cwd(), 'src');
+  const results = [];
+  const violations = [];
+
+  // Recursively find all TSX files
+  function findTsxFiles(dir) {
+    const files = [];
+    const entries = fs.readdirSync(dir, { withFileTypes: true });
+    
+    for (const entry of entries) {
+      const fullPath = path.join(dir, entry.name);
+      if (entry.isDirectory() && !entry.name.startsWith('.')) {
+        files.push(...findTsxFiles(fullPath));
+      } else if (entry.isFile() && (entry.name.endsWith('.tsx') || entry.name.endsWith('.jsx'))) {
+        files.push(fullPath);
+      }
+    }
+    return files;
+  }
+
+  const tsxFiles = findTsxFiles(srcDir);
+  console.log(`${COLORS.dim}Found ${tsxFiles.length} component files to scan${COLORS.reset}\n`);
+
+  for (const file of tsxFiles) {
+    const content = fs.readFileSync(file, 'utf-8');
+    const lines = content.split('\n');
+    const relativePath = path.relative(process.cwd(), file);
+    const fileViolations = [];
+
+    for (const { pattern, message, severity } of PROHIBITED_PATTERNS) {
+      // Reset regex state
+      pattern.lastIndex = 0;
+      
+      let match;
+      while ((match = pattern.exec(content)) !== null) {
+        // Find line number
+        const beforeMatch = content.substring(0, match.index);
+        const lineNumber = beforeMatch.split('\n').length;
+        
+        fileViolations.push({
+          id: 'css-pattern-check',
+          impact: severity,
+          description: message,
+          file: relativePath,
+          line: lineNumber,
+          match: match[0].substring(0, 50) + (match[0].length > 50 ? '...' : ''),
+        });
+      }
+    }
+
+    if (fileViolations.length > 0) {
+      violations.push(...fileViolations);
+    }
+  }
+
+  // Group by file for output
+  const fileGroups = violations.reduce((acc, v) => {
+    if (!acc[v.file]) acc[v.file] = [];
+    acc[v.file].push(v);
+    return acc;
+  }, {});
+
+  // Print results
+  for (const [file, fileViolations] of Object.entries(fileGroups)) {
+    console.log(`\n${COLORS.bold}━━━ ${file} ━━━${COLORS.reset}`);
+    console.log(`${COLORS.red}✗ ${fileViolations.length} issue(s) found${COLORS.reset}`);
+    fileViolations.forEach((v, i) => console.log(formatViolation(v, i)));
+  }
+
+  if (violations.length === 0) {
+    console.log(`${COLORS.green}✓ No CSS/pattern issues found!${COLORS.reset}`);
+  }
+
+  results.push({
+    route: 'src/**/*.tsx',
+    name: 'Source Files',
+    violations,
+    passes: tsxFiles.length - Object.keys(fileGroups).length,
+    incomplete: [],
+  });
+
+  return results;
+}
+
+/**
+ * Main audit function using axe-core + Puppeteer (full mode)
+ */
+async function runFullAudit() {
   const isCI = process.argv.includes('--ci');
   const baseUrl = process.env.BASE_URL || 'http://localhost:4173';
   
   console.log(`${COLORS.bold}${COLORS.cyan}`);
   console.log('╔═══════════════════════════════════════════════════╗');
   console.log('║     WCAG 2.1 AA Accessibility Audit               ║');
-  console.log('║     TSi JUKEBOX - axe-core                        ║');
+  console.log('║     TSiJUKEBOX - axe-core                         ║');
   console.log('╚═══════════════════════════════════════════════════╝');
   console.log(`${COLORS.reset}`);
   console.log(`${COLORS.dim}Base URL: ${baseUrl}${COLORS.reset}`);
@@ -132,12 +266,14 @@ async function runAudit() {
     puppeteer = require('puppeteer');
     AxePuppeteer = require('@axe-core/puppeteer').AxePuppeteer;
   } catch (error) {
-    console.log(`\n${COLORS.yellow}⚠ Puppeteer/axe-core not installed. Running in check-only mode.${COLORS.reset}`);
-    console.log(`${COLORS.dim}Install with: npm install -D puppeteer @axe-core/puppeteer${COLORS.reset}\n`);
+    console.log(`\n${COLORS.yellow}⚠ Puppeteer/axe-core not installed.${COLORS.reset}`);
+    console.log(`${COLORS.dim}Install with: npm install -D puppeteer @axe-core/puppeteer${COLORS.reset}`);
+    console.log(`${COLORS.dim}Or use: npm run a11y:simple for lightweight checks${COLORS.reset}\n`);
     
     // Generate mock report for CI when dependencies not available
     const mockReport = {
       timestamp: new Date().toISOString(),
+      mode: 'skipped',
       wcagTags: WCAG_TAGS,
       routesTested: 0,
       totalViolations: 0,
@@ -152,7 +288,7 @@ async function runAudit() {
       console.log(`${COLORS.green}✓ Report generated: a11y-report.json${COLORS.reset}`);
     }
     
-    process.exit(0);
+    return [];
   }
 
   const results = [];
@@ -211,14 +347,40 @@ async function runAudit() {
     }
   }
 
+  return results;
+}
+
+/**
+ * Main entry point
+ */
+async function runAudit() {
+  const isCI = process.argv.includes('--ci');
+  const isSimple = process.argv.includes('--simple');
+
+  let results;
+  let mode;
+
+  if (isSimple) {
+    mode = 'simple';
+    results = await runSimpleAudit();
+  } else {
+    mode = 'full';
+    results = await runFullAudit();
+  }
+
+  if (results.length === 0) {
+    process.exit(0);
+  }
+
   // Generate report
-  const report = generateReport(results);
+  const report = generateReport(results, mode);
 
   // Print final summary
   console.log(`\n${COLORS.bold}═══════════════════════════════════════════════════`);
   console.log(`                    SUMMARY`);
   console.log(`═══════════════════════════════════════════════════${COLORS.reset}`);
-  console.log(`Routes tested: ${report.routesTested}`);
+  console.log(`Mode: ${mode}`);
+  console.log(`${mode === 'full' ? 'Routes' : 'Files'} tested: ${report.routesTested}`);
   console.log(`Total violations: ${report.totalViolations}`);
   console.log(`Critical/Serious: ${report.criticalViolations}`);
   console.log(`Status: ${report.passed ? `${COLORS.green}✓ PASSED${COLORS.reset}` : `${COLORS.red}✗ FAILED${COLORS.reset}`}`);

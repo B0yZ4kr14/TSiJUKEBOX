@@ -2,7 +2,7 @@
 @tailwind components;
 @tailwind utilities;
 
-/* TSi JUKEBOX Design System - Optimized for CachyOS + Openbox Kiosk */
+/* TSiJUKEBOX Design System - Optimized for CachyOS + Openbox Kiosk */
 
 @layer base {
   :root {

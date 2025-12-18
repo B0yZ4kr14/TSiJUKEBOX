@@ -561,7 +561,7 @@ export default function Settings() {
             </Link>
             <div>
               <h1 className="text-xl font-bold text-gold-neon">{categoryTitles[activeCategory]}</h1>
-              <p className="text-kiosk-text/60 text-sm">Configurações do TSi JUKEBOX</p>
+              <p className="text-kiosk-text/60 text-sm">Configurações do TSiJUKEBOX</p>
             </div>
           </motion.header>
 

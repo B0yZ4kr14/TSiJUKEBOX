@@ -30,7 +30,7 @@ export const wikiCategories: WikiCategory[] = [
     id: 'playback',
     title: 'Reprodução de Música',
     icon: 'Music',
-    description: 'Aprenda a controlar a reprodução de músicas no TSi JUKEBOX',
+    description: 'Aprenda a controlar a reprodução de músicas no TSiJUKEBOX',
     subSections: [
       {
         id: 'basic-controls',
@@ -429,7 +429,7 @@ export const wikiCategories: WikiCategory[] = [
             id: 'change-language',
             title: 'Alterar Idioma',
             description: 'Mude o idioma da interface',
-            content: 'O TSi JUKEBOX suporta múltiplos idiomas: Português, Inglês e Espanhol.',
+            content: 'O TSiJUKEBOX suporta múltiplos idiomas: Português, Inglês e Espanhol.',
             steps: [
               'Acesse Configurações > Idioma',
               'Selecione o idioma desejado',
@@ -456,7 +456,7 @@ export const wikiCategories: WikiCategory[] = [
             id: 'spotify-connect',
             title: 'Conectar ao Spotify',
             description: 'Configure a integração com Spotify',
-            content: 'O TSi JUKEBOX usa o Spotify como fonte de música. A conexão requer credenciais OAuth.',
+            content: 'O TSiJUKEBOX usa o Spotify como fonte de música. A conexão requer credenciais OAuth.',
             steps: [
               'Acesse Configurações > Spotify',
               'Insira seu Client ID e Client Secret',
@@ -499,7 +499,7 @@ export const wikiCategories: WikiCategory[] = [
             id: 'spotify-playlists',
             title: 'Gerenciar Playlists',
             description: 'Crie e edite playlists',
-            content: 'Você pode visualizar, criar e gerenciar suas playlists do Spotify diretamente no TSi JUKEBOX.',
+            content: 'Você pode visualizar, criar e gerenciar suas playlists do Spotify diretamente no TSiJUKEBOX.',
             steps: [
               'Acesse Spotify > Playlists',
               'Visualize suas playlists existentes',
@@ -518,7 +518,7 @@ export const wikiCategories: WikiCategory[] = [
             id: 'backend-connection',
             title: 'Conexão com Backend',
             description: 'Configure a conexão com o servidor',
-            content: 'O TSi JUKEBOX se conecta a um backend FastAPI para controle de reprodução e persistência de dados.',
+            content: 'O TSiJUKEBOX se conecta a um backend FastAPI para controle de reprodução e persistência de dados.',
             steps: [
               'Acesse Configurações > Backend',
               'Verifique a URL do servidor',
@@ -575,7 +575,7 @@ export const wikiCategories: WikiCategory[] = [
               'Spicetify modifica o cliente Spotify desktop',
               'Permite aplicar temas visuais personalizados',
               'Adiciona extensões para funcionalidades extras',
-              'Integra-se com o TSi JUKEBOX para controle local'
+              'Integra-se com o TSiJUKEBOX para controle local'
             ],
             tips: [
               'Requer Spotify desktop instalado',
@@ -635,7 +635,7 @@ export const wikiCategories: WikiCategory[] = [
             id: 'ytm-connect',
             title: 'Conectar YouTube Music',
             description: 'Configure sua conta Google',
-            content: 'O TSi JUKEBOX suporta YouTube Music como provedor de música alternativo ao Spotify, permitindo acessar sua biblioteca e playlists do YouTube Music.',
+            content: 'O TSiJUKEBOX suporta YouTube Music como provedor de música alternativo ao Spotify, permitindo acessar sua biblioteca e playlists do YouTube Music.',
             steps: [
               'Acesse Configurações > Integrações > YouTube Music',
               'Clique em "Conectar com Google"',
@@ -676,7 +676,7 @@ export const wikiCategories: WikiCategory[] = [
             id: 'ytm-playback',
             title: 'Reprodução com YouTube Music',
             description: 'Controle a reprodução de músicas',
-            content: 'O TSi JUKEBOX integra controles de reprodução para YouTube Music, permitindo tocar, pausar, pular e controlar volume das músicas.',
+            content: 'O TSiJUKEBOX integra controles de reprodução para YouTube Music, permitindo tocar, pausar, pular e controlar volume das músicas.',
             steps: [
               'Selecione uma música ou playlist no YouTube Music Browser',
               'Toque no botão Play para iniciar a reprodução',
@@ -696,11 +696,11 @@ export const wikiCategories: WikiCategory[] = [
             id: 'google-oauth-setup',
             title: 'Configurar Google Cloud Console',
             description: 'Guia completo para configurar OAuth do YouTube Music',
-            content: 'Para usar o YouTube Music no TSi JUKEBOX, você precisa configurar um projeto no Google Cloud Console com as credenciais OAuth 2.0. Este guia passo a passo mostra como criar e configurar tudo.',
+            content: 'Para usar o YouTube Music no TSiJUKEBOX, você precisa configurar um projeto no Google Cloud Console com as credenciais OAuth 2.0. Este guia passo a passo mostra como criar e configurar tudo.',
             steps: [
               '1. Acesse console.cloud.google.com e faça login com sua conta Google',
               '2. Clique em "Selecionar Projeto" e depois "Novo Projeto"',
-              '3. Dê um nome ao projeto (ex: "TSi JUKEBOX") e clique em Criar',
+              '3. Dê um nome ao projeto (ex: "TSiJUKEBOX") e clique em Criar',
               '4. No menu lateral, vá em "APIs e Serviços" > "Biblioteca"',
               '5. Pesquise por "YouTube Data API v3" e clique em Ativar',
               '6. Vá em "APIs e Serviços" > "Tela de Consentimento OAuth"',
@@ -734,7 +734,7 @@ export const wikiCategories: WikiCategory[] = [
             id: 'provider-selection',
             title: 'Escolher Provedor Padrão',
             description: 'Configure o serviço de música principal',
-            content: 'O TSi JUKEBOX suporta múltiplos provedores de música (Spotify, YouTube Music, Spicetify). Você pode escolher qual será o provedor padrão.',
+            content: 'O TSiJUKEBOX suporta múltiplos provedores de música (Spotify, YouTube Music, Spicetify). Você pode escolher qual será o provedor padrão.',
             steps: [
               'Acesse Configurações > Integrações',
               'Na seção "Provedor Padrão", selecione o serviço',
@@ -1053,7 +1053,7 @@ export const wikiCategories: WikiCategory[] = [
             description: 'A música está tocando mas sem áudio',
             content: 'Ausência de som com música tocando indica problema na cadeia de áudio: volume, saída, ou processo do Spotify.',
             steps: [
-              '1. Verifique o volume no TSi JUKEBOX (não está em 0%?)',
+              '1. Verifique o volume no TSiJUKEBOX (não está em 0%?)',
               '2. Verifique o volume do sistema operacional',
               '3. Confirme que a saída de áudio correta está selecionada',
               '4. Verifique se os alto-falantes/fones estão conectados',
@@ -1082,7 +1082,7 @@ export const wikiCategories: WikiCategory[] = [
             id: 'faq-volume-not-changing',
             title: 'O volume não muda',
             description: 'Ajustes de volume não têm efeito',
-            content: 'Se o volume do TSi JUKEBOX não afeta o áudio, pode haver desconexão entre o frontend e o controle de volume do sistema.',
+            content: 'Se o volume do TSiJUKEBOX não afeta o áudio, pode haver desconexão entre o frontend e o controle de volume do sistema.',
             steps: [
               '1. Verifique se está em modo Demo (volume é simulado)',
               '2. Confirme que o backend está recebendo os comandos',

@@ -2,6 +2,7 @@ import { ReactNode } from 'react';
 import { Link, useLocation, useNavigate } from 'react-router-dom';
 import { useUser } from '@/contexts/UserContext';
 import { Button } from '@/components/ui/button';
+import { LogoBrand } from '@/components/ui/LogoBrand';
 import { cn } from '@/lib/utils';
 import { 
   LayoutDashboard, 
@@ -38,8 +39,8 @@ export function AdminLayout({ children }: AdminLayoutProps) {
       {/* Sidebar */}
       <aside className="fixed left-0 top-0 h-full w-64 bg-sidebar border-r border-sidebar-border">
         <div className="p-4 border-b border-sidebar-border">
-          <h1 className="text-xl font-bold text-gold-neon">TSi JUKEBOX</h1>
-          <p className="text-sm text-kiosk-text/70">Painel Admin</p>
+          <LogoBrand size="sm" variant="metal" animate={false} centered={false} />
+          <p className="text-sm text-kiosk-text/70 mt-1">Painel Admin</p>
         </div>
         
         <nav className="p-2 space-y-1">

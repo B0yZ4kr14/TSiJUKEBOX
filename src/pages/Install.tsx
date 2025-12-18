@@ -110,7 +110,7 @@ export default function Install() {
             <div className="w-32 h-32 rounded-3xl bg-gradient-to-br from-kiosk-primary/20 to-kiosk-accent/20 flex items-center justify-center shadow-2xl shadow-kiosk-primary/20">
               <img 
                 src="/pwa-192x192.png" 
-                alt="TSi JUKEBOX" 
+                alt="TSiJUKEBOX" 
                 className="w-28 h-28 rounded-2xl"
               />
             </div>

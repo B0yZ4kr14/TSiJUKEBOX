@@ -797,7 +797,7 @@ export default function SetupWizard() {
             <div className="space-y-2">
               <h3 className="text-2xl font-bold text-kiosk-text">Configuração Concluída!</h3>
               <p className="text-kiosk-text/70">
-                Seu TSi JUKEBOX está pronto para uso.
+                Seu TSiJUKEBOX está pronto para uso.
               </p>
             </div>
             <div className="p-4 rounded-lg card-option-dark-3d text-left space-y-2">

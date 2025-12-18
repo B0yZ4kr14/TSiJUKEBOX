@@ -626,7 +626,7 @@ export function AdvancedDatabaseSection({ isDemoMode }: AdvancedDatabaseSectionP
                     <div className="flex-1">
                       <p className="font-medium text-kiosk-text">{eng.name}</p>
                       {eng.defaultPort > 0 && (
-                        <span className="text-xs text-kiosk-text/50">Porta: {eng.defaultPort}</span>
+                        <span className="text-xs text-kiosk-text/85">Porta: {eng.defaultPort}</span>
                       )}
                     </div>
                     {selectedEngine === eng.id && (
@@ -741,7 +741,7 @@ export function AdvancedDatabaseSection({ isDemoMode }: AdvancedDatabaseSectionP
                 )}>
                   {connectionStatus.success ? 'Conexão bem-sucedida!' : 'Falha na conexão'}
                 </span>
-                <span className="text-xs text-kiosk-text/50 ml-auto">
+                <span className="text-xs text-kiosk-text/85 ml-auto">
                   {connectionStatus.latency}ms
                 </span>
               </div>
@@ -801,7 +801,7 @@ export function AdvancedDatabaseSection({ isDemoMode }: AdvancedDatabaseSectionP
 
         {/* Maintenance/Repair Tab */}
         <TabsContent value="maintenance" className="space-y-4" data-tour="database-maintenance">
-          <p className="text-sm text-kiosk-text/70 mb-4">
+          <p className="text-sm text-kiosk-text/90 mb-4">
             Ferramentas de manutenção e reparo para {engine.name}
           </p>
 
@@ -824,7 +824,7 @@ export function AdvancedDatabaseSection({ isDemoMode }: AdvancedDatabaseSectionP
                     )}
                   </Button>
                 </div>
-                <p className="text-xs text-kiosk-text/70">{tool.description}</p>
+                <p className="text-xs text-kiosk-text/90">{tool.description}</p>
                 <code className="block text-xs font-mono text-cyan-400/80 bg-kiosk-bg/50 p-2 rounded">
                   {tool.command}
                 </code>
@@ -840,7 +840,7 @@ export function AdvancedDatabaseSection({ isDemoMode }: AdvancedDatabaseSectionP
 
         {/* Migration Tab */}
         <TabsContent value="migration" className="space-y-4">
-          <p className="text-sm text-kiosk-text/70 mb-4">
+          <p className="text-sm text-kiosk-text/90 mb-4">
             Exporte e importe dados entre diferentes motores de banco
           </p>
 
@@ -848,25 +848,25 @@ export function AdvancedDatabaseSection({ isDemoMode }: AdvancedDatabaseSectionP
             <Button variant="kiosk-outline" className="h-auto py-4 flex-col gap-2 button-action-neon">
               <Download className="w-6 h-6" />
               <span className="text-sm">Exportar Dados</span>
-              <span className="text-xs text-kiosk-text/60">JSON/SQL</span>
+              <span className="text-xs text-kiosk-text/85">JSON/SQL</span>
             </Button>
             <Button variant="kiosk-outline" className="h-auto py-4 flex-col gap-2 button-action-neon">
               <Upload className="w-6 h-6" />
               <span className="text-sm">Importar Dados</span>
-              <span className="text-xs text-kiosk-text/60">De outro banco</span>
+              <span className="text-xs text-kiosk-text/85">De outro banco</span>
             </Button>
           </div>
 
           <div className="card-option-dark-3d rounded-lg p-4 space-y-3">
             <h5 className="text-sm font-medium text-label-yellow">Migração Assistida</h5>
-            <p className="text-xs text-kiosk-text/70">
+            <p className="text-xs text-kiosk-text/90">
               Transfira dados automaticamente de um motor para outro mantendo integridade referencial.
             </p>
             <div className="flex items-center gap-2">
               <Badge variant="outline" className="bg-kiosk-surface">
                 {engine.name}
               </Badge>
-              <ArrowLeftRight className="w-4 h-4 text-kiosk-text/50" />
+              <ArrowLeftRight className="w-4 h-4 text-kiosk-text/85" />
               <select className="bg-kiosk-bg border border-kiosk-surface rounded px-2 py-1 text-sm text-kiosk-text">
                 {databaseEngines.filter(e => e.id !== selectedEngine).map(e => (
                   <option key={e.id} value={e.id}>{e.name}</option>
@@ -882,7 +882,7 @@ export function AdvancedDatabaseSection({ isDemoMode }: AdvancedDatabaseSectionP
         {/* Templates Tab */}
         <TabsContent value="templates" className="space-y-4">
           <div className="flex items-center justify-between mb-4">
-            <p className="text-sm text-kiosk-text/70">
+            <p className="text-sm text-kiosk-text/90">
               Templates de tabelas para {engine.name}
             </p>
             <Button size="sm" variant="kiosk-outline" onClick={handleExportSchema} className="button-action-neon">
@@ -909,7 +909,7 @@ export function AdvancedDatabaseSection({ isDemoMode }: AdvancedDatabaseSectionP
                     Copiar
                   </Button>
                 </div>
-                <p className="text-xs text-kiosk-text/70">{template.description}</p>
+                <p className="text-xs text-kiosk-text/90">{template.description}</p>
                 <pre className="text-xs font-mono text-cyan-400/80 bg-kiosk-bg/50 p-3 rounded overflow-x-auto max-h-40">
                   {template.sql}
                 </pre>
@@ -920,7 +920,7 @@ export function AdvancedDatabaseSection({ isDemoMode }: AdvancedDatabaseSectionP
 
         {/* Documentation Tab */}
         <TabsContent value="docs" className="space-y-4">
-          <p className="text-sm text-kiosk-text/70 mb-4">
+          <p className="text-sm text-kiosk-text/90 mb-4">
             Documentação oficial e recursos para {engine.name}
           </p>
 
@@ -937,14 +937,14 @@ export function AdvancedDatabaseSection({ isDemoMode }: AdvancedDatabaseSectionP
                   <BookOpen className="w-5 h-5 icon-neon-blue" />
                   <span className="text-sm text-kiosk-text">{doc.title}</span>
                 </div>
-                <ExternalLink className="w-4 h-4 text-kiosk-text/50" />
+                <ExternalLink className="w-4 h-4 text-kiosk-text/85" />
               </a>
             ))}
           </div>
 
           <div className="card-option-dark-3d rounded-lg p-4 space-y-3">
             <h5 className="text-sm font-medium text-label-yellow">Dicas de Instalação</h5>
-            <div className="text-xs text-kiosk-text/70 space-y-2">
+            <div className="text-xs text-kiosk-text/90 space-y-2">
               {selectedEngine === 'sqlite' && (
                 <p>SQLite já vem embutido - não requer instalação adicional.</p>
               )}

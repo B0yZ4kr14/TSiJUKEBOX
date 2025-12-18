@@ -445,7 +445,7 @@ export function CloudBackupSection({ isDemoMode }: CloudBackupSectionProps) {
                 <p className="text-sm text-kiosk-text">
                   {currentProvider.icon} {currentProvider.name}
                 </p>
-                <p className="text-xs text-kiosk-text/75">
+                <p className="text-xs text-kiosk-text/90">
                   {config.isOAuthConnected ? t('cloudBackup.authenticated') : t('cloudBackup.authenticate')}
                 </p>
               </div>
@@ -513,7 +513,7 @@ export function CloudBackupSection({ isDemoMode }: CloudBackupSectionProps) {
             {t('cloudBackup.migration.title')}
           </Label>
           
-          <p className="text-xs text-kiosk-text/70">
+          <p className="text-xs text-kiosk-text/90">
             {t('cloudBackup.migration.description')}
           </p>
 

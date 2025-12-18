@@ -433,7 +433,7 @@ export function CommandDeck({ disabled = false }: CommandDeckProps) {
               <Power className="w-5 h-5" />
               {t('commandDeck.rebootDialog.title')}
             </AlertDialogTitle>
-            <AlertDialogDescription className="text-kiosk-text/75">
+            <AlertDialogDescription className="text-kiosk-text/90">
               {t('commandDeck.rebootDialog.description')}
             </AlertDialogDescription>
           </AlertDialogHeader>

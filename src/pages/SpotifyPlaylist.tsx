@@ -68,7 +68,7 @@ export default function SpotifyPlaylistPage() {
 
           <div className="relative p-6">
             <Link to="/spotify">
-              <Button variant="ghost" size="icon" className="text-kiosk-text mb-4">
+              <Button variant="ghost" size="icon" className="text-kiosk-text mb-4" aria-label="Voltar ao Spotify">
                 <ArrowLeft className="w-5 h-5" />
               </Button>
             </Link>
@@ -104,16 +104,17 @@ export default function SpotifyPlaylistPage() {
               <button
                 className="w-14 h-14 rounded-full bg-[#1DB954] flex items-center justify-center shadow-lg hover:scale-105 transition-transform"
                 onClick={() => playPlaylist(`spotify:playlist:${playlist.id}`)}
+                aria-label="Reproduzir playlist"
               >
                 <Play className="w-6 h-6 text-black fill-black ml-1" />
               </button>
-              <Button variant="ghost" size="icon" className="w-10 h-10 text-kiosk-text/60 hover:text-kiosk-text">
+              <Button variant="ghost" size="icon" className="w-10 h-10 text-kiosk-text/60 hover:text-kiosk-text" aria-label="Ativar modo aleatório">
                 <Shuffle className="w-5 h-5" />
               </Button>
-              <Button variant="ghost" size="icon" className="w-10 h-10 text-kiosk-text/60 hover:text-kiosk-text">
+              <Button variant="ghost" size="icon" className="w-10 h-10 text-kiosk-text/60 hover:text-kiosk-text" aria-label="Adicionar aos favoritos">
                 <Heart className="w-5 h-5" />
               </Button>
-              <Button variant="ghost" size="icon" className="w-10 h-10 text-kiosk-text/60 hover:text-kiosk-text">
+              <Button variant="ghost" size="icon" className="w-10 h-10 text-kiosk-text/60 hover:text-kiosk-text" aria-label="Mais opções">
                 <MoreHorizontal className="w-5 h-5" />
               </Button>
             </div>

@@ -47,6 +47,7 @@ export default function AdminLogs() {
                     id="auto-refresh"
                     checked={autoRefresh}
                     onCheckedChange={setAutoRefresh}
+                    aria-label="Atualização automática de logs"
                   />
                   <Label htmlFor="auto-refresh" className="text-sm">Auto-refresh</Label>
                 </div>
@@ -84,6 +85,7 @@ export default function AdminLogs() {
                   size="icon"
                   onClick={() => refetch()}
                   disabled={isFetching}
+                  aria-label="Atualizar logs"
                 >
                   <RefreshCw className={cn("w-4 h-4 icon-neon-blue", isFetching && "animate-spin")} />
                 </Button>

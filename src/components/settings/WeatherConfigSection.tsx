@@ -125,6 +125,7 @@ export function WeatherConfigSection() {
             checked={weather.isEnabled}
             onCheckedChange={handleToggle}
             className="data-[state=checked]:bg-cyan-500 switch-3d"
+            aria-label="Habilitar widget de clima"
           />
         </div>
 
@@ -189,6 +190,7 @@ export function WeatherConfigSection() {
               size="icon"
               className="absolute right-0 top-0 h-full px-3 text-kiosk-text/50 hover:text-kiosk-text"
               onClick={() => setShowApiKey(!showApiKey)}
+              aria-label={showApiKey ? 'Ocultar chave de API' : 'Mostrar chave de API'}
             >
               {showApiKey ? <EyeOff className="w-4 h-4" /> : <Eye className="w-4 h-4" />}
             </Button>

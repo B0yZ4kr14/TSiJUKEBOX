@@ -7,6 +7,7 @@ export interface AppUser {
   role: UserRole;
   createdAt: string;
   lastLogin?: string;
+  customPermissions?: Partial<UserPermissions>;
 }
 
 export interface UserPermissions {

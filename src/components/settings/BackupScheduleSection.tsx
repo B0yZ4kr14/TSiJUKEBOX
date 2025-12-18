@@ -108,6 +108,7 @@ export function BackupScheduleSection() {
             id="schedule-enabled"
             checked={schedule.enabled}
             onCheckedChange={(enabled) => setSchedule({ ...schedule, enabled })}
+            aria-label="Habilitar backup automático"
           />
         </div>
 

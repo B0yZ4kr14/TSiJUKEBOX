@@ -109,6 +109,7 @@ export function BackendConnectionSection({
             disabled={isDemoMode}
             className="data-[state=checked]:bg-kiosk-primary"
             data-tour="websocket-toggle"
+            aria-label="Ativar conexão WebSocket"
           />
         </div>
 
@@ -135,6 +136,7 @@ export function BackendConnectionSection({
               max={5000}
               step={500}
               className="w-full"
+              aria-label="Intervalo de polling em milissegundos"
             />
             <p className="text-xs text-settings-hint">
               Menor intervalo = mais responsivo, maior uso de rede

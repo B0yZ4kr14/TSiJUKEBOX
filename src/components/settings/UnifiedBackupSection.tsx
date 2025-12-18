@@ -244,10 +244,10 @@ export function UnifiedBackupSection({ isDemoMode }: UnifiedBackupSectionProps) 
                       </Badge>
                     </div>
                     <div className="flex items-center gap-1 flex-shrink-0 ml-2">
-                      <Button size="icon" onClick={() => handleRestore(backup.id)} disabled={isDemoMode || isLoading === `restore-${backup.id}`} className="w-8 h-8 button-action-neon" title={t('backupLocal.restore')}>
+                      <Button size="icon" onClick={() => handleRestore(backup.id)} disabled={isDemoMode || isLoading === `restore-${backup.id}`} className="w-8 h-8 button-action-neon" title={t('backupLocal.restore')} aria-label={`Restaurar backup ${backup.name}`}>
                         <Upload className="w-4 h-4" />
                       </Button>
-                      <Button size="icon" onClick={() => handleDelete(backup.id)} disabled={isDemoMode || isLoading === `delete-${backup.id}`} className="w-8 h-8 button-destructive-neon" title={t('backupLocal.deleteBackup')}>
+                      <Button size="icon" onClick={() => handleDelete(backup.id)} disabled={isDemoMode || isLoading === `delete-${backup.id}`} className="w-8 h-8 button-destructive-neon" title={t('backupLocal.deleteBackup')} aria-label={`Excluir backup ${backup.name}`}>
                         <Trash2 className="w-4 h-4" />
                       </Button>
                     </div>
@@ -293,7 +293,7 @@ export function UnifiedBackupSection({ isDemoMode }: UnifiedBackupSectionProps) 
                 <Label className="text-label-yellow text-sm">{t('cloudBackup.secretKey')}</Label>
                 <div className="relative">
                   <Input type={showSecrets ? 'text' : 'password'} value={cloudConfig.awsSecretKey || ''} onChange={(e) => setCloudConfig({ ...cloudConfig, awsSecretKey: e.target.value })} placeholder="wJalrXUtnFEMI/K7MDENG/bPxRfiCYEXAMPLEKEY" className="input-3d bg-kiosk-bg font-mono pr-10" disabled={isDemoMode} />
-                  <Button type="button" size="icon" className="absolute right-0 top-0 h-full px-3 button-action-neon" onClick={() => setShowSecrets(!showSecrets)}>
+                  <Button type="button" size="icon" className="absolute right-0 top-0 h-full px-3 button-action-neon" onClick={() => setShowSecrets(!showSecrets)} aria-label={showSecrets ? 'Ocultar chave secreta' : 'Mostrar chave secreta'}>
                     {showSecrets ? <EyeOff className="w-4 h-4" /> : <Eye className="w-4 h-4" />}
                   </Button>
                 </div>
@@ -315,7 +315,7 @@ export function UnifiedBackupSection({ isDemoMode }: UnifiedBackupSectionProps) 
                 <Label className="text-label-yellow text-sm">{t('cloudBackup.password')}</Label>
                 <div className="relative">
                   <Input type={showSecrets ? 'text' : 'password'} value={cloudConfig.megaPassword || ''} onChange={(e) => setCloudConfig({ ...cloudConfig, megaPassword: e.target.value })} placeholder="••••••••" className="input-3d bg-kiosk-bg pr-10" disabled={isDemoMode} />
-                  <Button type="button" size="icon" className="absolute right-0 top-0 h-full px-3 button-action-neon" onClick={() => setShowSecrets(!showSecrets)}>
+                  <Button type="button" size="icon" className="absolute right-0 top-0 h-full px-3 button-action-neon" onClick={() => setShowSecrets(!showSecrets)} aria-label={showSecrets ? 'Ocultar senha' : 'Mostrar senha'}>
                     {showSecrets ? <EyeOff className="w-4 h-4" /> : <Eye className="w-4 h-4" />}
                   </Button>
                 </div>
@@ -341,7 +341,7 @@ export function UnifiedBackupSection({ isDemoMode }: UnifiedBackupSectionProps) 
         <TabsContent value="schedule" className="space-y-4 mt-4">
           <div className="flex items-center justify-between p-3 rounded-lg card-option-dark-3d">
             <Label htmlFor="schedule-enabled" className="text-sm text-label-yellow">{t('backup.automatic')}</Label>
-            <Switch id="schedule-enabled" checked={schedule.enabled} onCheckedChange={(enabled) => setSchedule({ ...schedule, enabled })} data-tour="backup-schedule-toggle" />
+            <Switch id="schedule-enabled" checked={schedule.enabled} onCheckedChange={(enabled) => setSchedule({ ...schedule, enabled })} data-tour="backup-schedule-toggle" aria-label="Habilitar backup automático" />
           </div>
 
           {schedule.enabled && (

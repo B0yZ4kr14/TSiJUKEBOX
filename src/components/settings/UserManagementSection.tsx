@@ -1,14 +1,15 @@
 import { useState, useEffect } from 'react';
-import { Users, Plus, Edit2, Trash2, Shield, ShieldAlert, ShieldCheck } from 'lucide-react';
+import { Users, Plus, Edit2, Trash2, Shield, ShieldAlert, ShieldCheck, Settings2, ChevronDown } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 import { Badge } from '@/components/ui/badge';
+import { Switch } from '@/components/ui/switch';
 import { SettingsSection } from './SettingsSection';
 import { toast } from 'sonner';
 import { useTranslation } from '@/hooks/useTranslation';
-import type { AppUser, UserRole } from '@/types/user';
+import type { AppUser, UserRole, UserPermissions, rolePermissions } from '@/types/user';
 import {
   Dialog,
   DialogContent,
@@ -27,12 +28,28 @@ import {
   AlertDialogHeader,
   AlertDialogTitle,
 } from '@/components/ui/alert-dialog';
+import {
+  Collapsible,
+  CollapsibleContent,
+  CollapsibleTrigger,
+} from '@/components/ui/collapsible';
 
 interface UserFormData {
   username: string;
   password: string;
   role: UserRole;
+  customPermissions?: Partial<UserPermissions>;
 }
+
+const defaultPermissions: UserPermissions = {
+  canAddToQueue: false,
+  canRemoveFromQueue: false,
+  canModifyPlaylists: false,
+  canControlPlayback: true,
+  canAccessSettings: false,
+  canManageUsers: false,
+  canAccessSystemControls: false,
+};
 
 export function UserManagementSection() {
   const { t } = useTranslation();
@@ -41,10 +58,12 @@ export function UserManagementSection() {
   const [showDeleteDialog, setShowDeleteDialog] = useState(false);
   const [editingUser, setEditingUser] = useState<AppUser | null>(null);
   const [userToDelete, setUserToDelete] = useState<AppUser | null>(null);
+  const [permissionsOpen, setPermissionsOpen] = useState(false);
   const [formData, setFormData] = useState<UserFormData>({
     username: '',
     password: '',
     role: 'user',
+    customPermissions: undefined,
   });
 
   const roleConfig: Record<UserRole, { label: string; icon: React.ReactNode; color: string }> = {
@@ -71,6 +90,16 @@ export function UserManagementSection() {
     admin: t('users.roleDescriptions.admin'),
   };
 
+  const permissionLabels: Record<keyof UserPermissions, string> = {
+    canAddToQueue: 'Adicionar à fila',
+    canRemoveFromQueue: 'Remover da fila',
+    canModifyPlaylists: 'Modificar playlists',
+    canControlPlayback: 'Controlar reprodução',
+    canAccessSettings: 'Acessar configurações',
+    canManageUsers: 'Gerenciar usuários',
+    canAccessSystemControls: 'Controles do sistema',
+  };
+
   useEffect(() => {
     const saved = localStorage.getItem('app_users');
     if (saved) {
@@ -91,6 +120,39 @@ export function UserManagementSection() {
     localStorage.setItem('app_users', JSON.stringify(newUsers));
   };
 
+  const getBasePermissions = (role: UserRole): UserPermissions => {
+    const base: Record<UserRole, UserPermissions> = {
+      newbie: {
+        canAddToQueue: false,
+        canRemoveFromQueue: false,
+        canModifyPlaylists: false,
+        canControlPlayback: true,
+        canAccessSettings: false,
+        canManageUsers: false,
+        canAccessSystemControls: false,
+      },
+      user: {
+        canAddToQueue: true,
+        canRemoveFromQueue: true,
+        canModifyPlaylists: true,
+        canControlPlayback: true,
+        canAccessSettings: false,
+        canManageUsers: false,
+        canAccessSystemControls: false,
+      },
+      admin: {
+        canAddToQueue: true,
+        canRemoveFromQueue: true,
+        canModifyPlaylists: true,
+        canControlPlayback: true,
+        canAccessSettings: true,
+        canManageUsers: true,
+        canAccessSystemControls: true,
+      },
+    };
+    return base[role];
+  };
+
   const handleAddUser = () => {
     if (!formData.username || !formData.password) {
       toast.error(t('users.fillAllFields'));
@@ -107,11 +169,13 @@ export function UserManagementSection() {
       username: formData.username,
       role: formData.role,
       createdAt: new Date().toISOString(),
+      customPermissions: formData.customPermissions,
     };
 
     saveUsers([...users, newUser]);
     setShowAddDialog(false);
-    setFormData({ username: '', password: '', role: 'user' });
+    setFormData({ username: '', password: '', role: 'user', customPermissions: undefined });
+    setPermissionsOpen(false);
     toast.success(t('users.userCreated'));
   };
 
@@ -120,12 +184,13 @@ export function UserManagementSection() {
 
     const updated = users.map(u => 
       u.id === editingUser.id 
-        ? { ...u, role: formData.role }
+        ? { ...u, role: formData.role, customPermissions: formData.customPermissions }
         : u
     );
 
     saveUsers(updated);
     setEditingUser(null);
+    setPermissionsOpen(false);
     toast.success(t('users.userUpdated'));
   };
 
@@ -148,13 +213,64 @@ export function UserManagementSection() {
 
   const openEditDialog = (user: AppUser) => {
     setEditingUser(user);
-    setFormData({ username: user.username, password: '', role: user.role });
+    setFormData({ 
+      username: user.username, 
+      password: '', 
+      role: user.role,
+      customPermissions: user.customPermissions,
+    });
+    setPermissionsOpen(false);
   };
 
   const openDeleteDialog = (user: AppUser) => {
     setUserToDelete(user);
     setShowDeleteDialog(true);
   };
+
+  const handlePermissionChange = (permission: keyof UserPermissions, value: boolean) => {
+    const currentCustom = formData.customPermissions || {};
+    setFormData({
+      ...formData,
+      customPermissions: {
+        ...currentCustom,
+        [permission]: value,
+      },
+    });
+  };
+
+  const getCurrentPermissionValue = (permission: keyof UserPermissions): boolean => {
+    if (formData.customPermissions?.[permission] !== undefined) {
+      return formData.customPermissions[permission];
+    }
+    return getBasePermissions(formData.role)[permission];
+  };
+
+  const renderPermissionsSection = () => (
+    <Collapsible open={permissionsOpen} onOpenChange={setPermissionsOpen}>
+      <CollapsibleTrigger className="flex items-center justify-between w-full p-3 rounded-lg card-option-dark-3d hover:bg-kiosk-surface/50 transition-colors">
+        <div className="flex items-center gap-2">
+          <Settings2 className="w-4 h-4 icon-neon-blue" />
+          <span className="text-label-yellow text-sm font-medium">Permissões Avançadas</span>
+        </div>
+        <ChevronDown className={`w-4 h-4 text-kiosk-text/60 transition-transform ${permissionsOpen ? 'rotate-180' : ''}`} />
+      </CollapsibleTrigger>
+      <CollapsibleContent className="mt-3 space-y-2 p-3 rounded-lg card-option-dark-3d">
+        <p className="text-xs text-settings-hint mb-3">
+          Personalize as permissões ou use os padrões do nível de acesso selecionado.
+        </p>
+        {(Object.keys(permissionLabels) as Array<keyof UserPermissions>).map((permission) => (
+          <div key={permission} className="flex items-center justify-between py-2">
+            <Label className="text-sm text-kiosk-text/90">{permissionLabels[permission]}</Label>
+            <Switch
+              checked={getCurrentPermissionValue(permission)}
+              onCheckedChange={(value) => handlePermissionChange(permission, value)}
+              aria-label={`Permitir ${permissionLabels[permission].toLowerCase()}`}
+            />
+          </div>
+        ))}
+      </CollapsibleContent>
+    </Collapsible>
+  );
 
   return (
     <SettingsSection
@@ -192,6 +308,7 @@ export function UserManagementSection() {
                   size="icon"
                   className="h-8 w-8 button-action-neon"
                   onClick={() => openEditDialog(user)}
+                  aria-label={`Editar usuário ${user.username}`}
                 >
                   <Edit2 className="w-4 h-4" />
                 </Button>
@@ -199,6 +316,7 @@ export function UserManagementSection() {
                   size="icon"
                   className="h-8 w-8 button-destructive-neon"
                   onClick={() => openDeleteDialog(user)}
+                  aria-label={`Remover usuário ${user.username}`}
                 >
                   <Trash2 className="w-4 h-4" />
                 </Button>
@@ -212,7 +330,8 @@ export function UserManagementSection() {
           className="w-full button-primary-glow-3d"
           data-tour="add-user-button"
           onClick={() => {
-            setFormData({ username: '', password: '', role: 'user' });
+            setFormData({ username: '', password: '', role: 'user', customPermissions: undefined });
+            setPermissionsOpen(false);
             setShowAddDialog(true);
           }}
         >
@@ -269,7 +388,7 @@ export function UserManagementSection() {
               <Label className="text-label-yellow">{t('users.accessLevel')}</Label>
               <Select
                 value={formData.role}
-                onValueChange={(value: UserRole) => setFormData({ ...formData, role: value })}
+                onValueChange={(value: UserRole) => setFormData({ ...formData, role: value, customPermissions: undefined })}
               >
                 <SelectTrigger>
                   <SelectValue />
@@ -281,6 +400,9 @@ export function UserManagementSection() {
                 </SelectContent>
               </Select>
             </div>
+            
+            {/* Advanced Permissions */}
+            {renderPermissionsSection()}
           </div>
           <DialogFooter>
             <Button variant="kiosk-outline" onClick={() => setShowAddDialog(false)}>
@@ -305,7 +427,7 @@ export function UserManagementSection() {
               <Label className="text-label-yellow">{t('users.accessLevel')}</Label>
               <Select
                 value={formData.role}
-                onValueChange={(value: UserRole) => setFormData({ ...formData, role: value })}
+                onValueChange={(value: UserRole) => setFormData({ ...formData, role: value, customPermissions: undefined })}
               >
                 <SelectTrigger>
                   <SelectValue />
@@ -317,6 +439,9 @@ export function UserManagementSection() {
                 </SelectContent>
               </Select>
             </div>
+            
+            {/* Advanced Permissions */}
+            {renderPermissionsSection()}
           </div>
           <DialogFooter>
             <Button variant="kiosk-outline" onClick={() => setEditingUser(null)}>

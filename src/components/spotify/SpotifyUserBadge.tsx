@@ -16,7 +16,7 @@ export function SpotifyUserBadge({ user, isConnected, className }: SpotifyUserBa
       <Link to="/settings">
         <motion.div
           className={cn(
-            "flex items-center gap-2 px-3 py-1.5 rounded-full bg-kiosk-surface/50 text-kiosk-text/60 hover:bg-kiosk-surface hover:text-kiosk-text transition-colors",
+            "flex items-center gap-2 px-3 py-1.5 rounded-full bg-kiosk-surface/50 text-kiosk-text/85 hover:bg-kiosk-surface hover:text-kiosk-text transition-colors",
             className
           )}
           whileHover={{ scale: 1.02 }}

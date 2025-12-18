@@ -43,9 +43,9 @@ export default function SpotifyPlaylistPage() {
     return (
       <KioskLayout>
         <div className="min-h-screen flex flex-col items-center justify-center p-8">
-          <Music className="w-16 h-16 text-kiosk-text/50 mb-4" />
+          <Music className="w-16 h-16 text-kiosk-text/85 mb-4" />
           <h1 className="text-xl font-bold text-kiosk-text mb-2">Playlist não encontrada</h1>
-          <p className="text-kiosk-text/60 mb-4">A playlist pode ter sido removida ou você não tem acesso.</p>
+          <p className="text-kiosk-text/85 mb-4">A playlist pode ter sido removida ou você não tem acesso.</p>
           <Link to="/spotify">
             <Button className="bg-[#1DB954] hover:bg-[#1ed760] text-black">
               Voltar ao Spotify
@@ -79,18 +79,18 @@ export default function SpotifyPlaylistPage() {
                   <img src={playlist.imageUrl} alt={playlist.name} className="w-full h-full object-cover" />
                 ) : (
                   <div className="w-full h-full flex items-center justify-center">
-                    <Music className="w-20 h-20 text-kiosk-text/50" />
+                    <Music className="w-20 h-20 text-kiosk-text/85" />
                   </div>
                 )}
               </div>
 
               <div className="flex-1">
-                <p className="text-sm text-kiosk-text/60 uppercase tracking-wider mb-1">Playlist</p>
+                <p className="text-sm text-kiosk-text/85 uppercase tracking-wider mb-1">Playlist</p>
                 <h1 className="text-3xl md:text-5xl font-bold text-kiosk-text mb-4">{playlist.name}</h1>
                 {playlist.description && (
-                  <p className="text-kiosk-text/60 mb-2 line-clamp-2">{playlist.description}</p>
+                  <p className="text-kiosk-text/85 mb-2 line-clamp-2">{playlist.description}</p>
                 )}
-                <div className="flex items-center gap-2 text-sm text-kiosk-text/60">
+                <div className="flex items-center gap-2 text-sm text-kiosk-text/85">
                   <span className="font-semibold text-kiosk-text">{playlist.owner}</span>
                   <span>•</span>
                   <span>{tracks.length} músicas</span>
@@ -108,13 +108,13 @@ export default function SpotifyPlaylistPage() {
               >
                 <Play className="w-6 h-6 text-black fill-black ml-1" />
               </button>
-              <Button variant="ghost" size="icon" className="w-10 h-10 text-kiosk-text/60 hover:text-kiosk-text" aria-label="Ativar modo aleatório">
+              <Button variant="ghost" size="icon" className="w-10 h-10 text-kiosk-text/85 hover:text-kiosk-text" aria-label="Ativar modo aleatório">
                 <Shuffle className="w-5 h-5" />
               </Button>
-              <Button variant="ghost" size="icon" className="w-10 h-10 text-kiosk-text/60 hover:text-kiosk-text" aria-label="Adicionar aos favoritos">
+              <Button variant="ghost" size="icon" className="w-10 h-10 text-kiosk-text/85 hover:text-kiosk-text" aria-label="Adicionar aos favoritos">
                 <Heart className="w-5 h-5" />
               </Button>
-              <Button variant="ghost" size="icon" className="w-10 h-10 text-kiosk-text/60 hover:text-kiosk-text" aria-label="Mais opções">
+              <Button variant="ghost" size="icon" className="w-10 h-10 text-kiosk-text/85 hover:text-kiosk-text" aria-label="Mais opções">
                 <MoreHorizontal className="w-5 h-5" />
               </Button>
             </div>
@@ -123,7 +123,7 @@ export default function SpotifyPlaylistPage() {
 
         {/* Track list header */}
         <div className="sticky top-0 z-30 bg-kiosk-bg/95 backdrop-blur-md border-b border-kiosk-border">
-          <div className="flex items-center gap-4 px-4 py-2 text-sm text-kiosk-text/60">
+          <div className="flex items-center gap-4 px-4 py-2 text-sm text-kiosk-text/85">
             <span className="w-8 text-center">#</span>
             <span className="w-10" />
             <span className="flex-1">Título</span>
@@ -137,8 +137,8 @@ export default function SpotifyPlaylistPage() {
         <div className="p-4">
           {tracks.length === 0 ? (
             <div className="text-center py-12">
-              <Music className="w-12 h-12 text-kiosk-text/50 mx-auto mb-4" />
-              <p className="text-kiosk-text/60">Esta playlist está vazia</p>
+              <Music className="w-12 h-12 text-kiosk-text/85 mx-auto mb-4" />
+              <p className="text-kiosk-text/85">Esta playlist está vazia</p>
             </div>
           ) : (
             <div className="space-y-1">

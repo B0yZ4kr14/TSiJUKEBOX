@@ -75,9 +75,9 @@ export function WeatherWidget() {
           animate={{ rotate: 360 }}
           transition={{ duration: 1, repeat: Infinity, ease: 'linear' }}
         >
-          <RefreshCw className="w-4 h-4 text-kiosk-text/50" />
+          <RefreshCw className="w-4 h-4 text-kiosk-text/85" />
         </motion.div>
-        <span className="text-xs text-kiosk-text/70 font-medium">Carregando...</span>
+        <span className="text-xs text-kiosk-text/90 font-medium">Carregando...</span>
       </div>
     );
   }
@@ -112,7 +112,7 @@ export function WeatherWidget() {
                     {weather.temperature}°C
                   </span>
                 </div>
-                <div className="flex items-center gap-1 text-xs text-kiosk-text/70">
+                <div className="flex items-center gap-1 text-xs text-kiosk-text/90">
                   <MapPin className="w-3 h-3" />
                   <span className="font-medium">{weather.location}</span>
                 </div>
@@ -123,7 +123,7 @@ export function WeatherWidget() {
                 animate={{ rotate: isExpanded ? 180 : 0 }}
                 transition={{ duration: 0.2 }}
               >
-                <ChevronDown className="w-4 h-4 text-kiosk-text/50" />
+                <ChevronDown className="w-4 h-4 text-kiosk-text/85" />
               </motion.div>
             </motion.div>
           </TooltipTrigger>
@@ -133,7 +133,7 @@ export function WeatherWidget() {
                 <AnimatedWeatherIcon conditionCode={weather.conditionCode} size="md" />
                 <div>
                   <p className="font-semibold text-kiosk-text">{weather.condition}</p>
-                  <p className="text-xs text-kiosk-text/70">
+                  <p className="text-xs text-kiosk-text/90">
                     Sensação: {weather.feelsLike}°C
                   </p>
                 </div>
@@ -150,7 +150,7 @@ export function WeatherWidget() {
                 </div>
               </div>
 
-              <div className="text-xs text-kiosk-text/50 pt-1 border-t border-kiosk-surface">
+              <div className="text-xs text-kiosk-text/85 pt-1 border-t border-kiosk-surface">
                 {weather.location}, {weather.region} - {weather.country}
                 <br />
                 Atualizado: {weather.updatedAt.toLocaleTimeString('pt-BR', { hour: '2-digit', minute: '2-digit' })}
@@ -183,7 +183,7 @@ export function WeatherWidget() {
                   }}
                   className="p-1.5 rounded-lg hover:bg-kiosk-surface transition-colors"
                 >
-                  <RefreshCw className="w-4 h-4 text-kiosk-text/60" />
+                  <RefreshCw className="w-4 h-4 text-kiosk-text/85" />
                 </button>
               </div>
               

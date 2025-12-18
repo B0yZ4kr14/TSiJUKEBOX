@@ -60,7 +60,7 @@ export function CreatePlaylistModal({ isOpen, onClose, onCreate, isCreating }: C
             {/* Close button */}
             <button
               onClick={handleClose}
-              className="absolute top-4 right-4 text-kiosk-text/50 hover:text-kiosk-text"
+              className="absolute top-4 right-4 text-kiosk-text/85 hover:text-kiosk-text"
             >
               <X className="w-5 h-5" />
             </button>
@@ -72,7 +72,7 @@ export function CreatePlaylistModal({ isOpen, onClose, onCreate, isCreating }: C
               </div>
               <div>
                 <h2 className="text-xl font-bold text-kiosk-text">Nova Playlist</h2>
-                <p className="text-sm text-kiosk-text/60">Crie sua playlist personalizada</p>
+                <p className="text-sm text-kiosk-text/85">Crie sua playlist personalizada</p>
               </div>
             </div>
 
@@ -105,7 +105,7 @@ export function CreatePlaylistModal({ isOpen, onClose, onCreate, isCreating }: C
               <div className="flex items-center justify-between py-2">
                 <div>
                   <Label className="text-kiosk-text">Playlist Pública</Label>
-                  <p className="text-xs text-kiosk-text/50">Outros usuários poderão ver</p>
+                  <p className="text-xs text-kiosk-text/85">Outros usuários poderão ver</p>
                 </div>
                 <Switch
                   checked={isPublic}

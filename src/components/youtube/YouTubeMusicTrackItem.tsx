@@ -45,7 +45,7 @@ export function YouTubeMusicTrackItem({
       <div className="w-8 text-center">
         {index !== undefined ? (
           <>
-            <span className="text-kiosk-text/50 text-sm group-hover:hidden">{index + 1}</span>
+            <span className="text-kiosk-text/85 text-sm group-hover:hidden">{index + 1}</span>
             <button
               className="hidden group-hover:block text-kiosk-text hover:text-[#FF0000]"
               onClick={onPlay}
@@ -55,7 +55,7 @@ export function YouTubeMusicTrackItem({
           </>
         ) : (
           <button
-            className="text-kiosk-text/50 hover:text-[#FF0000]"
+            className="text-kiosk-text/85 hover:text-[#FF0000]"
             onClick={onPlay}
           >
             <Play className="w-4 h-4 fill-current" />
@@ -75,7 +75,7 @@ export function YouTubeMusicTrackItem({
             />
           ) : (
             <div className="w-full h-full flex items-center justify-center">
-              <span className="text-kiosk-text/50">♪</span>
+              <span className="text-kiosk-text/85">♪</span>
             </div>
           )}
         </div>
@@ -101,7 +101,7 @@ export function YouTubeMusicTrackItem({
           size="icon"
           className={cn(
             "w-8 h-8",
-            isLiked ? "text-[#FF0000]" : "text-kiosk-text/50 hover:text-kiosk-text"
+            isLiked ? "text-[#FF0000]" : "text-kiosk-text/85 hover:text-kiosk-text"
           )}
           onClick={onLike}
         >
@@ -110,7 +110,7 @@ export function YouTubeMusicTrackItem({
         <Button
           variant="ghost"
           size="icon"
-          className="w-8 h-8 text-kiosk-text/50 hover:text-kiosk-text"
+          className="w-8 h-8 text-kiosk-text/85 hover:text-kiosk-text"
           onClick={onAddToQueue}
           title="Adicionar à fila"
         >
@@ -119,7 +119,7 @@ export function YouTubeMusicTrackItem({
         <Button
           variant="ghost"
           size="icon"
-          className="w-8 h-8 text-kiosk-text/50 hover:text-kiosk-text"
+          className="w-8 h-8 text-kiosk-text/85 hover:text-kiosk-text"
           onClick={onAddToPlaylist}
           title="Adicionar à playlist"
         >
@@ -128,7 +128,7 @@ export function YouTubeMusicTrackItem({
       </div>
 
       {/* Duration */}
-      <span className="text-sm text-kiosk-text/50 w-12 text-right">
+      <span className="text-sm text-kiosk-text/85 w-12 text-right">
         {formatDuration(track.durationMs)}
       </span>
     </div>

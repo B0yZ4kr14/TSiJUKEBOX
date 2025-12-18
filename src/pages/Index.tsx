@@ -173,7 +173,7 @@ export default function Index() {
                   <Music className="w-8 h-8 text-kiosk-primary" />
                 </motion.div>
               </div>
-              <p className="text-kiosk-text/70">{t('notifications.connecting')}</p>
+              <p className="text-kiosk-text/90">{t('notifications.connecting')}</p>
             </motion.div>
           </div>
         </div>
@@ -193,11 +193,11 @@ export default function Index() {
               <span className="text-4xl">⚠️</span>
             </div>
             <h2 className="text-2xl font-bold text-kiosk-text">{t('notifications.connectionError')}</h2>
-            <p className="text-kiosk-text/70">
+            <p className="text-kiosk-text/90">
               {t('notifications.backendNotRunning')} <br />
               <code className="text-kiosk-primary">{apiUrl}</code>
             </p>
-            <p className="text-sm text-kiosk-text/50">
+            <p className="text-sm text-kiosk-text/85">
               {isDev 
                 ? t('notifications.enableDemoMode')
                 : t('notifications.backendNotRunning')

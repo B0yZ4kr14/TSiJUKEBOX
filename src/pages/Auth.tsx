@@ -259,7 +259,7 @@ export default function Auth() {
                 {isLoading ? 'Entrando...' : 'Entrar'}
               </Button>
               
-              <p className="text-xs text-kiosk-text/60 text-center mt-4">
+              <p className="text-xs text-kiosk-text/85 text-center mt-4">
                 Credenciais padrão: tsi / connect
               </p>
             </form>

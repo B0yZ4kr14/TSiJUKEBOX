@@ -151,7 +151,7 @@ export function GuidedTour({ steps, isOpen, onClose, onComplete }: GuidedTourPro
           {/* Close button */}
           <button
             onClick={handleSkip}
-            className="absolute top-3 right-3 text-kiosk-text/50 hover:text-kiosk-text transition-colors"
+            className="absolute top-3 right-3 text-kiosk-text/85 hover:text-kiosk-text transition-colors"
           >
             <X className="w-4 h-4" />
           </button>
@@ -190,13 +190,13 @@ export function GuidedTour({ steps, isOpen, onClose, onComplete }: GuidedTourPro
               size="sm"
               onClick={handlePrev}
               disabled={currentStep === 0}
-              className="text-kiosk-text/70 hover:text-kiosk-text button-ghost-visible"
+              className="text-kiosk-text/90 hover:text-kiosk-text button-ghost-visible"
             >
               <ChevronLeft className="w-4 h-4 mr-1" />
               Anterior
             </Button>
 
-            <span className="text-xs text-kiosk-text/50">
+            <span className="text-xs text-kiosk-text/85">
               {currentStep + 1} / {steps.length}
             </span>
 

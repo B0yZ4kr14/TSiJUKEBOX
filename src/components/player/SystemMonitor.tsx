@@ -56,7 +56,7 @@ export function SystemMonitor({ cpu, memory, temp }: SystemMonitorProps) {
           getStatusGlow(cpu, { warning: 70, danger: 90 })
         )} />
         <motion.span 
-          className="text-xs font-bold text-kiosk-text/70 tabular-nums"
+          className="text-xs font-bold text-kiosk-text/90 tabular-nums"
           key={cpu.toFixed(0)}
           initial={{ opacity: 0.5 }}
           animate={{ opacity: 1 }}
@@ -78,7 +78,7 @@ export function SystemMonitor({ cpu, memory, temp }: SystemMonitorProps) {
           getStatusGlow(memory, { warning: 75, danger: 90 })
         )} />
         <motion.span 
-          className="text-xs font-bold text-kiosk-text/70 tabular-nums"
+          className="text-xs font-bold text-kiosk-text/90 tabular-nums"
           key={memory.toFixed(0)}
           initial={{ opacity: 0.5 }}
           animate={{ opacity: 1 }}
@@ -100,7 +100,7 @@ export function SystemMonitor({ cpu, memory, temp }: SystemMonitorProps) {
           getStatusGlow(temp, { warning: 60, danger: 75 })
         )} />
         <motion.span 
-          className="text-xs font-bold text-kiosk-text/70 tabular-nums"
+          className="text-xs font-bold text-kiosk-text/90 tabular-nums"
           key={temp.toFixed(0)}
           initial={{ opacity: 0.5 }}
           animate={{ opacity: 1 }}

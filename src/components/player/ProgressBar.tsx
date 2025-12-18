@@ -134,7 +134,7 @@ export function ProgressBar({ position, duration, genre, onSeek, className }: Pr
 
       {/* Time display with 3D badges */}
       <div className="flex justify-between text-xs">
-        <span className="tabular-nums text-kiosk-text/70 badge-3d px-2 py-0.5 rounded">{formatTime(position)}</span>
+        <span className="tabular-nums text-kiosk-text/90 badge-3d px-2 py-0.5 rounded">{formatTime(position)}</span>
         {hoverPosition !== null && isInteractive && (
           <motion.span 
             className="text-kiosk-text/90 tabular-nums badge-3d px-2 py-0.5 rounded bg-kiosk-primary/20"
@@ -144,7 +144,7 @@ export function ProgressBar({ position, duration, genre, onSeek, className }: Pr
             {formatTime(hoverPosition)}
           </motion.span>
         )}
-        <span className="tabular-nums text-kiosk-text/70 badge-3d px-2 py-0.5 rounded">{formatTime(duration)}</span>
+        <span className="tabular-nums text-kiosk-text/90 badge-3d px-2 py-0.5 rounded">{formatTime(duration)}</span>
       </div>
     </div>
   );

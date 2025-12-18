@@ -48,7 +48,7 @@ export function UserBadge() {
         variant="ghost"
         size="sm"
         onClick={handleLogin}
-        className="h-8 px-3 rounded-full bg-kiosk-surface/30 hover:bg-kiosk-surface/50 text-kiosk-text/70 hover:text-kiosk-text"
+        className="h-8 px-3 rounded-full bg-kiosk-surface/30 hover:bg-kiosk-surface/50 text-kiosk-text/90 hover:text-kiosk-text"
       >
         <LogIn className="w-4 h-4 mr-2" />
         Entrar

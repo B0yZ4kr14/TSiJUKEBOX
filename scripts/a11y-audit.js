@@ -44,6 +44,34 @@ const IMPACT_COLORS = {
   minor: COLORS.dim,
 };
 
+// Comment patterns that validate a WCAG exception
+const WCAG_EXCEPTION_PATTERNS = [
+  /\/\*\s*WCAG\s*Exception/i,
+  /\{\/\*\s*WCAG\s*Exception/i,
+  /\/\/\s*WCAG\s*Exception/i,
+];
+
+/**
+ * Check if a match has a WCAG Exception comment in the 1-3 lines before it
+ */
+function hasWcagExceptionComment(content, matchIndex) {
+  const beforeMatch = content.substring(0, matchIndex);
+  const lines = beforeMatch.split('\n');
+  const lineNumber = lines.length - 1;
+  const allLines = content.split('\n');
+  
+  for (let i = 1; i <= 3; i++) {
+    const checkLine = lineNumber - i;
+    if (checkLine >= 0) {
+      const line = allLines[checkLine];
+      if (WCAG_EXCEPTION_PATTERNS.some(p => p.test(line))) {
+        return true;
+      }
+    }
+  }
+  return false;
+}
+
 // Prohibited patterns for simple mode
 const PROHIBITED_PATTERNS = [
   // === LOW CONTRAST TEXT PATTERNS (CRITICAL) ===
@@ -387,6 +415,11 @@ async function runSimpleAudit() {
       
       let match;
       while ((match = pattern.exec(content)) !== null) {
+        // Skip if has WCAG Exception comment (reduces false positives)
+        if (hasWcagExceptionComment(content, match.index)) {
+          continue;
+        }
+        
         // Find line number
         const beforeMatch = content.substring(0, match.index);
         const lineNumber = beforeMatch.split('\n').length;

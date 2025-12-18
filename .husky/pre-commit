@@ -19,3 +19,19 @@ if [ $? -ne 0 ]; then
 fi
 
 echo "✅ Verificação de contraste passou!"
+
+echo ""
+echo "🔍 Verificando comentários WCAG em exceções..."
+
+# Executar validador de comentários WCAG
+node scripts/validate-wcag-comments.js
+
+if [ $? -ne 0 ]; then
+  echo ""
+  echo "❌ Commit bloqueado: Exceções WCAG sem comentários"
+  echo "💡 Adicione /* WCAG Exception: */ antes das ocorrências"
+  echo ""
+  exit 1
+fi
+
+echo "✅ Todas as exceções WCAG estão documentadas!"

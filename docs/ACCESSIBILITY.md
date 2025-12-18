@@ -118,7 +118,18 @@ Ao criar uma nova exceção, adicione um comentário no código:
 
 E adicione a entrada na tabela acima neste documento.
 
-### 4. Touch Targets
+#### Página de Visualização Interativa
+
+Acesse `/wcag-exceptions` na aplicação para ver demonstrações visuais de todas as exceções WCAG com:
+- Estados normal vs hover comparados lado a lado
+- Categorização por tipo (decorativo, mudança de estado, desabilitado, secundário)
+- Código de comentário WCAG para copiar
+- Filtros por categoria
+
+#### Validação Automatizada
+
+Execute `npm run wcag:validate` para verificar que todas as exceções estão documentadas.
+O CI/CD bloqueia PRs com exceções não documentadas.
 
 Todos os elementos interativos atendem ao tamanho mínimo de 44x44px:
 

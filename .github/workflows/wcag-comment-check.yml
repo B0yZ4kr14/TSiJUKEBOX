@@ -1,0 +1,88 @@
+name: WCAG Comment Validation
+
+on:
+  push:
+    branches: [main, master]
+    paths:
+      - 'src/**/*.tsx'
+      - 'src/**/*.jsx'
+  pull_request:
+    branches: [main, master]
+    paths:
+      - 'src/**/*.tsx'
+      - 'src/**/*.jsx'
+
+jobs:
+  wcag-comment-check:
+    name: Validate WCAG Exception Comments
+    runs-on: ubuntu-latest
+    
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+        
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+          
+      - name: Run WCAG comment validation
+        id: wcag
+        run: node scripts/validate-wcag-comments.js
+        
+      - name: Generate JSON report
+        if: failure()
+        run: node scripts/validate-wcag-comments.js --json > wcag-report.json
+        continue-on-error: true
+        
+      - name: Upload WCAG report
+        if: failure()
+        uses: actions/upload-artifact@v4
+        with:
+          name: wcag-comment-report
+          path: wcag-report.json
+          retention-days: 7
+          
+      - name: Comment PR with results
+        if: github.event_name == 'pull_request' && failure()
+        uses: actions/github-script@v7
+        with:
+          script: |
+            const fs = require('fs');
+            let comment = '## ⚠️ WCAG Comment Validation Failed\n\n';
+            
+            try {
+              const report = JSON.parse(fs.readFileSync('wcag-report.json', 'utf8'));
+              comment += `Found **${report.undocumented}** low-contrast occurrence(s) without WCAG comments.\n\n`;
+              comment += `**Documented exceptions:** ${report.documented}\n\n`;
+              
+              if (report.issues.length > 0) {
+                comment += `### Missing Comments\n\n`;
+                const byFile = {};
+                report.issues.forEach(i => {
+                  if (!byFile[i.file]) byFile[i.file] = [];
+                  byFile[i.file].push(i);
+                });
+                
+                for (const [file, issues] of Object.entries(byFile)) {
+                  comment += `**${file}**\n`;
+                  issues.forEach(i => {
+                    comment += `- Line ${i.line}: \`${i.match}\`\n`;
+                  });
+                  comment += '\n';
+                }
+                
+                comment += `### How to Fix\n\n`;
+                comment += `Add a comment on the line before each occurrence:\n\n`;
+                comment += '```tsx\n{/* WCAG Exception: /30 decorative icon, becomes visible on hover */}\n<Icon className="text-kiosk-text/30" />\n```\n';
+              }
+            } catch (e) {
+              comment += `Could not parse report: ${e.message}`;
+            }
+            
+            await github.rest.issues.createComment({
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              issue_number: context.issue.number,
+              body: comment,
+            });

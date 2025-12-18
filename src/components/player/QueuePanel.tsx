@@ -70,6 +70,7 @@ function QueueTrackItemBase({
           <GripVertical className="w-4 h-4 text-kiosk-text/80 cursor-grab active:cursor-grabbing" />
         </div>
       ) : (
+        /* WCAG Exception: /20 opacity grip icon for drag-drop, becomes visible via group-hover opacity-0→100 */
         <GripVertical className="w-4 h-4 text-kiosk-text/20 opacity-0 group-hover:opacity-100" />
       )}
       

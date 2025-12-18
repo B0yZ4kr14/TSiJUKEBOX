@@ -83,6 +83,7 @@ export function CloudConnectionSection() {
           </>
         ) : (
           <div className="text-center py-6">
+            {/* WCAG Exception: Decorative cloud icon at /20 for unconfigured empty state */}
             <Cloud className="w-12 h-12 text-kiosk-text/20 mx-auto mb-3" />
             <p className="text-settings-hint mb-4">Lovable Cloud não está configurado</p>
             <Button variant="kiosk-outline" className="border-kiosk-border text-kiosk-text">

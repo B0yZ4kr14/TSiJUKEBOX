@@ -179,7 +179,8 @@ export default function YouTubeMusicBrowser() {
                 ))}
               </div>
             ) : playlists.length === 0 ? (
-              <div className="text-center py-12 text-kiosk-text/60">
+              <div className="text-center py-12 text-kiosk-text/85">
+                {/* WCAG Exception: Decorative icon at /30 opacity, not critical content */}
                 <Library className="w-16 h-16 mx-auto mb-4 opacity-30" />
                 <p>Nenhuma playlist encontrada</p>
                 <p className="text-sm">Crie sua primeira playlist no YouTube Music</p>

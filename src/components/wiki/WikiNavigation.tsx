@@ -461,7 +461,7 @@ export function WikiNavigation({
                                 <span className="text-xs font-medium truncate flex-1">
                                   {highlightMatch(subSection.title, searchQuery)}
                                 </span>
-                                <Badge variant="outline" className="text-[9px] px-1 py-0 h-4 border-kiosk-border text-kiosk-text/50">
+                                <Badge variant="outline" className="text-[9px] px-1 py-0 h-4 border-kiosk-border text-kiosk-text/85">
                                   {subSection.articles.length}
                                 </Badge>
                               </button>
@@ -502,7 +502,7 @@ export function WikiNavigation({
                                                 showTreeLines ? "pl-5 pr-2" : "px-3",
                                                 selectedArticle === article.id
                                                   ? "bg-primary/20 text-primary"
-                                                  : "hover:bg-kiosk-surface/30 text-kiosk-text/60 hover:text-kiosk-text",
+                                                  : "hover:bg-kiosk-surface/30 text-kiosk-text/85 hover:text-kiosk-text",
                                                 // Highlight new articles (only if not read)
                                                 NEW_ARTICLE_IDS.has(article.id) && !(isArticleRead?.(article.id)) && "bg-green-500/5 hover:bg-green-500/10"
                                               )}

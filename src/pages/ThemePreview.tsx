@@ -402,14 +402,14 @@ export default function ThemePreview() {
                         className="w-full h-10 rounded-lg mb-1 shadow-lg border border-white/10"
                         style={{ background: `hsl(${currentPreset.colors.surface})` }}
                       />
-                      <span className="text-xs text-kiosk-text/60">Surface</span>
+                      <span className="text-xs text-kiosk-text/85">Surface</span>
                     </div>
                     <div className="text-center">
                       <div 
                         className="w-full h-10 rounded-lg mb-1 shadow-lg border border-white/10"
                         style={{ background: `hsl(${currentPreset.colors.text})` }}
                       />
-                      <span className="text-xs text-kiosk-text/60">Text</span>
+                      <span className="text-xs text-kiosk-text/85">Text</span>
                     </div>
                   </div>
                   
@@ -466,15 +466,15 @@ export default function ThemePreview() {
                   <div className="grid grid-cols-3 gap-4">
                     <div className="card-option-dark-3d rounded-lg p-4">
                       <p className="text-kiosk-text font-medium">Card Normal</p>
-                      <p className="text-xs text-kiosk-text/60 mt-1">Estado padrão</p>
+                      <p className="text-xs text-kiosk-text/85 mt-1">Estado padrão</p>
                     </div>
                     <div className="card-option-selected-3d rounded-lg p-4">
                       <p className="text-kiosk-text font-medium">Card Selecionado</p>
-                      <p className="text-xs text-kiosk-text/60 mt-1">Estado ativo</p>
+                      <p className="text-xs text-kiosk-text/85 mt-1">Estado ativo</p>
                     </div>
                     <div className="card-neon-border rounded-lg p-4 bg-kiosk-surface">
                       <p className="text-kiosk-text font-medium">Card Neon</p>
-                      <p className="text-xs text-kiosk-text/60 mt-1">Borda brilhante</p>
+                      <p className="text-xs text-kiosk-text/85 mt-1">Borda brilhante</p>
                     </div>
                   </div>
                 </div>
@@ -518,15 +518,15 @@ export default function ThemePreview() {
                   <div className="flex gap-6">
                     <div className="flex flex-col items-center gap-2">
                       <Sun className="w-8 h-8 icon-neon-blue" />
-                      <span className="text-xs text-kiosk-text/60">Neon Blue</span>
+                      <span className="text-xs text-kiosk-text/85">Neon Blue</span>
                     </div>
                     <div className="flex flex-col items-center gap-2">
                       <Moon className="w-8 h-8 icon-neon-blue-hover" />
-                      <span className="text-xs text-kiosk-text/60">Hover Effect</span>
+                      <span className="text-xs text-kiosk-text/85">Hover Effect</span>
                     </div>
                     <div className="flex flex-col items-center gap-2">
                       <Zap className="w-8 h-8 text-label-yellow" style={{ filter: 'drop-shadow(0 0 8px hsl(45 100% 50%))' }} />
-                      <span className="text-xs text-kiosk-text/60">Yellow Glow</span>
+                      <span className="text-xs text-kiosk-text/85">Yellow Glow</span>
                     </div>
                   </div>
                 </div>

@@ -244,7 +244,8 @@ export function AccessibilitySection() {
               {soundEnabled ? (
                 <Volume2 className="w-5 h-5 icon-neon-blue" />
               ) : (
-                <VolumeX className="w-5 h-5 text-kiosk-text/50" />
+                /* WCAG Exception: Disabled state icon at /80 for visual distinction */
+                <VolumeX className="w-5 h-5 text-kiosk-text/80" />
               )}
               <div>
                 <Label className="text-label-yellow font-medium">Sons de Feedback</Label>
@@ -265,7 +266,8 @@ export function AccessibilitySection() {
         <div className="card-option-dark-3d rounded-lg p-4">
           <div className="flex items-center justify-between">
             <div className="flex items-center gap-3">
-              <Sparkles className={`w-5 h-5 ${animationsEnabled ? 'icon-neon-blue' : 'text-kiosk-text/50'}`} />
+              {/* WCAG Exception: Disabled state icon at /80 for visual distinction */}
+              <Sparkles className={`w-5 h-5 ${animationsEnabled ? 'icon-neon-blue' : 'text-kiosk-text/80'}`} />
               <div>
                 <Label className="text-label-yellow font-medium">Efeitos Visuais</Label>
                 <p className="text-xs text-settings-hint mt-0.5">

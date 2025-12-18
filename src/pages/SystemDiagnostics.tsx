@@ -550,7 +550,7 @@ export default function SystemDiagnostics() {
               </div>
               
               {lastRun && (
-                <span className="text-xs text-kiosk-text/50 flex items-center gap-1">
+                <span className="text-xs text-kiosk-text/85 flex items-center gap-1">
                   <RefreshCw className="w-3 h-3" />
                   Última execução: {lastRun.toLocaleTimeString()}
                 </span>
@@ -560,7 +560,7 @@ export default function SystemDiagnostics() {
             {isRunning && (
               <div className="mt-4">
                 <Progress value={progress} className="h-2" />
-                <p className="text-xs text-kiosk-text/50 mt-1 text-center">
+                <p className="text-xs text-kiosk-text/85 mt-1 text-center">
                   {Math.round(progress)}% concluído
                 </p>
               </div>
@@ -599,12 +599,12 @@ export default function SystemDiagnostics() {
                         </div>
                         <div>
                           <p className="font-medium text-kiosk-text">{test.name}</p>
-                          <p className="text-xs text-kiosk-text/50">{test.description}</p>
+                          <p className="text-xs text-kiosk-text/85">{test.description}</p>
                         </div>
                       </div>
                       <div className="flex items-center gap-2">
                         {result?.latency && (
-                          <span className="text-xs text-kiosk-text/50">{result.latency}ms</span>
+                          <span className="text-xs text-kiosk-text/85">{result.latency}ms</span>
                         )}
                         {result && (
                           <Badge className={getStatusBadge(result.status)}>
@@ -671,12 +671,12 @@ export default function SystemDiagnostics() {
                         </div>
                         <div>
                           <p className="font-medium text-kiosk-text">{test.name}</p>
-                          <p className="text-xs text-kiosk-text/50">{test.description}</p>
+                          <p className="text-xs text-kiosk-text/85">{test.description}</p>
                         </div>
                       </div>
                       <div className="flex items-center gap-2">
                         {result?.latency && (
-                          <span className="text-xs text-kiosk-text/50">{result.latency}ms</span>
+                          <span className="text-xs text-kiosk-text/85">{result.latency}ms</span>
                         )}
                         {result && (
                           <Badge className={getStatusBadge(result.status)}>
@@ -743,12 +743,12 @@ export default function SystemDiagnostics() {
                         </div>
                         <div>
                           <p className="font-medium text-kiosk-text">{test.name}</p>
-                          <p className="text-xs text-kiosk-text/50">{test.description}</p>
+                          <p className="text-xs text-kiosk-text/85">{test.description}</p>
                         </div>
                       </div>
                       <div className="flex items-center gap-2">
                         {result?.latency && (
-                          <span className="text-xs text-kiosk-text/50">{result.latency}ms</span>
+                          <span className="text-xs text-kiosk-text/85">{result.latency}ms</span>
                         )}
                         {result && (
                           <Badge className={getStatusBadge(result.status)}>

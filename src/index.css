@@ -284,6 +284,36 @@
       0 0 15px hsl(195 100% 45% / 0.3);
   }
 
+  /* Títulos de seção em ciano neon - para h4/subseções */
+  .text-section-cyan {
+    color: hsl(185 100% 65%);
+    font-weight: 600;
+    text-shadow: 
+      0 0 8px hsl(185 100% 55% / 0.7),
+      0 0 16px hsl(185 100% 50% / 0.4);
+  }
+
+  /* Título neon azul para sub-seções */
+  .title-neon-blue {
+    color: hsl(195 100% 70%);
+    font-weight: 600;
+    text-shadow: 
+      0 0 6px hsl(195 100% 60% / 0.6),
+      0 0 12px hsl(195 100% 50% / 0.4);
+  }
+
+  /* Label neon para valores/status */
+  .text-label-neon {
+    color: hsl(195 100% 85%);
+    text-shadow: 0 0 4px hsl(195 100% 60% / 0.4);
+  }
+
+  /* Texto branco neon para valores */
+  .text-neon-white {
+    color: hsl(0 0% 95%);
+    text-shadow: 0 0 4px hsl(0 0% 100% / 0.3);
+  }
+
   /* Botão outline neon com boa visibilidade */
   .button-outline-neon {
     background: linear-gradient(145deg, hsl(220 25% 16%) 0%, hsl(220 30% 10%) 100%);

@@ -249,8 +249,8 @@ export function DistributedBackupSection() {
             {/* Status Visualization */}
             <div className="card-option-dark-3d rounded-lg p-4">
               <div className="flex items-center justify-between mb-3">
-                <h4 className="text-sm font-medium text-label-yellow flex items-center gap-2">
-                  <HardDrive className="w-4 h-4" />
+                <h4 className="text-sm text-section-cyan flex items-center gap-2">
+                  <HardDrive className="w-4 h-4 icon-neon-blue" />
                   Status das Réplicas
                 </h4>
                 <Badge variant="outline" className={cn(

@@ -3233,3 +3233,130 @@ body[data-gradient="true"] {
 .settings-sidebar-expanded ~ main.settings-content-area {
   margin-left: 200px;
 }
+
+/* ========== CONTRAST DEBUG MODE ========== */
+
+/* Panel de Debug flutuante */
+.debug-contrast-panel {
+  position: fixed;
+  bottom: 20px;
+  right: 20px;
+  background: hsl(220 25% 8% / 0.98);
+  border: 2px solid hsl(185 80% 50% / 0.5);
+  border-radius: 12px;
+  padding: 16px;
+  z-index: 99999;
+  width: 320px;
+  max-height: 400px;
+  overflow-y: auto;
+  box-shadow: 
+    0 0 20px hsl(185 100% 50% / 0.3),
+    0 10px 40px hsl(0 0% 0% / 0.5);
+  backdrop-filter: blur(12px);
+}
+
+/* Destacar elementos com contraste insuficiente - ERRO */
+.debug-contrast-error {
+  outline: 3px dashed hsl(0 100% 50%) !important;
+  outline-offset: 2px;
+  position: relative;
+}
+
+.debug-contrast-error::before {
+  content: '⚠️ CONTRASTE';
+  position: absolute;
+  top: -22px;
+  left: 0;
+  background: hsl(0 100% 45%);
+  color: white;
+  font-size: 9px;
+  font-weight: 700;
+  padding: 2px 6px;
+  border-radius: 4px;
+  z-index: 99998;
+  white-space: nowrap;
+  pointer-events: none;
+}
+
+/* Destacar fundos brancos/claros - WARNING */
+.debug-light-background {
+  outline: 3px dashed hsl(45 100% 50%) !important;
+  outline-offset: 2px;
+  position: relative;
+}
+
+.debug-light-background::before {
+  content: '⚠️ FUNDO CLARO';
+  position: absolute;
+  top: -22px;
+  left: 0;
+  background: hsl(45 100% 40%);
+  color: black;
+  font-size: 9px;
+  font-weight: 700;
+  padding: 2px 6px;
+  border-radius: 4px;
+  z-index: 99998;
+  white-space: nowrap;
+  pointer-events: none;
+}
+
+/* Destacar texto invisível/escuro */
+.debug-dark-text {
+  outline: 3px dashed hsl(280 100% 60%) !important;
+  outline-offset: 2px;
+  position: relative;
+}
+
+.debug-dark-text::before {
+  content: '⚠️ TEXTO ESCURO';
+  position: absolute;
+  top: -22px;
+  left: 0;
+  background: hsl(280 100% 50%);
+  color: white;
+  font-size: 9px;
+  font-weight: 700;
+  padding: 2px 6px;
+  border-radius: 4px;
+  z-index: 99998;
+  white-space: nowrap;
+  pointer-events: none;
+}
+
+/* Highlight para o elemento atual */
+.debug-highlight-current {
+  outline: 4px solid hsl(185 100% 50%) !important;
+  outline-offset: 4px;
+  animation: debug-pulse 1s ease-in-out infinite;
+}
+
+@keyframes debug-pulse {
+  0%, 100% {
+    outline-color: hsl(185 100% 50%);
+    box-shadow: 0 0 0 0 hsl(185 100% 50% / 0.4);
+  }
+  50% {
+    outline-color: hsl(185 100% 70%);
+    box-shadow: 0 0 20px 4px hsl(185 100% 50% / 0.6);
+  }
+}
+
+/* Scrollbar do painel */
+.debug-contrast-panel::-webkit-scrollbar {
+  width: 6px;
+}
+
+.debug-contrast-panel::-webkit-scrollbar-track {
+  background: hsl(220 25% 15%);
+  border-radius: 3px;
+}
+
+.debug-contrast-panel::-webkit-scrollbar-thumb {
+  background: hsl(185 80% 50% / 0.5);
+  border-radius: 3px;
+}
+
+.debug-contrast-panel::-webkit-scrollbar-thumb:hover {
+  background: hsl(185 80% 50% / 0.7);
+}

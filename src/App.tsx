@@ -8,6 +8,7 @@ import { SettingsProvider } from "@/contexts/SettingsContext";
 import { UserProvider } from "@/contexts/UserContext";
 import { ProtectedRoute } from "@/components/auth/ProtectedRoute";
 import { useConnectionMonitor } from "@/hooks/useConnectionMonitor";
+import { ContrastDebugPanel } from "@/components/debug/ContrastDebugPanel";
 import { Music } from "lucide-react";
 
 // Eagerly loaded pages (critical path)
@@ -160,6 +161,8 @@ const App = () => (
           <BrowserRouter>
             <AppRoutes />
           </BrowserRouter>
+          {/* Contrast Debug Panel - Only in DEV mode */}
+          {import.meta.env.DEV && <ContrastDebugPanel />}
         </TooltipProvider>
       </UserProvider>
     </SettingsProvider>

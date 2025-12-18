@@ -20,6 +20,7 @@ import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigge
 import { useLocalMusic } from '@/hooks/useLocalMusic';
 import { useTranslation } from '@/hooks/useTranslation';
 import { toast } from 'sonner';
+import { AudioWaveformPreview } from '@/components/upload/AudioWaveformPreview';
 
 export function LocalMusicSection() {
   const { t } = useTranslation();
@@ -61,6 +62,8 @@ export function LocalMusicSection() {
   const [showPlaylistDialog, setShowPlaylistDialog] = useState(false);
   const [showInstanceDialog, setShowInstanceDialog] = useState(false);
   const [isDragging, setIsDragging] = useState(false);
+  const [previewFile, setPreviewFile] = useState<File | null>(null);
+  const [showPreview, setShowPreview] = useState(false);
   const fileInputRef = useRef<HTMLInputElement>(null);
 
   const handleDragEnter = (e: React.DragEvent) => {
@@ -94,7 +97,12 @@ export function LocalMusicSection() {
       toast.warning(t('localMusic.someFilesIgnored'));
     }
     
-    if (validFiles.length > 0) {
+    if (validFiles.length === 1) {
+      // Single file: show preview
+      setPreviewFile(validFiles[0]);
+      setShowPreview(true);
+    } else if (validFiles.length > 1) {
+      // Multiple files: upload directly
       uploadFiles(validFiles);
     }
   };
@@ -110,10 +118,26 @@ export function LocalMusicSection() {
         toast.warning(t('localMusic.someFilesIgnored'));
       }
       
-      if (validFiles.length > 0) {
+      if (validFiles.length === 1) {
+        // Single file: show preview
+        setPreviewFile(validFiles[0]);
+        setShowPreview(true);
+      } else if (validFiles.length > 1) {
+        // Multiple files: upload directly
         uploadFiles(validFiles);
       }
     }
+  };
+
+  const handlePreviewConfirm = (file: File) => {
+    uploadFiles([file]);
+    setShowPreview(false);
+    setPreviewFile(null);
+  };
+
+  const handlePreviewClose = () => {
+    setShowPreview(false);
+    setPreviewFile(null);
   };
 
   const handleCreatePlaylist = async () => {
@@ -659,6 +683,14 @@ export function LocalMusicSection() {
           </Tabs>
         </CardContent>
       </Card>
+
+      {/* Audio Preview Modal */}
+      <AudioWaveformPreview
+        file={previewFile}
+        isOpen={showPreview}
+        onClose={handlePreviewClose}
+        onConfirm={handlePreviewConfirm}
+      />
     </div>
   );
 }

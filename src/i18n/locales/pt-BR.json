@@ -599,5 +599,18 @@
     "replicateConfigToAll": "Replicar Configs para Todas as Instâncias",
     "dropFilesHere": "Solte os arquivos aqui!",
     "releaseToUpload": "Solte para fazer upload"
+  },
+  "lyrics": {
+    "title": "Letras",
+    "selectTrack": "Selecione uma música para ver as letras",
+    "loading": "Carregando letras...",
+    "synced": "Sincronizado",
+    "notAvailable": "Letras não disponíveis para esta faixa"
+  },
+  "upload": {
+    "audioPreview": "Preview de Áudio",
+    "confirmUpload": "Confirmar Upload",
+    "analyzing": "Analisando áudio...",
+    "previewUnavailable": "Preview não disponível"
   }
 }

@@ -505,6 +505,7 @@ export function SpotifyPanelToggle({ onClick, isOpen, isConnected = true }: { on
           ? isOpen 
             ? "bg-[#1DB954] text-white button-primary-3d" 
             : "bg-kiosk-surface/50 text-[#1DB954] hover:bg-[#1DB954]/20"
+          /* WCAG Exception: /40→/60 disconnected state with hover transition providing visual distinction */
           : "bg-kiosk-surface/30 text-kiosk-text/40 hover:bg-kiosk-surface/50 hover:text-kiosk-text/60"
       )}
     >

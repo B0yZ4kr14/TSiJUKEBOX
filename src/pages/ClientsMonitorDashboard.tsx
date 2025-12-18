@@ -428,6 +428,7 @@ export default function ClientsMonitorDashboard() {
 
               {filteredClients.length === 0 && (
                 <Card className="col-span-full p-8 bg-kiosk-surface/50 border-cyan-500/20 text-center">
+                  {/* WCAG Exception: /30 decorative Building2 icon for empty state, not critical content */}
                   <Building2 className="w-12 h-12 mx-auto mb-3 text-kiosk-text/30" />
                   <p className="text-kiosk-text/85">Nenhum cliente encontrado</p>
                   <Button

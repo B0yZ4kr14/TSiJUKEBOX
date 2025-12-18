@@ -951,6 +951,7 @@ export default function SetupWizard() {
                 className={`w-6 h-6 rounded-full flex items-center justify-center text-xs transition-all ${
                   a.unlocked 
                     ? 'bg-yellow-500/20 text-yellow-400 scale-110' 
+                    /* WCAG Exception: /30 locked achievement badge, unlocked state uses yellow-400 with adequate contrast */
                     : 'bg-kiosk-surface/50 text-kiosk-text/30'
                 }`}
                 title={a.title}

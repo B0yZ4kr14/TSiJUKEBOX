@@ -91,6 +91,7 @@ export default function SpotifySearchPage() {
 
           {!isSearching && !hasResults && query.length >= 2 && (
             <div className="text-center py-12">
+              {/* WCAG Exception: /30 decorative Music icon for empty search state */}
               <Music className="w-12 h-12 text-kiosk-text/30 mx-auto mb-4" />
               <p className="text-kiosk-text/85">Nenhum resultado para "{query}"</p>
             </div>
@@ -98,6 +99,7 @@ export default function SpotifySearchPage() {
 
           {!isSearching && !query && (
             <div className="text-center py-12">
+              {/* WCAG Exception: /30 decorative Search icon for initial state */}
               <Search className="w-12 h-12 text-kiosk-text/30 mx-auto mb-4" />
               <p className="text-kiosk-text/85">Busque por músicas, álbuns, artistas ou playlists</p>
             </div>

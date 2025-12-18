@@ -65,6 +65,59 @@ O sistema de cores foi projetado para atender aos requisitos mínimos:
 - `text-label-orange` - Labels secundários (HSL 30 100% 60%)
 - `icon-neon-blue` - Ícones com glow ciano
 
+### 3.1 Exceções Intencionais de Contraste WCAG
+
+Alguns elementos utilizam contraste reduzido intencionalmente para criar hierarquia visual. 
+Todas as exceções são documentadas no código com comentários `/* WCAG Exception: */`.
+
+#### Critérios para Exceções Válidas
+
+Uma exceção de contraste é válida quando:
+1. O elemento é **puramente decorativo** (não transmite informação crítica)
+2. O elemento possui **estado alternativo** com contraste adequado (hover, focus, active)
+3. O elemento é **redundante** (informação disponível por outros meios)
+4. O elemento está em **estado desabilitado** (intencionalmente dimmed)
+
+#### Lista Completa de Exceções (13 total)
+
+| # | Arquivo | Opacidade | Elemento | Justificativa |
+|---|---------|-----------|----------|---------------|
+| 1 | `QueuePanel.tsx` | `/20` | GripVertical icon | Visível via `group-hover:opacity-100` |
+| 2 | `CloudConnectionSection.tsx` | `/20` | Cloud icon | Ícone decorativo em estado não configurado |
+| 3 | `InteractiveTestMode.tsx` | `/40` | Gesture demo icons | Demonstração visual não-crítica |
+| 4 | `WikiArticle.tsx` | `/40` | Bookmark inactive | Transição hover → `text-yellow-500` |
+| 5 | `LogoBrand.tsx` | `/60` | Tagline | Texto secundário; logo principal tem contraste adequado |
+| 6 | `AccessibilitySection.tsx` | `/80` | VolumeX icon | Estado desabilitado distinto do ativado |
+| 7 | `AccessibilitySection.tsx` | `/80` | Sparkles icon | Estado desabilitado distinto do ativado |
+| 8 | `YouTubeMusicBrowser.tsx` | `opacity-30` | Library icon | Ícone decorativo em estado vazio |
+| 9 | `SetupWizard.tsx` | `/30` | Achievement locked | Estado bloqueado; desbloqueado usa `yellow-400` |
+| 10 | `ClientsMonitorDashboard.tsx` | `/30` | Building2 icon | Ícone decorativo em estado vazio |
+| 11 | `SpotifySearch.tsx` | `/30` | Music/Search icons | Ícones decorativos em estados vazios |
+| 12 | `SpotifyPanel.tsx` | `/40→/60` | Botão desconectado | Hover aumenta contraste; estado conectado usa `#1DB954` |
+| 13 | `AddToPlaylistModal.tsx` | `/30` | Loader2/Plus icons | Tornam-se `#FF0000` quando adicionado |
+
+#### Regras de Substituição Padrão
+
+Se um elemento **não se qualifica** como exceção válida, use estas substituições:
+
+| Opacidade Original | Substituição | Ratio Aproximado |
+|--------------------|--------------|------------------|
+| `/20`, `/30`, `/40` | `/80` | ~4.5:1 |
+| `/50` | `/85` | ~5:1 |
+| `/60` | `/85` | ~5:1 |
+| `/70`, `/74` | `/90` | ~6:1 |
+
+#### Como Documentar Novas Exceções
+
+Ao criar uma nova exceção, adicione um comentário no código:
+
+```tsx
+{/* WCAG Exception: [opacidade] [elemento] porque [justificativa específica] */}
+<Icon className="text-kiosk-text/40" />
+```
+
+E adicione a entrada na tabela acima neste documento.
+
 ### 4. Touch Targets
 
 Todos os elementos interativos atendem ao tamanho mínimo de 44x44px:

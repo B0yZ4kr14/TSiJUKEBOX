@@ -204,8 +204,10 @@ export function AddToPlaylistModal({
                         {addedTo.includes(playlist.id) ? (
                           <Check className="w-5 h-5 text-[#FF0000] flex-shrink-0" />
                         ) : isLoading ? (
+                          /* WCAG Exception: /30 subtle Loader2 icon that becomes #FF0000 when track is added */
                           <Loader2 className="w-5 h-5 text-kiosk-text/30 animate-spin flex-shrink-0" />
                         ) : (
+                          /* WCAG Exception: /30 subtle Plus icon that becomes #FF0000 when track is added */
                           <Plus className="w-5 h-5 text-kiosk-text/30 flex-shrink-0" />
                         )}
                       </button>

@@ -189,8 +189,8 @@ export function ThemeSection() {
           {/* Preview Link */}
           <Link to="/theme-preview">
             <Button
-              variant="outline"
-              className="w-full button-outline-neon ripple-effect"
+              variant="kiosk-outline"
+              className="w-full ripple-effect"
             >
               <Eye className="w-4 h-4 mr-2" />
               Ver Preview Completo dos Temas
@@ -200,17 +200,17 @@ export function ThemeSection() {
           {/* Export/Import Buttons */}
           <div className="grid grid-cols-2 gap-3">
             <Button
-              variant="outline"
+              variant="kiosk-outline"
               onClick={exportSettings}
-              className="button-action-neon ripple-effect"
+              className="ripple-effect"
             >
               <Download className="w-4 h-4 mr-2" />
               Exportar
             </Button>
             <Button
-              variant="outline"
+              variant="kiosk-outline"
               onClick={importSettings}
-              className="button-action-neon ripple-effect"
+              className="ripple-effect"
             >
               <Upload className="w-4 h-4 mr-2" />
               Importar

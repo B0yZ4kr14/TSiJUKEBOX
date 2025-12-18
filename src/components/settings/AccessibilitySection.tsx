@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react';
-import { Eye, Type, Zap, Monitor, Check, X, Volume2, VolumeX, Sparkles, Bug } from 'lucide-react';
+import { Eye, Type, Zap, Monitor, Check, X, Volume2, VolumeX, Sparkles, Bug, Download } from 'lucide-react';
 import { SettingsSection } from './SettingsSection';
 import { Switch } from '@/components/ui/switch';
 import { Slider } from '@/components/ui/slider';
@@ -160,7 +160,7 @@ export function AccessibilitySection() {
                 <Check className="w-4 h-4 mr-2" />
                 Aplicar Mudanças
               </Button>
-              <Button onClick={cancelChanges} variant="outline" className="button-outline-neon">
+              <Button onClick={cancelChanges} variant="kiosk-outline">
                 <X className="w-4 h-4 mr-2" />
                 Cancelar
               </Button>
@@ -303,11 +303,45 @@ export function AccessibilitySection() {
           </div>
         )}
 
+        {/* Export Accessibility Report */}
+        {import.meta.env.DEV && contrastDebugEnabled && (
+          <Button
+            variant="kiosk-outline"
+            onClick={() => {
+              const report = {
+                timestamp: new Date().toISOString(),
+                settings: {
+                  highContrast: settings.highContrast,
+                  fontSize: settings.fontSize,
+                  reducedMotion: settings.reducedMotion,
+                  soundEnabled,
+                  animationsEnabled,
+                },
+                contrastDebugEnabled,
+              };
+              const blob = new Blob([JSON.stringify(report, null, 2)], { type: 'application/json' });
+              const url = URL.createObjectURL(blob);
+              const a = document.createElement('a');
+              a.href = url;
+              a.download = `accessibility-report-${new Date().toISOString().split('T')[0]}.json`;
+              document.body.appendChild(a);
+              a.click();
+              document.body.removeChild(a);
+              URL.revokeObjectURL(url);
+              toast.success('Relatório de acessibilidade exportado!');
+            }}
+            className="w-full"
+          >
+            <Download className="w-4 h-4 mr-2" />
+            Exportar Relatório de Acessibilidade
+          </Button>
+        )}
+
         {/* Reset Button */}
         <Button
-          variant="outline"
+          variant="kiosk-outline"
           onClick={resetToDefaults}
-          className="w-full button-outline-neon text-label-yellow ripple-effect"
+          className="w-full text-label-yellow ripple-effect"
         >
           Restaurar Padrões
         </Button>

@@ -487,6 +487,308 @@ const helpSections: HelpSection[] = [
         ]
       }
     ]
+  },
+  // =============================================
+  // SPICETIFY FAQ - 15 itens
+  // =============================================
+  {
+    id: 'spicetify-faq',
+    title: 'Spicetify FAQ',
+    icon: <Palette className="w-5 h-5 icon-neon-blue" />,
+    items: [
+      {
+        id: 'spicetify-what',
+        question: 'O que é Spicetify e para que serve?',
+        answer: 'Spicetify é uma ferramenta de linha de comando que permite personalizar o cliente desktop do Spotify. Com ela, você pode aplicar temas visuais, instalar extensões de funcionalidade, adicionar snippets CSS e muito mais.',
+        tips: ['Funciona apenas com Spotify desktop', 'É gratuito e open source']
+      },
+      {
+        id: 'spicetify-web-player',
+        question: 'Spicetify funciona com Spotify Web Player?',
+        answer: 'Não. O Spicetify funciona exclusivamente com o cliente desktop do Spotify. O Web Player não pode ser personalizado com Spicetify.',
+        tips: ['Use o cliente desktop para aproveitar todas as customizações']
+      },
+      {
+        id: 'spicetify-update-broke',
+        question: 'Por que meu tema parou de funcionar após atualização do Spotify?',
+        answer: 'Atualizações do Spotify frequentemente alteram a estrutura interna do app, quebrando customizações do Spicetify. Isso é normal e esperado.',
+        steps: [
+          'Execute: spicetify backup apply',
+          'Se não funcionar: spicetify restore backup apply',
+          'Atualize o Spicetify: spicetify upgrade'
+        ]
+      },
+      {
+        id: 'spicetify-marketplace',
+        question: 'Como aplicar um tema do Marketplace?',
+        answer: 'O Marketplace permite instalar temas com um clique diretamente do Spotify.',
+        steps: [
+          'Habilite: spicetify config custom_apps marketplace && spicetify apply',
+          'Acesse o Marketplace no menu lateral do Spotify',
+          'Navegue até Themes e clique Install no tema desejado'
+        ]
+      },
+      {
+        id: 'spicetify-extensions-recommended',
+        question: 'Quais extensões são recomendadas?',
+        answer: 'Extensões populares incluem: Shuffle+ (embaralhamento inteligente), Lyrics+ (letras sincronizadas), Full App Display (modo tela cheia), e Keyboard Shortcut (atalhos customizáveis).',
+        tips: ['Instale pelo Marketplace para facilitar']
+      },
+      {
+        id: 'spicetify-create-theme',
+        question: 'Como criar meu próprio tema?',
+        answer: 'Crie uma pasta em ~/.config/spicetify/Themes/MeuTema com arquivo color.ini definindo as cores. Opcionalmente, adicione user.css para estilos avançados.',
+        steps: [
+          'Crie a pasta do tema em Themes/',
+          'Crie color.ini com as variáveis de cor',
+          'Aplique: spicetify config current_theme MeuTema && spicetify apply'
+        ]
+      },
+      {
+        id: 'spicetify-snippets-performance',
+        question: 'Snippets CSS afetam performance?',
+        answer: 'Snippets CSS geralmente têm impacto mínimo na performance. No entanto, snippets muito complexos com animações pesadas podem causar lentidão.',
+        tips: ['Use snippets simples para melhor performance']
+      },
+      {
+        id: 'spicetify-safe',
+        question: 'É seguro usar Spicetify?',
+        answer: 'Sim, Spicetify é seguro. É um projeto open source amplamente usado pela comunidade. Ele modifica apenas arquivos locais do Spotify, não acessa sua conta ou dados pessoais.',
+        tips: ['Não viola termos de serviço do Spotify']
+      },
+      {
+        id: 'spicetify-backup-config',
+        question: 'Como fazer backup das minhas configurações Spicetify?',
+        answer: 'O comando spicetify backup cria backup do Spotify original. Para suas customizações, copie a pasta ~/.config/spicetify inteira.',
+        steps: [
+          'Execute: spicetify backup',
+          'Copie ~/.config/spicetify para local seguro',
+          'Para restaurar, copie de volta e execute: spicetify apply'
+        ]
+      },
+      {
+        id: 'spicetify-linux',
+        question: 'Spicetify funciona no Linux/CachyOS?',
+        answer: 'Sim! Spicetify funciona perfeitamente em Linux, incluindo CachyOS. A instalação pode ser feita via script curl ou gerenciador de pacotes AUR.',
+        steps: [
+          'Via AUR: yay -S spicetify-cli',
+          'Via script: curl -fsSL https://raw.githubusercontent.com/spicetify/spicetify-cli/master/install.sh | sh'
+        ]
+      },
+      {
+        id: 'spicetify-remove',
+        question: 'Como remover completamente o Spicetify?',
+        answer: 'Para remover o Spicetify e restaurar o Spotify original:',
+        steps: [
+          'Execute: spicetify restore',
+          'Delete ~/.spicetify e ~/.config/spicetify',
+          'Reinicie o Spotify'
+        ]
+      },
+      {
+        id: 'spicetify-ext-not-working',
+        question: 'Por que algumas extensões não funcionam?',
+        answer: 'Extensões podem parar de funcionar após atualizações do Spotify ou Spicetify. Verifique se há atualizações disponíveis para a extensão ou procure alternativas.',
+        steps: [
+          'Atualize o Spicetify: spicetify upgrade',
+          'Reinstale a extensão pelo Marketplace',
+          'Verifique issues no GitHub da extensão'
+        ]
+      },
+      {
+        id: 'spicetify-upgrade',
+        question: 'Como atualizar o Spicetify?',
+        answer: 'O comando spicetify upgrade atualiza para a versão mais recente.',
+        steps: [
+          'Execute: spicetify upgrade',
+          'Reaplique: spicetify apply',
+          'Se houver problemas: spicetify restore backup apply'
+        ]
+      },
+      {
+        id: 'spicetify-multiple-themes',
+        question: 'Posso usar múltiplos temas ao mesmo tempo?',
+        answer: 'Não diretamente, mas você pode combinar elementos de diferentes temas criando um tema personalizado que mistura cores e CSS de outros temas.'
+      },
+      {
+        id: 'spicetify-ban-account',
+        question: 'O Spotify pode banir minha conta por usar Spicetify?',
+        answer: 'Não há casos conhecidos de banimento por uso do Spicetify. A ferramenta modifica apenas a aparência local do app, não interfere com serviços do Spotify nem viola termos de uso de forma detectável.',
+        tips: ['Spicetify é amplamente usado há anos sem problemas']
+      }
+    ]
+  },
+  // =============================================
+  // STORJ FAQ - 12 itens
+  // =============================================
+  {
+    id: 'storj-faq',
+    title: 'Storj Cloud FAQ',
+    icon: <Cloud className="w-5 h-5 icon-neon-blue" />,
+    items: [
+      {
+        id: 'storj-what',
+        question: 'O que é Storj e como difere de S3?',
+        answer: 'Storj é uma plataforma de armazenamento em nuvem descentralizada. Diferente do S3 (centralizado na AWS), seus dados são criptografados, fragmentados e distribuídos em milhares de nós globalmente.',
+        tips: ['Mais seguro e privado que soluções centralizadas', 'Compatível com protocolo S3']
+      },
+      {
+        id: 'storj-secure',
+        question: 'Storj é seguro para dados sensíveis?',
+        answer: 'Sim. Storj usa criptografia end-to-end (AES-256-GCM) onde apenas você possui as chaves. Nem mesmo a Storj pode acessar seus dados.',
+        tips: ['Dados fragmentados em 80+ peças', 'Distribuídos em mínimo 29 nós diferentes']
+      },
+      {
+        id: 'storj-cost',
+        question: 'Quanto custa usar Storj?',
+        answer: 'Storj usa modelo pay-as-you-go: $4/TB/mês para armazenamento e $7/TB para download. Upload e operações de API são gratuitos.',
+        tips: ['Mais barato que AWS S3', 'Sem custos de egress entre regiões']
+      },
+      {
+        id: 'storj-access-grant',
+        question: 'Como gerar um Access Grant?',
+        answer: 'Access Grants são gerados no console do Storj.',
+        steps: [
+          'Acesse console.storj.io',
+          'Vá em Access > Create Access Grant',
+          'Escolha permissões (Full ou Restricted)',
+          'Copie e guarde o grant (mostrado apenas uma vez)'
+        ]
+      },
+      {
+        id: 'storj-data-if-close',
+        question: 'Posso acessar meus dados se Storj fechar?',
+        answer: 'Storj é baseado em código aberto e rede descentralizada. Mesmo se a empresa fechar, os dados permanecem acessíveis através da rede de nós independentes.',
+        tips: ['Dados não dependem de infraestrutura centralizada']
+      },
+      {
+        id: 'storj-speed',
+        question: 'Qual a velocidade de upload/download?',
+        answer: 'A velocidade depende da sua conexão de internet. Storj usa download paralelo de múltiplos nós, geralmente alcançando velocidades comparáveis ou superiores a serviços centralizados.',
+        tips: ['Download paralelo de múltiplas fontes', 'Performance melhor em arquivos maiores']
+      },
+      {
+        id: 'storj-auto-backup',
+        question: 'Como configurar backup automático?',
+        answer: 'No TSiJUKEBOX, configure em Configurações > Backup > Agendamento. Defina frequência, horário e retenção de backups antigos.',
+        steps: [
+          'Configure Storj em Cloud Backup primeiro',
+          'Ative backup automático em Agendamento',
+          'Escolha frequência e horário'
+        ]
+      },
+      {
+        id: 'storj-s3-tools',
+        question: 'Posso usar ferramentas S3 com Storj?',
+        answer: 'Sim! Storj é 100% compatível com S3. Use AWS CLI, rclone, Cyberduck, s3cmd e outras ferramentas S3 com credenciais S3 do Storj.',
+        steps: [
+          'Gere credenciais S3 no console Storj',
+          'Use endpoint: gateway.storjshare.io',
+          'Configure sua ferramenta S3 favorita'
+        ]
+      },
+      {
+        id: 'storj-object-lock',
+        question: 'O que é Object Lock e quando usar?',
+        answer: 'Object Lock impede que objetos sejam deletados ou modificados por um período definido. Útil para compliance, retenção legal ou proteção contra ransomware.',
+        tips: ['Modo Governance: admins podem remover', 'Modo Compliance: ninguém pode remover']
+      },
+      {
+        id: 'storj-share-files',
+        question: 'Como compartilhar arquivos via Storj?',
+        answer: 'Use Linksharing para gerar URLs públicas de acesso aos seus arquivos.',
+        steps: [
+          'Crie um Access Grant com permissão de leitura',
+          'Use Storj Linkshare ou SDK para gerar URL',
+          'Compartilhe o link gerado'
+        ]
+      },
+      {
+        id: 'storj-grant-vs-s3',
+        question: 'Qual a diferença entre Access Grant e S3 credentials?',
+        answer: 'Access Grant é o método nativo do Storj, mais seguro e com controle granular. S3 credentials são para compatibilidade com ferramentas S3 existentes.',
+        tips: ['Use Access Grant quando possível', 'S3 credentials para ferramentas legadas']
+      },
+      {
+        id: 'storj-restore',
+        question: 'Como restaurar backup do Storj?',
+        answer: 'No TSiJUKEBOX, acesse Configurações > Cloud Backup, liste backups disponíveis, selecione o desejado e clique em Restaurar.',
+        tips: ['Faça backup local antes de restaurar', 'Restauração substitui dados atuais']
+      }
+    ]
+  },
+  // =============================================
+  // MÚSICA LOCAL FAQ - 8 itens
+  // =============================================
+  {
+    id: 'local-music-faq',
+    title: 'Música Local FAQ',
+    icon: <Music className="w-5 h-5 icon-neon-blue" />,
+    items: [
+      {
+        id: 'local-upload',
+        question: 'Como fazer upload de músicas MP3?',
+        answer: 'Acesse Configurações > Integrações > Música Local. Na aba Upload, arraste seus arquivos MP3 ou clique para selecionar. O sistema processa e adiciona à biblioteca automaticamente.',
+        steps: [
+          'Acesse Música Local nas Integrações',
+          'Vá na aba Upload',
+          'Arraste ou selecione arquivos MP3',
+          'Aguarde o processamento'
+        ]
+      },
+      {
+        id: 'local-formats',
+        question: 'Quais formatos de áudio são suportados?',
+        answer: 'O sistema suporta MP3 (recomendado), M4A/AAC, FLAC (sem perdas) e OGG. MP3 oferece melhor compatibilidade, FLAC melhor qualidade.',
+        tips: ['MP3 320kbps oferece ótima qualidade', 'FLAC para audiófilos']
+      },
+      {
+        id: 'local-sync-users',
+        question: 'Como sincronizar músicas para todos os usuários?',
+        answer: 'Na aba Sincronização, selecione as músicas e clique em "Sincronizar Todos". O sistema copia os arquivos para /home/$user/Music/ de cada usuário cadastrado.',
+        tips: ['Requer permissões root', 'Usa rsync para eficiência']
+      },
+      {
+        id: 'local-replicate',
+        question: 'Como replicar biblioteca para outras instâncias?',
+        answer: 'Registre outras instâncias TSiJUKEBOX na aba Instâncias. Depois, selecione músicas e use "Replicar" para transferir via SSH.',
+        steps: [
+          'Registre a instância de destino',
+          'Selecione músicas na biblioteca',
+          'Escolha destinos e clique Replicar',
+          'Aguarde a transferência SSH'
+        ]
+      },
+      {
+        id: 'local-size-limit',
+        question: 'Qual o limite de tamanho por arquivo?',
+        answer: 'Por padrão, o limite é de 50MB por arquivo. Arquivos FLAC de alta qualidade podem ultrapassar isso. Configure o limite nas opções avançadas se necessário.',
+        tips: ['MP3 320kbps: ~2.5MB/minuto', 'FLAC: ~5-10MB/minuto']
+      },
+      {
+        id: 'local-playlists',
+        question: 'Como organizar músicas em playlists?',
+        answer: 'Na aba Playlists, crie novas playlists e adicione músicas arrastando ou selecionando. Playlists locais são independentes do Spotify.',
+        steps: [
+          'Vá na aba Playlists',
+          'Clique em Nova Playlist',
+          'Dê um nome e descrição',
+          'Arraste músicas da biblioteca para a playlist'
+        ]
+      },
+      {
+        id: 'local-performance',
+        question: 'O upload afeta a performance do sistema?',
+        answer: 'Durante uploads grandes, pode haver leve impacto na responsividade. O processamento de metadados ID3 consome CPU temporariamente.',
+        tips: ['Faça uploads em lote fora do horário de uso intenso', 'Arquivos menores processam mais rápido']
+      },
+      {
+        id: 'local-backup',
+        question: 'Como fazer backup da biblioteca musical?',
+        answer: 'Configure backup cloud em Configurações > Backup. A biblioteca musical será incluída nos backups automáticos. Alternativamente, copie manualmente a pasta de músicas.',
+        tips: ['Inclua músicas no backup cloud', 'Mantenha cópias locais também']
+      }
+    ]
   }
 ];
 

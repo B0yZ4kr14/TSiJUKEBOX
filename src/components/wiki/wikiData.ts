@@ -1200,6 +1200,700 @@ export const wikiCategories: WikiCategory[] = [
         ]
       }
     ]
+  },
+  // =============================================
+  // SPICETIFY COMPLETO - 25+ artigos
+  // =============================================
+  {
+    id: 'spicetify',
+    title: 'Spicetify',
+    icon: 'Palette',
+    description: 'Guia completo de personalização do Spotify com Spicetify',
+    subSections: [
+      {
+        id: 'spicetify-getting-started',
+        title: 'Primeiros Passos',
+        articles: [
+          {
+            id: 'spicetify-what-is',
+            title: 'O que é Spicetify?',
+            description: 'Introdução ao Spicetify e suas funcionalidades',
+            content: 'Spicetify é uma ferramenta de linha de comando que permite personalizar completamente o cliente desktop do Spotify. Com ela, você pode aplicar temas, instalar extensões, adicionar snippets CSS e muito mais.',
+            tips: [
+              'Spicetify funciona apenas com o cliente desktop do Spotify',
+              'Não funciona com Spotify Web Player',
+              'É completamente gratuito e open source'
+            ]
+          },
+          {
+            id: 'spicetify-install-linux',
+            title: 'Instalação no Linux/CachyOS',
+            description: 'Como instalar o Spicetify em sistemas Linux',
+            content: 'A instalação do Spicetify em Linux é simples e pode ser feita via script ou gerenciador de pacotes.',
+            steps: [
+              'Certifique-se que o Spotify está instalado',
+              'Execute: curl -fsSL https://raw.githubusercontent.com/spicetify/spicetify-cli/master/install.sh | sh',
+              'Adicione ao PATH: export PATH=$PATH:~/.spicetify',
+              'Execute: spicetify backup apply',
+              'Reinicie o Spotify'
+            ],
+            tips: [
+              'No CachyOS, você pode usar: yay -S spicetify-cli',
+              'Sempre faça backup antes de aplicar mudanças'
+            ]
+          },
+          {
+            id: 'spicetify-install-windows',
+            title: 'Instalação no Windows',
+            description: 'Como instalar o Spicetify no Windows',
+            content: 'No Windows, a instalação pode ser feita via PowerShell com privilégios administrativos.',
+            steps: [
+              'Abra PowerShell como Administrador',
+              'Execute: iwr -useb https://raw.githubusercontent.com/spicetify/spicetify-cli/master/install.ps1 | iex',
+              'Execute: spicetify backup apply enable-devtools',
+              'Reinicie o Spotify'
+            ]
+          },
+          {
+            id: 'spicetify-first-config',
+            title: 'Primeira Configuração',
+            description: 'Configuração inicial do Spicetify',
+            content: 'Após a instalação, o Spicetify precisa ser configurado para reconhecer seu Spotify e aplicar as customizações.',
+            steps: [
+              'Execute: spicetify para criar o arquivo de configuração',
+              'O config.ini será criado em ~/.config/spicetify',
+              'Execute: spicetify backup para criar backup do Spotify original',
+              'Execute: spicetify apply para aplicar as configurações'
+            ]
+          },
+          {
+            id: 'spicetify-update',
+            title: 'Atualizar Spicetify',
+            description: 'Como manter o Spicetify atualizado',
+            content: 'É importante manter o Spicetify atualizado, especialmente após atualizações do Spotify.',
+            steps: [
+              'Execute: spicetify upgrade',
+              'Após atualização do Spotify, execute: spicetify backup apply',
+              'Se houver problemas, execute: spicetify restore backup apply'
+            ],
+            tips: ['O Spotify pode quebrar o Spicetify após atualizações automáticas']
+          },
+          {
+            id: 'spicetify-uninstall',
+            title: 'Remover Spicetify',
+            description: 'Como remover completamente o Spicetify',
+            content: 'Para remover o Spicetify e restaurar o Spotify original:',
+            steps: [
+              'Execute: spicetify restore',
+              'Delete a pasta ~/.spicetify',
+              'Delete a pasta ~/.config/spicetify',
+              'Reinicie o Spotify'
+            ]
+          }
+        ]
+      },
+      {
+        id: 'spicetify-themes',
+        title: 'Temas',
+        articles: [
+          {
+            id: 'spicetify-apply-theme',
+            title: 'Aplicar um Tema',
+            description: 'Como aplicar temas no Spotify',
+            content: 'Temas mudam completamente a aparência do Spotify, incluindo cores, fontes e layout.',
+            steps: [
+              'Baixe o tema desejado para ~/.config/spicetify/Themes/',
+              'Edite config.ini: current_theme = NomeDoTema',
+              'Execute: spicetify apply',
+              'Reinicie o Spotify'
+            ]
+          },
+          {
+            id: 'spicetify-create-theme',
+            title: 'Criar Tema Personalizado',
+            description: 'Como criar seu próprio tema',
+            content: 'Você pode criar temas customizados definindo cores e estilos CSS.',
+            steps: [
+              'Crie uma pasta em ~/.config/spicetify/Themes/MeuTema/',
+              'Crie color.ini com as cores desejadas',
+              'Crie user.css para estilos adicionais (opcional)',
+              'Aplique: spicetify config current_theme MeuTema && spicetify apply'
+            ],
+            tips: ['Use o tema Sleek como base para começar']
+          },
+          {
+            id: 'spicetify-theme-dribbblish',
+            title: 'Tema Dribbblish',
+            description: 'Um dos temas mais populares',
+            content: 'Dribbblish é um tema moderno com visual limpo e várias opções de cores.',
+            steps: [
+              'Clone: git clone https://github.com/spicetify/spicetify-themes',
+              'Copie Dribbblish para Themes/',
+              'Configure: spicetify config current_theme Dribbblish color_scheme base',
+              'Execute: spicetify apply'
+            ]
+          },
+          {
+            id: 'spicetify-theme-catppuccin',
+            title: 'Tema Catppuccin',
+            description: 'Tema com paleta de cores suaves',
+            content: 'Catppuccin oferece 4 variantes: Latte, Frappé, Macchiato e Mocha.',
+            steps: [
+              'Baixe de github.com/catppuccin/spicetify',
+              'Copie para ~/.config/spicetify/Themes/',
+              'Configure: spicetify config current_theme catppuccin color_scheme mocha',
+              'Execute: spicetify apply'
+            ]
+          },
+          {
+            id: 'spicetify-color-schemes',
+            title: 'Esquemas de Cores',
+            description: 'Como criar e aplicar esquemas de cores',
+            content: 'Cada tema pode ter múltiplos esquemas de cores definidos no arquivo color.ini.',
+            steps: [
+              'Abra ~/.config/spicetify/Themes/NomeDoTema/color.ini',
+              'Adicione uma nova seção [MeuEsquema]',
+              'Defina as variáveis de cor',
+              'Aplique: spicetify config color_scheme MeuEsquema && spicetify apply'
+            ]
+          }
+        ]
+      },
+      {
+        id: 'spicetify-extensions',
+        title: 'Extensões',
+        articles: [
+          {
+            id: 'spicetify-ext-install',
+            title: 'Instalar Extensões',
+            description: 'Como adicionar extensões ao Spotify',
+            content: 'Extensões adicionam funcionalidades extras ao Spotify.',
+            steps: [
+              'Baixe o arquivo .js da extensão',
+              'Copie para ~/.config/spicetify/Extensions/',
+              'Execute: spicetify config extensions nome.js',
+              'Execute: spicetify apply'
+            ]
+          },
+          {
+            id: 'spicetify-ext-shuffle-plus',
+            title: 'Shuffle+ (Embaralhar Melhorado)',
+            description: 'Algoritmo de shuffle mais inteligente',
+            content: 'Shuffle+ melhora o algoritmo de embaralhamento do Spotify para evitar repetições e criar uma experiência mais variada.',
+            tips: ['Evita tocar a mesma música em sequência', 'Distribui melhor artistas na fila']
+          },
+          {
+            id: 'spicetify-ext-lyrics-plus',
+            title: 'Lyrics+ (Letras Sincronizadas)',
+            description: 'Letras sincronizadas em tempo real',
+            content: 'Exibe letras sincronizadas durante a reprodução, buscando de múltiplas fontes.',
+            tips: ['Sincroniza com a música em tempo real', 'Suporta múltiplos idiomas']
+          },
+          {
+            id: 'spicetify-ext-keyboard',
+            title: 'Keyboard Shortcut',
+            description: 'Atalhos de teclado adicionais',
+            content: 'Adiciona atalhos de teclado personalizáveis para controlar o Spotify.',
+            tips: ['Configure atalhos globais', 'Funciona mesmo com janela minimizada']
+          },
+          {
+            id: 'spicetify-ext-full-display',
+            title: 'Full App Display',
+            description: 'Modo de tela cheia aprimorado',
+            content: 'Exibe a capa do álbum e informações da música em tela cheia.',
+            tips: ['Ideal para uso em TVs', 'Mostra visualizações de áudio']
+          }
+        ]
+      },
+      {
+        id: 'spicetify-snippets',
+        title: 'Snippets CSS',
+        articles: [
+          {
+            id: 'spicetify-snippets-what',
+            title: 'O que são Snippets?',
+            description: 'Introdução aos snippets CSS',
+            content: 'Snippets são pequenos trechos de CSS que modificam elementos específicos da interface sem mudar o tema inteiro.',
+            tips: ['Podem ser combinados com qualquer tema', 'Fácil de ativar/desativar']
+          },
+          {
+            id: 'spicetify-snippets-add',
+            title: 'Adicionar Snippet',
+            description: 'Como adicionar snippets customizados',
+            content: 'Snippets podem ser adicionados ao arquivo user.css do tema atual.',
+            steps: [
+              'Abra ~/.config/spicetify/Themes/NomeDoTema/user.css',
+              'Adicione o código CSS do snippet',
+              'Execute: spicetify apply',
+              'Reinicie o Spotify'
+            ]
+          },
+          {
+            id: 'spicetify-snippets-roundedui',
+            title: 'Snippet Rounded UI',
+            description: 'Adiciona bordas arredondadas',
+            content: 'Este snippet arredonda os cantos de todos os elementos da interface para um visual mais suave.',
+            tips: ['Combina bem com temas modernos']
+          },
+          {
+            id: 'spicetify-snippets-hideads',
+            title: 'Snippet Hide Ads',
+            description: 'Remove elementos promocionais',
+            content: 'Oculta banners e elementos promocionais da interface (não bloqueia ads de áudio).',
+            tips: ['Não bloqueia anúncios de áudio', 'Apenas visual']
+          }
+        ]
+      },
+      {
+        id: 'spicetify-marketplace',
+        title: 'Marketplace',
+        articles: [
+          {
+            id: 'spicetify-marketplace-setup',
+            title: 'Habilitar Marketplace',
+            description: 'Como ativar o Marketplace do Spicetify',
+            content: 'O Marketplace permite instalar temas, extensões e snippets diretamente do Spotify.',
+            steps: [
+              'Execute: spicetify config custom_apps marketplace',
+              'Execute: spicetify apply',
+              'Acesse pelo menu lateral do Spotify',
+              'Explore e instale com um clique'
+            ]
+          },
+          {
+            id: 'spicetify-marketplace-browse',
+            title: 'Navegar Marketplace',
+            description: 'Como explorar o Marketplace',
+            content: 'O Marketplace organiza itens em categorias: Extensions, Themes, Apps e Snippets.',
+            tips: ['Use filtros para encontrar itens', 'Veja avaliações da comunidade']
+          },
+          {
+            id: 'spicetify-marketplace-install',
+            title: 'Instalar do Marketplace',
+            description: 'Como instalar itens do Marketplace',
+            content: 'Instalação simplificada com um clique.',
+            steps: [
+              'Encontre o item desejado',
+              'Clique em Install',
+              'Aguarde o download e aplicação automática',
+              'Algumas instalações requerem reiniciar o Spotify'
+            ]
+          }
+        ]
+      },
+      {
+        id: 'spicetify-troubleshooting',
+        title: 'Solução de Problemas',
+        articles: [
+          {
+            id: 'spicetify-after-update',
+            title: 'Após Atualização do Spotify',
+            description: 'O que fazer quando o Spotify atualiza',
+            content: 'Atualizações do Spotify podem quebrar customizações do Spicetify.',
+            steps: [
+              'Execute: spicetify backup apply',
+              'Se não funcionar: spicetify restore backup apply',
+              'Atualize o Spicetify: spicetify upgrade',
+              'Reaplique as configurações'
+            ]
+          },
+          {
+            id: 'spicetify-not-working',
+            title: 'Spicetify Não Funciona',
+            description: 'Diagnóstico de problemas gerais',
+            content: 'Passos para resolver problemas comuns do Spicetify.',
+            steps: [
+              'Verifique se o caminho do Spotify está correto em config.ini',
+              'Execute: spicetify restore para restaurar backup',
+              'Reconfigure: spicetify backup apply enable-devtools',
+              'Verifique permissões da pasta do Spotify'
+            ]
+          },
+          {
+            id: 'spicetify-theme-broken',
+            title: 'Tema Não Aplica',
+            description: 'Quando o tema não funciona',
+            content: 'Problemas com temas geralmente são causados por arquivos incorretos ou incompatibilidade.',
+            steps: [
+              'Verifique se a pasta do tema está em Themes/',
+              'Confirme que color.ini existe e está válido',
+              'Tente com um tema diferente para testar',
+              'Verifique logs: spicetify -v apply'
+            ]
+          },
+          {
+            id: 'spicetify-reset',
+            title: 'Resetar Spicetify',
+            description: 'Como fazer reset completo',
+            content: 'Para um reset completo e recomeçar do zero:',
+            steps: [
+              'Execute: spicetify restore',
+              'Delete ~/.config/spicetify',
+              'Reinstale o Spotify (opcional mas recomendado)',
+              'Reinstale o Spicetify',
+              'Configure novamente do início'
+            ]
+          }
+        ]
+      }
+    ]
+  },
+  // =============================================
+  // STORJ CLOUD STORAGE - 15+ artigos
+  // =============================================
+  {
+    id: 'storj-cloud',
+    title: 'Storj Cloud Storage',
+    icon: 'Satellite',
+    description: 'Armazenamento descentralizado para backups e arquivos',
+    subSections: [
+      {
+        id: 'storj-getting-started',
+        title: 'Primeiros Passos',
+        articles: [
+          {
+            id: 'storj-what-is',
+            title: 'O que é Storj?',
+            description: 'Introdução ao Storj DCS',
+            content: 'Storj é uma plataforma de armazenamento em nuvem descentralizada que oferece segurança, privacidade e custos reduzidos comparado a soluções tradicionais.',
+            tips: [
+              'Dados são criptografados end-to-end',
+              'Distribuídos em milhares de nós globalmente',
+              'Compatível com protocolo S3'
+            ]
+          },
+          {
+            id: 'storj-create-account',
+            title: 'Criar Conta Storj',
+            description: 'Como criar uma conta no Storj',
+            content: 'O registro no Storj é gratuito e oferece créditos iniciais para teste.',
+            steps: [
+              'Acesse storj.io/signup',
+              'Preencha email e senha',
+              'Confirme o email',
+              'Complete a verificação',
+              'Receba créditos gratuitos iniciais'
+            ]
+          },
+          {
+            id: 'storj-pricing',
+            title: 'Preços e Planos',
+            description: 'Entenda os custos do Storj',
+            content: 'Storj usa modelo pay-as-you-go com preços competitivos.',
+            tips: [
+              'Armazenamento: $4/TB/mês',
+              'Download: $7/TB',
+              'Upload e operações: grátis',
+              'Sem taxas de egress para transferências entre regiões'
+            ]
+          },
+          {
+            id: 'storj-security',
+            title: 'Segurança e Criptografia',
+            description: 'Como o Storj protege seus dados',
+            content: 'Storj oferece criptografia de ponta a ponta com chaves que você controla.',
+            tips: [
+              'Criptografia AES-256-GCM',
+              'Chaves nunca são compartilhadas com Storj',
+              'Dados são fragmentados e distribuídos',
+              'Redundância de 80 peças em 29 nós mínimo'
+            ]
+          }
+        ]
+      },
+      {
+        id: 'storj-access-grants',
+        title: 'Access Grants',
+        articles: [
+          {
+            id: 'storj-create-grant',
+            title: 'Criar Access Grant',
+            description: 'Como gerar um Access Grant',
+            content: 'Access Grants são credenciais que permitem acesso aos seus buckets e objetos.',
+            steps: [
+              'Acesse o console do Storj',
+              'Vá em Access > Create Access',
+              'Escolha tipo: Full Access ou Restricted',
+              'Defina nome e permissões',
+              'Copie e guarde o Access Grant gerado'
+            ],
+            tips: ['Access Grants são mostrados apenas uma vez', 'Guarde em local seguro']
+          },
+          {
+            id: 'storj-grant-permissions',
+            title: 'Permissões de Access Grant',
+            description: 'Tipos de permissões disponíveis',
+            content: 'Access Grants podem ter permissões granulares para diferentes operações.',
+            tips: [
+              'Read: listar e baixar objetos',
+              'Write: fazer upload de objetos',
+              'Delete: remover objetos',
+              'List: listar conteúdo de buckets'
+            ]
+          },
+          {
+            id: 'storj-s3-credentials',
+            title: 'Credenciais S3',
+            description: 'Usar Storj via protocolo S3',
+            content: 'Storj é compatível com S3, permitindo usar ferramentas existentes.',
+            steps: [
+              'Vá em Access > Create S3 Credentials',
+              'Gere Access Key e Secret Key',
+              'Use endpoint: gateway.storjshare.io',
+              'Configure em seu cliente S3 favorito'
+            ]
+          }
+        ]
+      },
+      {
+        id: 'storj-backup-tsijukebox',
+        title: 'Backup no TSiJUKEBOX',
+        articles: [
+          {
+            id: 'storj-configure-backup',
+            title: 'Configurar Backup Storj',
+            description: 'Como configurar backup para Storj no TSiJUKEBOX',
+            content: 'O TSiJUKEBOX suporta backup automático para Storj usando Access Grant.',
+            steps: [
+              'Acesse Configurações > Cloud Backup',
+              'Selecione Storj como provedor',
+              'Cole seu Access Grant',
+              'Defina o bucket de destino',
+              'Salve e teste a conexão'
+            ]
+          },
+          {
+            id: 'storj-manual-backup',
+            title: 'Backup Manual',
+            description: 'Como executar backup manual',
+            content: 'Backups manuais podem ser executados a qualquer momento.',
+            steps: [
+              'Acesse Configurações > Backup',
+              'Na aba Cloud, clique em "Backup Agora"',
+              'Aguarde o upload completar',
+              'Verifique o status na lista de backups'
+            ]
+          },
+          {
+            id: 'storj-scheduled-backup',
+            title: 'Backup Agendado',
+            description: 'Configurar backups automáticos',
+            content: 'Configure backups automáticos em horários específicos.',
+            steps: [
+              'Acesse Configurações > Backup > Agendamento',
+              'Ative "Backup Automático"',
+              'Escolha frequência: Diário, Semanal, Mensal',
+              'Defina horário de execução',
+              'Configure retenção de backups antigos'
+            ]
+          },
+          {
+            id: 'storj-restore-backup',
+            title: 'Restaurar Backup',
+            description: 'Como restaurar dados do Storj',
+            content: 'Restaure backups armazenados no Storj para recuperar dados.',
+            steps: [
+              'Acesse Configurações > Cloud Backup',
+              'Liste backups disponíveis',
+              'Selecione o backup desejado',
+              'Clique em "Restaurar"',
+              'Aguarde o download e aplicação'
+            ],
+            tips: ['Restauração substitui dados atuais', 'Faça backup local antes de restaurar']
+          }
+        ]
+      },
+      {
+        id: 'storj-advanced',
+        title: 'Recursos Avançados',
+        articles: [
+          {
+            id: 'storj-versioning',
+            title: 'Versionamento de Arquivos',
+            description: 'Manter múltiplas versões de objetos',
+            content: 'O versionamento permite manter histórico de alterações em seus arquivos.',
+            tips: [
+              'Ative por bucket nas configurações',
+              'Cada versão é cobrada separadamente',
+              'Útil para recuperação de dados'
+            ]
+          },
+          {
+            id: 'storj-object-lock',
+            title: 'Object Lock (Proteção)',
+            description: 'Proteger objetos contra exclusão',
+            content: 'Object Lock impede que objetos sejam deletados ou modificados por um período.',
+            tips: [
+              'Ideal para compliance e auditoria',
+              'Modo Governance: admins podem remover',
+              'Modo Compliance: ninguém pode remover'
+            ]
+          },
+          {
+            id: 'storj-regions',
+            title: 'Regiões Disponíveis',
+            description: 'Escolher região para seus dados',
+            content: 'Storj oferece múltiplas regiões para otimizar latência e compliance.',
+            tips: [
+              'US1: América do Norte',
+              'EU1: Europa',
+              'AP1: Ásia-Pacífico',
+              'Dados podem ser globais por padrão'
+            ]
+          }
+        ]
+      }
+    ]
+  },
+  // =============================================
+  // MÚSICA LOCAL - 10+ artigos
+  // =============================================
+  {
+    id: 'local-music',
+    title: 'Música Local',
+    icon: 'HardDrive',
+    description: 'Gerencie arquivos MP3 locais e sincronize entre instâncias',
+    subSections: [
+      {
+        id: 'local-music-upload',
+        title: 'Upload e Gerenciamento',
+        articles: [
+          {
+            id: 'local-upload-files',
+            title: 'Fazer Upload de Músicas',
+            description: 'Como adicionar músicas MP3 ao sistema',
+            content: 'O sistema de música local permite fazer upload de arquivos MP3 para reprodução offline.',
+            steps: [
+              'Acesse Configurações > Integrações > Música Local',
+              'Vá na aba "Upload"',
+              'Arraste arquivos MP3 ou clique para selecionar',
+              'Aguarde o upload e processamento',
+              'Músicas aparecem na aba "Biblioteca"'
+            ],
+            tips: [
+              'Formatos suportados: MP3, M4A, FLAC, OGG',
+              'Metadados ID3 são extraídos automaticamente'
+            ]
+          },
+          {
+            id: 'local-delete-files',
+            title: 'Excluir Arquivos',
+            description: 'Como remover músicas do sistema',
+            content: 'Músicas podem ser removidas individualmente ou em lote.',
+            steps: [
+              'Acesse a aba "Biblioteca"',
+              'Selecione as músicas desejadas',
+              'Clique em "Excluir Selecionados"',
+              'Confirme a exclusão'
+            ],
+            tips: ['Exclusão remove de todos os usuários sincronizados']
+          },
+          {
+            id: 'local-supported-formats',
+            title: 'Formatos Suportados',
+            description: 'Tipos de arquivo de áudio aceitos',
+            content: 'O sistema suporta os principais formatos de áudio digital.',
+            tips: [
+              'MP3: formato mais comum, boa compatibilidade',
+              'M4A/AAC: melhor qualidade em tamanhos menores',
+              'FLAC: sem perdas, arquivos maiores',
+              'OGG: formato livre, boa compressão'
+            ]
+          }
+        ]
+      },
+      {
+        id: 'local-music-sync',
+        title: 'Sincronização',
+        articles: [
+          {
+            id: 'local-sync-all-users',
+            title: 'Sincronizar para Todos os Usuários',
+            description: 'Distribuir músicas para todos os usuários do sistema',
+            content: 'A sincronização copia músicas para /home/$user/Music/ de todos os usuários cadastrados.',
+            steps: [
+              'Acesse a aba "Sincronização"',
+              'Selecione as músicas a sincronizar',
+              'Clique em "Sincronizar Todos"',
+              'Aguarde a cópia para cada usuário'
+            ],
+            tips: [
+              'Requer permissões root',
+              'Sincronização via rsync para eficiência'
+            ]
+          },
+          {
+            id: 'local-sync-single-user',
+            title: 'Sincronizar para Usuário Específico',
+            description: 'Sincronizar músicas para um usuário específico',
+            content: 'Você pode sincronizar músicas seletivamente para usuários específicos.',
+            steps: [
+              'Acesse a aba "Sincronização"',
+              'Selecione o usuário na lista',
+              'Escolha as músicas',
+              'Clique em "Sincronizar"'
+            ]
+          },
+          {
+            id: 'local-sync-status',
+            title: 'Status de Sincronização',
+            description: 'Monitorar progresso de sincronização',
+            content: 'O sistema mostra o status em tempo real das sincronizações em andamento.',
+            tips: [
+              'Verde: sincronizado com sucesso',
+              'Amarelo: sincronização em andamento',
+              'Vermelho: erro na sincronização'
+            ]
+          }
+        ]
+      },
+      {
+        id: 'local-music-replication',
+        title: 'Replicação Multi-Instância',
+        articles: [
+          {
+            id: 'local-register-instance',
+            title: 'Registrar Outra Instância',
+            description: 'Como adicionar outras instâncias TSiJUKEBOX',
+            content: 'Registre outras instalações do TSiJUKEBOX para replicar músicas entre elas.',
+            steps: [
+              'Acesse a aba "Instâncias"',
+              'Clique em "Registrar Nova"',
+              'Informe URL e nome da instância',
+              'Teste a conexão',
+              'Salve o registro'
+            ]
+          },
+          {
+            id: 'local-replicate-library',
+            title: 'Replicar Biblioteca',
+            description: 'Copiar músicas para outras instâncias',
+            content: 'Replique toda sua biblioteca ou músicas selecionadas para outras instâncias TSiJUKEBOX.',
+            steps: [
+              'Selecione músicas na biblioteca',
+              'Escolha instâncias de destino',
+              'Clique em "Replicar"',
+              'Aguarde a transferência'
+            ],
+            tips: [
+              'Transferência via SSH/rsync',
+              'Compressão durante transferência'
+            ]
+          },
+          {
+            id: 'local-bulk-operations',
+            title: 'Operações em Lote',
+            description: 'Gerenciar múltiplas músicas simultaneamente',
+            content: 'Execute operações em várias músicas de uma vez.',
+            tips: [
+              'Selecione múltiplas músicas com Ctrl+Click',
+              'Use Shift+Click para selecionar intervalo',
+              'Ações disponíveis: excluir, sincronizar, replicar, criar playlist'
+            ]
+          }
+        ]
+      }
+    ]
   }
 ];
 

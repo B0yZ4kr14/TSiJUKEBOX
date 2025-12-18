@@ -33,7 +33,9 @@ import {
   AccessibilitySection, 
   KeysManagementSection,
   SpicetifySection,
-  YouTubeMusicSection
+  YouTubeMusicSection,
+  LocalMusicSection,
+  StorjSection
 } from '@/components/settings';
 import { SettingsSidebar, SettingsCategory } from '@/components/settings/SettingsSidebar';
 import { SettingsDashboard } from '@/components/settings/SettingsDashboard';
@@ -503,6 +505,12 @@ export default function Settings() {
 
             {/* YouTube Music Section */}
             <YouTubeMusicSection />
+
+            {/* Local Music Section - Sistema Premium de Upload MP3 */}
+            <LocalMusicSection />
+
+            {/* Storj Cloud Storage Section */}
+            <StorjSection />
           </>
         );
 

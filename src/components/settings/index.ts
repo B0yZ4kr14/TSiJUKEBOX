@@ -33,3 +33,5 @@ export { SettingsNotificationBanner, SettingsNotificationBadge } from './Setting
 export { SpicetifySection } from './SpicetifySection';
 export { YouTubeMusicSection } from './YouTubeMusicSection';
 export { MusicIntegrationsSection } from './MusicIntegrationsSection';
+export { LocalMusicSection } from './LocalMusicSection';
+export { StorjSection } from './StorjSection';

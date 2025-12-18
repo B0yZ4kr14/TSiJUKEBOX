@@ -15,13 +15,13 @@ export default function AdminFeedback() {
       <div className="space-y-6">
         <div>
           <h2 className="text-3xl font-bold tracking-tight text-gold-neon">Feedback</h2>
-          <p className="text-kiosk-text/70">Visualize as avaliações dos usuários</p>
+          <p className="text-kiosk-text/90">Visualize as avaliações dos usuários</p>
         </div>
 
         <Card className="card-admin-extreme-3d">
           <CardHeader>
             <CardTitle className="text-gold-neon">Avaliações Recebidas</CardTitle>
-            <CardDescription className="text-kiosk-text/70">
+            <CardDescription className="text-kiosk-text/90">
               {feedbacks?.length ?? 0} feedbacks registrados
             </CardDescription>
           </CardHeader>
@@ -33,7 +33,7 @@ export default function AdminFeedback() {
             ) : !feedbacks || feedbacks.length === 0 ? (
               <div className="flex flex-col items-center justify-center py-8 text-center">
                 <MessageSquare className="w-12 h-12 icon-neon-blue mb-4" />
-                <p className="text-kiosk-text/70">Nenhum feedback recebido</p>
+                <p className="text-kiosk-text/90">Nenhum feedback recebido</p>
               </div>
             ) : (
               <div className="space-y-4">

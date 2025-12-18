@@ -71,7 +71,7 @@ export function SettingsSection({
                 animate={{ rotate: isOpen ? 180 : 0 }}
                 transition={{ duration: 0.3 }}
               >
-                <ChevronDown className="w-5 h-5 text-kiosk-text/70" />
+                <ChevronDown className="w-5 h-5 text-kiosk-text/90" />
               </motion.div>
             </div>
           </div>

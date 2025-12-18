@@ -130,7 +130,7 @@ export function SettingsSidebar({ activeCategory, onCategoryChange }: SettingsSi
                 variant="ghost"
                 size="icon"
                 onClick={() => setIsExpanded(true)}
-                className="w-10 h-10 mb-2 text-kiosk-text/50 hover:text-kiosk-text hover:bg-kiosk-surface/50"
+                className="w-10 h-10 mb-2 text-kiosk-text/85 hover:text-kiosk-text hover:bg-kiosk-surface/50"
               >
                 <Search className="w-4 h-4" />
               </Button>
@@ -189,7 +189,7 @@ export function SettingsSidebar({ activeCategory, onCategoryChange }: SettingsSi
         {/* No results message */}
         {searchQuery && filteredCategories.length === 0 && (
           <motion.p
-            className="text-xs text-kiosk-text/50 text-center mt-4 px-2"
+            className="text-xs text-kiosk-text/85 text-center mt-4 px-2"
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
           >

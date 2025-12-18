@@ -574,7 +574,7 @@ export default function Help() {
               variant="ghost"
               size="icon"
               onClick={() => navigate(-1)}
-              className="text-kiosk-text/70 hover:text-kiosk-text"
+              className="text-kiosk-text/90 hover:text-kiosk-text"
             >
               <ArrowLeft className="w-5 h-5" />
             </Button>
@@ -582,7 +582,7 @@ export default function Help() {
               <HelpCircle className="w-6 h-6 icon-neon-blue" />
               <div>
                 <h1 className="text-xl font-bold text-kiosk-text">Manual & FAQ</h1>
-                <p className="text-xs text-kiosk-text/60">{totalArticles} artigos em {helpSections.length} seções</p>
+                <p className="text-xs text-kiosk-text/85">{totalArticles} artigos em {helpSections.length} seções</p>
               </div>
             </div>
           </div>
@@ -748,7 +748,7 @@ export default function Help() {
                             {item.steps && (
                               <div className="space-y-2">
                                 <p className="text-sm font-medium text-label-yellow">📋 Passo a passo:</p>
-                                <ol className="list-decimal list-inside space-y-2 text-sm text-kiosk-text/70">
+                                <ol className="list-decimal list-inside space-y-2 text-sm text-kiosk-text/90">
                                   {item.steps.map((step, i) => (
                                     <li key={i} className="leading-relaxed">{formatBrandInText(step)}</li>
                                   ))}
@@ -759,7 +759,7 @@ export default function Help() {
                             {item.tips && (
                               <div className="p-3 rounded-lg bg-primary/10 space-y-1">
                                 <p className="text-sm font-medium text-primary">💡 Dicas:</p>
-                                <ul className="text-sm text-kiosk-text/70 space-y-1">
+                                <ul className="text-sm text-kiosk-text/90 space-y-1">
                                   {item.tips.map((tip, i) => (
                                     <li key={i} className="leading-relaxed">• {formatBrandInText(tip)}</li>
                                   ))}
@@ -775,7 +775,7 @@ export default function Help() {
               ) : (
               <div className="text-center py-12">
                   <HelpCircle className="w-16 h-16 mx-auto icon-neon-blue opacity-30 mb-4" />
-                  <p className="text-kiosk-text/70">Selecione uma seção no índice para ver o conteúdo</p>
+                  <p className="text-kiosk-text/90">Selecione uma seção no índice para ver o conteúdo</p>
                 </div>
               )}
             </ScrollArea>

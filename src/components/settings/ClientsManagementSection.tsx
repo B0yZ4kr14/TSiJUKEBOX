@@ -448,7 +448,7 @@ export function ClientsManagementSection() {
 
         {/* Clients List */}
         {clients.length === 0 ? (
-          <div className="text-center py-8 text-kiosk-text/50">
+          <div className="text-center py-8 text-kiosk-text/85">
             <Building2 className="w-12 h-12 mx-auto mb-3 opacity-50" />
             <p className="text-sm">Nenhum cliente cadastrado</p>
             <p className="text-xs mt-1">Adicione terminais <span className="text-brand-inline">TSiJUKEBOX</span> para gerenciar</p>
@@ -484,7 +484,7 @@ export function ClientsManagementSection() {
                     </div>
                     
                     {client.address && (
-                      <p className="text-xs text-kiosk-text/70 flex items-center gap-1 mb-1">
+                      <p className="text-xs text-kiosk-text/90 flex items-center gap-1 mb-1">
                         <MapPin className="w-3 h-3" />
                         {client.address}{client.city && `, ${client.city}`}
                       </p>
@@ -496,7 +496,7 @@ export function ClientsManagementSection() {
                     </p>
                     
                     {client.sshHost && (
-                      <p className="text-xs text-kiosk-text/50 flex items-center gap-1 mt-1">
+                      <p className="text-xs text-kiosk-text/85 flex items-center gap-1 mt-1">
                         <Key className="w-3 h-3" />
                         SSH: {client.sshUser}@{client.sshHost}:{client.sshPort}
                       </p>

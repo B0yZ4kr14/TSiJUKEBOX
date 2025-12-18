@@ -84,13 +84,13 @@ export function YouTubeMusicTrackItem({
       {/* Track info */}
       <div className="flex-1 min-w-0">
         <p className="text-kiosk-text font-medium truncate">{track.title}</p>
-        <p className="text-sm text-kiosk-text/60 truncate">{track.artist}</p>
+        <p className="text-sm text-kiosk-text/85 truncate">{track.artist}</p>
       </div>
 
       {/* Album */}
       {showAlbum && (
         <div className="hidden md:block flex-1 min-w-0">
-          <p className="text-sm text-kiosk-text/60 truncate">{track.album}</p>
+          <p className="text-sm text-kiosk-text/85 truncate">{track.album}</p>
         </div>
       )}
 

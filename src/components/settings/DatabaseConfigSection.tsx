@@ -108,7 +108,7 @@ export function DatabaseConfigSection({ isDemoMode = false }: DatabaseConfigSect
               <HardDrive className="w-5 h-5 icon-neon-blue" />
               <div>
                 <p className="font-medium text-kiosk-text">SQLite Local</p>
-                <p className="text-sm text-kiosk-text/75">Arquivo no servidor local - Simples e rápido</p>
+                <p className="text-sm text-kiosk-text/90">Arquivo no servidor local - Simples e rápido</p>
               </div>
             </Label>
           </div>
@@ -125,7 +125,7 @@ export function DatabaseConfigSection({ isDemoMode = false }: DatabaseConfigSect
               <Server className="w-5 h-5 icon-neon-blue" />
               <div>
                 <p className="font-medium text-kiosk-text">SQLite Remoto</p>
-                <p className="text-sm text-kiosk-text/75">Arquivo em servidor externo via SSH</p>
+                <p className="text-sm text-kiosk-text/90">Arquivo em servidor externo via SSH</p>
               </div>
             </Label>
           </div>
@@ -142,7 +142,7 @@ export function DatabaseConfigSection({ isDemoMode = false }: DatabaseConfigSect
               <Sparkles className="w-5 h-5 icon-neon-blue" />
               <div>
                 <p className="font-medium text-kiosk-text">Supabase</p>
-                <p className="text-sm text-kiosk-text/75">Banco PostgreSQL na nuvem com painel admin</p>
+                <p className="text-sm text-kiosk-text/90">Banco PostgreSQL na nuvem com painel admin</p>
               </div>
             </Label>
           </div>
@@ -159,7 +159,7 @@ export function DatabaseConfigSection({ isDemoMode = false }: DatabaseConfigSect
               <Cloud className="w-5 h-5 icon-neon-blue" />
               <div>
                 <p className="font-medium text-kiosk-text">Lovable Cloud</p>
-                <p className="text-sm text-kiosk-text/75">100% gerenciado - Zero configuração</p>
+                <p className="text-sm text-kiosk-text/90">100% gerenciado - Zero configuração</p>
               </div>
             </Label>
           </div>
@@ -178,7 +178,7 @@ export function DatabaseConfigSection({ isDemoMode = false }: DatabaseConfigSect
                 disabled={isDemoMode}
                 className="input-3d bg-kiosk-bg"
               />
-              <p className="text-xs text-kiosk-text/70">
+              <p className="text-xs text-kiosk-text/90">
                 Caminho completo para o arquivo SQLite no computador
               </p>
             </div>
@@ -266,7 +266,7 @@ export function DatabaseConfigSection({ isDemoMode = false }: DatabaseConfigSect
                 disabled={isDemoMode}
                 className="input-3d bg-kiosk-bg"
               />
-              <p className="text-xs text-kiosk-text/70">
+              <p className="text-xs text-kiosk-text/90">
                 Encontre isso em: Supabase Dashboard → Settings → API
               </p>
             </div>
@@ -281,7 +281,7 @@ export function DatabaseConfigSection({ isDemoMode = false }: DatabaseConfigSect
                 disabled={isDemoMode}
                 className="input-3d bg-kiosk-bg font-mono text-xs"
               />
-              <p className="text-xs text-kiosk-text/70">
+              <p className="text-xs text-kiosk-text/90">
                 Esta chave é segura para usar no frontend
               </p>
             </div>
@@ -311,10 +311,10 @@ export function DatabaseConfigSection({ isDemoMode = false }: DatabaseConfigSect
               <CheckCircle2 className="w-6 h-6 text-green-400" />
               <div>
                 <p className="font-medium text-green-400">✨ Conectado ao Lovable Cloud</p>
-                <p className="text-sm text-kiosk-text/75 mt-1">
+                <p className="text-sm text-kiosk-text/90 mt-1">
                   Banco de dados gerenciado automaticamente. Nenhuma configuração necessária!
                 </p>
-                <ul className="mt-2 text-xs text-kiosk-text/60 space-y-1">
+                <ul className="mt-2 text-xs text-kiosk-text/85 space-y-1">
                   <li>• Backup automático diário</li>
                   <li>• Escalabilidade ilimitada</li>
                   <li>• Segurança de nível empresarial</li>

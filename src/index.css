@@ -173,6 +173,26 @@
     color: hsl(0 0% 65%);
   }
 
+  /* Neon White Bold - Maximum Legibility */
+  .text-neon-white-bold {
+    color: hsl(0 0% 95%);
+    font-weight: 700;
+    text-shadow: 
+      0 0 4px hsl(0 0% 100% / 0.4),
+      0 0 8px hsl(185 100% 70% / 0.2);
+  }
+
+  /* Secondary Visible - Improved Contrast */
+  .text-secondary-visible {
+    color: hsl(0 0% 85%);
+    font-weight: 500;
+  }
+
+  /* Tertiary Visible - Readable Muted Text */
+  .text-tertiary-visible {
+    color: hsl(0 0% 78%);
+  }
+
   /* Settings page high contrast text */
   .text-settings-title {
     color: hsl(0 0% 95%);

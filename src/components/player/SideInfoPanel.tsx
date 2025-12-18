@@ -101,20 +101,20 @@ export function SideInfoPanel({
                   {/* Now Playing Mini */}
                   {currentTrack && (
                     <div className="p-3 rounded-lg bg-[#1DB954]/10 border border-[#1DB954]/20">
-                      <p className="text-xs text-kiosk-text/60 uppercase tracking-wider mb-2">Tocando Agora</p>
+                      <p className="text-xs text-kiosk-text/85 uppercase tracking-wider mb-2 font-semibold">Tocando Agora</p>
                       <div className="flex items-center gap-3">
                         <div className="w-12 h-12 rounded overflow-hidden flex-shrink-0">
                           {currentTrack.cover ? (
                             <img src={currentTrack.cover} alt={currentTrack.album} className="w-full h-full object-cover" />
                           ) : (
                             <div className="w-full h-full bg-kiosk-surface flex items-center justify-center">
-                              <Music className="w-5 h-5 text-kiosk-text/40" />
+                              <Music className="w-5 h-5 text-kiosk-text/80" />
                             </div>
                           )}
                         </div>
                         <div className="flex-1 min-w-0">
                           <p className="font-medium text-kiosk-text truncate">{currentTrack.title}</p>
-                          <p className="text-sm text-kiosk-text/70 truncate">{currentTrack.artist}</p>
+                          <p className="text-sm text-kiosk-text/85 truncate">{currentTrack.artist}</p>
                         </div>
                       </div>
                     </div>
@@ -122,12 +122,12 @@ export function SideInfoPanel({
 
                   {/* Next Up */}
                   <div>
-                    <p className="text-xs text-kiosk-text/60 uppercase tracking-wider mb-3">
+                    <p className="text-xs text-kiosk-text/85 uppercase tracking-wider mb-3 font-semibold">
                       Próximas ({queue?.next.length || 0})
                     </p>
                     {!queue || queue.next.length === 0 ? (
-                      <div className="text-center py-8 text-kiosk-text/50">
-                        <Music className="w-10 h-10 mx-auto mb-2 opacity-40" />
+                      <div className="text-center py-8 text-kiosk-text/80">
+                        <Music className="w-10 h-10 mx-auto mb-2 opacity-50" />
                         <p className="text-sm">A fila está vazia</p>
                       </div>
                     ) : (
@@ -137,19 +137,19 @@ export function SideInfoPanel({
                             key={item.id}
                             className="flex items-center gap-3 p-2 rounded-lg hover:bg-kiosk-surface/50 transition-colors group"
                           >
-                            <span className="w-5 text-center text-xs text-kiosk-text/50">{index + 1}</span>
+                            <span className="w-5 text-center text-xs text-kiosk-text/80">{index + 1}</span>
                             <div className="w-10 h-10 rounded overflow-hidden flex-shrink-0">
                               {item.cover ? (
                                 <img src={item.cover} alt={item.album} className="w-full h-full object-cover" />
                               ) : (
                                 <div className="w-full h-full bg-kiosk-surface flex items-center justify-center">
-                                  <Music className="w-4 h-4 text-kiosk-text/40" />
+                                  <Music className="w-4 h-4 text-kiosk-text/80" />
                                 </div>
                               )}
                             </div>
                             <div className="flex-1 min-w-0">
                               <p className="text-sm font-medium text-kiosk-text truncate">{item.title}</p>
-                              <p className="text-xs text-kiosk-text/60 truncate">{item.artist}</p>
+                              <p className="text-xs text-kiosk-text/80 truncate">{item.artist}</p>
                             </div>
                           </div>
                         ))}
@@ -159,8 +159,8 @@ export function SideInfoPanel({
 
                   {/* History */}
                   {queue && queue.history.length > 0 && (
-                    <div className="opacity-60">
-                      <p className="text-xs text-kiosk-text/60 uppercase tracking-wider mb-3">Histórico</p>
+                    <div className="opacity-70">
+                      <p className="text-xs text-kiosk-text/85 uppercase tracking-wider mb-3 font-semibold">Histórico</p>
                       <div className="space-y-2">
                         {queue.history.slice(0, 5).map((item) => (
                           <div
@@ -172,13 +172,13 @@ export function SideInfoPanel({
                                 <img src={item.cover} alt={item.album} className="w-full h-full object-cover" />
                               ) : (
                                 <div className="w-full h-full bg-kiosk-surface flex items-center justify-center">
-                                  <Music className="w-3 h-3 text-kiosk-text/40" />
+                                  <Music className="w-3 h-3 text-kiosk-text/80" />
                                 </div>
                               )}
                             </div>
                             <div className="flex-1 min-w-0">
                               <p className="text-xs font-medium text-kiosk-text truncate">{item.title}</p>
-                              <p className="text-xs text-kiosk-text/50 truncate">{item.artist}</p>
+                              <p className="text-xs text-kiosk-text/80 truncate">{item.artist}</p>
                             </div>
                           </div>
                         ))}
@@ -205,8 +205,8 @@ export function SideInfoPanel({
               <ScrollArea className="h-full">
                 <div className="p-4 space-y-6">
                   {!currentTrack ? (
-                    <div className="text-center py-12 text-kiosk-text/50">
-                      <Music className="w-16 h-16 mx-auto mb-4 opacity-40" />
+                    <div className="text-center py-12 text-kiosk-text/80">
+                      <Music className="w-16 h-16 mx-auto mb-4 opacity-50" />
                       <p>Nenhuma música tocando</p>
                     </div>
                   ) : (
@@ -221,7 +221,7 @@ export function SideInfoPanel({
                           />
                         ) : (
                           <div className="w-full h-full bg-kiosk-surface flex items-center justify-center">
-                            <Disc3 className="w-16 h-16 text-kiosk-text/30" />
+                            <Disc3 className="w-16 h-16 text-kiosk-text/75" />
                           </div>
                         )}
                       </div>
@@ -229,7 +229,7 @@ export function SideInfoPanel({
                       {/* Track Info */}
                       <div className="text-center">
                         <h3 className="text-xl font-bold text-kiosk-text mb-1">{currentTrack.title}</h3>
-                        <p className="text-kiosk-text/70">{currentTrack.artist}</p>
+                        <p className="text-kiosk-text/85">{currentTrack.artist}</p>
                       </div>
 
                       {/* Details */}
@@ -237,7 +237,7 @@ export function SideInfoPanel({
                         <div className="flex items-center gap-3 p-3 rounded-lg bg-kiosk-surface/30">
                           <Disc3 className="w-5 h-5 text-cyan-400" />
                           <div className="flex-1">
-                            <p className="text-xs text-kiosk-text/60">Álbum</p>
+                            <p className="text-xs text-kiosk-text/80 font-medium">Álbum</p>
                             <p className="text-sm text-kiosk-text">{currentTrack.album || 'Desconhecido'}</p>
                           </div>
                         </div>
@@ -246,7 +246,7 @@ export function SideInfoPanel({
                           <div className="flex items-center gap-3 p-3 rounded-lg bg-kiosk-surface/30">
                             <Clock className="w-5 h-5 text-cyan-400" />
                             <div className="flex-1">
-                              <p className="text-xs text-kiosk-text/60">Duração</p>
+                              <p className="text-xs text-kiosk-text/80 font-medium">Duração</p>
                               <p className="text-sm text-kiosk-text">{formatDuration(currentTrack.duration)}</p>
                             </div>
                           </div>
@@ -256,7 +256,7 @@ export function SideInfoPanel({
                           <div className="flex items-center gap-3 p-3 rounded-lg bg-kiosk-surface/30">
                             <Tag className="w-5 h-5 text-cyan-400" />
                             <div className="flex-1">
-                              <p className="text-xs text-kiosk-text/60">Gênero</p>
+                              <p className="text-xs text-kiosk-text/80 font-medium">Gênero</p>
                               <Badge variant="outline" className="mt-1">{currentTrack.genre}</Badge>
                             </div>
                           </div>
@@ -266,7 +266,7 @@ export function SideInfoPanel({
                           <div className="flex items-center gap-3 p-3 rounded-lg bg-kiosk-surface/30">
                             <Calendar className="w-5 h-5 text-cyan-400" />
                             <div className="flex-1">
-                              <p className="text-xs text-kiosk-text/60">Ano</p>
+                              <p className="text-xs text-kiosk-text/80 font-medium">Ano</p>
                               <p className="text-sm text-kiosk-text">{currentTrack.year}</p>
                             </div>
                           </div>
@@ -299,7 +299,7 @@ export function SideInfoPanelToggle({
       className={`w-10 h-10 rounded-full transition-all ${
         isOpen 
           ? 'bg-cyan-500/20 text-cyan-400' 
-          : 'bg-kiosk-surface/50 text-kiosk-text/70 hover:text-cyan-400'
+          : 'bg-kiosk-surface/50 text-kiosk-text/85 hover:text-cyan-400'
       }`}
     >
       <Info className="w-5 h-5" />

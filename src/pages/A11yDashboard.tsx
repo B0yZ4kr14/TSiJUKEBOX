@@ -401,8 +401,8 @@ export default function A11yDashboard() {
       {!stats && !isLoading && (
         <div className="flex items-center justify-center h-64">
           <div className="text-center">
-            <Accessibility className="w-16 h-16 text-kiosk-text/50 mx-auto mb-4" />
-            <p className="text-kiosk-text/85">Clique em "Executar Scan" para analisar a acessibilidade</p>
+            <Accessibility className="w-16 h-16 text-kiosk-text/75 mx-auto mb-4" />
+            <p className="text-kiosk-text/90">Clique em "Executar Scan" para analisar a acessibilidade</p>
           </div>
         </div>
       )}

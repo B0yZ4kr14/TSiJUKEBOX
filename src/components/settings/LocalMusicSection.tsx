@@ -230,7 +230,7 @@ export function LocalMusicSection() {
               {/* Toolbar */}
               <div className="flex items-center gap-3 flex-wrap">
                 <div className="relative flex-1 min-w-[200px]">
-                  <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-kiosk-text/50" />
+                  <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-kiosk-text/80" />
                   <Input
                     placeholder={t('localMusic.searchMusic')}
                     value={searchQuery}
@@ -271,8 +271,8 @@ export function LocalMusicSection() {
               {/* File list */}
               <ScrollArea className="h-[350px]">
                 {filteredFiles.length === 0 ? (
-                  <div className="text-center py-12 text-kiosk-text/60">
-                    <Music className="w-12 h-12 mx-auto mb-3 opacity-50" />
+                  <div className="text-center py-12 text-kiosk-text/85">
+                    <Music className="w-12 h-12 mx-auto mb-3 opacity-60" />
                     <p>{t('localMusic.noMusic')}</p>
                     <Button variant="outline" className="mt-4" onClick={() => setActiveTab('upload')}>
                       <Upload className="w-4 h-4 mr-2" />
@@ -298,14 +298,14 @@ export function LocalMusicSection() {
                           <img src={file.coverUrl} alt={file.album} className="w-10 h-10 rounded object-cover" />
                         ) : (
                           <div className="w-10 h-10 rounded bg-kiosk-surface flex items-center justify-center">
-                            <Music className="w-5 h-5 text-kiosk-text/40" />
+                            <Music className="w-5 h-5 text-kiosk-text/80" />
                           </div>
                         )}
                         <div className="flex-1 min-w-0">
-                          <p className="font-bold text-kiosk-text/90 truncate">{file.title}</p>
-                          <p className="text-sm text-kiosk-text/60 truncate">{file.artist} • {file.album}</p>
+                          <p className="font-bold text-kiosk-text/95 truncate">{file.title}</p>
+                          <p className="text-sm text-kiosk-text/85 truncate">{file.artist} • {file.album}</p>
                         </div>
-                        <div className="text-right text-sm text-kiosk-text/60">
+                        <div className="text-right text-sm text-kiosk-text/85">
                           <p>{formatDuration(file.duration)}</p>
                           <p>{formatSize(file.size)}</p>
                         </div>
@@ -340,11 +340,11 @@ export function LocalMusicSection() {
                             <img src={file.coverUrl} alt={file.album} className="w-full aspect-square rounded object-cover mb-2" />
                           ) : (
                             <div className="w-full aspect-square rounded bg-kiosk-surface flex items-center justify-center mb-2">
-                              <Music className="w-8 h-8 text-kiosk-text/40" />
+                              <Music className="w-8 h-8 text-kiosk-text/80" />
                             </div>
                           )}
-                          <p className="font-bold text-sm text-kiosk-text/90 truncate">{file.title}</p>
-                          <p className="text-xs text-kiosk-text/60 truncate">{file.artist}</p>
+                          <p className="font-bold text-sm text-kiosk-text/95 truncate">{file.title}</p>
+                          <p className="text-xs text-kiosk-text/85 truncate">{file.artist}</p>
                         </CardContent>
                       </Card>
                     ))}
@@ -353,7 +353,7 @@ export function LocalMusicSection() {
               </ScrollArea>
 
               {/* Stats */}
-              <div className="flex gap-4 text-sm text-kiosk-text/70">
+              <div className="flex gap-4 text-sm text-kiosk-text/85 font-medium">
                 <span>{files.length} {t('localMusic.files')}</span>
                 <span>{formatSize(files.reduce((acc, f) => acc + f.size, 0))} {t('localMusic.total')}</span>
               </div>
@@ -411,10 +411,10 @@ export function LocalMusicSection() {
                 ) : (
                   <>
                     <Upload className="w-12 h-12 mx-auto mb-4 icon-neon-blue" />
-                    <p className="text-lg font-bold text-kiosk-text/90 mb-2">
+                    <p className="text-lg font-bold text-kiosk-text/95 mb-2">
                       {t('localMusic.dragAndDrop')}
                     </p>
-                    <p className="text-kiosk-text/60 mb-4">
+                    <p className="text-kiosk-text/85 mb-4">
                       {t('localMusic.clickToSelect')}
                     </p>
                     <Button variant="outline" disabled={isUploading}>

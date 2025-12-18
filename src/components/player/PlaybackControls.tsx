@@ -8,6 +8,7 @@ import {
   TooltipProvider,
   TooltipTrigger,
 } from '@/components/ui/tooltip';
+import { useTranslation } from '@/hooks/useTranslation';
 
 interface PlaybackControlsProps {
   shuffle: boolean;
@@ -26,7 +27,8 @@ export function PlaybackControls({
   onQueueOpen,
   disabled,
 }: PlaybackControlsProps) {
-  const repeatLabel = repeat === 'off' ? 'Desligado' : repeat === 'track' ? 'Faixa' : 'Playlist';
+  const { t } = useTranslation();
+  const repeatLabel = repeat === 'off' ? t('player.repeatOff') : repeat === 'track' ? t('player.repeatTrack') : t('player.repeatContext');
 
   return (
     <TooltipProvider>
@@ -44,6 +46,8 @@ export function PlaybackControls({
                 size="icon"
                 onClick={onShuffleToggle}
                 disabled={disabled}
+                aria-label={shuffle ? t('player.shuffleOn') : t('player.shuffleOff')}
+                aria-pressed={shuffle}
                 className={cn(
                   "w-9 h-9 rounded-full transition-all duration-300 relative",
                   shuffle
@@ -67,7 +71,7 @@ export function PlaybackControls({
             </motion.div>
           </TooltipTrigger>
           <TooltipContent side="top" className="bg-slate-800 border-slate-700">
-            <p>Shuffle: {shuffle ? 'Ligado' : 'Desligado'}</p>
+            <p>{shuffle ? t('player.shuffleOn') : t('player.shuffleOff')}</p>
           </TooltipContent>
         </Tooltip>
 
@@ -84,6 +88,8 @@ export function PlaybackControls({
                 size="icon"
                 onClick={onRepeatToggle}
                 disabled={disabled}
+                aria-label={repeatLabel}
+                aria-pressed={repeat !== 'off'}
                 className={cn(
                   "w-9 h-9 rounded-full transition-all duration-300 relative",
                   repeat !== 'off'
@@ -122,7 +128,7 @@ export function PlaybackControls({
             </motion.div>
           </TooltipTrigger>
           <TooltipContent side="top" className="bg-slate-800 border-slate-700">
-            <p>Repeat: {repeatLabel}</p>
+            <p>{repeatLabel}</p>
           </TooltipContent>
         </Tooltip>
 
@@ -135,6 +141,7 @@ export function PlaybackControls({
                 size="icon"
                 onClick={onQueueOpen}
                 disabled={disabled}
+                aria-label={t('player.openQueue')}
                 className="w-9 h-9 rounded-full text-kiosk-text/50 hover:text-kiosk-text hover:bg-kiosk-surface/50 transition-all duration-200"
               >
                 <ListMusic className="w-4 h-4" />
@@ -142,7 +149,7 @@ export function PlaybackControls({
             </motion.div>
           </TooltipTrigger>
           <TooltipContent side="top" className="bg-slate-800 border-slate-700">
-            <p>Fila de reprodução</p>
+            <p>{t('player.openQueue')}</p>
           </TooltipContent>
         </Tooltip>
       </div>

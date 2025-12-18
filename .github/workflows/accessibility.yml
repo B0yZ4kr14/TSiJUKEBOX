@@ -1,4 +1,4 @@
-name: Accessibility Check
+name: Accessibility Audit
 
 on:
   push:
@@ -7,7 +7,7 @@ on:
     branches: [main]
 
 jobs:
-  a11y-check:
+  a11y-audit:
     runs-on: ubuntu-latest
     
     steps:
@@ -23,27 +23,21 @@ jobs:
       - name: Install dependencies
         run: npm ci
         
+      - name: Install Puppeteer browser
+        run: npx puppeteer browsers install chrome
+        
       - name: Build project
         run: npm run build
         
-      - name: Install serve
-        run: npm install -g serve
-        
       - name: Start preview server
-        run: serve -s dist -l 4173 &
+        run: npx serve -s dist -l 4173 &
         
       - name: Wait for server
-        run: sleep 5
+        run: sleep 10
         
-      - name: Install axe-core CLI
-        run: npm install -g @axe-core/cli
-        
-      - name: Run axe accessibility tests
-        run: |
-          axe http://localhost:4173 \
-            --tags wcag2a,wcag2aa \
-            --save accessibility-report.json \
-            --exit
+      - name: Run accessibility audit
+        id: a11y
+        run: node scripts/a11y-audit.js --ci --json
         continue-on-error: true
         
       - name: Upload accessibility report
@@ -51,17 +45,83 @@ jobs:
         if: always()
         with:
           name: accessibility-report
-          path: accessibility-report.json
+          path: a11y-report.json
           retention-days: 30
           
-      - name: Check for critical issues
+      - name: Comment PR with results
+        if: github.event_name == 'pull_request' && always()
+        uses: actions/github-script@v7
+        with:
+          script: |
+            const fs = require('fs');
+            
+            let comment = '## 🔍 Accessibility Audit Results\n\n';
+            
+            try {
+              const report = JSON.parse(fs.readFileSync('a11y-report.json', 'utf8'));
+              
+              const statusIcon = report.passed ? '✅' : '❌';
+              const statusText = report.passed ? 'Passed' : 'Failed';
+              
+              comment += `| Metric | Value |\n`;
+              comment += `|--------|-------|\n`;
+              comment += `| **Status** | ${statusIcon} ${statusText} |\n`;
+              comment += `| **Routes Tested** | ${report.routesTested} |\n`;
+              comment += `| **Total Violations** | ${report.totalViolations} |\n`;
+              comment += `| **Critical/Serious** | ${report.criticalViolations} |\n`;
+              comment += `| **WCAG Tags** | ${report.wcagTags.join(', ')} |\n\n`;
+              
+              if (report.totalViolations > 0) {
+                comment += `### Violations by Route\n\n`;
+                for (const route of report.routes) {
+                  if (route.violationCount > 0) {
+                    comment += `#### ${route.name} (\`${route.path}\`) - ${route.violationCount} violation(s)\n\n`;
+                    for (const v of route.violations) {
+                      const impactEmoji = v.impact === 'critical' ? '🔴' : v.impact === 'serious' ? '🟠' : v.impact === 'moderate' ? '🟡' : '⚪';
+                      comment += `- ${impactEmoji} **${v.id}** (${v.impact}): ${v.description}\n`;
+                    }
+                    comment += '\n';
+                  }
+                }
+              }
+              
+              comment += `\n<details>\n<summary>📊 Full Report</summary>\n\n`;
+              comment += '```json\n' + JSON.stringify(report, null, 2) + '\n```\n';
+              comment += '</details>\n';
+              
+            } catch (error) {
+              comment += `⚠️ Could not parse accessibility report: ${error.message}\n`;
+            }
+            
+            // Find existing comment
+            const { data: comments } = await github.rest.issues.listComments({
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              issue_number: context.issue.number,
+            });
+            
+            const existingComment = comments.find(c => 
+              c.user.type === 'Bot' && c.body.includes('Accessibility Audit Results')
+            );
+            
+            if (existingComment) {
+              await github.rest.issues.updateComment({
+                owner: context.repo.owner,
+                repo: context.repo.repo,
+                comment_id: existingComment.id,
+                body: comment,
+              });
+            } else {
+              await github.rest.issues.createComment({
+                owner: context.repo.owner,
+                repo: context.repo.repo,
+                issue_number: context.issue.number,
+                body: comment,
+              });
+            }
+            
+      - name: Check audit status
+        if: steps.a11y.outcome == 'failure'
         run: |
-          if [ -f accessibility-report.json ]; then
-            violations=$(cat accessibility-report.json | jq '.violations | length')
-            if [ "$violations" -gt 0 ]; then
-              echo "⚠️ Found $violations accessibility violations"
-              cat accessibility-report.json | jq '.violations[] | {id, impact, description}'
-            else
-              echo "✅ No accessibility violations found"
-            fi
-          fi
+          echo "::warning::Accessibility audit found critical violations"
+          exit 1

@@ -21,7 +21,7 @@ export function SignUpForm({ onSubmit, isLoading }: SignUpFormProps) {
   });
 
   return (
-    <form onSubmit={handleSubmit(onSubmit)} className="space-y-4">
+    <form onSubmit={handleSubmit(onSubmit)} className="space-y-4" data-testid="signup-form">
       <AuthFormField
         name="email"
         label="Email"
@@ -31,6 +31,7 @@ export function SignUpForm({ onSubmit, isLoading }: SignUpFormProps) {
         control={control}
         autoComplete="email"
         disabled={isLoading}
+        data-testid="signup-email-input"
       />
       <AuthFormField
         name="password"
@@ -41,6 +42,7 @@ export function SignUpForm({ onSubmit, isLoading }: SignUpFormProps) {
         control={control}
         autoComplete="new-password"
         disabled={isLoading}
+        data-testid="signup-password-input"
       />
       <AuthFormField
         name="confirmPassword"
@@ -51,8 +53,9 @@ export function SignUpForm({ onSubmit, isLoading }: SignUpFormProps) {
         control={control}
         autoComplete="new-password"
         disabled={isLoading}
+        data-testid="signup-confirm-password-input"
       />
-      <Button type="submit" className="w-full" disabled={isLoading}>
+      <Button type="submit" className="w-full" disabled={isLoading} data-testid="signup-submit-button">
         {isLoading ? 'Criando conta...' : 'Criar Conta'}
       </Button>
     </form>

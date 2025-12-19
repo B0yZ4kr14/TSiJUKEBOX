@@ -20,7 +20,7 @@ export function LoginForm({ onSubmit, isLoading }: LoginFormProps) {
   });
 
   return (
-    <form onSubmit={handleSubmit(onSubmit)} className="space-y-4">
+    <form onSubmit={handleSubmit(onSubmit)} className="space-y-4" data-testid="login-form">
       <AuthFormField
         name="email"
         label="Email"
@@ -30,6 +30,7 @@ export function LoginForm({ onSubmit, isLoading }: LoginFormProps) {
         control={control}
         autoComplete="email"
         disabled={isLoading}
+        data-testid="login-email-input"
       />
       <AuthFormField
         name="password"
@@ -40,8 +41,9 @@ export function LoginForm({ onSubmit, isLoading }: LoginFormProps) {
         control={control}
         autoComplete="current-password"
         disabled={isLoading}
+        data-testid="login-password-input"
       />
-      <Button type="submit" className="w-full" disabled={isLoading}>
+      <Button type="submit" className="w-full" disabled={isLoading} data-testid="login-submit-button">
         {isLoading ? 'Entrando...' : 'Entrar'}
       </Button>
     </form>

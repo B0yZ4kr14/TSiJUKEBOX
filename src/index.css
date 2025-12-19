@@ -3658,3 +3658,50 @@ body[data-gradient="true"] {
 [data-light-mode="true"] .text-kiosk-text\/90 {
   color: hsl(220 15% 25%);
 }
+
+/* ========== PERMISSION TOGGLE NEON STYLES ========== */
+
+/* Toggle Ativo - Verde Neon */
+.permission-toggle-on {
+  background: linear-gradient(180deg, hsl(135 100% 45%) 0%, hsl(135 100% 35%) 100%);
+  border-color: hsl(135 100% 50%);
+  box-shadow: 
+    0 0 10px hsl(135 100% 50% / 0.8),
+    0 0 20px hsl(135 100% 50% / 0.5),
+    0 0 30px hsl(135 100% 50% / 0.3),
+    inset 0 0 5px hsl(0 0% 100% / 0.3);
+}
+
+.permission-toggle-on:hover {
+  box-shadow: 
+    0 0 15px hsl(135 100% 55% / 1),
+    0 0 30px hsl(135 100% 55% / 0.7),
+    0 0 45px hsl(135 100% 55% / 0.5);
+}
+
+/* Toggle Inativo - Vermelho Neon */
+.permission-toggle-off {
+  background: linear-gradient(180deg, hsl(350 100% 50%) 0%, hsl(350 100% 40%) 100%);
+  border-color: hsl(350 100% 50%);
+  box-shadow: 
+    0 0 10px hsl(350 100% 50% / 0.8),
+    0 0 20px hsl(350 100% 50% / 0.5),
+    0 0 30px hsl(350 100% 50% / 0.3),
+    inset 0 0 5px hsl(0 0% 100% / 0.3);
+}
+
+.permission-toggle-off:hover {
+  box-shadow: 
+    0 0 15px hsl(350 100% 55% / 1),
+    0 0 30px hsl(350 100% 55% / 0.7),
+    0 0 45px hsl(350 100% 55% / 0.5);
+}
+
+/* Permission Toggle Thumb Glow */
+.permission-toggle-on .permission-toggle-thumb {
+  box-shadow: 0 0 10px hsl(135 100% 50% / 0.8);
+}
+
+.permission-toggle-off .permission-toggle-thumb {
+  box-shadow: 0 0 10px hsl(350 100% 50% / 0.8);
+}

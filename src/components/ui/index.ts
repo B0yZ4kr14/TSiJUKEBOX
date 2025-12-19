@@ -53,7 +53,10 @@ export { useToast, toast } from './use-toast';
 
 // Custom UI components
 export { BackButton, type BackButtonProps } from './BackButton';
-export { BrandText } from './BrandText';
+export { BrandText, formatBrandInText } from './BrandText';
+export type { BrandTextSize, BrandTextWeight } from './BrandText';
+export { BrandTagline, BrandWithTagline } from './BrandTagline';
+export type { TaglineVariant, TaglineSize } from './BrandTagline';
 export { HighContrastToggle } from './HighContrastToggle';
 export { InfoTooltip } from './InfoTooltip';
 export { LogoBrand } from './LogoBrand';

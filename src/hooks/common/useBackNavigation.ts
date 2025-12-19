@@ -1,7 +1,7 @@
 import { useNavigate, useLocation } from 'react-router-dom';
 import { toast } from 'sonner';
 
-interface UseBackNavigationOptions {
+export interface UseBackNavigationOptions {
   fallbackPath?: string;
   showToast?: boolean;
   toastMessage?: string;

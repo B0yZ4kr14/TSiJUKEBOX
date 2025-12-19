@@ -2,7 +2,6 @@ import { useState, useMemo } from 'react';
 import { useSearchParams } from 'react-router-dom';
 import { motion, AnimatePresence } from 'framer-motion';
 import { 
-  ArrowLeft, 
   Search, 
   Book, 
   Settings, 
@@ -39,6 +38,7 @@ import { resetTour } from '@/components/tour/GuidedTour';
 import { InteractiveTestMode } from '@/components/help/InteractiveTestMode';
 import { GlobalSearchModal } from '@/components/GlobalSearchModal';
 import { useGlobalSearch, useBackNavigation } from '@/hooks';
+import { BackButton } from '@/components/ui/BackButton';
 import { downloadMarkdown, downloadHTML, printDocument } from '@/lib/documentExporter';
 import { toast } from 'sonner';
 
@@ -822,7 +822,7 @@ const helpSections: HelpSection[] = [
 ];
 
 export default function Help() {
-  const { goBack, navigate } = useBackNavigation();
+  const { navigate } = useBackNavigation();
   const [searchQuery, setSearchQuery] = useState('');
   const [selectedSection, setSelectedSection] = useState<string | null>('getting-started');
   const [showInteractiveTest, setShowInteractiveTest] = useState<'keyboard' | 'gestures' | null>(null);
@@ -901,15 +901,7 @@ export default function Help() {
       <div className="p-4 border-b border-border no-print">
         <div className="flex items-center justify-between max-w-6xl mx-auto">
           <div className="flex items-center gap-4">
-            <Button
-              variant="ghost"
-              size="icon"
-              onClick={goBack}
-              className="text-kiosk-text/90 hover:text-kiosk-text"
-              aria-label="Voltar"
-            >
-              <ArrowLeft className="w-5 h-5" />
-            </Button>
+            <BackButton />
             <div className="flex items-center gap-3">
               <HelpCircle className="w-6 h-6 icon-neon-blue" />
               <div>

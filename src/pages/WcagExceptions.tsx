@@ -6,13 +6,13 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { Button } from '@/components/ui/button';
 import { 
   GripVertical, Cloud, Hand, Bookmark, Sparkles, 
-  ArrowLeft, Copy, Check, Eye, EyeOff,
+  Copy, Check, Eye, EyeOff,
   VolumeX, Library, Building2, Music, Search, Plus, Loader2, Wand2
 } from 'lucide-react';
 import { LogoBrand } from '@/components/ui/LogoBrand';
 import { PageTitle } from '@/components/ui/PageTitle';
 import { WcagExceptionComment } from '@/components/ui/WcagExceptionComment';
-import { useBackNavigation } from '@/hooks';
+import { BackButton } from '@/components/ui/BackButton';
 import { toast } from 'sonner';
 
 interface WcagException {
@@ -283,7 +283,6 @@ const ExceptionDemo = ({ exception }: { exception: WcagException }) => {
 };
 
 export default function WcagExceptions() {
-  const { goBack } = useBackNavigation();
   
   const categories = {
     'decorative': { label: 'Decorativos', description: 'Ícones puramente visuais sem informação crítica', color: 'text-purple-400' },
@@ -300,15 +299,7 @@ export default function WcagExceptions() {
       <div className="max-w-6xl mx-auto">
         {/* Header */}
         <div className="flex items-center gap-4 mb-6">
-          <Button 
-            variant="ghost" 
-            size="icon"
-            onClick={goBack}
-            className="text-nav-neon-white hover:text-kiosk-text"
-            aria-label="Voltar"
-          >
-            <ArrowLeft className="w-5 h-5" />
-          </Button>
+          <BackButton className="text-nav-neon-white hover:text-kiosk-text" />
           <LogoBrand variant="metal" size="sm" />
         </div>
         

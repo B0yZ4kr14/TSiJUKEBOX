@@ -1,7 +1,7 @@
 import { useState, useEffect } from 'react';
 import { useSearchParams } from 'react-router-dom';
 import { motion, AnimatePresence } from 'framer-motion';
-import { ArrowLeft, Book, FileText, Printer, Star, Trash2, Search, Download, Code, HelpCircle, Music, Keyboard, Palette, Plug, Shield, Terminal, WifiOff, CloudOff, FileCode } from 'lucide-react';
+import { Book, FileText, Printer, Star, Trash2, Search, Download, Code, HelpCircle, Music, Keyboard, Palette, Plug, Shield, Terminal, WifiOff, CloudOff, FileCode } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { ScrollArea } from '@/components/ui/scroll-area';
 import { Badge } from '@/components/ui/badge';
@@ -13,13 +13,14 @@ import { WikiSearch } from '@/components/wiki/WikiSearch';
 import { GlobalSearchModal } from '@/components/GlobalSearchModal';
 import { wikiCategories, findArticleById, getTotalArticleCount } from '@/components/wiki/wikiData';
 import { useWikiBookmarks, useGlobalSearch, useReadArticles, useBackNavigation } from '@/hooks';
+import { BackButton } from '@/components/ui/BackButton';
 import { useWikiOffline } from '@/hooks/common/useWikiOffline';
 import { downloadMarkdown, downloadHTML, printDocument } from '@/lib/documentExporter';
 import { toast } from 'sonner';
 import { formatBrandName } from '@/lib/utils';
 
 export default function Wiki() {
-  const { goBack, navigate } = useBackNavigation();
+  const { navigate } = useBackNavigation();
   const [searchParams] = useSearchParams();
   const [selectedArticle, setSelectedArticle] = useState<string | null>(null);
   const [selectedCategory, setSelectedCategory] = useState<string | null>(null);
@@ -104,15 +105,7 @@ export default function Wiki() {
         <div className="p-4">
           <div className="flex items-center justify-between max-w-7xl mx-auto">
             <div className="flex items-center gap-4">
-              <Button
-                variant="ghost"
-                size="icon"
-                onClick={goBack}
-                className="text-kiosk-text/85 hover:text-kiosk-text"
-                aria-label="Voltar"
-              >
-                <ArrowLeft className="w-5 h-5" />
-              </Button>
+              <BackButton className="text-kiosk-text/85 hover:text-kiosk-text" />
               <div className="flex items-center gap-3">
                 <Book className="w-6 h-6 icon-neon-blue" />
                 <div>

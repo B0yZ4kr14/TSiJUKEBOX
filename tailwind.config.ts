@@ -87,12 +87,17 @@ export default {
           "0%, 100%": { boxShadow: "0 0 0 0 rgba(6, 182, 212, 0)" },
           "50%": { boxShadow: "0 0 0 4px rgba(6, 182, 212, 0.3)" },
         },
+        "highlight-pulse-var": {
+          "0%, 100%": { boxShadow: "0 0 0 0 transparent" },
+          "50%": { boxShadow: "0 0 0 4px var(--highlight-color, rgba(6, 182, 212, 0.3))" },
+        },
       },
       animation: {
         "accordion-down": "accordion-down 0.2s ease-out",
         "accordion-up": "accordion-up 0.2s ease-out",
         "spin-slow": "spin-slow 8s linear infinite",
         "highlight-pulse": "highlight-pulse 0.75s ease-in-out 2",
+        "highlight-pulse-var": "highlight-pulse-var 0.75s ease-in-out 2",
       },
     },
   },

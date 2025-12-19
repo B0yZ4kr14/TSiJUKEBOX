@@ -53,7 +53,7 @@ export function IndexHeader({
       {/* LINE 2: Status bar with grid for perfect centering */}
       <div className="grid grid-cols-3 items-center w-full">
         {/* Left: System Info */}
-        <div className="flex items-center gap-3 justify-start">
+        <div className="flex items-center gap-3 justify-start min-w-0 overflow-hidden">
           <SystemMonitor 
             cpu={status?.cpu ?? 0} 
             memory={status?.memory ?? 0} 
@@ -86,12 +86,12 @@ export function IndexHeader({
         </div>
 
         {/* Center: Digital Clock - truly centered via grid */}
-        <div className="flex justify-center">
+        <div className="flex justify-center z-10 relative">
           <DigitalClock showDate={true} showSeconds={false} />
         </div>
         
         {/* Right: User & Actions */}
-        <div className="flex items-center gap-3 justify-end">
+        <div className="flex items-center gap-3 justify-end min-w-0 overflow-hidden">
           <UserBadge />
 
           <div className="w-px h-6 bg-kiosk-text/20" />

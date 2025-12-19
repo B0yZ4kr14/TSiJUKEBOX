@@ -24,6 +24,8 @@ interface WikiNavigationProps {
   onSelectCategory: (categoryId: string) => void;
   selectedCategory: string | null;
   isArticleRead?: (articleId: string) => boolean;
+  /** Custom highlight color for the pulse animation (CSS color value) */
+  highlightColor?: string;
 }
 
 const iconMap: Record<string, React.ReactNode> = {
@@ -77,7 +79,8 @@ export function WikiNavigation({
   onSelectArticle, 
   onSelectCategory,
   selectedCategory,
-  isArticleRead 
+  isArticleRead,
+  highlightColor = 'rgba(6, 182, 212, 0.3)'
 }: WikiNavigationProps) {
   // Default: expand 'integrations' category to show new Spicetify/YouTube Music articles
   const [expandedCategories, setExpandedCategories] = useState<Set<string>>(
@@ -502,6 +505,9 @@ export function WikiNavigation({
                                                 setHighlightedArticle(article.id);
                                                 setTimeout(() => setHighlightedArticle(null), 1500);
                                               }}
+                                              style={highlightedArticle === article.id ? {
+                                                '--highlight-color': highlightColor
+                                              } as React.CSSProperties : undefined}
                                               className={cn(
                                                 "w-full flex items-center gap-2 py-1 rounded text-left text-xs transition-all",
                                                 showTreeLines ? "pl-5 pr-2" : "px-3",
@@ -510,8 +516,8 @@ export function WikiNavigation({
                                                   : "hover:bg-kiosk-surface/30 text-description-visible hover:text-kiosk-text",
                                                 // Highlight new articles (only if not read)
                                                 NEW_ARTICLE_IDS.has(article.id) && !(isArticleRead?.(article.id)) && "bg-green-500/5 hover:bg-green-500/10",
-                                                // Highlight pulse animation
-                                                highlightedArticle === article.id && "animate-highlight-pulse"
+                                                // Highlight pulse animation with custom color
+                                                highlightedArticle === article.id && "animate-highlight-pulse-var"
                                               )}
                                             >
                                               <span className={cn(

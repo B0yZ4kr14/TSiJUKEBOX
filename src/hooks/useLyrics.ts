@@ -1,27 +1,37 @@
 import { useQuery } from '@tanstack/react-query';
 import { supabase } from '@/integrations/supabase/client';
-import type { LyricsLine } from '@/lib/lrcParser';
+import { getCachedLyrics, setCachedLyrics } from '@/lib/lyricsCache';
+import type { LyricsData } from '@/types/lyrics';
 
-export interface LyricsData {
-  source: 'lrclib' | 'genius' | 'none';
-  synced: boolean;
-  lines: LyricsLine[];
-  plainText?: string;
-  trackName: string;
-  artistName: string;
-}
+export type { LyricsData } from '@/types/lyrics';
 
 async function fetchLyrics(trackName: string, artistName: string): Promise<LyricsData> {
+  // Check localStorage cache first
+  const cached = getCachedLyrics(trackName, artistName);
+  if (cached) {
+    console.log('[Lyrics] Loaded from cache:', trackName);
+    return cached;
+  }
+
+  // Fetch from edge function
   const { data, error } = await supabase.functions.invoke('lyrics-search', {
     body: { trackName, artistName },
   });
   
   if (error) {
-    console.error('Error fetching lyrics:', error);
+    console.error('[Lyrics] Error fetching:', error);
     throw new Error(error.message);
   }
   
-  return data as LyricsData;
+  const lyricsData = data as LyricsData;
+  
+  // Cache only if lyrics were found
+  if (lyricsData.source !== 'none') {
+    setCachedLyrics(trackName, artistName, lyricsData);
+    console.log('[Lyrics] Cached:', trackName);
+  }
+  
+  return lyricsData;
 }
 
 export function useLyrics(trackName?: string, artistName?: string) {

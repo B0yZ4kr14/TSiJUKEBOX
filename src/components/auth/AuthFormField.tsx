@@ -14,6 +14,7 @@ interface AuthFormFieldProps<T extends FieldValues> {
   control: Control<T>;
   autoComplete?: string;
   disabled?: boolean;
+  'data-testid'?: string;
 }
 
 function AuthFormFieldInner<T extends FieldValues>(
@@ -26,6 +27,7 @@ function AuthFormFieldInner<T extends FieldValues>(
     control,
     autoComplete,
     disabled,
+    'data-testid': testId,
   }: AuthFormFieldProps<T>,
   _ref: React.Ref<HTMLInputElement>
 ) {
@@ -46,6 +48,7 @@ function AuthFormFieldInner<T extends FieldValues>(
               placeholder={placeholder}
               autoComplete={autoComplete}
               disabled={disabled}
+              data-testid={testId}
               className={cn(
                 'pl-10 bg-kiosk-surface border-kiosk-border text-kiosk-text',
                 error && 'border-red-500 focus-visible:ring-red-500'

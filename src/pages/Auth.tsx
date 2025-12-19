@@ -77,7 +77,7 @@ export default function Auth() {
   const isSupabaseProvider = authConfig.provider === 'supabase';
 
   return (
-    <div className="min-h-screen bg-kiosk-bg flex items-center justify-center p-4">
+    <div className="min-h-screen bg-kiosk-bg flex items-center justify-center p-4" data-testid="auth-page">
       <Card className="w-full max-w-md border-cyan-500/30 bg-kiosk-surface backdrop-blur">
         <CardHeader className="text-center space-y-4">
           <LogoBrand size="sm" variant="metal" centered animate className="mb-2" />
@@ -101,10 +101,10 @@ export default function Auth() {
           {isSupabaseProvider ? (
             <Tabs defaultValue="login" className="w-full">
               <TabsList className="grid w-full grid-cols-2 mb-6 bg-kiosk-surface-alt">
-                <TabsTrigger value="login" className="data-[state=active]:bg-kiosk-primary/20 text-kiosk-text">
+                <TabsTrigger value="login" data-testid="login-tab" className="data-[state=active]:bg-kiosk-primary/20 text-kiosk-text">
                   Entrar
                 </TabsTrigger>
-                <TabsTrigger value="signup" className="data-[state=active]:bg-kiosk-primary/20 text-kiosk-text">
+                <TabsTrigger value="signup" data-testid="signup-tab" className="data-[state=active]:bg-kiosk-primary/20 text-kiosk-text">
                   Criar Conta
                 </TabsTrigger>
               </TabsList>

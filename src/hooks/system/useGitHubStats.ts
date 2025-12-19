@@ -1,5 +1,6 @@
 import { useState, useEffect, useCallback } from 'react';
 import { supabase } from '@/integrations/supabase/client';
+import { getFromCache, setToCache, clearCache, getCacheStats } from './useGitHubCache';
 
 export interface GitHubRepoInfo {
   name: string;
@@ -61,6 +62,12 @@ export interface GitHubLanguages {
   [key: string]: number;
 }
 
+interface CacheStats {
+  size: number;
+  keys: string[];
+  lastUpdate: number | null;
+}
+
 interface UseGitHubStatsReturn {
   repoInfo: GitHubRepoInfo | null;
   commits: GitHubCommit[];
@@ -70,7 +77,10 @@ interface UseGitHubStatsReturn {
   languages: GitHubLanguages;
   isLoading: boolean;
   error: string | null;
-  refetch: () => Promise<void>;
+  fromCache: boolean;
+  cacheStats: CacheStats;
+  refetch: (force?: boolean) => Promise<void>;
+  clearAllCache: () => void;
 }
 
 async function fetchGitHubData<T>(action: string, path: string = ''): Promise<T | null> {
@@ -96,6 +106,25 @@ async function fetchGitHubData<T>(action: string, path: string = ''): Promise<T 
   }
 }
 
+async function fetchWithCache<T>(action: string, forceRefresh: boolean = false): Promise<{ data: T | null; fromCache: boolean }> {
+  if (!forceRefresh) {
+    const cached = getFromCache<T>(action);
+    if (cached) {
+      console.log(`[useGitHubStats] Cache hit for ${action}`);
+      return { data: cached, fromCache: true };
+    }
+  }
+
+  console.log(`[useGitHubStats] Fetching ${action} from API`);
+  const data = await fetchGitHubData<T>(action);
+  
+  if (data) {
+    setToCache(action, data);
+  }
+  
+  return { data, fromCache: false };
+}
+
 export function useGitHubStats(): UseGitHubStatsReturn {
   const [repoInfo, setRepoInfo] = useState<GitHubRepoInfo | null>(null);
   const [commits, setCommits] = useState<GitHubCommit[]>([]);
@@ -105,44 +134,52 @@ export function useGitHubStats(): UseGitHubStatsReturn {
   const [languages, setLanguages] = useState<GitHubLanguages>({});
   const [isLoading, setIsLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
+  const [fromCache, setFromCache] = useState(false);
+  const [cacheStats, setCacheStats] = useState<CacheStats>(() => getCacheStats());
 
-  const fetchAllData = useCallback(async () => {
+  const fetchAllData = useCallback(async (forceRefresh: boolean = false) => {
     setIsLoading(true);
     setError(null);
 
     try {
-      const [
-        repoData,
-        commitsData,
-        contributorsData,
-        releasesData,
-        branchesData,
-        languagesData
-      ] = await Promise.all([
-        fetchGitHubData<GitHubRepoInfo>('repo-info'),
-        fetchGitHubData<GitHubCommit[]>('commits'),
-        fetchGitHubData<GitHubContributor[]>('contributors'),
-        fetchGitHubData<GitHubRelease[]>('releases'),
-        fetchGitHubData<GitHubBranch[]>('branches'),
-        fetchGitHubData<GitHubLanguages>('languages')
+      const results = await Promise.all([
+        fetchWithCache<GitHubRepoInfo>('repo-info', forceRefresh),
+        fetchWithCache<GitHubCommit[]>('commits', forceRefresh),
+        fetchWithCache<GitHubContributor[]>('contributors', forceRefresh),
+        fetchWithCache<GitHubRelease[]>('releases', forceRefresh),
+        fetchWithCache<GitHubBranch[]>('branches', forceRefresh),
+        fetchWithCache<GitHubLanguages>('languages', forceRefresh)
       ]);
 
-      if (repoData) setRepoInfo(repoData);
-      if (commitsData) setCommits(commitsData);
-      if (contributorsData) setContributors(contributorsData);
-      if (releasesData) setReleases(releasesData);
-      if (branchesData) setBranches(branchesData);
-      if (languagesData) setLanguages(languagesData);
+      const [repoData, commitsData, contributorsData, releasesData, branchesData, languagesData] = results;
 
-      if (!repoData && !commitsData && !contributorsData) {
+      // Verificar se algum dado veio do cache
+      const anyFromCache = results.some(r => r.fromCache);
+      setFromCache(anyFromCache);
+
+      if (repoData.data) setRepoInfo(repoData.data);
+      if (commitsData.data) setCommits(commitsData.data);
+      if (contributorsData.data) setContributors(contributorsData.data);
+      if (releasesData.data) setReleases(releasesData.data);
+      if (branchesData.data) setBranches(branchesData.data);
+      if (languagesData.data) setLanguages(languagesData.data);
+
+      if (!repoData.data && !commitsData.data && !contributorsData.data) {
         setError('Falha ao carregar dados do GitHub');
       }
+      
+      setCacheStats(getCacheStats());
     } catch (err) {
       console.error('[useGitHubStats] Error:', err);
       setError('Erro ao conectar com o GitHub');
     } finally {
       setIsLoading(false);
     }
+  }, []);
+
+  const clearAllCache = useCallback(() => {
+    clearCache();
+    setCacheStats(getCacheStats());
   }, []);
 
   useEffect(() => {
@@ -158,6 +195,9 @@ export function useGitHubStats(): UseGitHubStatsReturn {
     languages,
     isLoading,
     error,
-    refetch: fetchAllData
+    fromCache,
+    cacheStats,
+    refetch: fetchAllData,
+    clearAllCache
   };
 }

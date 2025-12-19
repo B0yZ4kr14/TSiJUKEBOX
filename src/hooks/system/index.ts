@@ -20,3 +20,10 @@ export {
   type GitHubBranch,
   type GitHubLanguages
 } from './useGitHubStats';
+export {
+  useGitHubCache,
+  getFromCache,
+  setToCache,
+  clearCache,
+  getCacheStats
+} from './useGitHubCache';

@@ -139,12 +139,12 @@ export function WeatherConfigSection() {
               <span className="text-4xl">{testWeather.icon}</span>
               <div className="flex-1">
                 <div className="flex items-center gap-2">
-                  <span className="text-2xl font-bold text-kiosk-text">
+                  <span className="text-2xl font-bold text-nav-neon-white">
                     {testWeather.temperature}°C
                   </span>
-                  <span className="text-kiosk-text/75">{testWeather.condition}</span>
+                  <span className="text-description-visible">{testWeather.condition}</span>
                 </div>
-                <div className="flex items-center gap-1 text-sm text-kiosk-text/75">
+                <div className="flex items-center gap-1 text-sm text-description-visible">
                   <MapPin className="w-3 h-3" />
                   <span>{testWeather.location}, {testWeather.region}</span>
                 </div>
@@ -154,7 +154,7 @@ export function WeatherConfigSection() {
                 size="icon"
                 onClick={refresh}
                 disabled={isLoading}
-                className="text-kiosk-text/85 hover:text-kiosk-text"
+                className="text-description-visible hover:text-nav-neon-white"
               >
                 <RefreshCw className={`w-4 h-4 ${isLoading ? 'animate-spin' : ''}`} />
               </Button>
@@ -187,7 +187,7 @@ export function WeatherConfigSection() {
               type="button"
               variant="ghost"
               size="icon"
-              className="absolute right-0 top-0 h-full px-3 text-kiosk-text/85 hover:text-kiosk-text"
+              className="absolute right-0 top-0 h-full px-3 text-description-visible hover:text-nav-neon-white"
               onClick={() => setShowApiKey(!showApiKey)}
               aria-label={showApiKey ? 'Ocultar chave de API' : 'Mostrar chave de API'}
             >

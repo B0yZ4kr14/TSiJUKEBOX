@@ -95,7 +95,7 @@ export function LyricsDisplay({
 
   if (!trackId || !trackName) {
     return (
-      <div className="flex flex-col items-center justify-center h-full text-kiosk-text/85 p-8">
+      <div className="flex flex-col items-center justify-center h-full text-description-visible p-8">
         <Music className="w-16 h-16 mb-4 opacity-50" />
         <p className="text-center">{t('lyrics.selectTrack')}</p>
       </div>
@@ -106,14 +106,14 @@ export function LyricsDisplay({
     return (
       <div className="flex flex-col items-center justify-center h-full p-8">
         <div className="w-12 h-12 rounded-full border-2 border-cyan-500 border-t-transparent animate-spin mb-4" />
-        <p className="text-kiosk-text/85">{t('lyrics.loading')}</p>
+        <p className="text-description-visible">{t('lyrics.loading')}</p>
       </div>
     );
   }
 
   if (error) {
     return (
-      <div className="flex flex-col items-center justify-center h-full text-kiosk-text/85 p-8">
+      <div className="flex flex-col items-center justify-center h-full text-description-visible p-8">
         <AlertCircle className="w-12 h-12 mb-4 text-red-400/80" />
         <p className="text-center">{error}</p>
       </div>
@@ -163,10 +163,10 @@ export function LyricsDisplay({
               ref={(el) => { lineRefs.current[index] = el; }}
               className={`text-center transition-all duration-300 ${
                 index === currentLineIndex
-                  ? 'text-xl font-bold text-kiosk-text scale-105'
+                  ? 'text-xl font-bold text-nav-neon-white scale-105'
                   : index < currentLineIndex
-                  ? 'text-base text-kiosk-text/75'
-                  : 'text-base text-kiosk-text/85'
+                  ? 'text-base text-description-visible'
+                  : 'text-base text-description-visible'
               }`}
               style={{
                 textShadow: index === currentLineIndex 
@@ -192,10 +192,10 @@ export function LyricsDisplay({
                   height: `${8 + Math.random() * 8}px`,
                   animationDelay: `${i * 0.15}s`
                 }}
-              />
+                />
             ))}
           </div>
-          <span className="text-xs text-kiosk-text/85">{t('lyrics.synced')}</span>
+          <span className="text-xs text-description-visible">{t('lyrics.synced')}</span>
         </div>
       )}
     </div>

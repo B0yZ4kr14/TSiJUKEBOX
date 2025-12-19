@@ -90,10 +90,10 @@ export function LogoBrand({
         <span className={getTsiClass()}>TSi</span>
         <span className={getJukeboxClass()}>JUKEBOX</span>
       </div>
-      {/* WCAG Exception: Tagline at /60 is secondary decorative text, logo itself has adequate contrast */}
+      {/* WCAG Exception: Tagline is secondary decorative text, logo itself has adequate contrast */}
       {showTagline && (
         <p className={cn(
-          "text-kiosk-text/60 mt-1 tracking-widest uppercase",
+          "text-secondary-visible mt-1 tracking-widest uppercase",
           taglineSizes[size]
         )}>
           Enterprise Music System

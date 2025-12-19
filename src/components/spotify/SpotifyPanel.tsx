@@ -306,7 +306,7 @@ export function SpotifyPanel({ isOpen, onClose, currentTrackId, currentAlbumId, 
               {/* Playlists Tab */}
               {activeTab === 'playlists' && (
                 <>
-                  <h3 className="text-sm font-semibold text-kiosk-text/90 mb-3">Suas Playlists</h3>
+                  <h3 className="text-sm font-semibold text-nav-neon-white mb-3">Suas Playlists</h3>
                   {playlistsLoading ? <LoadingSkeleton /> : (
                     <div className="space-y-1">
                       {playlists.map((playlist) => (
@@ -337,7 +337,7 @@ export function SpotifyPanel({ isOpen, onClose, currentTrackId, currentAlbumId, 
               {/* Liked Songs Tab */}
               {activeTab === 'liked' && (
                 <>
-                  <h3 className="text-sm font-semibold text-kiosk-text/90 mb-3">Músicas Curtidas</h3>
+                  <h3 className="text-sm font-semibold text-nav-neon-white mb-3">Músicas Curtidas</h3>
                   {libraryLoading ? <LoadingSkeleton /> : (
                     <div className="space-y-1">
                       {likedTracks.slice(0, 30).map((track) => (
@@ -356,7 +356,7 @@ export function SpotifyPanel({ isOpen, onClose, currentTrackId, currentAlbumId, 
               {/* Recent Tab */}
               {activeTab === 'recent' && (
                 <>
-                  <h3 className="text-sm font-semibold text-kiosk-text/90 mb-3">Tocadas Recentemente</h3>
+                  <h3 className="text-sm font-semibold text-nav-neon-white mb-3">Tocadas Recentemente</h3>
                   {libraryLoading ? <LoadingSkeleton /> : (
                     <div className="space-y-1">
                       {recentlyPlayed.slice(0, 30).map((track, idx) => (
@@ -375,9 +375,9 @@ export function SpotifyPanel({ isOpen, onClose, currentTrackId, currentAlbumId, 
               {/* Recommendations Tab */}
               {activeTab === 'recommendations' && (
                 <>
-                  <h3 className="text-sm font-semibold text-kiosk-text/90 mb-3">Para Você</h3>
+                  <h3 className="text-sm font-semibold text-nav-neon-white mb-3">Para Você</h3>
                   {!currentTrackId ? (
-                    <div className="text-center py-8 text-kiosk-text/85">
+                    <div className="text-center py-8 text-description-visible">
                       <Sparkles className="w-8 h-8 mx-auto mb-2 opacity-60" />
                       <p className="text-sm">Toque uma música para ver recomendações</p>
                     </div>
@@ -399,7 +399,7 @@ export function SpotifyPanel({ isOpen, onClose, currentTrackId, currentAlbumId, 
               {/* New Releases Tab */}
               {activeTab === 'releases' && (
                 <>
-                  <h3 className="text-sm font-semibold text-kiosk-text/90 mb-3">Novos Lançamentos</h3>
+                  <h3 className="text-sm font-semibold text-nav-neon-white mb-3">Novos Lançamentos</h3>
                   {browseLoading ? <LoadingSkeleton /> : (
                     <div className="grid grid-cols-2 gap-2">
                       {newReleases.slice(0, 20).map((album) => (
@@ -418,7 +418,7 @@ export function SpotifyPanel({ isOpen, onClose, currentTrackId, currentAlbumId, 
               {/* Featured Playlists Tab */}
               {activeTab === 'featured' && (
                 <>
-                  <h3 className="text-sm font-semibold text-kiosk-text/85 mb-3">Playlists em Destaque</h3>
+                  <h3 className="text-sm font-semibold text-description-visible mb-3">Playlists em Destaque</h3>
                   {browseLoading ? <LoadingSkeleton /> : (
                     <div className="grid grid-cols-2 gap-2">
                       {featuredPlaylists.slice(0, 20).map((playlist) => (
@@ -436,7 +436,7 @@ export function SpotifyPanel({ isOpen, onClose, currentTrackId, currentAlbumId, 
               {/* Top Tracks Tab */}
               {activeTab === 'top' && (
                 <>
-                  <h3 className="text-sm font-semibold text-kiosk-text/85 mb-3">Suas Top Músicas</h3>
+                  <h3 className="text-sm font-semibold text-description-visible mb-3">Suas Top Músicas</h3>
                   {browseLoading ? <LoadingSkeleton /> : (
                     <div className="space-y-1">
                       {topTracks.slice(0, 30).map((track, idx) => (
@@ -459,7 +459,7 @@ export function SpotifyPanel({ isOpen, onClose, currentTrackId, currentAlbumId, 
               {/* Search Results Tab */}
               {activeTab === 'search' && (
                 <>
-                  <h3 className="text-sm font-semibold text-kiosk-text/85 mb-3">Resultados da Busca</h3>
+                  <h3 className="text-sm font-semibold text-description-visible mb-3">Resultados da Busca</h3>
                   {isSearching ? <LoadingSkeleton /> : searchResults.tracks.length > 0 ? (
                     <div className="space-y-1">
                       {searchResults.tracks.slice(0, 30).map((track) => (
@@ -472,7 +472,7 @@ export function SpotifyPanel({ isOpen, onClose, currentTrackId, currentAlbumId, 
                       ))}
                     </div>
                   ) : (
-                    <div className="text-center py-8 text-kiosk-text/75">
+                    <div className="text-center py-8 text-description-visible">
                       <Search className="w-8 h-8 mx-auto mb-2 opacity-60" />
                       <p className="text-sm">Pesquise por músicas ou artistas</p>
                     </div>

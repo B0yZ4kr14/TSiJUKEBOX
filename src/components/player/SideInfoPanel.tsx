@@ -101,7 +101,7 @@ export function SideInfoPanel({
                   {/* Now Playing Mini */}
                   {currentTrack && (
                     <div className="p-3 rounded-lg bg-[#1DB954]/10 border border-[#1DB954]/20">
-                      <p className="text-xs text-kiosk-text/85 uppercase tracking-wider mb-2 font-semibold">Tocando Agora</p>
+                      <p className="text-xs text-description-visible uppercase tracking-wider mb-2 font-semibold">Tocando Agora</p>
                       <div className="flex items-center gap-3">
                         <div className="w-12 h-12 rounded overflow-hidden flex-shrink-0">
                           {currentTrack.cover ? (
@@ -114,7 +114,7 @@ export function SideInfoPanel({
                         </div>
                         <div className="flex-1 min-w-0">
                           <p className="font-medium text-kiosk-text truncate">{currentTrack.title}</p>
-                          <p className="text-sm text-kiosk-text/85 truncate">{currentTrack.artist}</p>
+                          <p className="text-sm text-description-visible truncate">{currentTrack.artist}</p>
                         </div>
                       </div>
                     </div>
@@ -122,7 +122,7 @@ export function SideInfoPanel({
 
                   {/* Next Up */}
                   <div>
-                    <p className="text-xs text-kiosk-text/85 uppercase tracking-wider mb-3 font-semibold">
+                    <p className="text-xs text-description-visible uppercase tracking-wider mb-3 font-semibold">
                       Próximas ({queue?.next.length || 0})
                     </p>
                     {!queue || queue.next.length === 0 ? (
@@ -160,7 +160,7 @@ export function SideInfoPanel({
                   {/* History */}
                   {queue && queue.history.length > 0 && (
                     <div className="opacity-70">
-                      <p className="text-xs text-kiosk-text/85 uppercase tracking-wider mb-3 font-semibold">Histórico</p>
+                      <p className="text-xs text-description-visible uppercase tracking-wider mb-3 font-semibold">Histórico</p>
                       <div className="space-y-2">
                         {queue.history.slice(0, 5).map((item) => (
                           <div
@@ -221,15 +221,15 @@ export function SideInfoPanel({
                           />
                         ) : (
                           <div className="w-full h-full bg-kiosk-surface flex items-center justify-center">
-                            <Disc3 className="w-16 h-16 text-kiosk-text/75" />
+                            <Disc3 className="w-16 h-16 text-secondary-visible" />
                           </div>
                         )}
                       </div>
 
                       {/* Track Info */}
                       <div className="text-center">
-                        <h3 className="text-xl font-bold text-kiosk-text mb-1">{currentTrack.title}</h3>
-                        <p className="text-kiosk-text/85">{currentTrack.artist}</p>
+                        <h3 className="text-xl font-bold text-nav-neon-white mb-1">{currentTrack.title}</h3>
+                        <p className="text-description-visible">{currentTrack.artist}</p>
                       </div>
 
                       {/* Details */}
@@ -299,7 +299,7 @@ export function SideInfoPanelToggle({
       className={`w-10 h-10 rounded-full transition-all ${
         isOpen 
           ? 'bg-cyan-500/20 text-cyan-400' 
-          : 'bg-kiosk-surface/50 text-kiosk-text/85 hover:text-cyan-400'
+          : 'bg-kiosk-surface/50 text-description-visible hover:text-cyan-400'
       }`}
     >
       <Info className="w-5 h-5" />

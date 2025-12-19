@@ -64,7 +64,7 @@ export function PageTitle({
             {title}
           </h1>
           {subtitle && (
-            <p className="text-kiosk-text/75 text-sm mt-1">{subtitle}</p>
+            <p className="text-description-visible text-sm mt-1">{subtitle}</p>
           )}
         </div>
       </div>

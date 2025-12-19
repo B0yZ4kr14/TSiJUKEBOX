@@ -175,7 +175,7 @@ export function WcagExceptionComment({
                     <Badge variant="outline" className={`${color} border-current/30 text-xs`}>
                       {label}
                     </Badge>
-                    <span className="text-kiosk-text/70 text-xs hidden md:inline">{description}</span>
+                    <span className="text-description-visible text-xs hidden md:inline">{description}</span>
                   </div>
                 </SelectItem>
               ))}
@@ -200,10 +200,10 @@ export function WcagExceptionComment({
         {/* Hover State Toggle */}
         <div className="flex items-center justify-between p-3 bg-kiosk-bg/30 rounded-lg">
           <div>
-            <Label htmlFor="wcag-hover" className="text-kiosk-text/90 cursor-pointer">
+            <Label htmlFor="wcag-hover" className="text-nav-neon-white cursor-pointer">
               Tem estado hover/focus
             </Label>
-            <p className="text-xs text-kiosk-text/70">
+            <p className="text-xs text-description-visible">
               Marque se o elemento aumenta contraste no hover
             </p>
           </div>
@@ -267,7 +267,7 @@ export function WcagExceptionComment({
               {copied ? (
                 <Check className="w-4 h-4 text-green-500" />
               ) : (
-                <Copy className="w-4 h-4 text-kiosk-text/70" />
+                <Copy className="w-4 h-4 text-description-visible" />
               )}
             </Button>
           </div>

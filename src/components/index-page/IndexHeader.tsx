@@ -45,14 +45,19 @@ export function IndexHeader({
 }: IndexHeaderProps) {
   return (
     <header className="flex flex-col p-2 pt-1.5 header-3d backdrop-blur-sm">
-      {/* LINE 1: Logo centered at absolute top */}
+      {/* LINE 1: Logo centered at absolute top - responsive size */}
       <div className="w-full flex justify-center mb-2">
-        <LogoBrand size="lg" variant="metal" animate={false} />
+        <div className="hidden sm:block">
+          <LogoBrand size="lg" variant="metal" animate={false} />
+        </div>
+        <div className="block sm:hidden">
+          <LogoBrand size="md" variant="metal" animate={false} />
+        </div>
       </div>
 
       {/* LINE 2: Status bar with grid for perfect centering */}
       <div className="grid grid-cols-3 items-center w-full">
-        {/* Left: System Info */}
+        {/* Left: System Info - responsive hiding */}
         <div className="flex items-center gap-3 justify-start min-w-0 overflow-hidden">
           <SystemMonitor 
             cpu={status?.cpu ?? 0} 
@@ -60,20 +65,24 @@ export function IndexHeader({
             temp={status?.temp ?? 0} 
           />
           
-          <div className="w-px h-6 bg-kiosk-text/20" />
+          {/* WeatherWidget: hidden on xs, visible on sm+ */}
+          <div className="hidden sm:flex items-center gap-3">
+            <div className="w-px h-6 bg-kiosk-text/20" />
+            <WeatherWidget />
+          </div>
           
-          <WeatherWidget />
+          {/* ConnectionIndicator: hidden on xs/sm, visible on md+ */}
+          <div className="hidden md:flex items-center gap-3">
+            <div className="w-px h-6 bg-kiosk-text/20" />
+            <ConnectionIndicator 
+              connectionType={isOnline ? (connectionType ?? 'polling') : 'disconnected'}
+              isSpotifyActive={!!status?.playing && !!status?.track}
+            />
+          </div>
           
-          <div className="w-px h-6 bg-kiosk-text/20" />
-          
-          <ConnectionIndicator 
-            connectionType={isOnline ? (connectionType ?? 'polling') : 'disconnected'}
-            isSpotifyActive={!!status?.playing && !!status?.track}
-          />
-          
-          {/* Mini visualizer no header quando tocando */}
+          {/* Mini visualizer: hidden on xs/sm/md, visible on lg+ */}
           {status?.playing && (
-            <>
+            <div className="hidden lg:flex items-center gap-3">
               <div className="w-px h-6 bg-kiosk-text/20" />
               <AudioVisualizer 
                 variant="compact" 
@@ -81,7 +90,7 @@ export function IndexHeader({
                 barCount={8}
                 className="opacity-50 scale-75"
               />
-            </>
+            </div>
           )}
         </div>
 
@@ -90,40 +99,47 @@ export function IndexHeader({
           <DigitalClock showDate={true} showSeconds={false} />
         </div>
         
-        {/* Right: User & Actions */}
+        {/* Right: User & Actions - responsive hiding */}
         <div className="flex items-center gap-3 justify-end min-w-0 overflow-hidden">
           <UserBadge />
 
-          <div className="w-px h-6 bg-kiosk-text/20" />
+          {/* Panel toggles: hidden on xs, visible on sm+ */}
+          <div className="hidden sm:flex items-center gap-3">
+            <div className="w-px h-6 bg-kiosk-text/20" />
 
-          <SideInfoPanelToggle 
-            onClick={onSideInfoToggle}
-            isOpen={showSideInfoPanel}
-          />
+            <SideInfoPanelToggle 
+              onClick={onSideInfoToggle}
+              isOpen={showSideInfoPanel}
+            />
 
-          <SpotifyPanelToggle 
-            onClick={onSpotifyToggle}
-            isOpen={showSpotifyPanel}
-            isConnected={isSpotifyConnected}
-          />
+            <SpotifyPanelToggle 
+              onClick={onSpotifyToggle}
+              isOpen={showSpotifyPanel}
+              isConnected={isSpotifyConnected}
+            />
 
-          <LibraryPanelToggle 
-            onClick={onLibraryToggle}
-            isOpen={showLibraryPanel}
-          />
+            <LibraryPanelToggle 
+              onClick={onLibraryToggle}
+              isOpen={showLibraryPanel}
+            />
+          </div>
 
-          <Button
-            variant="ghost"
-            size="icon"
-            asChild
-            className="w-10 h-10 rounded-full hover:bg-kiosk-surface/50"
-            aria-label="Brand Guidelines"
-          >
-            <Link to="/brand">
-              <Palette className="w-5 h-5 icon-neon-blue" />
-            </Link>
-          </Button>
+          {/* Brand button: hidden on xs/sm, visible on md+ */}
+          <div className="hidden md:block">
+            <Button
+              variant="ghost"
+              size="icon"
+              asChild
+              className="w-10 h-10 rounded-full hover:bg-kiosk-surface/50"
+              aria-label="Brand Guidelines"
+            >
+              <Link to="/brand">
+                <Palette className="w-5 h-5 icon-neon-blue" />
+              </Link>
+            </Button>
+          </div>
 
+          {/* Install button: always visible (important action) */}
           {canInstall && (
             <Button
               variant="ghost"

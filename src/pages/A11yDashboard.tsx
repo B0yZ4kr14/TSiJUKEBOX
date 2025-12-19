@@ -1,7 +1,6 @@
 import { useState } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { 
-  ArrowLeft, 
   RefreshCw, 
   AlertTriangle, 
   CheckCircle2, 
@@ -29,7 +28,8 @@ import {
   TableRow 
 } from '@/components/ui/table';
 import { LogoBrand } from '@/components/ui/LogoBrand';
-import { useA11yStats, useBackNavigation } from '@/hooks';
+import { BackButton } from '@/components/ui/BackButton';
+import { useA11yStats } from '@/hooks';
 import {
   PieChart as RechartsPieChart,
   Pie,
@@ -45,7 +45,6 @@ import {
 } from 'recharts';
 
 export default function A11yDashboard() {
-  const { goBack } = useBackNavigation();
   const {
     stats,
     isLoading,
@@ -86,15 +85,7 @@ export default function A11yDashboard() {
       {/* Header */}
       <div className="flex items-center justify-between mb-8">
         <div className="flex items-center gap-4">
-          <Button
-            variant="ghost"
-            size="icon"
-            onClick={goBack}
-            className="text-nav-neon-white hover:text-kiosk-text"
-            aria-label="Voltar"
-          >
-            <ArrowLeft className="w-5 h-5" />
-          </Button>
+          <BackButton className="text-nav-neon-white hover:text-kiosk-text" />
           <div>
             <h1 className="text-2xl font-bold text-gold-neon flex items-center gap-2">
               <Accessibility className="w-6 h-6 icon-neon-blue" />

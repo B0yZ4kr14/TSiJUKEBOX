@@ -5,9 +5,7 @@ import { KioskLayout } from '@/components/layout/KioskLayout';
 import { Button } from '@/components/ui/button';
 import { TrackItem } from '@/components/spotify/TrackItem';
 import { AddToPlaylistModal } from '@/components/spotify/AddToPlaylistModal';
-import { useSpotifyPlaylist } from '@/hooks/useSpotifyPlaylists';
-import { useSpotifyPlayer } from '@/hooks/useSpotifyPlayer';
-import { useSpotifyLibrary } from '@/hooks/useSpotifyLibrary';
+import { useSpotifyPlaylist, useSpotifyPlayer, useSpotifyLibrary } from '@/hooks';
 import { SpotifyTrack } from '@/lib/api/spotify';
 
 function formatDuration(ms: number): string {

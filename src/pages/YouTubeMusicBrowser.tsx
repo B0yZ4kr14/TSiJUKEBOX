@@ -6,7 +6,7 @@ import { KioskLayout } from '@/components/layout/KioskLayout';
 import { Button } from '@/components/ui/button';
 import { Skeleton } from '@/components/ui/skeleton';
 import { YouTubeMusicPlaylistCard, YouTubeMusicUserBadge } from '@/components/youtube';
-import { useYouTubeMusicLibrary } from '@/hooks/useYouTubeMusicLibrary';
+import { useYouTubeMusicLibrary } from '@/hooks';
 import { useSettings } from '@/contexts/SettingsContext';
 import { youtubeMusicClient } from '@/lib/api/youtubeMusic';
 import { toast } from 'sonner';

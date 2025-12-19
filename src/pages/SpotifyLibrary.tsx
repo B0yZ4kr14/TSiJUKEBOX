@@ -8,8 +8,7 @@ import { TrackItem } from '@/components/spotify/TrackItem';
 import { AlbumCard } from '@/components/spotify/AlbumCard';
 import { ArtistCard } from '@/components/spotify/ArtistCard';
 import { AddToPlaylistModal } from '@/components/spotify/AddToPlaylistModal';
-import { useSpotifyLibrary } from '@/hooks/useSpotifyLibrary';
-import { useSpotifyPlayer } from '@/hooks/useSpotifyPlayer';
+import { useSpotifyLibrary, useSpotifyPlayer } from '@/hooks';
 import { useSettings } from '@/contexts/SettingsContext';
 import { SpotifyTrack } from '@/lib/api/spotify';
 

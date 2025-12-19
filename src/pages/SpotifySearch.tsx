@@ -10,9 +10,7 @@ import { AlbumCard } from '@/components/spotify/AlbumCard';
 import { ArtistCard } from '@/components/spotify/ArtistCard';
 import { PlaylistCard } from '@/components/spotify/PlaylistCard';
 import { AddToPlaylistModal } from '@/components/spotify/AddToPlaylistModal';
-import { useSpotifySearch } from '@/hooks/useSpotifySearch';
-import { useSpotifyPlayer } from '@/hooks/useSpotifyPlayer';
-import { useSpotifyLibrary } from '@/hooks/useSpotifyLibrary';
+import { useSpotifySearch, useSpotifyPlayer, useSpotifyLibrary } from '@/hooks';
 import { SpotifyTrack } from '@/lib/api/spotify';
 
 export default function SpotifySearchPage() {

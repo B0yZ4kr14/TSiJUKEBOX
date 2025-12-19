@@ -6,9 +6,7 @@ import { Button } from '@/components/ui/button';
 import { PlaylistCard } from '@/components/spotify/PlaylistCard';
 import { TrackItem } from '@/components/spotify/TrackItem';
 import { CreatePlaylistModal } from '@/components/spotify/CreatePlaylistModal';
-import { useSpotifyPlaylists } from '@/hooks/useSpotifyPlaylists';
-import { useSpotifyLibrary } from '@/hooks/useSpotifyLibrary';
-import { useSpotifyPlayer } from '@/hooks/useSpotifyPlayer';
+import { useSpotifyPlaylists, useSpotifyLibrary, useSpotifyPlayer } from '@/hooks';
 import { useSettings } from '@/contexts/SettingsContext';
 
 export default function SpotifyBrowser() {

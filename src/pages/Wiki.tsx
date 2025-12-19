@@ -1,7 +1,7 @@
 import { useState, useEffect } from 'react';
 import { useNavigate, useSearchParams } from 'react-router-dom';
 import { motion } from 'framer-motion';
-import { ArrowLeft, Book, FileText, Printer, Star, Trash2, Search, Download, Code, HelpCircle, Music, Keyboard, Palette, Plug, Shield, Terminal } from 'lucide-react';
+import { ArrowLeft, Book, FileText, Printer, Star, Trash2, Search, Download, Code, HelpCircle, Music, Keyboard, Palette, Plug, Shield, Terminal, WifiOff, CloudOff, FileCode } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { ScrollArea } from '@/components/ui/scroll-area';
 import { Badge } from '@/components/ui/badge';
@@ -13,6 +13,7 @@ import { WikiSearch } from '@/components/wiki/WikiSearch';
 import { GlobalSearchModal } from '@/components/GlobalSearchModal';
 import { wikiCategories, findArticleById, getTotalArticleCount } from '@/components/wiki/wikiData';
 import { useWikiBookmarks, useGlobalSearch, useReadArticles } from '@/hooks';
+import { useWikiOffline } from '@/hooks/common/useWikiOffline';
 import { downloadMarkdown, downloadHTML, printDocument } from '@/lib/documentExporter';
 import { toast } from 'sonner';
 import { formatBrandName } from '@/lib/utils';
@@ -25,6 +26,19 @@ export default function Wiki() {
   const { bookmarks, toggleBookmark, isBookmarked, clearBookmarks } = useWikiBookmarks();
   const { markAsRead, isRead } = useReadArticles();
 
+  // Offline support
+  const {
+    isOffline,
+    savedArticles,
+    savedArticleCount,
+    storageUsedFormatted,
+    saveArticleOffline,
+    removeArticleOffline,
+    isArticleSaved,
+    getOfflineArticle,
+    clearAllOfflineArticles
+  } = useWikiOffline();
+
   // Global search
   const globalSearch = useGlobalSearch({});
 
@@ -36,8 +50,37 @@ export default function Wiki() {
     }
   }, [searchParams]);
 
-  const article = selectedArticle ? findArticleById(selectedArticle) : null;
+  // Get article - prioritize offline version when offline
+  const getArticle = (articleId: string | null) => {
+    if (!articleId) return null;
+    if (isOffline && isArticleSaved(articleId)) {
+      return getOfflineArticle(articleId);
+    }
+    return findArticleById(articleId);
+  };
+
+  const article = getArticle(selectedArticle);
   const totalArticles = getTotalArticleCount();
+
+  // Offline handlers
+  const handleSaveOffline = (art: typeof article) => {
+    if (art && saveArticleOffline(art)) {
+      toast.success('Artigo salvo para leitura offline');
+    } else {
+      toast.error('Erro ao salvar artigo offline');
+    }
+  };
+
+  const handleRemoveOffline = (articleId: string) => {
+    if (removeArticleOffline(articleId)) {
+      toast.success('Artigo removido do cache offline');
+    }
+  };
+
+  const handleClearOffline = () => {
+    clearAllOfflineArticles();
+    toast.success('Cache offline limpo');
+  };
 
   // Export functions
   const handleExportMarkdown = () => {
@@ -73,10 +116,25 @@ export default function Wiki() {
                 <Book className="w-6 h-6 icon-neon-blue" />
                 <div>
                   <h1 className="text-xl font-bold text-gold-neon">Wiki</h1>
-                <p className="text-xs text-description-visible">
+                  <p className="text-xs text-description-visible">
                     {totalArticles} artigos em {wikiCategories.length} categorias
                   </p>
                 </div>
+              </div>
+              {/* Offline Status Badges */}
+              <div className="flex items-center gap-2">
+                {isOffline && (
+                  <Badge variant="destructive" className="flex items-center gap-1">
+                    <WifiOff className="w-3 h-3" />
+                    Offline
+                  </Badge>
+                )}
+                {savedArticleCount > 0 && (
+                  <Badge variant="secondary" className="flex items-center gap-1 bg-green-500/20 text-green-400 border-green-500/30">
+                    <CloudOff className="w-3 h-3" />
+                    {savedArticleCount} salvos ({storageUsedFormatted})
+                  </Badge>
+                )}
               </div>
             </div>
             
@@ -195,6 +253,49 @@ export default function Wiki() {
                 </div>
               )}
 
+              {/* Offline Articles Section */}
+              {savedArticleCount > 0 && (
+                <div className="p-3 rounded-xl bg-green-500/10 border border-green-500/30">
+                  <div className="flex items-center justify-between mb-2">
+                    <div className="flex items-center gap-2">
+                      <CloudOff className="w-4 h-4 text-green-500" />
+                      <span className="text-sm font-medium text-green-400">Offline</span>
+                    </div>
+                    <Button
+                      variant="ghost"
+                      size="sm"
+                      onClick={handleClearOffline}
+                      className="h-6 w-6 p-0 text-kiosk-text/80 hover:text-red-400"
+                      title="Limpar cache offline"
+                    >
+                      <Trash2 className="w-3 h-3" />
+                    </Button>
+                  </div>
+                  <div className="flex flex-wrap gap-1">
+                    {savedArticles.slice(0, 5).map(id => {
+                      const art = findArticleById(id);
+                      if (!art) return null;
+                      return (
+                        <Badge
+                          key={id}
+                          variant="secondary"
+                          className="cursor-pointer text-xs bg-green-500/20 hover:bg-green-500/30 text-green-300"
+                          onClick={() => setSelectedArticle(id)}
+                        >
+                          {art.title.length > 15 ? art.title.slice(0, 15) + '...' : art.title}
+                        </Badge>
+                      );
+                    })}
+                    {savedArticles.length > 5 && (
+                      <Badge variant="outline" className="text-xs text-green-400 border-green-500/30">
+                        +{savedArticles.length - 5}
+                      </Badge>
+                    )}
+                  </div>
+                  <p className="text-xs text-green-400/70 mt-2">{storageUsedFormatted} usado</p>
+                </div>
+              )}
+
               <h2 className="text-sm font-semibold text-label-yellow px-3">NAVEGAÇÃO</h2>
               <WikiNavigation
                 selectedArticle={selectedArticle}
@@ -219,6 +320,10 @@ export default function Wiki() {
                     toast.success(isBookmarked(article.id) ? 'Removido dos favoritos' : 'Adicionado aos favoritos');
                   }}
                   onArticleViewed={markAsRead}
+                  onSaveOffline={handleSaveOffline}
+                  onRemoveOffline={handleRemoveOffline}
+                  isSavedOffline={isArticleSaved(article.id)}
+                  isOfflineMode={isOffline}
                 />
               ) : selectedCategory ? (
                 <CategoryOverview 
@@ -330,6 +435,7 @@ function WelcomeScreen({
               'administration': <Shield className="w-5 h-5 icon-neon-blue" />,
               'troubleshooting': <Terminal className="w-5 h-5 icon-neon-blue" />,
               'faq': <HelpCircle className="w-5 h-5 icon-neon-blue" />,
+              'technical-docs': <FileCode className="w-5 h-5 icon-neon-blue" />,
             };
             return iconMap[id] || <Book className="w-5 h-5 icon-neon-blue" />;
           };

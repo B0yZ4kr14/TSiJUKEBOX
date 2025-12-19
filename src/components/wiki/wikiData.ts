@@ -1894,6 +1894,292 @@ export const wikiCategories: WikiCategory[] = [
         ]
       }
     ]
+  },
+  {
+    id: 'technical-docs',
+    title: 'Documentação Técnica',
+    icon: 'FileCode',
+    description: 'Guias para desenvolvedores, referência de API e práticas de segurança',
+    subSections: [
+      {
+        id: 'quickstart',
+        title: 'Início Rápido',
+        articles: [
+          {
+            id: 'doc-getting-started',
+            title: 'Guia de Início Rápido',
+            description: 'Primeira instalação do TSiJUKEBOX em 5 minutos',
+            content: 'Este guia ajuda você a instalar e configurar o TSiJUKEBOX rapidamente. Siga os passos abaixo para ter o sistema funcionando em minutos.',
+            steps: [
+              'Clone o repositório: git clone https://github.com/seu-usuario/tsijukebox.git',
+              'Entre na pasta: cd tsijukebox',
+              'Instale dependências: npm install',
+              'Configure o arquivo .env com suas credenciais',
+              'Inicie o servidor de desenvolvimento: npm run dev',
+              'Acesse http://localhost:5173 no navegador'
+            ],
+            tips: [
+              'Use Node.js 18+ para melhor compatibilidade',
+              'O Bun também é suportado como alternativa ao npm',
+              'Configure o Supabase antes de usar recursos de autenticação'
+            ],
+            relatedArticles: ['doc-installation', 'doc-configuration']
+          },
+          {
+            id: 'doc-installation',
+            title: 'Instalação Completa',
+            description: 'Todas as opções de instalação: bare metal, Docker, script Python',
+            content: 'O TSiJUKEBOX oferece múltiplas opções de instalação para atender diferentes necessidades de deployment. Escolha a opção que melhor se adapta ao seu ambiente.',
+            steps: [
+              'Bare Metal: Clone o repositório e execute npm install && npm run build',
+              'Docker: Use docker-compose up para iniciar todos os serviços',
+              'Script Python: Execute python scripts/installer/main.py --full para instalação automatizada',
+              'Cloud: Conecte-se ao Lovable Cloud para deployment automático'
+            ],
+            tips: [
+              'Use Docker para ambientes de produção isolados',
+              'O script Python instala automaticamente Grafana, Prometheus, Nginx e mais',
+              'Para Arch Linux, o instalador usa pacman e AUR helpers'
+            ],
+            relatedArticles: ['doc-getting-started', 'doc-configuration']
+          }
+        ]
+      },
+      {
+        id: 'developer',
+        title: 'Para Desenvolvedores',
+        articles: [
+          {
+            id: 'doc-dev-guide',
+            title: 'Guia do Desenvolvedor',
+            description: 'Arquitetura do projeto, padrões de código e contribuição',
+            content: 'O TSiJUKEBOX segue uma arquitetura modular baseada em React + TypeScript. Os componentes são organizados por domínio, e hooks encapsulam a lógica de negócios.',
+            steps: [
+              'Estrutura: src/components (UI), src/hooks (lógica), src/pages (rotas), src/lib (utilitários)',
+              'Estilo: Use Tailwind CSS com tokens semânticos do design system',
+              'Estado: Prefer hooks customizados e React Query para dados remotos',
+              'Testes: Execute npm run test para rodar Vitest',
+              'Linting: npm run lint para verificar padrões de código'
+            ],
+            tips: [
+              'Componentes devem ser pequenos e focados (< 200 linhas)',
+              'Extraia lógica complexa para hooks customizados',
+              'Use TypeScript strict mode para máxima segurança de tipos',
+              'Documente props de componentes com JSDoc'
+            ],
+            relatedArticles: ['doc-api-reference', 'doc-hooks-architecture']
+          },
+          {
+            id: 'doc-api-reference',
+            title: 'Referência de API',
+            description: 'Documentação completa de hooks, endpoints e tipos',
+            content: 'Esta referência documenta todas as APIs públicas do TSiJUKEBOX, incluindo hooks React, funções utilitárias, tipos TypeScript e endpoints de backend.',
+            steps: [
+              'Hooks de Autenticação: useLocalAuth, useSupabaseAuth, useAuthConfig',
+              'Hooks de Player: usePlayer, usePlaybackControls, useVolume, useLyrics',
+              'Hooks de Spotify: useSpotifyPlayer, useSpotifyLibrary, useSpotifySearch',
+              'Hooks de YouTube: useYouTubeMusicPlayer, useYouTubeMusicLibrary',
+              'Hooks de Sistema: useWeather, useNetworkStatus, useWebSocketStatus'
+            ],
+            tips: [
+              'Hooks são organizados por domínio em src/hooks/',
+              'Importe hooks do arquivo index: import { usePlayer } from "@/hooks"',
+              'Consulte os arquivos .test.ts para exemplos de uso'
+            ],
+            relatedArticles: ['doc-hooks-architecture', 'doc-dev-guide']
+          },
+          {
+            id: 'doc-hooks-architecture',
+            title: 'Arquitetura de Hooks',
+            description: 'Organização e padrões de hooks React',
+            content: 'Os hooks do TSiJUKEBOX seguem uma arquitetura em camadas que separa preocupações e facilita testes e manutenção.',
+            steps: [
+              'Camada Auth: Gerencia autenticação local e Supabase',
+              'Camada Common: Hooks utilitários reutilizáveis (useDebounce, useMobile)',
+              'Camada Player: Controle de reprodução e fila de músicas',
+              'Camada Spotify/YouTube: Integração com APIs de streaming',
+              'Camada System: Monitoramento, rede, WebSocket, clima'
+            ],
+            tips: [
+              'Use useCallback para funções passadas como props',
+              'Evite efeitos colaterais em renders - use useEffect',
+              'Testes unitários em __tests__/ ao lado de cada hook',
+              'Mocks disponíveis em src/test/mocks/'
+            ],
+            relatedArticles: ['doc-api-reference', 'doc-dev-guide']
+          },
+          {
+            id: 'doc-backend-endpoints',
+            title: 'Endpoints de Backend',
+            description: 'Edge Functions e APIs do servidor',
+            content: 'O backend do TSiJUKEBOX é implementado como Edge Functions Supabase, oferecendo escalabilidade automática e baixa latência.',
+            steps: [
+              'spotify-auth: Autenticação OAuth com Spotify',
+              'youtube-music-auth: Autenticação com YouTube Music',
+              'lyrics-search: Busca de letras sincronizadas',
+              'github-repo: Informações do repositório'
+            ],
+            tips: [
+              'Edge Functions são deployadas automaticamente',
+              'Use secrets para API keys (nunca hardcode)',
+              'Logs disponíveis em supabase/functions/'
+            ],
+            relatedArticles: ['doc-api-reference', 'doc-security']
+          }
+        ]
+      },
+      {
+        id: 'configuration',
+        title: 'Configuração',
+        articles: [
+          {
+            id: 'doc-configuration',
+            title: 'Configurações Avançadas',
+            description: 'Todas as opções de configuração do sistema',
+            content: 'O TSiJUKEBOX oferece configurações extensivas para personalizar comportamento, aparência e integrações do sistema.',
+            steps: [
+              'Variáveis de Ambiente: Configure em .env (VITE_SUPABASE_URL, etc.)',
+              'Temas: Use ThemeCustomizer ou edite index.css para cores personalizadas',
+              'Integrações: Configure Spotify, YouTube Music, NTP, Weather API',
+              'Backup: Configure schedule e destinos (local, cloud, SSH)',
+              'Acessibilidade: Alto contraste, tamanho de fonte, animações reduzidas'
+            ],
+            tips: [
+              'Variáveis VITE_ são expostas no client-side',
+              'Use secrets do Supabase para credenciais sensíveis',
+              'Configurações são persistidas no localStorage por padrão'
+            ],
+            relatedArticles: ['doc-troubleshooting', 'doc-security']
+          },
+          {
+            id: 'doc-troubleshooting',
+            title: 'Solução de Problemas',
+            description: 'Problemas comuns e como resolvê-los',
+            content: 'Este guia ajuda a diagnosticar e resolver os problemas mais comuns encontrados ao usar o TSiJUKEBOX.',
+            steps: [
+              'Erro de conexão Spotify: Verifique credenciais OAuth e callback URL',
+              'Música não toca: Verifique se há dispositivo Spotify ativo',
+              'Sincronização falha: Verifique conexão de rede e WebSocket',
+              'Letras não aparecem: Verifique cache de letras e API de lyrics',
+              'Tema não aplica: Limpe cache do navegador e recarregue'
+            ],
+            tips: [
+              'Abra DevTools (F12) para ver erros no console',
+              'Verifique logs de rede para falhas de API',
+              'Limpar localStorage pode resolver muitos problemas',
+              'Use modo incógnito para descartar extensões conflitantes'
+            ],
+            relatedArticles: ['doc-configuration', 'doc-security']
+          }
+        ]
+      },
+      {
+        id: 'security',
+        title: 'Segurança',
+        articles: [
+          {
+            id: 'doc-security',
+            title: 'Guia de Segurança',
+            description: 'Práticas de segurança, autenticação e RLS',
+            content: 'A segurança do TSiJUKEBOX é implementada em múltiplas camadas: autenticação de usuários, Row Level Security (RLS) no banco de dados, e validação de entrada.',
+            steps: [
+              'Autenticação: Use Supabase Auth ou sistema local com bcrypt',
+              'RLS: Todas as tabelas têm políticas que restringem acesso por user_id',
+              'CORS: Edge Functions validam origem das requisições',
+              'Secrets: API keys são armazenadas em variáveis de ambiente seguras',
+              'Validação: Zod valida todas as entradas de usuário'
+            ],
+            tips: [
+              'Nunca exponha chaves de API no código frontend',
+              'Use HTTPS em produção',
+              'Revise RLS policies após criar novas tabelas',
+              'Habilite 2FA quando possível'
+            ],
+            relatedArticles: ['doc-configuration', 'doc-dev-guide']
+          },
+          {
+            id: 'doc-accessibility',
+            title: 'Guia de Acessibilidade',
+            description: 'Conformidade WCAG e práticas inclusivas',
+            content: 'O TSiJUKEBOX segue as diretrizes WCAG 2.1 AA para garantir que todos os usuários possam usar o sistema.',
+            steps: [
+              'Navegação por teclado: Tab, Enter, Escape funcionam em toda a UI',
+              'Leitores de tela: ARIA labels em todos os elementos interativos',
+              'Contraste: Modo alto contraste disponível em configurações',
+              'Animações: Opção para reduzir movimento para usuários sensíveis',
+              'Fontes: Tamanho ajustável de 12px a 20px'
+            ],
+            tips: [
+              'Use axe-core para auditar acessibilidade',
+              'Teste com leitores de tela reais (NVDA, VoiceOver)',
+              'Mantenha ratio de contraste mínimo de 4.5:1',
+              'Evite informação apenas por cor'
+            ],
+            relatedArticles: ['doc-security', 'doc-dev-guide']
+          }
+        ]
+      },
+      {
+        id: 'reference',
+        title: 'Referência',
+        articles: [
+          {
+            id: 'doc-changelog',
+            title: 'Histórico de Versões',
+            description: 'Changelog completo do projeto',
+            content: 'Histórico de todas as versões do TSiJUKEBOX com features, correções e breaking changes.',
+            steps: [
+              'v4.0.0 Enterprise: Brand Guidelines, Analytics Dashboard, Instalador Python avançado',
+              'v3.5.0: PWA offline, Wiki expandida, Métricas de instalação',
+              'v3.0.0: YouTube Music integration, NTP sync, Weather widget',
+              'v2.0.0: Spotify Connect, Queue management, Themes',
+              'v1.0.0: Release inicial com player básico'
+            ],
+            tips: [
+              'Consulte CHANGELOG.md para detalhes completos',
+              'Breaking changes são marcados com ⚠️',
+              'Migrations são fornecidas para upgrades'
+            ],
+            relatedArticles: ['doc-glossary', 'doc-getting-started']
+          },
+          {
+            id: 'doc-glossary',
+            title: 'Glossário',
+            description: 'Termos técnicos explicados para todos os níveis',
+            content: 'Definições dos termos técnicos usados na documentação e interface do TSiJUKEBOX.',
+            steps: [
+              'RLS (Row Level Security): Políticas de banco que restringem acesso por usuário',
+              'Edge Function: Função serverless executada em CDN próximo ao usuário',
+              'OAuth: Protocolo de autorização usado por Spotify e YouTube',
+              'PWA (Progressive Web App): App web que funciona offline e pode ser instalado',
+              'WebSocket: Conexão bidirecional para dados em tempo real',
+              'Spicetify: Ferramenta para customizar cliente Spotify desktop'
+            ],
+            tips: [
+              'Consulte MDN Web Docs para termos web genéricos',
+              'Supabase Docs para termos específicos do banco',
+              'Spotify Developer Docs para termos da API de streaming'
+            ],
+            relatedArticles: ['doc-changelog', 'doc-dev-guide']
+          },
+          {
+            id: 'doc-credits',
+            title: 'Créditos e Licenças',
+            description: 'Atribuições de bibliotecas e assets',
+            content: 'O TSiJUKEBOX usa várias bibliotecas open source e assets. Esta seção lista todas as atribuições necessárias.',
+            tips: [
+              'React (MIT License)',
+              'Tailwind CSS (MIT License)',
+              'Framer Motion (MIT License)',
+              'Lucide Icons (ISC License)',
+              'Supabase (Apache 2.0)',
+              'shadcn/ui (MIT License)'
+            ],
+            relatedArticles: ['doc-glossary', 'doc-dev-guide']
+          }
+        ]
+      }
+    ]
   }
 ];
 

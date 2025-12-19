@@ -13,18 +13,26 @@ import {
   Music,
   Hand,
   Keyboard,
-  Bookmark
+  Bookmark,
+  Download,
+  Check,
+  CloudOff
 } from 'lucide-react';
 import { WikiArticle as WikiArticleType, findArticleById, getArticlePath } from './wikiData';
 import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
 import { formatBrandName } from '@/lib/utils';
+
 interface WikiArticleProps {
   article: WikiArticleType;
   onSelectArticle: (articleId: string) => void;
   isBookmarked?: boolean;
   onToggleBookmark?: () => void;
   onArticleViewed?: (articleId: string) => void;
+  onSaveOffline?: (article: WikiArticleType) => void;
+  onRemoveOffline?: (articleId: string) => void;
+  isSavedOffline?: boolean;
+  isOfflineMode?: boolean;
 }
 
 // Simple illustration components
@@ -156,7 +164,17 @@ const illustrations: Record<string, React.ReactNode> = {
   deck: <SettingsIllustration />,
 };
 
-export function WikiArticleView({ article, onSelectArticle, isBookmarked, onToggleBookmark, onArticleViewed }: WikiArticleProps) {
+export function WikiArticleView({ 
+  article, 
+  onSelectArticle, 
+  isBookmarked, 
+  onToggleBookmark, 
+  onArticleViewed,
+  onSaveOffline,
+  onRemoveOffline,
+  isSavedOffline,
+  isOfflineMode
+}: WikiArticleProps) {
   const path = getArticlePath(article.id);
 
   // Mark article as read when viewed
@@ -165,6 +183,14 @@ export function WikiArticleView({ article, onSelectArticle, isBookmarked, onTogg
       onArticleViewed(article.id);
     }
   }, [article.id, onArticleViewed]);
+
+  const handleOfflineToggle = () => {
+    if (isSavedOffline && onRemoveOffline) {
+      onRemoveOffline(article.id);
+    } else if (onSaveOffline) {
+      onSaveOffline(article);
+    }
+  };
 
   return (
     <motion.article
@@ -187,21 +213,52 @@ export function WikiArticleView({ article, onSelectArticle, isBookmarked, onTogg
 
       {/* Header */}
       <header className="flex items-start justify-between gap-4">
-        <div className="space-y-2">
-          <h1 className="text-2xl font-bold text-gold-neon">{formatBrandName(article.title)}</h1>
+        <div className="space-y-2 flex-1">
+          <div className="flex items-center gap-2 flex-wrap">
+            <h1 className="text-2xl font-bold text-gold-neon">{formatBrandName(article.title)}</h1>
+            {isSavedOffline && (
+              <Badge variant="secondary" className="bg-green-500/20 text-green-400 border-green-500/30">
+                <CloudOff className="w-3 h-3 mr-1" />
+                Offline
+              </Badge>
+            )}
+            {isOfflineMode && !isSavedOffline && (
+              <Badge variant="destructive" className="text-xs">
+                Sem cache
+              </Badge>
+            )}
+          </div>
           <p className="text-kiosk-text/90">{formatBrandName(article.description)}</p>
         </div>
-        {/* WCAG Exception: Inactive bookmark transitions to yellow-500 on hover/active */}
-        {onToggleBookmark && (
-          <Button
-            variant="ghost"
-            size="icon"
-            onClick={onToggleBookmark}
-            className={`shrink-0 ${isBookmarked ? 'text-yellow-500' : 'text-secondary-visible hover:text-yellow-500'}`}
-          >
-            <Bookmark className={`w-5 h-5 ${isBookmarked ? 'fill-yellow-500' : ''}`} />
-          </Button>
-        )}
+        <div className="flex items-center gap-1 shrink-0">
+          {/* Offline Button */}
+          {(onSaveOffline || onRemoveOffline) && (
+            <Button
+              variant="ghost"
+              size="icon"
+              onClick={handleOfflineToggle}
+              className={`${isSavedOffline ? 'text-green-500 hover:text-green-400' : 'text-secondary-visible hover:text-green-500'}`}
+              title={isSavedOffline ? 'Remover do offline' : 'Salvar para offline'}
+            >
+              {isSavedOffline ? (
+                <Check className="w-5 h-5" />
+              ) : (
+                <Download className="w-5 h-5" />
+              )}
+            </Button>
+          )}
+          {/* Bookmark Button */}
+          {onToggleBookmark && (
+            <Button
+              variant="ghost"
+              size="icon"
+              onClick={onToggleBookmark}
+              className={`${isBookmarked ? 'text-yellow-500' : 'text-secondary-visible hover:text-yellow-500'}`}
+            >
+              <Bookmark className={`w-5 h-5 ${isBookmarked ? 'fill-yellow-500' : ''}`} />
+            </Button>
+          )}
+        </div>
       </header>
 
       {/* Illustration */}

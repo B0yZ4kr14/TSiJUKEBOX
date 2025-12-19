@@ -1,8 +1,10 @@
 import { cn } from '@/lib/utils';
 
+export type LogoBrandVariant = 'default' | 'ultra' | 'bulge' | 'mirror' | 'mirror-dark' | 'silver' | 'metal' | 'brand' | 'hologram';
+
 interface LogoBrandProps {
   size?: 'sm' | 'md' | 'lg' | 'xl';
-  variant?: 'default' | 'ultra' | 'bulge' | 'mirror' | 'mirror-dark' | 'silver' | 'metal' | 'brand';
+  variant?: LogoBrandVariant;
   showTagline?: boolean;
   centered?: boolean;
   animate?: boolean;
@@ -40,6 +42,7 @@ export function LogoBrand({
       case 'silver': return 'logo-container-silver';
       case 'metal': return 'logo-container-metal';
       case 'brand': return 'logo-container-brand';
+      case 'hologram': return 'logo-container-hologram';
       default: return 'logo-container-3d';
     }
   };
@@ -50,6 +53,7 @@ export function LogoBrand({
       case 'bulge': return 'logo-animate-bulge';
       case 'mirror': return 'logo-animate-mirror';
       case 'brand': return 'logo-animate-brand';
+      case 'hologram': return 'logo-animate-hologram';
       default: return 'logo-animate';
     }
   };
@@ -63,6 +67,7 @@ export function LogoBrand({
       case 'silver': return 'logo-tsi-silver';
       case 'metal': return 'logo-tsi-metal';
       case 'brand': return 'logo-tsi-brand';
+      case 'hologram': return 'logo-tsi-hologram';
       default: return 'logo-tsi';
     }
   };
@@ -76,6 +81,7 @@ export function LogoBrand({
       case 'silver': return 'logo-jukebox-silver';
       case 'metal': return 'logo-jukebox-metal';
       case 'brand': return 'logo-jukebox-brand';
+      case 'hologram': return 'logo-jukebox-hologram';
       default: return 'logo-jukebox';
     }
   };
@@ -98,7 +104,8 @@ export function LogoBrand({
       {showTagline && (
         <p className={cn(
           "text-secondary-visible mt-1 tracking-widest uppercase",
-          taglineSizes[size]
+          taglineSizes[size],
+          variant === 'hologram' && 'text-cyan-300/70'
         )}>
           Enterprise Music System
         </p>

@@ -17,6 +17,10 @@ export interface BackButtonProps extends Omit<ButtonProps, 'onClick'> {
   label?: string;
   /** Icon size variant */
   iconSize?: keyof typeof iconSizes;
+  /** Show label text next to icon */
+  showLabel?: boolean;
+  /** Position of label relative to icon */
+  labelPosition?: 'before' | 'after';
 }
 
 export const BackButton = forwardRef<HTMLButtonElement, BackButtonProps>(
@@ -24,27 +28,39 @@ export const BackButton = forwardRef<HTMLButtonElement, BackButtonProps>(
     navigationOptions, 
     label = 'Voltar',
     iconSize = 'md',
+    showLabel = false,
+    labelPosition = 'after',
     variant = 'ghost',
-    size = 'icon',
+    size,
     className,
     ...props 
   }, ref) => {
     const { goBack } = useBackNavigation(navigationOptions);
+    
+    // Use 'icon' size only when not showing label
+    const buttonSize = size ?? (showLabel ? 'default' : 'icon');
 
     return (
       <Button
         ref={ref}
         variant={variant}
-        size={size}
+        size={buttonSize}
         onClick={goBack}
         aria-label={label}
         className={cn(
           'text-kiosk-text/90 hover:text-kiosk-text transition-colors',
+          showLabel && 'gap-2',
           className
         )}
         {...props}
       >
+        {showLabel && labelPosition === 'before' && (
+          <span className="text-sm font-medium">{label}</span>
+        )}
         <ArrowLeft className={iconSizes[iconSize]} />
+        {showLabel && labelPosition === 'after' && (
+          <span className="text-sm font-medium">{label}</span>
+        )}
       </Button>
     );
   }

@@ -1,3 +1,4 @@
+import { useState, useCallback } from 'react';
 import { motion } from 'framer-motion';
 import { 
   Star, 
@@ -26,11 +27,10 @@ import {
   XAxis, 
   YAxis, 
   Tooltip, 
-  ResponsiveContainer,
-  Legend
+  ResponsiveContainer
 } from 'recharts';
 
-import { useGitHubStats } from '@/hooks/system/useGitHubStats';
+import { useGitHubStats, GitHubCommit } from '@/hooks/system/useGitHubStats';
 import { KioskLayout } from '@/components/layout/KioskLayout';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
@@ -39,6 +39,9 @@ import { Skeleton } from '@/components/ui/skeleton';
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
 import { ScrollArea } from '@/components/ui/scroll-area';
 import { LogoBrand } from '@/components/ui/LogoBrand';
+import { CommitFilters } from '@/components/github/CommitFilters';
+import { CacheIndicator } from '@/components/github/CacheIndicator';
+import { getCommitTypeInfo } from '@/lib/constants/commitTypes';
 
 const LANGUAGE_COLORS: Record<string, string> = {
   TypeScript: '#3178c6',
@@ -108,8 +111,19 @@ export default function GitHubDashboard() {
     languages, 
     isLoading, 
     error, 
-    refetch 
+    fromCache,
+    cacheStats,
+    refetch,
+    clearAllCache
   } = useGitHubStats();
+
+  const [filteredCommits, setFilteredCommits] = useState<GitHubCommit[]>([]);
+  
+  const handleFilteredCommits = useCallback((filtered: GitHubCommit[]) => {
+    setFilteredCommits(filtered);
+  }, []);
+
+  const displayCommits = filteredCommits.length > 0 || commits.length === 0 ? filteredCommits : commits;
 
   // Preparar dados para gráfico de linguagens
   const totalBytes = Object.values(languages).reduce((a, b) => a + b, 0);
@@ -168,10 +182,15 @@ export default function GitHubDashboard() {
                 Ver no GitHub
               </Button>
             )}
+            <CacheIndicator 
+              stats={cacheStats} 
+              fromCache={fromCache} 
+              onClear={clearAllCache} 
+            />
             <Button 
               variant="default" 
               size="sm"
-              onClick={refetch}
+              onClick={() => refetch(true)}
               disabled={isLoading}
             >
               <RefreshCw className={`h-4 w-4 mr-2 ${isLoading ? 'animate-spin' : ''}`} />
@@ -338,59 +357,82 @@ export default function GitHubDashboard() {
           className="mb-8"
         >
           <Card className="border-border/50 bg-card/80 backdrop-blur-sm">
-            <CardHeader>
+            <CardHeader className="flex flex-row items-center justify-between">
               <CardTitle className="flex items-center gap-2">
                 <Clock className="h-5 w-5 text-primary" />
                 Commits Recentes
+                {displayCommits.length !== commits.length && (
+                  <Badge variant="secondary" className="ml-2">
+                    {displayCommits.length} de {commits.length}
+                  </Badge>
+                )}
               </CardTitle>
             </CardHeader>
-            <CardContent>
+            <CardContent className="space-y-4">
+              {!isLoading && commits.length > 0 && (
+                <CommitFilters
+                  commits={commits}
+                  contributors={contributors}
+                  onFilter={handleFilteredCommits}
+                />
+              )}
               {isLoading ? (
                 <div className="space-y-4">
                   {[...Array(5)].map((_, i) => (
                     <Skeleton key={i} className="h-16 w-full" />
                   ))}
                 </div>
-              ) : commits.length > 0 ? (
+              ) : displayCommits.length > 0 ? (
                 <ScrollArea className="h-[300px]">
                   <div className="space-y-3">
-                    {commits.map((commit, index) => (
-                      <motion.div
-                        key={commit.sha}
-                        initial={{ opacity: 0, x: -10 }}
-                        animate={{ opacity: 1, x: 0 }}
-                        transition={{ delay: index * 0.05 }}
-                        className="flex items-start gap-4 p-3 rounded-lg bg-muted/30 hover:bg-muted/50 transition-colors cursor-pointer"
-                        onClick={() => window.open(commit.html_url, '_blank')}
-                      >
-                        <Avatar className="h-10 w-10">
-                          <AvatarImage src={commit.author?.avatar_url} />
-                          <AvatarFallback>
-                            {commit.commit.author.name.slice(0, 2).toUpperCase()}
-                          </AvatarFallback>
-                        </Avatar>
-                        <div className="flex-1 min-w-0">
-                          <p className="font-medium truncate">{commit.commit.message.split('\n')[0]}</p>
-                          <div className="flex items-center gap-2 text-sm text-muted-foreground mt-1">
-                            <code className="bg-muted px-1.5 py-0.5 rounded text-xs">
-                              {commit.sha.slice(0, 7)}
-                            </code>
-                            <span>•</span>
-                            <span>{commit.author?.login || commit.commit.author.name}</span>
-                            <span>•</span>
-                            <span>
-                              {formatDistanceToNow(new Date(commit.commit.author.date), { 
-                                addSuffix: true,
-                                locale: ptBR 
-                              })}
-                            </span>
+                    {displayCommits.map((commit, index) => {
+                      const typeInfo = getCommitTypeInfo(commit.commit.message);
+                      return (
+                        <motion.div
+                          key={commit.sha}
+                          initial={{ opacity: 0, x: -10 }}
+                          animate={{ opacity: 1, x: 0 }}
+                          transition={{ delay: index * 0.05 }}
+                          className="flex items-start gap-4 p-3 rounded-lg bg-muted/30 hover:bg-muted/50 transition-colors cursor-pointer"
+                          onClick={() => window.open(commit.html_url, '_blank')}
+                        >
+                          <Avatar className="h-10 w-10">
+                            <AvatarImage src={commit.author?.avatar_url} />
+                            <AvatarFallback>
+                              {commit.commit.author.name.slice(0, 2).toUpperCase()}
+                            </AvatarFallback>
+                          </Avatar>
+                          <div className="flex-1 min-w-0">
+                            <div className="flex items-center gap-2">
+                              <span className={`w-2 h-2 rounded-full ${typeInfo.color}`} />
+                              <Badge variant="outline" className="text-xs">
+                                {typeInfo.label}
+                              </Badge>
+                              <p className="font-medium truncate flex-1">{commit.commit.message.split('\n')[0]}</p>
+                            </div>
+                            <div className="flex items-center gap-2 text-sm text-muted-foreground mt-1">
+                              <code className="bg-muted px-1.5 py-0.5 rounded text-xs">
+                                {commit.sha.slice(0, 7)}
+                              </code>
+                              <span>•</span>
+                              <span>{commit.author?.login || commit.commit.author.name}</span>
+                              <span>•</span>
+                              <span>
+                                {formatDistanceToNow(new Date(commit.commit.author.date), { 
+                                  addSuffix: true,
+                                  locale: ptBR 
+                                })}
+                              </span>
+                            </div>
                           </div>
-                        </div>
-                        <ExternalLink className="h-4 w-4 text-muted-foreground" />
-                      </motion.div>
-                    ))}
+                          <ExternalLink className="h-4 w-4 text-muted-foreground" />
+                        </motion.div>
+                      );
+                    })}
                   </div>
                 </ScrollArea>
+              ) : commits.length > 0 ? (
+                <p className="text-muted-foreground text-center py-10">Nenhum commit encontrado com os filtros aplicados</p>
               ) : (
                 <p className="text-muted-foreground text-center py-10">Sem commits recentes</p>
               )}

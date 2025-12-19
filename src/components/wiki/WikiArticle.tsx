@@ -191,13 +191,13 @@ export function WikiArticleView({ article, onSelectArticle, isBookmarked, onTogg
           <h1 className="text-2xl font-bold text-gold-neon">{formatBrandName(article.title)}</h1>
           <p className="text-kiosk-text/90">{formatBrandName(article.description)}</p>
         </div>
-        {/* WCAG Exception: Inactive bookmark at /40 transitions to yellow-500 on hover/active */}
+        {/* WCAG Exception: Inactive bookmark transitions to yellow-500 on hover/active */}
         {onToggleBookmark && (
           <Button
             variant="ghost"
             size="icon"
             onClick={onToggleBookmark}
-            className={`shrink-0 ${isBookmarked ? 'text-yellow-500' : 'text-kiosk-text/40 hover:text-yellow-500'}`}
+            className={`shrink-0 ${isBookmarked ? 'text-yellow-500' : 'text-secondary-visible hover:text-yellow-500'}`}
           >
             <Bookmark className={`w-5 h-5 ${isBookmarked ? 'fill-yellow-500' : ''}`} />
           </Button>

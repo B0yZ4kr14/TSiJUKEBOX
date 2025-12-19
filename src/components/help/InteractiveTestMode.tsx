@@ -279,8 +279,8 @@ export function InteractiveTestMode({ mode, onClose }: InteractiveTestModeProps)
                       <Hand className="w-12 h-12" />
                       <ChevronRight className="w-8 h-8 animate-pulse" />
                     </div>
-                    <p className="text-kiosk-text/90">Deslize horizontalmente para testar</p>
-                    <p className="text-xs text-kiosk-text/85">Mínimo: {GESTURE_THRESHOLD}px</p>
+                    <p className="text-nav-neon-white">Deslize horizontalmente para testar</p>
+                    <p className="text-xs text-description-visible">Mínimo: {GESTURE_THRESHOLD}px</p>
                   </div>
                 </div>
                 

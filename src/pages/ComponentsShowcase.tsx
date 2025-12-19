@@ -16,7 +16,8 @@ import { Badge } from '@/components/ui/badge';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { ScrollArea } from '@/components/ui/scroll-area';
 import { LogoBrand } from '@/components/ui/LogoBrand';
-import { BrandText, BrandTextSize } from '@/components/ui/BrandText';
+import { BrandText, BrandTextSize, BrandTextWeight } from '@/components/ui/BrandText';
+import { BrandTagline, TaglineVariant, TaglineSize } from '@/components/ui/BrandTagline';
 import { CodePlayground, PropDefinition } from '@/components/docs/CodePlayground';
 
 // Component categories
@@ -146,7 +147,8 @@ const showcaseComponents = {
       title: 'BrandText',
       description: 'Texto estilizado da marca TSiJUKEBOX com shimmer metálico',
       code: `<BrandText 
-  size={size} 
+  size={size}
+  weight={weight}
   noShimmer={noShimmer}
 />`,
       props: [
@@ -154,8 +156,15 @@ const showcaseComponents = {
           name: 'size', 
           type: 'select' as const, 
           default: 'md',
-          options: ['sm', 'md', 'lg', 'xl'],
+          options: ['sm', 'md', 'lg', 'xl', '2xl', '3xl'],
           description: 'Tamanho do texto'
+        },
+        { 
+          name: 'weight', 
+          type: 'select' as const, 
+          default: 'bold',
+          options: ['light', 'normal', 'medium', 'semibold', 'bold', 'extrabold'],
+          description: 'Peso da fonte'
         },
         { 
           name: 'noShimmer', 
@@ -167,7 +176,55 @@ const showcaseComponents = {
       renderPreview: (props: Record<string, unknown>) => (
         <BrandText 
           size={props.size as BrandTextSize}
+          weight={props.weight as BrandTextWeight}
           noShimmer={props.noShimmer as boolean}
+        />
+      ),
+    },
+    {
+      id: 'brand-tagline',
+      title: 'BrandTagline',
+      description: 'Tagline estilizada para acompanhar o nome da marca',
+      code: `<BrandTagline 
+  text={text}
+  variant={variant}
+  size={size}
+  uppercase={uppercase}
+/>`,
+      props: [
+        { 
+          name: 'text', 
+          type: 'string' as const, 
+          default: 'Enterprise Music System',
+          description: 'Texto da tagline'
+        },
+        { 
+          name: 'variant', 
+          type: 'select' as const, 
+          default: 'default',
+          options: ['default', 'subtle', 'accent', 'neon', 'gradient'],
+          description: 'Estilo visual'
+        },
+        { 
+          name: 'size', 
+          type: 'select' as const, 
+          default: 'sm',
+          options: ['xs', 'sm', 'md', 'lg'],
+          description: 'Tamanho do texto'
+        },
+        { 
+          name: 'uppercase', 
+          type: 'boolean' as const, 
+          default: true,
+          description: 'Texto em maiúsculas'
+        },
+      ],
+      renderPreview: (props: Record<string, unknown>) => (
+        <BrandTagline 
+          text={props.text as string}
+          variant={props.variant as TaglineVariant}
+          size={props.size as TaglineSize}
+          uppercase={props.uppercase as boolean}
         />
       ),
     },

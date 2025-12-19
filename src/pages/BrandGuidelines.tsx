@@ -9,7 +9,8 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { toast } from 'sonner';
 import { LogoBrand } from '@/components/ui/LogoBrand';
 import { LogoDownload } from '@/components/ui/LogoDownload';
-import { BrandText } from '@/components/ui/BrandText';
+import { BrandText, BrandTextWeight } from '@/components/ui/BrandText';
+import { BrandTagline, TaglineVariant } from '@/components/ui/BrandTagline';
 
 // Color data for the palette
 const neonColors = [
@@ -388,8 +389,75 @@ ${baseColors.map(c => `  ${c.cssVar}: ${c.hsl};`).join('\n')}
                   <p className="text-green-400">{`<BrandText />`}</p>
                   <p className="text-kiosk-text/70 mt-2">{`// Com tamanho`}</p>
                   <p className="text-green-400">{`<BrandText size="xl" />`}</p>
+                  <p className="text-kiosk-text/70 mt-2">{`// Com peso`}</p>
+                  <p className="text-green-400">{`<BrandText weight="semibold" />`}</p>
                   <p className="text-kiosk-text/70 mt-2">{`// Sem shimmer (acessibilidade)`}</p>
                   <p className="text-green-400">{`<BrandText noShimmer />`}</p>
+                </div>
+              </CardContent>
+            </Card>
+
+            {/* BrandTagline Component */}
+            <Card className="bg-kiosk-surface/30 border-cyan-500/20">
+              <CardHeader>
+                <CardTitle className="text-gold-neon flex items-center gap-2">
+                  <Type className="w-5 h-5 icon-neon-blue" />
+                  Componente BrandTagline
+                </CardTitle>
+                <CardDescription className="text-kiosk-text/60">
+                  Tagline estilizada para uso junto com BrandText em headers e footers
+                </CardDescription>
+              </CardHeader>
+              <CardContent className="space-y-6">
+                {/* Variantes de Tagline */}
+                <div className="space-y-3">
+                  <h4 className="text-sm font-medium text-kiosk-text/70">Variantes</h4>
+                  <div className="grid grid-cols-2 md:grid-cols-5 gap-4">
+                    {(['default', 'subtle', 'accent', 'neon', 'gradient'] as TaglineVariant[]).map((variant) => (
+                      <div key={variant} className="p-3 bg-kiosk-bg/50 rounded-lg text-center">
+                        <BrandTagline variant={variant} size="xs" />
+                        <Badge variant="outline" className="mt-2 text-xs">{variant}</Badge>
+                      </div>
+                    ))}
+                  </div>
+                </div>
+                
+                {/* Uso em Headers */}
+                <div className="space-y-3">
+                  <h4 className="text-sm font-medium text-kiosk-text/70">Uso em Headers</h4>
+                  <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                    <div className="p-6 bg-kiosk-bg/50 rounded-lg text-center">
+                      <BrandText size="xl" />
+                      <BrandTagline variant="subtle" size="sm" className="mt-1" />
+                    </div>
+                    <div className="p-6 bg-kiosk-bg/50 rounded-lg text-center">
+                      <BrandText size="md" weight="semibold" />
+                      <BrandTagline variant="accent" size="xs" className="mt-1" />
+                    </div>
+                  </div>
+                </div>
+                
+                {/* Pesos do BrandText */}
+                <div className="space-y-3">
+                  <h4 className="text-sm font-medium text-kiosk-text/70">Variantes de Peso (BrandText)</h4>
+                  <div className="grid grid-cols-2 md:grid-cols-3 gap-4">
+                    {(['light', 'normal', 'semibold', 'bold', 'extrabold'] as BrandTextWeight[]).map((weight) => (
+                      <div key={weight} className="p-4 bg-kiosk-bg/50 rounded-lg text-center">
+                        <BrandText size="lg" weight={weight} />
+                        <Badge variant="outline" className="mt-2 text-xs">{weight}</Badge>
+                      </div>
+                    ))}
+                  </div>
+                </div>
+
+                {/* Uso do Código */}
+                <div className="p-4 bg-kiosk-bg/80 rounded-lg font-mono text-sm space-y-2">
+                  <p className="text-cyan-400">{`import { BrandTagline, BrandWithTagline } from '@/components/ui/BrandTagline';`}</p>
+                  <Separator className="bg-kiosk-border/30 my-3" />
+                  <p className="text-kiosk-text/70">{`// Tagline standalone`}</p>
+                  <p className="text-green-400">{`<BrandTagline variant="neon" />`}</p>
+                  <p className="text-kiosk-text/70 mt-2">{`// Combo BrandText + Tagline`}</p>
+                  <p className="text-green-400">{`<BrandWithTagline brandSize="xl" taglineVariant="subtle" />`}</p>
                 </div>
               </CardContent>
             </Card>

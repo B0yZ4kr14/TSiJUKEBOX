@@ -3229,7 +3229,54 @@ body[data-gradient="true"] {
   }
 }
 
-/* Hover - reflexo metálico mais intenso */
+/* Permitir que BrandText use font-weight do parent */
+.text-brand-tsi,
+.text-brand-jukebox {
+  font-weight: inherit;
+}
+
+/* ========== BRAND TAGLINE VARIANTS ========== */
+
+/* Tagline Neon - Efeito luminoso sutil */
+.text-brand-tagline-neon {
+  color: hsl(195 80% 60%);
+  text-shadow: 
+    0 0 10px hsl(195 100% 50% / 0.4),
+    0 0 20px hsl(195 100% 50% / 0.2);
+}
+
+.dark .text-brand-tagline-neon {
+  color: hsl(195 100% 70%);
+  text-shadow: 
+    0 0 15px hsl(195 100% 55% / 0.5),
+    0 0 30px hsl(195 100% 55% / 0.3);
+}
+
+/* Tagline Gradient - Gradiente prata→dourado */
+.text-brand-tagline-gradient {
+  background: linear-gradient(
+    90deg,
+    hsl(210 20% 50%) 0%,
+    hsl(45 80% 55%) 50%,
+    hsl(210 20% 50%) 100%
+  );
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+
+.dark .text-brand-tagline-gradient {
+  background: linear-gradient(
+    90deg,
+    hsl(210 20% 70%) 0%,
+    hsl(45 100% 60%) 50%,
+    hsl(210 20% 70%) 100%
+  );
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+
 .logo-tsi-metal:hover {
   background: linear-gradient(
     180deg,

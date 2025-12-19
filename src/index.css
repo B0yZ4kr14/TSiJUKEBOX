@@ -3136,41 +3136,63 @@ body[data-gradient="true"] {
    Com suporte a dark/light mode
    ======================================== */
 
-/* Light Mode - Cores mais escuras para contraste em fundos claros */
+/* Shimmer animation for brand text */
+@keyframes text-brand-shimmer {
+  0% {
+    background-position: 200% center;
+  }
+  100% {
+    background-position: -200% center;
+  }
+}
+
+/* Light Mode - Cores mais escuras para contraste em fundos claros + shimmer */
 .text-brand-tsi {
   background: linear-gradient(
-    180deg,
+    110deg,
     hsl(210 25% 35%) 0%,
-    hsl(210 22% 28%) 50%,
-    hsl(210 25% 32%) 100%
+    hsl(210 25% 35%) 40%,
+    hsl(210 30% 55%) 50%,
+    hsl(210 25% 35%) 60%,
+    hsl(210 25% 35%) 100%
   );
+  background-size: 200% 100%;
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
   background-clip: text;
   font-weight: 700;
+  animation: text-brand-shimmer 8s ease-in-out infinite;
 }
 
 .text-brand-jukebox {
   background: linear-gradient(
-    180deg,
+    110deg,
     hsl(40 90% 35%) 0%,
-    hsl(35 85% 30%) 50%,
-    hsl(40 90% 32%) 100%
+    hsl(40 90% 35%) 40%,
+    hsl(45 95% 50%) 50%,
+    hsl(40 90% 35%) 60%,
+    hsl(40 90% 35%) 100%
   );
+  background-size: 200% 100%;
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
   background-clip: text;
   font-weight: 700;
+  animation: text-brand-shimmer 8s ease-in-out infinite;
+  animation-delay: 0.5s;
 }
 
-/* Dark Mode - Cores mais brilhantes para contraste em fundos escuros */
+/* Dark Mode - Cores mais brilhantes para contraste em fundos escuros + shimmer */
 .dark .text-brand-tsi {
   background: linear-gradient(
-    180deg,
-    hsl(210 20% 75%) 0%,
-    hsl(210 18% 60%) 50%,
+    110deg,
+    hsl(210 20% 70%) 0%,
+    hsl(210 20% 70%) 40%,
+    hsl(210 25% 85%) 50%,
+    hsl(210 20% 70%) 60%,
     hsl(210 20% 70%) 100%
   );
+  background-size: 200% 100%;
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
   background-clip: text;
@@ -3178,14 +3200,33 @@ body[data-gradient="true"] {
 
 .dark .text-brand-jukebox {
   background: linear-gradient(
-    180deg,
-    hsl(45 100% 58%) 0%,
-    hsl(38 90% 45%) 50%,
-    hsl(45 100% 52%) 100%
+    110deg,
+    hsl(45 100% 55%) 0%,
+    hsl(45 100% 55%) 40%,
+    hsl(50 100% 70%) 50%,
+    hsl(45 100% 55%) 60%,
+    hsl(45 100% 55%) 100%
   );
+  background-size: 200% 100%;
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
   background-clip: text;
+}
+
+/* Desativar shimmer quando necessário */
+.text-brand-tsi.no-shimmer,
+.text-brand-jukebox.no-shimmer {
+  animation: none;
+  background-size: 100% 100%;
+}
+
+/* Respeitar preferência de movimento reduzido */
+@media (prefers-reduced-motion: reduce) {
+  .text-brand-tsi,
+  .text-brand-jukebox {
+    animation: none;
+    background-size: 100% 100%;
+  }
 }
 
 /* Hover - reflexo metálico mais intenso */

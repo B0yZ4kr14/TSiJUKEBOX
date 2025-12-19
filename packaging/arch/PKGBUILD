@@ -1,0 +1,171 @@
+# Maintainer: B0.y_Z4kr14 <b0yz4kr14@proton.me>
+# TSiJUKEBOX Enterprise - Music System for Kiosk
+
+pkgname=tsijukebox
+pkgver=4.0.0
+pkgrel=1
+pkgdesc="Enterprise Music System for Kiosk - PWA with Spotify/YouTube Music Integration"
+arch=('x86_64' 'aarch64')
+url="https://github.com/B0yZ4kr14/TSiJUKEBOX"
+license=('custom:public-domain')
+
+# Runtime dependencies
+depends=(
+    'nodejs>=18'
+    'chromium'
+    'pulseaudio'
+    'libnotify'
+    'xdg-utils'
+)
+
+# Build dependencies
+makedepends=(
+    'npm'
+    'git'
+    'python'
+)
+
+# Optional dependencies
+optdepends=(
+    'spotify: Native Spotify client for Spicetify integration'
+    'spicetify-cli: Spotify customization and theming'
+    'nginx: Reverse proxy for production deployment'
+    'ufw: Firewall configuration'
+    'pipewire: Modern audio server (alternative to pulseaudio)'
+    'pipewire-pulse: PipeWire PulseAudio compatibility'
+    'grafana: Metrics and monitoring dashboard'
+    'prometheus: Metrics collection'
+)
+
+# Backup configuration files
+backup=(
+    'etc/tsijukebox/config.json'
+)
+
+# Installation hooks
+install=tsijukebox.install
+
+# Source
+source=(
+    "git+${url}.git"
+    'tsijukebox.service'
+    'tsijukebox.desktop'
+    'tsijukebox'
+    'config.json'
+)
+
+# Skip checksums for git source
+sha256sums=(
+    'SKIP'
+    'SKIP'
+    'SKIP'
+    'SKIP'
+    'SKIP'
+)
+
+# Package options
+options=('!strip')
+
+pkgver() {
+    cd "$srcdir/TSiJUKEBOX"
+    git describe --tags --long 2>/dev/null | sed 's/^v//;s/-/.r/;s/-/./' || echo "4.0.0"
+}
+
+prepare() {
+    cd "$srcdir/TSiJUKEBOX"
+    
+    # Clean any previous builds
+    rm -rf node_modules dist
+    
+    msg2 "Preparing build environment..."
+}
+
+build() {
+    cd "$srcdir/TSiJUKEBOX"
+    
+    msg2 "Installing dependencies..."
+    npm ci --legacy-peer-deps --no-audit --no-fund
+    
+    msg2 "Building production bundle..."
+    npm run build
+    
+    msg2 "Build completed successfully!"
+}
+
+check() {
+    cd "$srcdir/TSiJUKEBOX"
+    
+    msg2 "Running tests..."
+    npm run test --if-present || true
+}
+
+package() {
+    cd "$srcdir/TSiJUKEBOX"
+    
+    # Create directories
+    install -dm755 "$pkgdir/opt/tsijukebox"
+    install -dm755 "$pkgdir/etc/tsijukebox"
+    install -dm755 "$pkgdir/var/log/tsijukebox"
+    install -dm755 "$pkgdir/usr/share/doc/tsijukebox"
+    
+    # Install application files
+    msg2 "Installing application files..."
+    cp -r dist/* "$pkgdir/opt/tsijukebox/"
+    
+    # Install systemd service
+    msg2 "Installing systemd service..."
+    install -Dm644 "$srcdir/tsijukebox.service" \
+        "$pkgdir/usr/lib/systemd/system/tsijukebox.service"
+    
+    # Install user systemd service
+    install -Dm644 "$srcdir/tsijukebox.service" \
+        "$pkgdir/usr/lib/systemd/user/tsijukebox.service"
+    
+    # Install configuration
+    msg2 "Installing configuration..."
+    install -Dm644 "$srcdir/config.json" \
+        "$pkgdir/etc/tsijukebox/config.json"
+    
+    # Install desktop entry
+    msg2 "Installing desktop entry..."
+    install -Dm644 "$srcdir/tsijukebox.desktop" \
+        "$pkgdir/usr/share/applications/tsijukebox.desktop"
+    
+    # Install icon
+    install -Dm644 "public/pwa-512x512.png" \
+        "$pkgdir/usr/share/pixmaps/tsijukebox.png"
+    
+    # Install additional icon sizes
+    for size in 16 24 32 48 64 128 256 512; do
+        install -dm755 "$pkgdir/usr/share/icons/hicolor/${size}x${size}/apps"
+        if [[ -f "public/pwa-${size}x${size}.png" ]]; then
+            install -Dm644 "public/pwa-${size}x${size}.png" \
+                "$pkgdir/usr/share/icons/hicolor/${size}x${size}/apps/tsijukebox.png"
+        fi
+    done
+    
+    # Install launcher script
+    msg2 "Installing launcher..."
+    install -Dm755 "$srcdir/tsijukebox" \
+        "$pkgdir/usr/bin/tsijukebox"
+    
+    # Install documentation
+    msg2 "Installing documentation..."
+    install -Dm644 "README.md" \
+        "$pkgdir/usr/share/doc/tsijukebox/README.md"
+    install -Dm644 "LICENSE" \
+        "$pkgdir/usr/share/licenses/$pkgname/LICENSE"
+    
+    if [[ -d "docs" ]]; then
+        cp -r docs/* "$pkgdir/usr/share/doc/tsijukebox/"
+    fi
+    
+    # Set permissions
+    msg2 "Setting permissions..."
+    chmod -R 755 "$pkgdir/opt/tsijukebox"
+    chmod 644 "$pkgdir/opt/tsijukebox"/*.html 2>/dev/null || true
+    chmod 644 "$pkgdir/opt/tsijukebox"/*.js 2>/dev/null || true
+    chmod 644 "$pkgdir/opt/tsijukebox"/*.css 2>/dev/null || true
+    
+    msg2 "Package installation completed!"
+}

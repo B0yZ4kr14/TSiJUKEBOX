@@ -1,0 +1,63 @@
+[Unit]
+Description=TSiJUKEBOX Enterprise Music System
+Documentation=https://github.com/B0yZ4kr14/TSiJUKEBOX
+After=network-online.target sound.target graphical.target
+Wants=network-online.target
+ConditionPathExists=/opt/tsijukebox/index.html
+
+[Service]
+Type=simple
+User=kiosk
+Group=kiosk
+
+# Environment
+Environment=DISPLAY=:0
+Environment=XAUTHORITY=/home/kiosk/.Xauthority
+Environment=XDG_RUNTIME_DIR=/run/user/1000
+Environment=DBUS_SESSION_BUS_ADDRESS=unix:path=/run/user/1000/bus
+
+# Chromium kiosk mode
+ExecStartPre=/usr/bin/sleep 3
+ExecStart=/usr/bin/chromium \
+    --kiosk \
+    --app=file:///opt/tsijukebox/index.html \
+    --start-fullscreen \
+    --start-maximized \
+    --disable-translate \
+    --disable-features=TranslateUI \
+    --disable-infobars \
+    --disable-suggestions-service \
+    --disable-save-password-bubble \
+    --disable-session-crashed-bubble \
+    --disable-component-update \
+    --no-first-run \
+    --fast \
+    --fast-start \
+    --disable-background-networking \
+    --autoplay-policy=no-user-gesture-required \
+    --enable-features=OverlayScrollbar \
+    --hide-scrollbars \
+    --mute-audio=false \
+    --disable-pinch \
+    --overscroll-history-navigation=0
+
+# Restart policy
+Restart=on-failure
+RestartSec=5
+TimeoutStartSec=30
+TimeoutStopSec=10
+
+# Security
+NoNewPrivileges=true
+ProtectSystem=strict
+ProtectHome=read-only
+PrivateTmp=true
+ReadOnlyPaths=/opt/tsijukebox
+
+# Resource limits
+MemoryMax=2G
+CPUQuota=80%
+
+[Install]
+WantedBy=graphical.target
+Alias=jukebox.service

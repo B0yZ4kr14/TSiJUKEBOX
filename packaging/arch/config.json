@@ -1,0 +1,66 @@
+{
+  "kiosk_mode": true,
+  "language": "pt-BR",
+  "theme": "dark",
+  "autoplay": true,
+  "touch_enabled": true,
+  "volume": 80,
+  "audio": {
+    "output_device": "default",
+    "normalize_volume": true,
+    "crossfade_duration": 3
+  },
+  "display": {
+    "fullscreen": true,
+    "hide_cursor": true,
+    "screen_saver_timeout": 300,
+    "brightness": 100
+  },
+  "network": {
+    "offline_mode": false,
+    "sync_interval": 300,
+    "timeout": 30000
+  },
+  "integrations": {
+    "spotify": {
+      "enabled": true,
+      "auto_connect": true
+    },
+    "youtube_music": {
+      "enabled": true,
+      "auto_connect": true
+    },
+    "local_files": {
+      "enabled": true,
+      "music_directory": "/home/kiosk/Music",
+      "watch_directory": true
+    },
+    "spicetify": {
+      "enabled": false,
+      "extensions": []
+    }
+  },
+  "weather": {
+    "enabled": true,
+    "location": "auto",
+    "units": "metric",
+    "update_interval": 1800
+  },
+  "accessibility": {
+    "high_contrast": false,
+    "large_text": false,
+    "reduced_motion": false,
+    "screen_reader": false
+  },
+  "security": {
+    "require_auth": true,
+    "session_timeout": 3600,
+    "allow_guest": false
+  },
+  "logging": {
+    "level": "info",
+    "file": "/var/log/tsijukebox/app.log",
+    "max_size": "10M",
+    "max_files": 5
+  }
+}

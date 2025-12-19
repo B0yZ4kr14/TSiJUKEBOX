@@ -1,0 +1,26 @@
+[Desktop Entry]
+Version=1.0
+Type=Application
+Name=TSiJUKEBOX
+GenericName=Music System
+Comment=Enterprise Music System for Kiosk - PWA with Spotify/YouTube Music Integration
+Exec=/usr/bin/tsijukebox
+Icon=tsijukebox
+Terminal=false
+Categories=AudioVideo;Audio;Music;Player;
+Keywords=music;jukebox;kiosk;spotify;youtube;karaoke;enterprise;pwa;
+StartupNotify=true
+StartupWMClass=chromium
+
+# Actions
+Actions=kiosk;windowed;
+
+[Desktop Action kiosk]
+Name=Start in Kiosk Mode
+Exec=/usr/bin/tsijukebox --kiosk
+Icon=tsijukebox
+
+[Desktop Action windowed]
+Name=Start in Windowed Mode
+Exec=/usr/bin/tsijukebox --windowed
+Icon=tsijukebox

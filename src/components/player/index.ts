@@ -1,0 +1,20 @@
+// Player components barrel export
+export { AudioVisualizer } from './AudioVisualizer';
+export { CommandDeck } from './CommandDeck';
+export { ConnectionIndicator } from './ConnectionIndicator';
+export { DigitalClock } from './DigitalClock';
+export { FullscreenKaraoke } from './FullscreenKaraoke';
+export { KaraokeLyrics } from './KaraokeLyrics';
+export { LibraryPanel } from './LibraryPanel';
+export { LyricsDisplay } from './LyricsDisplay';
+export { NowPlaying } from './NowPlaying';
+export { PlaybackControls } from './PlaybackControls';
+export { PlayerControls } from './PlayerControls';
+export { ProgressBar } from './ProgressBar';
+export { QueuePanel } from './QueuePanel';
+export { SideInfoPanel } from './SideInfoPanel';
+export { SystemMonitor } from './SystemMonitor';
+export { UserBadge } from './UserBadge';
+export { VolumeSlider } from './VolumeSlider';
+export { WeatherForecastChart } from './WeatherForecastChart';
+export { WeatherWidget } from './WeatherWidget';

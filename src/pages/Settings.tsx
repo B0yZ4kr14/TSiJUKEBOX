@@ -1,5 +1,5 @@
-import { useState, useEffect } from 'react';
-import { Link, useSearchParams } from 'react-router-dom';
+import { useState } from 'react';
+import { Link } from 'react-router-dom';
 import { motion, AnimatePresence } from 'framer-motion';
 import { ArrowLeft, Monitor, TestTube, Music, ExternalLink, LogOut, Check, AlertCircle, Eye, EyeOff, Download } from 'lucide-react';
 import { KioskLayout } from '@/components/layout/KioskLayout';
@@ -13,16 +13,13 @@ import { LogoBrand } from '@/components/ui/LogoBrand';
 import { LogoDownload } from '@/components/ui/LogoDownload';
 import { BrandText } from '@/components/ui/BrandText';
 import { useSettings } from '@/contexts/SettingsContext';
-import { spotifyClient } from '@/lib/api/spotify';
-import { youtubeMusicClient } from '@/lib/api/youtubeMusic';
+import { useSettingsOAuth, useSettingsNavigation } from '@/hooks/settings';
 import { toast } from 'sonner';
 import { 
   SettingsSection, 
   ThemeSection, 
   CloudConnectionSection, 
   BackendConnectionSection, 
-  UnifiedDatabaseSection,
-  UnifiedBackupSection,
   AdvancedDatabaseSection,
   ClientsManagementSection,
   UserManagementSection, 
@@ -38,13 +35,14 @@ import {
   LocalMusicSection,
   StorjSection
 } from '@/components/settings';
-import { SettingsSidebar, SettingsCategory } from '@/components/settings/SettingsSidebar';
+import { BackupManager } from '@/components/settings/backup';
+import { SettingsSidebar } from '@/components/settings/SettingsSidebar';
 import { SettingsDashboard } from '@/components/settings/SettingsDashboard';
 import { SettingsBreadcrumb } from '@/components/settings/SettingsBreadcrumb';
 
 export default function Settings() {
-  const [searchParams, setSearchParams] = useSearchParams();
-  const [activeCategory, setActiveCategory] = useState<SettingsCategory>('dashboard');
+  const { activeCategory, setActiveCategory, categoryTitles } = useSettingsNavigation();
+  const { isConnecting, handleSpotifyConnect, handleSpotifyDisconnect } = useSettingsOAuth();
   
   const {
     isDemoMode,
@@ -57,94 +55,11 @@ export default function Settings() {
     setPollingInterval,
     spotify,
     setSpotifyCredentials,
-    setSpotifyTokens,
-    setSpotifyUser,
-    clearSpotifyAuth,
-    setYouTubeMusicTokens,
-    setYouTubeMusicUser,
   } = useSettings();
 
   const [localClientId, setLocalClientId] = useState(spotify.clientId);
   const [localClientSecret, setLocalClientSecret] = useState(spotify.clientSecret);
   const [showClientSecret, setShowClientSecret] = useState(false);
-  const [isConnecting, setIsConnecting] = useState(false);
-
-  // Persist active category
-  useEffect(() => {
-    const saved = localStorage.getItem('settings_active_category');
-    if (saved && ['dashboard', 'connections', 'data', 'system', 'appearance', 'security', 'integrations'].includes(saved)) {
-      setActiveCategory(saved as SettingsCategory);
-    }
-  }, []);
-
-  useEffect(() => {
-    localStorage.setItem('settings_active_category', activeCategory);
-  }, [activeCategory]);
-
-  // Handle OAuth callback (Spotify and YouTube Music)
-  useEffect(() => {
-    const code = searchParams.get('spotify_code');
-    const ytCode = searchParams.get('code');
-    const state = searchParams.get('state');
-    const error = searchParams.get('spotify_error') || searchParams.get('error');
-
-    if (error) {
-      toast.error(`Erro na autenticação: ${error}`);
-      setSearchParams({});
-      return;
-    }
-
-    // Spotify OAuth callback
-    if (code && spotify.clientId && spotify.clientSecret) {
-      handleSpotifyCallback(code);
-    }
-
-    // YouTube Music OAuth callback
-    if (ytCode && state === 'youtube-music-oauth') {
-      handleYouTubeMusicCallback(ytCode);
-    }
-  }, [searchParams, spotify.clientId, spotify.clientSecret]);
-
-  const handleSpotifyCallback = async (code: string) => {
-    setIsConnecting(true);
-    try {
-      const tokens = await spotifyClient.exchangeCode(code);
-      setSpotifyTokens(tokens);
-      
-      const user = await spotifyClient.validateToken();
-      if (user) {
-        setSpotifyUser(user);
-        toast.success(`Conectado como ${user.displayName}`);
-      }
-    } catch (error) {
-      if (import.meta.env.DEV) console.error('Failed to exchange code:', error);
-      toast.error('Falha ao conectar com Spotify');
-    } finally {
-      setIsConnecting(false);
-      setSearchParams({});
-    }
-  };
-
-  const handleYouTubeMusicCallback = async (code: string) => {
-    setIsConnecting(true);
-    try {
-      const redirectUri = `${window.location.origin}/settings`;
-      const tokens = await youtubeMusicClient.exchangeCode(code, redirectUri);
-      setYouTubeMusicTokens(tokens);
-      
-      const user = await youtubeMusicClient.getCurrentUser();
-      if (user) {
-        setYouTubeMusicUser(user);
-        toast.success(`YouTube Music conectado como ${user.name}`);
-      }
-    } catch (error) {
-      if (import.meta.env.DEV) console.error('Failed to exchange YouTube Music code:', error);
-      toast.error('Falha ao conectar com YouTube Music');
-    } finally {
-      setIsConnecting(false);
-      setSearchParams({});
-    }
-  };
 
   const handleDemoModeToggle = (checked: boolean) => {
     setDemoMode(checked);
@@ -160,40 +75,7 @@ export default function Settings() {
     toast.success('Credenciais Spotify salvas');
   };
 
-  const handleSpotifyConnect = async () => {
-    if (!spotify.clientId || !spotify.clientSecret) {
-      toast.error('Configure as credenciais primeiro');
-      return;
-    }
-
-    setIsConnecting(true);
-    try {
-      const { authUrl } = await spotifyClient.getAuthUrl();
-      window.location.href = authUrl;
-    } catch (error) {
-      if (import.meta.env.DEV) console.error('Failed to get auth URL:', error);
-      toast.error('Falha ao iniciar autenticação');
-      setIsConnecting(false);
-    }
-  };
-
-  const handleSpotifyDisconnect = () => {
-    clearSpotifyAuth();
-    toast.success('Desconectado do Spotify');
-  };
-
   const credentialsChanged = localClientId !== spotify.clientId || localClientSecret !== spotify.clientSecret;
-
-  // Category titles for header
-  const categoryTitles: Record<SettingsCategory, string> = {
-    dashboard: 'Dashboard',
-    connections: 'Conexões',
-    data: 'Dados & Backup',
-    system: 'Sistema',
-    appearance: 'Aparência',
-    security: 'Segurança & Usuários',
-    integrations: 'Integrações',
-  };
 
   // Render content based on active category
   const renderCategoryContent = () => {
@@ -221,7 +103,12 @@ export default function Settings() {
         return (
           <>
             <AdvancedDatabaseSection isDemoMode={isDemoMode} />
-            <UnifiedBackupSection isDemoMode={isDemoMode} />
+            <BackupManager 
+              providers={['local', 'cloud', 'distributed']} 
+              isDemoMode={isDemoMode}
+              showScheduler={true}
+              showHistory={true}
+            />
             <ClientsManagementSection />
           </>
         );

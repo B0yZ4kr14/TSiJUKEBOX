@@ -17,3 +17,6 @@ export * from './common';
 
 // Page hooks
 export * from './pages';
+
+// Settings hooks
+export * from './settings';

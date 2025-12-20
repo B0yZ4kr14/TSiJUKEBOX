@@ -33,7 +33,9 @@ import {
   SpicetifySection,
   YouTubeMusicSection,
   LocalMusicSection,
-  StorjSection
+  StorjSection,
+  GitHubSyncStatus,
+  CodeScanSection
 } from '@/components/settings';
 import { VolumeNormalizationSection } from '@/components/settings/VolumeNormalizationSection';
 import { VoiceControlSection } from '@/components/settings/VoiceControlSection';
@@ -227,6 +229,8 @@ export default function Settings() {
             <UserManagementSection />
             <KeysManagementSection />
             <AuthProviderSection />
+            <GitHubSyncStatus />
+            <CodeScanSection />
           </>
         );
 

@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react';
-import { Key, Shield, FileKey, FolderKey, Save, CheckCircle2, AlertTriangle, RefreshCw, Github, Loader2, KeyRound } from 'lucide-react';
+import { Key, Shield, FileKey, FolderKey, Save, CheckCircle2, AlertTriangle, RefreshCw, Github, Loader2, KeyRound, Plus, Trash2 } from 'lucide-react';
 import { SettingsSection } from './SettingsSection';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
@@ -8,8 +8,10 @@ import { Switch } from '@/components/ui/switch';
 import { Badge } from '@/components/ui/badge';
 import { Collapsible, CollapsibleContent, CollapsibleTrigger } from '@/components/ui/collapsible';
 import { ScrollArea } from '@/components/ui/scroll-area';
+import { AlertDialog, AlertDialogAction, AlertDialogCancel, AlertDialogContent, AlertDialogDescription, AlertDialogFooter, AlertDialogHeader, AlertDialogTitle, AlertDialogTrigger } from '@/components/ui/alert-dialog';
 import { toast } from 'sonner';
 import { supabase } from '@/integrations/supabase/client';
+import { CreateDeployKeyModal } from './CreateDeployKeyModal';
 
 interface KeysConfig {
   sshKeyPath: string;
@@ -64,6 +66,10 @@ export function KeysManagementSection() {
   const [gpgKeys, setGpgKeys] = useState<GitHubGPGKey[]>([]);
   const [isLoadingKeys, setIsLoadingKeys] = useState(false);
   const [keysError, setKeysError] = useState<string | null>(null);
+  
+  // Modal state
+  const [showCreateModal, setShowCreateModal] = useState(false);
+  const [deletingKeyId, setDeletingKeyId] = useState<number | null>(null);
 
   const updateConfig = (key: keyof KeysConfig, value: string | boolean) => {
     setConfig(prev => ({ ...prev, [key]: value }));
@@ -123,6 +129,26 @@ export function KeysManagementSection() {
     }
   };
 
+  const handleDeleteDeployKey = async (keyId: number) => {
+    setDeletingKeyId(keyId);
+    try {
+      const response = await supabase.functions.invoke('github-repo', {
+        body: { action: 'delete-deploy-key', keyId }
+      });
+
+      if (!response.data?.success) {
+        throw new Error(response.data?.error || 'Failed to delete');
+      }
+
+      setDeployKeys(prev => prev.filter(k => k.id !== keyId));
+      toast.success('Deploy key removida!');
+    } catch (error) {
+      toast.error('Erro ao remover deploy key');
+    } finally {
+      setDeletingKeyId(null);
+    }
+  };
+
   const formatDate = (dateString: string) => {
     return new Date(dateString).toLocaleDateString('pt-BR', {
       day: '2-digit',
@@ -178,19 +204,25 @@ export function KeysManagementSection() {
             </div>
           </CollapsibleTrigger>
           <CollapsibleContent className="pt-4 space-y-4">
-            <Button 
-              onClick={fetchGitHubKeys} 
-              disabled={isLoadingKeys}
-              variant="outline"
-              className="w-full"
-            >
-              {isLoadingKeys ? (
-                <Loader2 className="w-4 h-4 mr-2 animate-spin" />
-              ) : (
-                <RefreshCw className="w-4 h-4 mr-2" />
-              )}
-              {isLoadingKeys ? 'Carregando...' : 'Carregar Chaves do GitHub'}
-            </Button>
+            <div className="flex gap-2">
+              <Button 
+                onClick={fetchGitHubKeys} 
+                disabled={isLoadingKeys}
+                variant="outline"
+                className="flex-1"
+              >
+                {isLoadingKeys ? (
+                  <Loader2 className="w-4 h-4 mr-2 animate-spin" />
+                ) : (
+                  <RefreshCw className="w-4 h-4 mr-2" />
+                )}
+                {isLoadingKeys ? 'Carregando...' : 'Carregar Chaves'}
+              </Button>
+              <Button onClick={() => setShowCreateModal(true)} variant="default">
+                <Plus className="w-4 h-4 mr-2" />
+                Adicionar Deploy Key
+              </Button>
+            </div>
 
             {keysError && (
               <div className="p-3 rounded-lg bg-destructive/10 border border-destructive/30 text-destructive text-sm">
@@ -211,9 +243,32 @@ export function KeysManagementSection() {
                       <div key={key.id} className="p-2 rounded bg-kiosk-background/30 border border-kiosk-border">
                         <div className="flex items-center justify-between">
                           <span className="text-sm font-medium">{key.title}</span>
-                          <Badge variant={key.read_only ? 'secondary' : 'default'} className="text-xs">
-                            {key.read_only ? 'Read-only' : 'Read/Write'}
-                          </Badge>
+                          <div className="flex items-center gap-2">
+                            <Badge variant={key.read_only ? 'secondary' : 'default'} className="text-xs">
+                              {key.read_only ? 'Read-only' : 'Read/Write'}
+                            </Badge>
+                            <AlertDialog>
+                              <AlertDialogTrigger asChild>
+                                <Button variant="ghost" size="icon" className="h-6 w-6 text-destructive hover:text-destructive">
+                                  {deletingKeyId === key.id ? <Loader2 className="w-3 h-3 animate-spin" /> : <Trash2 className="w-3 h-3" />}
+                                </Button>
+                              </AlertDialogTrigger>
+                              <AlertDialogContent>
+                                <AlertDialogHeader>
+                                  <AlertDialogTitle>Remover Deploy Key?</AlertDialogTitle>
+                                  <AlertDialogDescription>
+                                    Esta ação não pode ser desfeita. A chave "{key.title}" será removida do repositório.
+                                  </AlertDialogDescription>
+                                </AlertDialogHeader>
+                                <AlertDialogFooter>
+                                  <AlertDialogCancel>Cancelar</AlertDialogCancel>
+                                  <AlertDialogAction onClick={() => handleDeleteDeployKey(key.id)} className="bg-destructive text-destructive-foreground hover:bg-destructive/90">
+                                    Remover
+                                  </AlertDialogAction>
+                                </AlertDialogFooter>
+                              </AlertDialogContent>
+                            </AlertDialog>
+                          </div>
                         </div>
                         <p className="text-xs text-muted-foreground font-mono mt-1">
                           {truncateKey(key.key)}
@@ -451,6 +506,12 @@ export function KeysManagementSection() {
           {isSaving ? 'Salvando...' : 'Salvar Configuração'}
         </Button>
       </div>
+
+      <CreateDeployKeyModal
+        open={showCreateModal}
+        onOpenChange={setShowCreateModal}
+        onSuccess={fetchGitHubKeys}
+      />
     </SettingsSection>
   );
 }

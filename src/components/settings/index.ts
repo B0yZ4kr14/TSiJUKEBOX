@@ -31,6 +31,9 @@ export { YouTubeMusicSection } from './YouTubeMusicSection';
 export { MusicIntegrationsSection } from './MusicIntegrationsSection';
 export { LocalMusicSection } from './LocalMusicSection';
 export { StorjSection } from './StorjSection';
+export { GitHubSyncStatus } from './GitHubSyncStatus';
+export { CreateDeployKeyModal } from './CreateDeployKeyModal';
+export { CodeScanSection } from './CodeScanSection';
 
 // New consolidated backup module
 export * from './backup';

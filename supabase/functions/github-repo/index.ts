@@ -16,11 +16,14 @@ serve(async (req) => {
       throw new Error('GITHUB_ACCESS_TOKEN not configured');
     }
 
-    const { path = '', action = 'contents' } = await req.json();
+    const body = await req.json();
+    const { path = '', action = 'contents', title, key, read_only, keyId } = body;
     const repo = 'B0yZ4kr14/TSiJUKEBOX';
     
     let url = '';
     let accept = 'application/vnd.github.v3+json';
+    let method = 'GET';
+    let requestBody: string | null = null;
     
     switch (action) {
       case 'contents':
@@ -39,6 +42,12 @@ serve(async (req) => {
       case 'commits':
         url = `https://api.github.com/repos/${repo}/commits?per_page=10`;
         break;
+      case 'last-commit':
+        url = `https://api.github.com/repos/${repo}/commits?per_page=1`;
+        break;
+      case 'sync-status':
+        url = `https://api.github.com/repos/${repo}`;
+        break;
       case 'releases':
         url = `https://api.github.com/repos/${repo}/releases`;
         break;
@@ -54,27 +63,48 @@ serve(async (req) => {
       case 'deploy-keys':
         url = `https://api.github.com/repos/${repo}/keys`;
         break;
+      case 'create-deploy-key':
+        url = `https://api.github.com/repos/${repo}/keys`;
+        method = 'POST';
+        requestBody = JSON.stringify({ title, key, read_only: read_only ?? true });
+        break;
+      case 'delete-deploy-key':
+        if (!keyId) throw new Error('keyId is required for delete-deploy-key');
+        url = `https://api.github.com/repos/${repo}/keys/${keyId}`;
+        method = 'DELETE';
+        break;
       case 'gpg-keys':
-        // GPG keys are per-user, not per-repo
         url = `https://api.github.com/user/gpg_keys`;
         break;
       case 'ssh-keys':
-        // SSH keys are per-user
         url = `https://api.github.com/user/keys`;
         break;
       default:
         url = `https://api.github.com/repos/${repo}/contents/${path}`;
     }
 
-    console.log(`[github-repo] Action: ${action}, Path: ${path}, URL: ${url}`);
+    console.log(`[github-repo] Action: ${action}, Method: ${method}, URL: ${url}`);
 
-    const response = await fetch(url, {
+    const fetchOptions: RequestInit = {
+      method,
       headers: {
         'Authorization': `Bearer ${GITHUB_TOKEN}`,
         'Accept': accept,
-        'User-Agent': 'TSiJUKEBOX-App'
-      }
-    });
+        'User-Agent': 'TSiJUKEBOX-App',
+        ...(requestBody && { 'Content-Type': 'application/json' }),
+      },
+      ...(requestBody && { body: requestBody }),
+    };
+
+    const response = await fetch(url, fetchOptions);
+
+    // DELETE returns 204 No Content on success
+    if (method === 'DELETE' && response.status === 204) {
+      console.log(`[github-repo] Success: ${action} (deleted)`);
+      return new Response(JSON.stringify({ success: true, data: null }), {
+        headers: { ...corsHeaders, 'Content-Type': 'application/json' },
+      });
+    }
 
     if (!response.ok) {
       const errorText = await response.text();

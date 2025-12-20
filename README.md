@@ -95,13 +95,13 @@ curl -fsSL https://raw.githubusercontent.com/B0yZ4kr14/TSiJUKEBOX/main/scripts/i
 
 ### 🎬 Demo em Ação
 
-<img src="https://via.placeholder.com/800x300/0d0d1a/00ff88?text=🎬+GIF+Animado+-+Navegação+Completa" alt="Demo GIF" width="800">
+<img src="public/screenshots/demo-animated.svg" alt="Demo Animado" width="800">
 
-*Veja o sistema em funcionamento*
+*Navegação animada pelo sistema*
 
 </div>
 
-> 💡 **Dica:** Substitua os placeholders acima por screenshots reais do seu sistema usando:
+> 💡 **Dica:** Execute a edge function `screenshot-service` para gerar screenshots reais:
 > ```bash
 > # Capture screenshots e salve em public/screenshots/
 > scrot -d 3 public/screenshots/dashboard.png

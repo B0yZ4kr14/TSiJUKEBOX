@@ -3,16 +3,18 @@ import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
 import { ScrollArea } from '@/components/ui/scroll-area';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
+import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { 
   Download, Trash2, CheckCircle2, XCircle, Clock, 
-  TrendingUp, BarChart3, Filter, FileJson, FileSpreadsheet
+  TrendingUp, BarChart3, Filter, FileJson, FileSpreadsheet, List, PieChart
 } from 'lucide-react';
 import { useVoiceCommandHistory, VoiceCommandHistoryEntry } from '@/hooks/player/useVoiceCommandHistory';
+import { VoiceAnalyticsCharts } from './VoiceAnalyticsCharts';
 import { motion, AnimatePresence } from 'framer-motion';
 import { toast } from 'sonner';
 
 export function VoiceCommandHistory() {
-  const { history, stats, clearHistory, exportAsJSON, exportAsCSV, getFilteredHistory } = useVoiceCommandHistory();
+  const { history, stats, analytics, clearHistory, exportAsJSON, exportAsCSV, getFilteredHistory } = useVoiceCommandHistory();
   const [filterAction, setFilterAction] = useState<string>('all');
   const [filterStatus, setFilterStatus] = useState<string>('all');
 
@@ -131,63 +133,83 @@ export function VoiceCommandHistory() {
         </div>
       )}
 
-      {/* Filters and Actions */}
-      <div className="flex flex-wrap items-center gap-2">
-        <div className="flex items-center gap-2 flex-1">
-          <Filter className="h-4 w-4 text-muted-foreground" />
-          <Select value={filterAction} onValueChange={setFilterAction}>
-            <SelectTrigger className="w-32 h-8 text-xs bg-kiosk-background border-kiosk-border">
-              <SelectValue placeholder="Ação" />
-            </SelectTrigger>
-            <SelectContent>
-              <SelectItem value="all">Todas ações</SelectItem>
-              {uniqueActions.map(action => (
-                <SelectItem key={action} value={action!}>{action}</SelectItem>
-              ))}
-            </SelectContent>
-          </Select>
-          
-          <Select value={filterStatus} onValueChange={setFilterStatus}>
-            <SelectTrigger className="w-28 h-8 text-xs bg-kiosk-background border-kiosk-border">
-              <SelectValue placeholder="Status" />
-            </SelectTrigger>
-            <SelectContent>
-              <SelectItem value="all">Todos</SelectItem>
-              <SelectItem value="success">Sucesso</SelectItem>
-              <SelectItem value="failed">Falha</SelectItem>
-            </SelectContent>
-          </Select>
+      {/* Tabs for List/Charts */}
+      <Tabs defaultValue="list" className="w-full">
+        <div className="flex items-center justify-between gap-2 flex-wrap">
+          <TabsList className="bg-kiosk-background/50">
+            <TabsTrigger value="list" className="text-xs gap-1.5">
+              <List className="h-3.5 w-3.5" />
+              Lista
+            </TabsTrigger>
+            <TabsTrigger value="charts" className="text-xs gap-1.5">
+              <PieChart className="h-3.5 w-3.5" />
+              Gráficos
+            </TabsTrigger>
+          </TabsList>
+
+          <div className="flex gap-1">
+            <Button variant="ghost" size="icon" className="h-8 w-8" onClick={handleExportJSON} title="Exportar JSON">
+              <FileJson className="h-4 w-4" />
+            </Button>
+            <Button variant="ghost" size="icon" className="h-8 w-8" onClick={handleExportCSV} title="Exportar CSV">
+              <FileSpreadsheet className="h-4 w-4" />
+            </Button>
+            <Button variant="ghost" size="icon" className="h-8 w-8 text-red-500 hover:text-red-600" onClick={handleClearHistory} title="Limpar histórico">
+              <Trash2 className="h-4 w-4" />
+            </Button>
+          </div>
         </div>
 
-        <div className="flex gap-1">
-          <Button variant="ghost" size="icon" className="h-8 w-8" onClick={handleExportJSON} title="Exportar JSON">
-            <FileJson className="h-4 w-4" />
-          </Button>
-          <Button variant="ghost" size="icon" className="h-8 w-8" onClick={handleExportCSV} title="Exportar CSV">
-            <FileSpreadsheet className="h-4 w-4" />
-          </Button>
-          <Button variant="ghost" size="icon" className="h-8 w-8 text-red-500 hover:text-red-600" onClick={handleClearHistory} title="Limpar histórico">
-            <Trash2 className="h-4 w-4" />
-          </Button>
-        </div>
-      </div>
+        <TabsContent value="list" className="mt-4">
+          {/* Filters */}
+          <div className="flex items-center gap-2 mb-3">
+            <Filter className="h-4 w-4 text-muted-foreground" />
+            <Select value={filterAction} onValueChange={setFilterAction}>
+              <SelectTrigger className="w-32 h-8 text-xs bg-kiosk-background border-kiosk-border">
+                <SelectValue placeholder="Ação" />
+              </SelectTrigger>
+              <SelectContent>
+                <SelectItem value="all">Todas ações</SelectItem>
+                {uniqueActions.map(action => (
+                  <SelectItem key={action} value={action!}>{action}</SelectItem>
+                ))}
+              </SelectContent>
+            </Select>
+            
+            <Select value={filterStatus} onValueChange={setFilterStatus}>
+              <SelectTrigger className="w-28 h-8 text-xs bg-kiosk-background border-kiosk-border">
+                <SelectValue placeholder="Status" />
+              </SelectTrigger>
+              <SelectContent>
+                <SelectItem value="all">Todos</SelectItem>
+                <SelectItem value="success">Sucesso</SelectItem>
+                <SelectItem value="failed">Falha</SelectItem>
+              </SelectContent>
+            </Select>
+          </div>
 
-      {/* History List */}
-      <ScrollArea className="h-64 rounded-lg border border-kiosk-border">
-        <div className="p-2 space-y-2">
-          <AnimatePresence mode="popLayout">
-            {filteredHistory.map((entry, index) => (
-              <HistoryEntryCard key={entry.id} entry={entry} index={index} />
-            ))}
-          </AnimatePresence>
-          
-          {filteredHistory.length === 0 && (
-            <p className="text-center text-sm text-muted-foreground py-4">
-              Nenhum resultado para os filtros selecionados
-            </p>
-          )}
-        </div>
-      </ScrollArea>
+          {/* History List */}
+          <ScrollArea className="h-64 rounded-lg border border-kiosk-border">
+            <div className="p-2 space-y-2">
+              <AnimatePresence mode="popLayout">
+                {filteredHistory.map((entry, index) => (
+                  <HistoryEntryCard key={entry.id} entry={entry} index={index} />
+                ))}
+              </AnimatePresence>
+              
+              {filteredHistory.length === 0 && (
+                <p className="text-center text-sm text-muted-foreground py-4">
+                  Nenhum resultado para os filtros selecionados
+                </p>
+              )}
+            </div>
+          </ScrollArea>
+        </TabsContent>
+
+        <TabsContent value="charts" className="mt-4">
+          <VoiceAnalyticsCharts analytics={analytics} />
+        </TabsContent>
+      </Tabs>
     </div>
   );
 }

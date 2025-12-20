@@ -1,11 +1,15 @@
 import { useState, useEffect } from 'react';
-import { Key, Shield, FileKey, FolderKey, Save, CheckCircle2, AlertTriangle } from 'lucide-react';
+import { Key, Shield, FileKey, FolderKey, Save, CheckCircle2, AlertTriangle, RefreshCw, Github, Loader2, KeyRound } from 'lucide-react';
 import { SettingsSection } from './SettingsSection';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { Button } from '@/components/ui/button';
 import { Switch } from '@/components/ui/switch';
+import { Badge } from '@/components/ui/badge';
+import { Collapsible, CollapsibleContent, CollapsibleTrigger } from '@/components/ui/collapsible';
+import { ScrollArea } from '@/components/ui/scroll-area';
 import { toast } from 'sonner';
+import { supabase } from '@/integrations/supabase/client';
 
 interface KeysConfig {
   sshKeyPath: string;
@@ -13,6 +17,24 @@ interface KeysConfig {
   gpgKeyId: string;
   gpgKeyPath: string;
   useSSHAgent: boolean;
+}
+
+interface GitHubKey {
+  id: number;
+  key: string;
+  title: string;
+  created_at: string;
+  read_only?: boolean;
+  verified?: boolean;
+}
+
+interface GitHubGPGKey {
+  id: number;
+  key_id: string;
+  name: string;
+  emails: { email: string; verified: boolean }[];
+  created_at: string;
+  expires_at: string | null;
 }
 
 const defaultConfig: KeysConfig = {
@@ -35,6 +57,13 @@ export function KeysManagementSection() {
     }
   });
   const [isSaving, setIsSaving] = useState(false);
+  
+  // GitHub keys state
+  const [deployKeys, setDeployKeys] = useState<GitHubKey[]>([]);
+  const [sshKeys, setSshKeys] = useState<GitHubKey[]>([]);
+  const [gpgKeys, setGpgKeys] = useState<GitHubGPGKey[]>([]);
+  const [isLoadingKeys, setIsLoadingKeys] = useState(false);
+  const [keysError, setKeysError] = useState<string | null>(null);
 
   const updateConfig = (key: keyof KeysConfig, value: string | boolean) => {
     setConfig(prev => ({ ...prev, [key]: value }));
@@ -50,6 +79,61 @@ export function KeysManagementSection() {
     } finally {
       setIsSaving(false);
     }
+  };
+
+  const fetchGitHubKeys = async () => {
+    setIsLoadingKeys(true);
+    setKeysError(null);
+    
+    try {
+      // Fetch deploy keys
+      const deployKeysResponse = await supabase.functions.invoke('github-repo', {
+        body: { action: 'deploy-keys' }
+      });
+      
+      if (deployKeysResponse.data?.success) {
+        setDeployKeys(deployKeysResponse.data.data || []);
+      }
+
+      // Fetch user SSH keys
+      const sshKeysResponse = await supabase.functions.invoke('github-repo', {
+        body: { action: 'ssh-keys' }
+      });
+      
+      if (sshKeysResponse.data?.success) {
+        setSshKeys(sshKeysResponse.data.data || []);
+      }
+
+      // Fetch GPG keys
+      const gpgKeysResponse = await supabase.functions.invoke('github-repo', {
+        body: { action: 'gpg-keys' }
+      });
+      
+      if (gpgKeysResponse.data?.success) {
+        setGpgKeys(gpgKeysResponse.data.data || []);
+      }
+
+      toast.success('Chaves do GitHub carregadas');
+    } catch (error) {
+      console.error('Error fetching GitHub keys:', error);
+      setKeysError('Erro ao carregar chaves do GitHub');
+      toast.error('Erro ao carregar chaves do GitHub');
+    } finally {
+      setIsLoadingKeys(false);
+    }
+  };
+
+  const formatDate = (dateString: string) => {
+    return new Date(dateString).toLocaleDateString('pt-BR', {
+      day: '2-digit',
+      month: '2-digit',
+      year: 'numeric'
+    });
+  };
+
+  const truncateKey = (key: string) => {
+    if (key.length <= 50) return key;
+    return `${key.substring(0, 25)}...${key.substring(key.length - 20)}`;
   };
 
   const instructions = {
@@ -78,11 +162,160 @@ export function KeysManagementSection() {
       delay={0.25}
     >
       <div className="space-y-6" data-tour="keys-management">
+        {/* GitHub Keys Section */}
+        <Collapsible defaultOpen={false}>
+          <CollapsibleTrigger className="flex items-center justify-between w-full p-3 rounded-lg bg-kiosk-background/50 border border-kiosk-border hover:bg-kiosk-background/70 transition-colors">
+            <div className="flex items-center gap-2">
+              <Github className="w-4 h-4 text-kiosk-primary" />
+              <span className="font-medium text-label-yellow">Chaves do GitHub</span>
+            </div>
+            <div className="flex items-center gap-2">
+              {(deployKeys.length > 0 || sshKeys.length > 0 || gpgKeys.length > 0) && (
+                <Badge variant="secondary" className="text-xs">
+                  {deployKeys.length + sshKeys.length + gpgKeys.length} chaves
+                </Badge>
+              )}
+            </div>
+          </CollapsibleTrigger>
+          <CollapsibleContent className="pt-4 space-y-4">
+            <Button 
+              onClick={fetchGitHubKeys} 
+              disabled={isLoadingKeys}
+              variant="outline"
+              className="w-full"
+            >
+              {isLoadingKeys ? (
+                <Loader2 className="w-4 h-4 mr-2 animate-spin" />
+              ) : (
+                <RefreshCw className="w-4 h-4 mr-2" />
+              )}
+              {isLoadingKeys ? 'Carregando...' : 'Carregar Chaves do GitHub'}
+            </Button>
+
+            {keysError && (
+              <div className="p-3 rounded-lg bg-destructive/10 border border-destructive/30 text-destructive text-sm">
+                {keysError}
+              </div>
+            )}
+
+            {/* Deploy Keys */}
+            {deployKeys.length > 0 && (
+              <div className="space-y-2">
+                <div className="flex items-center gap-2 text-sm font-medium text-label-yellow">
+                  <KeyRound className="w-4 h-4" />
+                  Deploy Keys ({deployKeys.length})
+                </div>
+                <ScrollArea className="h-32">
+                  <div className="space-y-2">
+                    {deployKeys.map(key => (
+                      <div key={key.id} className="p-2 rounded bg-kiosk-background/30 border border-kiosk-border">
+                        <div className="flex items-center justify-between">
+                          <span className="text-sm font-medium">{key.title}</span>
+                          <Badge variant={key.read_only ? 'secondary' : 'default'} className="text-xs">
+                            {key.read_only ? 'Read-only' : 'Read/Write'}
+                          </Badge>
+                        </div>
+                        <p className="text-xs text-muted-foreground font-mono mt-1">
+                          {truncateKey(key.key)}
+                        </p>
+                        <p className="text-xs text-muted-foreground mt-1">
+                          Criada em: {formatDate(key.created_at)}
+                        </p>
+                      </div>
+                    ))}
+                  </div>
+                </ScrollArea>
+              </div>
+            )}
+
+            {/* SSH Keys */}
+            {sshKeys.length > 0 && (
+              <div className="space-y-2">
+                <div className="flex items-center gap-2 text-sm font-medium text-label-yellow">
+                  <FileKey className="w-4 h-4" />
+                  SSH Keys ({sshKeys.length})
+                </div>
+                <ScrollArea className="h-32">
+                  <div className="space-y-2">
+                    {sshKeys.map(key => (
+                      <div key={key.id} className="p-2 rounded bg-kiosk-background/30 border border-kiosk-border">
+                        <div className="flex items-center justify-between">
+                          <span className="text-sm font-medium">{key.title}</span>
+                          {key.verified && (
+                            <Badge variant="default" className="text-xs bg-green-600">
+                              <CheckCircle2 className="w-3 h-3 mr-1" />
+                              Verificada
+                            </Badge>
+                          )}
+                        </div>
+                        <p className="text-xs text-muted-foreground font-mono mt-1">
+                          {truncateKey(key.key)}
+                        </p>
+                        <p className="text-xs text-muted-foreground mt-1">
+                          Criada em: {formatDate(key.created_at)}
+                        </p>
+                      </div>
+                    ))}
+                  </div>
+                </ScrollArea>
+              </div>
+            )}
+
+            {/* GPG Keys */}
+            {gpgKeys.length > 0 && (
+              <div className="space-y-2">
+                <div className="flex items-center gap-2 text-sm font-medium text-label-yellow">
+                  <Shield className="w-4 h-4" />
+                  GPG Keys ({gpgKeys.length})
+                </div>
+                <ScrollArea className="h-32">
+                  <div className="space-y-2">
+                    {gpgKeys.map(key => (
+                      <div key={key.id} className="p-2 rounded bg-kiosk-background/30 border border-kiosk-border">
+                        <div className="flex items-center justify-between">
+                          <span className="text-sm font-medium">{key.name || key.key_id}</span>
+                          {key.expires_at && (
+                            <Badge variant="outline" className="text-xs">
+                              Expira: {formatDate(key.expires_at)}
+                            </Badge>
+                          )}
+                        </div>
+                        <p className="text-xs text-muted-foreground font-mono mt-1">
+                          ID: {key.key_id}
+                        </p>
+                        {key.emails?.length > 0 && (
+                          <div className="flex flex-wrap gap-1 mt-1">
+                            {key.emails.slice(0, 2).map(email => (
+                              <Badge key={email.email} variant="secondary" className="text-xs">
+                                {email.email}
+                                {email.verified && <CheckCircle2 className="w-2.5 h-2.5 ml-1" />}
+                              </Badge>
+                            ))}
+                          </div>
+                        )}
+                        <p className="text-xs text-muted-foreground mt-1">
+                          Criada em: {formatDate(key.created_at)}
+                        </p>
+                      </div>
+                    ))}
+                  </div>
+                </ScrollArea>
+              </div>
+            )}
+
+            {!isLoadingKeys && deployKeys.length === 0 && sshKeys.length === 0 && gpgKeys.length === 0 && !keysError && (
+              <p className="text-sm text-muted-foreground text-center py-4">
+                Clique em "Carregar Chaves" para visualizar as chaves configuradas no GitHub
+              </p>
+            )}
+          </CollapsibleContent>
+        </Collapsible>
+
         {/* SSH Keys Section */}
         <div className="space-y-4">
           <div className="flex items-center gap-2 text-label-yellow">
             <FileKey className="w-4 h-4" />
-            <span className="font-medium">Chaves SSH</span>
+            <span className="font-medium">Chaves SSH Locais</span>
           </div>
 
           <div className="space-y-3">
@@ -159,7 +392,7 @@ export function KeysManagementSection() {
         <div className="space-y-4">
           <div className="flex items-center gap-2 text-label-yellow">
             <Shield className="w-4 h-4" />
-            <span className="font-medium">Chave GPG</span>
+            <span className="font-medium">Chave GPG Local</span>
           </div>
 
           <div className="space-y-3">

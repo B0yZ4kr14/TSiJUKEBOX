@@ -1,8 +1,8 @@
-import { Music, Settings, BarChart3, Play, Pause, SkipForward, Volume2, Heart, ListMusic } from "lucide-react";
+import { Music, Settings, BarChart3, Play, Pause, SkipForward, Volume2, Heart, ListMusic, Monitor } from "lucide-react";
 import { motion } from "framer-motion";
 
 interface ScreenshotPreviewProps {
-  variant: "dashboard" | "player" | "settings" | "stats";
+  variant: "dashboard" | "player" | "settings" | "stats" | "karaoke" | "queue" | "kiosk";
   theme?: "dark" | "light";
 }
 
@@ -190,6 +190,154 @@ export function ScreenshotPreview({ variant, theme = "dark" }: ScreenshotPreview
               </div>
             </div>
           ))}
+        </div>
+      </div>
+    );
+  }
+
+  // Karaoke Mode Preview
+  if (variant === "karaoke") {
+    return (
+      <div className={`rounded-xl border ${bgClass} p-4 aspect-video overflow-hidden relative`}>
+        {/* Fullscreen lyrics simulation */}
+        <div className="absolute inset-0 bg-gradient-to-b from-purple-900/50 to-black/80" />
+        
+        <div className="relative z-10 h-full flex flex-col items-center justify-center text-center">
+          {/* Song title */}
+          <div className={`text-xs ${mutedClass} mb-2`}>🎤 Modo Karaoke</div>
+          
+          {/* Lyrics display */}
+          <div className="space-y-2">
+            <div className={`text-sm ${mutedClass} opacity-50`}>
+              ♪ Verso anterior aqui...
+            </div>
+            <motion.div 
+              className="text-xl font-bold text-white"
+              animate={{ scale: [1, 1.05, 1] }}
+              transition={{ duration: 2, repeat: Infinity }}
+            >
+              ♪ Esta é a linha atual ♪
+            </motion.div>
+            <div className={`text-sm ${mutedClass} opacity-70`}>
+              ♪ Próximo verso aqui...
+            </div>
+          </div>
+
+          {/* Progress indicator */}
+          <div className="absolute bottom-4 left-4 right-4">
+            <div className={`h-1 rounded-full ${isDark ? 'bg-zinc-700' : 'bg-zinc-300'}`}>
+              <motion.div 
+                className="h-full rounded-full bg-gradient-to-r from-purple-500 to-pink-500"
+                initial={{ width: "0%" }}
+                animate={{ width: "65%" }}
+                transition={{ duration: 3, repeat: Infinity }}
+              />
+            </div>
+            <div className="flex justify-between mt-1">
+              <span className={`text-[10px] ${mutedClass}`}>2:15</span>
+              <span className={`text-[10px] ${mutedClass}`}>3:45</span>
+            </div>
+          </div>
+        </div>
+      </div>
+    );
+  }
+
+  // Queue Preview
+  if (variant === "queue") {
+    const queueItems = [
+      { title: "Bohemian Rhapsody", artist: "Queen", duration: "5:55", isPlaying: true },
+      { title: "Stairway to Heaven", artist: "Led Zeppelin", duration: "8:02", isPlaying: false },
+      { title: "Hotel California", artist: "Eagles", duration: "6:30", isPlaying: false },
+      { title: "Sweet Child O' Mine", artist: "Guns N' Roses", duration: "5:56", isPlaying: false },
+    ];
+
+    return (
+      <div className={`rounded-xl border ${bgClass} p-4 aspect-video overflow-hidden`}>
+        {/* Header */}
+        <div className="flex items-center justify-between mb-3">
+          <div className="flex items-center gap-2">
+            <ListMusic className={`w-5 h-5 ${accentClass}`} />
+            <span className={`font-semibold ${textClass}`}>Fila de Reprodução</span>
+          </div>
+          <span className={`text-xs ${mutedClass}`}>4 músicas</span>
+        </div>
+
+        {/* Queue List */}
+        <div className="space-y-2">
+          {queueItems.map((item, i) => (
+            <motion.div
+              key={i}
+              className={`flex items-center gap-2 p-2 rounded-lg ${
+                item.isPlaying 
+                  ? `bg-gradient-to-r ${isDark ? 'from-emerald-500/20 to-teal-500/10' : 'from-emerald-100 to-teal-50'} border ${isDark ? 'border-emerald-500/30' : 'border-emerald-300'}` 
+                  : `border ${cardClass}`
+              }`}
+              initial={{ x: -10, opacity: 0 }}
+              animate={{ x: 0, opacity: 1 }}
+              transition={{ delay: i * 0.1 }}
+            >
+              <div className={`w-5 h-5 rounded flex items-center justify-center text-[10px] font-bold ${
+                item.isPlaying ? 'bg-emerald-500 text-white' : `${isDark ? 'bg-zinc-700' : 'bg-zinc-200'} ${mutedClass}`
+              }`}>
+                {item.isPlaying ? <Play className="w-3 h-3" /> : i + 1}
+              </div>
+              <div className="flex-1 min-w-0">
+                <div className={`text-xs font-medium truncate ${item.isPlaying ? accentClass : textClass}`}>
+                  {item.title}
+                </div>
+                <div className={`text-[10px] ${mutedClass}`}>{item.artist}</div>
+              </div>
+              <span className={`text-[10px] ${mutedClass}`}>{item.duration}</span>
+            </motion.div>
+          ))}
+        </div>
+      </div>
+    );
+  }
+
+  // Kiosk Mode Preview
+  if (variant === "kiosk") {
+    return (
+      <div className={`rounded-xl border ${bgClass} p-4 aspect-video overflow-hidden relative`}>
+        {/* Kiosk fullscreen simulation */}
+        <div className="absolute inset-0 bg-gradient-to-br from-zinc-900 via-zinc-950 to-black" />
+        
+        <div className="relative z-10 h-full flex flex-col">
+          {/* Top bar */}
+          <div className="flex items-center justify-between mb-4">
+            <div className="flex items-center gap-2">
+              <div className="w-6 h-6 rounded-lg bg-gradient-to-br from-emerald-500 to-teal-600 flex items-center justify-center">
+                <Music className="w-3 h-3 text-white" />
+              </div>
+              <span className="font-bold text-white text-sm">TSiJUKEBOX</span>
+            </div>
+            <div className="flex items-center gap-2 text-[10px] text-zinc-400">
+              <Monitor className="w-3 h-3" />
+              <span>MODO KIOSK</span>
+            </div>
+          </div>
+
+          {/* Central content */}
+          <div className="flex-1 flex items-center justify-center">
+            <div className="text-center">
+              <motion.div 
+                className="w-20 h-20 mx-auto rounded-xl bg-gradient-to-br from-purple-600 to-pink-600 flex items-center justify-center mb-3 shadow-lg"
+                animate={{ boxShadow: ["0 0 20px rgba(168, 85, 247, 0.4)", "0 0 40px rgba(168, 85, 247, 0.6)", "0 0 20px rgba(168, 85, 247, 0.4)"] }}
+                transition={{ duration: 2, repeat: Infinity }}
+              >
+                <Music className="w-10 h-10 text-white" />
+              </motion.div>
+              <div className="text-white font-semibold text-sm">Toque para Começar</div>
+              <div className="text-zinc-400 text-[10px] mt-1">Selecione uma música</div>
+            </div>
+          </div>
+
+          {/* Bottom bar */}
+          <div className="flex items-center justify-between text-[10px] text-zinc-500">
+            <span>🔒 Protegido por PIN</span>
+            <span>v2.0 Enterprise</span>
+          </div>
         </div>
       </div>
     );

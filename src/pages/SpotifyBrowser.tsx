@@ -8,6 +8,7 @@ import { TrackItem } from '@/components/spotify/TrackItem';
 import { CreatePlaylistModal } from '@/components/spotify/CreatePlaylistModal';
 import { useSpotifyPlaylists, useSpotifyLibrary, useSpotifyPlayer } from '@/hooks';
 import { useSettings } from '@/contexts/SettingsContext';
+import { ComponentBoundary } from '@/components/errors';
 
 export default function SpotifyBrowser() {
   const navigate = useNavigate();

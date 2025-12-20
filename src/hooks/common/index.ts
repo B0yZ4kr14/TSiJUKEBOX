@@ -26,3 +26,15 @@ export {
 export { useWikiBookmarks } from './useWikiBookmarks';
 export { useBackNavigation } from './useBackNavigation';
 export { useNotifications, type Notification } from './useNotifications';
+export { 
+  useSettingsSelector, 
+  shallowEqual,
+  selectTheme,
+  selectLanguage,
+  selectIsDemoMode,
+  selectMusicProvider,
+  selectSpotify,
+  selectYoutubeMusic,
+  selectAnimationsEnabled,
+  selectSoundEnabled 
+} from './useSettingsSelector';

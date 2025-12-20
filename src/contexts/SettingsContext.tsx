@@ -1,4 +1,4 @@
-import React, { createContext, useContext } from 'react';
+import React, { createContext, useContext, useMemo, useCallback } from 'react';
 import { SpotifyProvider, useSpotify, type SpotifySettings } from './SpotifyContext';
 import { YouTubeMusicProvider, useYouTubeMusic, type YouTubeMusicSettings } from './YouTubeMusicContext';
 import { ThemeProvider, useTheme, type ThemeColor } from './ThemeContext';
@@ -23,7 +23,7 @@ interface WeatherSettings {
 }
 
 // Unified interface for backward compatibility
-interface SettingsContextType {
+export interface SettingsContextType {
   isDemoMode: boolean;
   setDemoMode: (value: boolean) => void;
   apiUrl: string;
@@ -60,7 +60,7 @@ interface SettingsContextType {
 const SettingsContext = createContext<SettingsContextType | null>(null);
 
 /**
- * Internal component that combines all context values
+ * Internal component that combines all context values with useMemo optimization
  */
 function SettingsAggregator({ children }: { children: React.ReactNode }) {
   const spotifyContext = useSpotify();
@@ -68,7 +68,8 @@ function SettingsAggregator({ children }: { children: React.ReactNode }) {
   const themeContext = useTheme();
   const appSettingsContext = useAppSettings();
 
-  const value: SettingsContextType = {
+  // Memoize the entire value object to prevent unnecessary re-renders
+  const value = useMemo<SettingsContextType>(() => ({
     // App settings
     isDemoMode: appSettingsContext.isDemoMode,
     setDemoMode: appSettingsContext.setDemoMode,
@@ -104,7 +105,43 @@ function SettingsAggregator({ children }: { children: React.ReactNode }) {
     setSoundEnabled: themeContext.setSoundEnabled,
     animationsEnabled: themeContext.animationsEnabled,
     setAnimationsEnabled: themeContext.setAnimationsEnabled,
-  };
+  }), [
+    // App settings deps
+    appSettingsContext.isDemoMode,
+    appSettingsContext.setDemoMode,
+    appSettingsContext.apiUrl,
+    appSettingsContext.setApiUrl,
+    appSettingsContext.useWebSocket,
+    appSettingsContext.setUseWebSocket,
+    appSettingsContext.pollingInterval,
+    appSettingsContext.setPollingInterval,
+    appSettingsContext.spicetify,
+    appSettingsContext.setSpicetifyConfig,
+    appSettingsContext.musicProvider,
+    appSettingsContext.setMusicProvider,
+    appSettingsContext.weather,
+    appSettingsContext.setWeatherConfig,
+    // Spotify deps
+    spotifyContext.spotify,
+    spotifyContext.setSpotifyCredentials,
+    spotifyContext.setSpotifyTokens,
+    spotifyContext.setSpotifyUser,
+    spotifyContext.clearSpotifyAuth,
+    // YouTube deps
+    youtubeMusicContext.youtubeMusic,
+    youtubeMusicContext.setYouTubeMusicTokens,
+    youtubeMusicContext.setYouTubeMusicUser,
+    youtubeMusicContext.clearYouTubeMusicAuth,
+    // Theme deps
+    themeContext.theme,
+    themeContext.setTheme,
+    themeContext.language,
+    themeContext.setLanguage,
+    themeContext.soundEnabled,
+    themeContext.setSoundEnabled,
+    themeContext.animationsEnabled,
+    themeContext.setAnimationsEnabled,
+  ]);
 
   return (
     <SettingsContext.Provider value={value}>

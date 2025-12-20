@@ -34,3 +34,5 @@ export {
   type AggregatedStats, 
   type StatsPeriod 
 } from './usePlaybackStats';
+export { useGitHubSync, type GitHubSyncStatus, type UseGitHubSyncReturn } from './useGitHubSync';
+export { useCodeScan, type CodeIssue, type CodeScanResult, type UseCodeScanReturn } from './useCodeScan';

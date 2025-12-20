@@ -113,6 +113,167 @@ export type Database = {
         }
         Relationships: []
       }
+      jam_participants: {
+        Row: {
+          avatar_color: string | null
+          id: string
+          is_active: boolean | null
+          is_host: boolean | null
+          joined_at: string | null
+          last_seen_at: string | null
+          nickname: string
+          session_id: string
+          user_id: string | null
+        }
+        Insert: {
+          avatar_color?: string | null
+          id?: string
+          is_active?: boolean | null
+          is_host?: boolean | null
+          joined_at?: string | null
+          last_seen_at?: string | null
+          nickname: string
+          session_id: string
+          user_id?: string | null
+        }
+        Update: {
+          avatar_color?: string | null
+          id?: string
+          is_active?: boolean | null
+          is_host?: boolean | null
+          joined_at?: string | null
+          last_seen_at?: string | null
+          nickname?: string
+          session_id?: string
+          user_id?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "jam_participants_session_id_fkey"
+            columns: ["session_id"]
+            isOneToOne: false
+            referencedRelation: "jam_sessions"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      jam_queue: {
+        Row: {
+          added_by: string | null
+          added_by_nickname: string | null
+          album_art: string | null
+          artist_name: string
+          created_at: string | null
+          duration_ms: number | null
+          id: string
+          is_played: boolean | null
+          position: number
+          session_id: string
+          track_id: string
+          track_name: string
+          votes: number | null
+        }
+        Insert: {
+          added_by?: string | null
+          added_by_nickname?: string | null
+          album_art?: string | null
+          artist_name: string
+          created_at?: string | null
+          duration_ms?: number | null
+          id?: string
+          is_played?: boolean | null
+          position: number
+          session_id: string
+          track_id: string
+          track_name: string
+          votes?: number | null
+        }
+        Update: {
+          added_by?: string | null
+          added_by_nickname?: string | null
+          album_art?: string | null
+          artist_name?: string
+          created_at?: string | null
+          duration_ms?: number | null
+          id?: string
+          is_played?: boolean | null
+          position?: number
+          session_id?: string
+          track_id?: string
+          track_name?: string
+          votes?: number | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "jam_queue_added_by_fkey"
+            columns: ["added_by"]
+            isOneToOne: false
+            referencedRelation: "jam_participants"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "jam_queue_session_id_fkey"
+            columns: ["session_id"]
+            isOneToOne: false
+            referencedRelation: "jam_sessions"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      jam_sessions: {
+        Row: {
+          access_code: string | null
+          code: string
+          created_at: string | null
+          current_track: Json | null
+          host_id: string | null
+          host_nickname: string | null
+          id: string
+          is_active: boolean | null
+          max_participants: number | null
+          name: string
+          playback_state: Json | null
+          playlist_id: string | null
+          playlist_name: string | null
+          privacy: string | null
+          updated_at: string | null
+        }
+        Insert: {
+          access_code?: string | null
+          code: string
+          created_at?: string | null
+          current_track?: Json | null
+          host_id?: string | null
+          host_nickname?: string | null
+          id?: string
+          is_active?: boolean | null
+          max_participants?: number | null
+          name: string
+          playback_state?: Json | null
+          playlist_id?: string | null
+          playlist_name?: string | null
+          privacy?: string | null
+          updated_at?: string | null
+        }
+        Update: {
+          access_code?: string | null
+          code?: string
+          created_at?: string | null
+          current_track?: Json | null
+          host_id?: string | null
+          host_nickname?: string | null
+          id?: string
+          is_active?: boolean | null
+          max_participants?: number | null
+          name?: string
+          playback_state?: Json | null
+          playlist_id?: string | null
+          playlist_name?: string | null
+          privacy?: string | null
+          updated_at?: string | null
+        }
+        Relationships: []
+      }
       notifications: {
         Row: {
           created_at: string | null

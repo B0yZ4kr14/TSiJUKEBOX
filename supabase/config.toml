@@ -44,3 +44,9 @@ verify_jwt = false
 
 [functions.doc-orchestrator]
 verify_jwt = false
+
+[functions.fullstack-refactor]
+verify_jwt = false
+
+[functions.screenshot-service]
+verify_jwt = false

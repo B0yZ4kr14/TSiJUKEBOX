@@ -51,6 +51,17 @@ serve(async (req) => {
       case 'languages':
         url = `https://api.github.com/repos/${repo}/languages`;
         break;
+      case 'deploy-keys':
+        url = `https://api.github.com/repos/${repo}/keys`;
+        break;
+      case 'gpg-keys':
+        // GPG keys are per-user, not per-repo
+        url = `https://api.github.com/user/gpg_keys`;
+        break;
+      case 'ssh-keys':
+        // SSH keys are per-user
+        url = `https://api.github.com/user/keys`;
+        break;
       default:
         url = `https://api.github.com/repos/${repo}/contents/${path}`;
     }

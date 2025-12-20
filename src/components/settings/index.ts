@@ -16,6 +16,7 @@ export { WeatherConfigSection } from './WeatherConfigSection';
 export { LanguageSection } from './LanguageSection';
 export { AccessibilitySection } from './AccessibilitySection';
 export { KeysManagementSection } from './KeysManagementSection';
+export { VoiceAnalyticsCharts } from './VoiceAnalyticsCharts';
 export { SettingsSectionTour } from './SettingsSectionTour';
 export { SettingsDashboard } from './SettingsDashboard';
 export { SettingsSidebar, type SettingsCategory } from './SettingsSidebar';

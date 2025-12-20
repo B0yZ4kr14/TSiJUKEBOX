@@ -48,6 +48,7 @@ const InstallerMetrics = lazy(() => import("./pages/InstallerMetrics"));
 const GitHubDashboard = lazy(() => import("./pages/GitHubDashboard"));
 const JukeboxStatsDashboard = lazy(() => import("./pages/JukeboxStatsDashboard"));
 const VersionComparison = lazy(() => import("./pages/VersionComparison"));
+const LandingPage = lazy(() => import("./pages/LandingPage"));
 
 const queryClient = new QueryClient({
   defaultOptions: {

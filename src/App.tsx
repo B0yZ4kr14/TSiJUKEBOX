@@ -1,4 +1,4 @@
-import { lazy, Suspense } from "react";
+import { lazy } from "react";
 import { Toaster } from "@/components/ui/toaster";
 import { Toaster as Sonner } from "@/components/ui/sonner";
 import { TooltipProvider } from "@/components/ui/tooltip";
@@ -9,6 +9,7 @@ import { UserProvider } from "@/contexts/UserContext";
 import { ProtectedRoute } from "@/components/auth/ProtectedRoute";
 import { useConnectionMonitor } from "@/hooks/system";
 import { ContrastDebugPanel } from "@/components/debug/ContrastDebugPanel";
+import { ErrorBoundary, SuspenseBoundary, PageBoundary } from "@/components/errors";
 import { Music } from "lucide-react";
 
 // Eagerly loaded pages (critical path)
@@ -61,27 +62,13 @@ const queryClient = new QueryClient({
   },
 });
 
-// Loading fallback component
-function PageLoader() {
-  return (
-    <div className="min-h-screen bg-kiosk-bg flex items-center justify-center">
-      <div className="text-center space-y-4">
-        <div className="w-16 h-16 rounded-full bg-kiosk-surface/50 flex items-center justify-center mx-auto animate-pulse">
-          <Music className="w-8 h-8 text-kiosk-primary" />
-        </div>
-        <p className="text-kiosk-text/85 text-sm">Carregando...</p>
-      </div>
-    </div>
-  );
-}
-
 // Inner app component that uses hooks
 function AppRoutes() {
   // Monitor backend connection and send push notifications
   useConnectionMonitor();
 
   return (
-    <Suspense fallback={<PageLoader />}>
+    <SuspenseBoundary variant="music" message="Carregando...">
       <Routes>
         {/* Public Routes - Eagerly loaded */}
         <Route path="/" element={<Index />} />
@@ -182,26 +169,28 @@ function AppRoutes() {
         {/* Catch-all */}
         <Route path="*" element={<NotFound />} />
       </Routes>
-    </Suspense>
+    </SuspenseBoundary>
   );
 }
 
 const App = () => (
-  <QueryClientProvider client={queryClient}>
-    <SettingsProvider>
-      <UserProvider>
-        <TooltipProvider>
-          <Toaster />
-          <Sonner />
-          <BrowserRouter>
-            <AppRoutes />
-          </BrowserRouter>
-          {/* Contrast Debug Panel - Only in DEV mode */}
-          {import.meta.env.DEV && <ContrastDebugPanel />}
-        </TooltipProvider>
-      </UserProvider>
-    </SettingsProvider>
-  </QueryClientProvider>
+  <ErrorBoundary showDetails={import.meta.env.DEV}>
+    <QueryClientProvider client={queryClient}>
+      <SettingsProvider>
+        <UserProvider>
+          <TooltipProvider>
+            <Toaster />
+            <Sonner />
+            <BrowserRouter>
+              <AppRoutes />
+            </BrowserRouter>
+            {/* Contrast Debug Panel - Only in DEV mode */}
+            {import.meta.env.DEV && <ContrastDebugPanel />}
+          </TooltipProvider>
+        </UserProvider>
+      </SettingsProvider>
+    </QueryClientProvider>
+  </ErrorBoundary>
 );
 
 export default App;

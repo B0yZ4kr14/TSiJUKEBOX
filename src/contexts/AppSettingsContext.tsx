@@ -1,4 +1,4 @@
-import React, { createContext, useContext, useState, useEffect, useCallback } from 'react';
+import React, { createContext, useContext, useState, useEffect, useCallback, useMemo } from 'react';
 
 export type MusicProvider = 'spotify' | 'spicetify' | 'youtube-music' | 'local';
 
@@ -159,23 +159,41 @@ export function AppSettingsProvider({ children }: { children: React.ReactNode })
     });
   }, []);
 
+  // Memoize the context value to prevent unnecessary re-renders
+  const value = useMemo<AppSettingsContextType>(() => ({
+    isDemoMode: settings.isDemoMode ?? false,
+    setDemoMode,
+    apiUrl: settings.apiUrl ?? defaultApiUrl,
+    setApiUrl,
+    useWebSocket: settings.useWebSocket ?? true,
+    setUseWebSocket,
+    pollingInterval: settings.pollingInterval ?? 2000,
+    setPollingInterval,
+    spicetify: spicetifySettings,
+    setSpicetifyConfig,
+    musicProvider,
+    setMusicProvider,
+    weather: weatherSettings,
+    setWeatherConfig,
+  }), [
+    settings.isDemoMode,
+    settings.apiUrl,
+    settings.useWebSocket,
+    settings.pollingInterval,
+    setDemoMode,
+    setApiUrl,
+    setUseWebSocket,
+    setPollingInterval,
+    spicetifySettings,
+    setSpicetifyConfig,
+    musicProvider,
+    setMusicProvider,
+    weatherSettings,
+    setWeatherConfig,
+  ]);
+
   return (
-    <AppSettingsContext.Provider value={{
-      isDemoMode: settings.isDemoMode ?? false,
-      setDemoMode,
-      apiUrl: settings.apiUrl ?? defaultApiUrl,
-      setApiUrl,
-      useWebSocket: settings.useWebSocket ?? true,
-      setUseWebSocket,
-      pollingInterval: settings.pollingInterval ?? 2000,
-      setPollingInterval,
-      spicetify: spicetifySettings,
-      setSpicetifyConfig,
-      musicProvider,
-      setMusicProvider,
-      weather: weatherSettings,
-      setWeatherConfig,
-    }}>
+    <AppSettingsContext.Provider value={value}>
       {children}
     </AppSettingsContext.Provider>
   );

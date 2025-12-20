@@ -43,6 +43,7 @@ import { CommitFilters } from '@/components/github/CommitFilters';
 import { CacheIndicator } from '@/components/github/CacheIndicator';
 import { GitHubDashboardCharts } from '@/components/github/GitHubDashboardCharts';
 import { getCommitTypeInfo } from '@/lib/constants/commitTypes';
+import { ComponentBoundary } from '@/components/errors';
 
 const LANGUAGE_COLORS: Record<string, string> = {
   TypeScript: '#3178c6',

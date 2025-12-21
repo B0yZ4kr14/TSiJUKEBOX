@@ -215,6 +215,73 @@ export const mockCreatePrivateSessionConfig = {
 };
 
 // ============================================
+// TRACK PLAYBACK DATA (for edge function tests)
+// ============================================
+
+export const mockTrackPlaybackData = {
+  // Valid complete record request
+  validComplete: {
+    track_id: 'spotify:track:4iV5W9uYEdYUVa79Axb7Rh',
+    track_name: 'Bohemian Rhapsody',
+    artist_name: 'Queen',
+    album_name: 'A Night at the Opera',
+    album_art: 'https://i.scdn.co/image/ab67616d0000b273',
+    provider: 'spotify' as const,
+    duration_ms: 354000,
+    completed: true,
+  },
+
+  // Valid minimal record request
+  validMinimal: {
+    track_id: 'yt:video:abc123',
+    track_name: 'Test Track',
+    artist_name: 'Test Artist',
+    provider: 'youtube' as const,
+  },
+
+  // Invalid: missing track_id
+  missingTrackId: {
+    track_name: 'Song',
+    artist_name: 'Artist',
+    provider: 'spotify',
+  },
+
+  // Invalid: wrong provider
+  invalidProvider: {
+    track_id: '123',
+    track_name: 'Song',
+    artist_name: 'Artist',
+    provider: 'invalid_provider',
+  },
+
+  // Invalid: missing required fields
+  missingRequired: {},
+
+  // Different providers
+  withYoutubeProvider: {
+    track_id: 'yt:video:dQw4w9WgXcQ',
+    track_name: 'Never Gonna Give You Up',
+    artist_name: 'Rick Astley',
+    provider: 'youtube' as const,
+    duration_ms: 213000,
+  },
+
+  withLocalProvider: {
+    track_id: '/music/local/track.mp3',
+    track_name: 'Local Track',
+    artist_name: 'Local Artist',
+    provider: 'local' as const,
+  },
+
+  withSoundcloudProvider: {
+    track_id: 'sc:track:123456',
+    track_name: 'Soundcloud Track',
+    artist_name: 'Soundcloud Artist',
+    provider: 'soundcloud' as const,
+  },
+};
+
+// ============================================
 // ERROR SCENARIOS
 // ============================================
 

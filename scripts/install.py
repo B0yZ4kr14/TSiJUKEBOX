@@ -631,6 +631,334 @@ class ConfigBackup:
 # DOCTOR DIAGNOSTIC (--doctor, --doctor-fix)
 # =============================================================================
 
+# =============================================================================
+# HEALTH CHECK (--health-check) - Verificação rápida para monitoramento
+# =============================================================================
+
+class HealthCheck:
+    """Verificação rápida de saúde para scripts de monitoramento.
+    
+    Retorna códigos de saída padronizados:
+    - 0 = OK (sistema saudável)
+    - 1 = WARNING (problemas não críticos)
+    - 2 = CRITICAL (problemas graves)
+    - 3 = UNKNOWN (erro na verificação)
+    """
+    
+    EXIT_OK = 0
+    EXIT_WARNING = 1
+    EXIT_CRITICAL = 2
+    EXIT_UNKNOWN = 3
+    
+    def __init__(self, verbose: bool = False):
+        self.verbose = verbose
+        self.status = self.EXIT_OK
+        self.messages: List[str] = []
+    
+    def _log(self, message: str):
+        """Adiciona mensagem ao log."""
+        self.messages.append(message)
+        if self.verbose:
+            print(message)
+    
+    def check_service(self, name: str) -> bool:
+        """Verifica se um serviço systemd está ativo."""
+        try:
+            code, stdout, _ = run_command(['systemctl', 'is-active', name], capture=True, check=False)
+            return stdout.strip() == 'active'
+        except Exception:
+            return False
+    
+    def check_port(self, port: int) -> bool:
+        """Verifica se uma porta está respondendo."""
+        try:
+            sock = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
+            sock.settimeout(2)
+            result = sock.connect_ex(('localhost', port))
+            sock.close()
+            return result == 0
+        except Exception:
+            return False
+    
+    def check_disk(self, min_gb: float = 1.0) -> bool:
+        """Verifica espaço mínimo em disco."""
+        try:
+            _, _, free = shutil.disk_usage("/")
+            return (free / (1024**3)) >= min_gb
+        except Exception:
+            return False
+    
+    def check_process(self, name: str) -> bool:
+        """Verifica se um processo está rodando."""
+        try:
+            code, _, _ = run_command(['pgrep', '-x', name], capture=True, check=False)
+            return code == 0
+        except Exception:
+            return False
+    
+    def run(self) -> int:
+        """Executa health check e retorna código de saída."""
+        checks = [
+            # (nome, função, required)
+            ("tsijukebox.service", lambda: self.check_service('tsijukebox'), True),
+            ("port-5173", lambda: self.check_port(5173), True),
+            ("disk-space-1gb", lambda: self.check_disk(1.0), True),
+            ("grafana.service", lambda: self.check_service('grafana'), False),
+            ("prometheus.service", lambda: self.check_service('prometheus'), False),
+            ("nginx.service", lambda: self.check_service('nginx'), False),
+        ]
+        
+        for name, check_fn, required in checks:
+            try:
+                ok = check_fn()
+                if ok:
+                    self._log(f"OK: {name}")
+                else:
+                    if required:
+                        self.status = max(self.status, self.EXIT_CRITICAL)
+                        self._log(f"CRITICAL: {name}")
+                    else:
+                        self.status = max(self.status, self.EXIT_WARNING)
+                        self._log(f"WARNING: {name}")
+            except Exception as e:
+                self.status = max(self.status, self.EXIT_UNKNOWN)
+                self._log(f"UNKNOWN: {name} ({e})")
+        
+        # Sempre imprimir se houver problemas
+        if self.status != self.EXIT_OK and not self.verbose:
+            for msg in self.messages:
+                if not msg.startswith("OK:"):
+                    print(msg)
+        
+        return self.status
+
+
+# =============================================================================
+# PLUGIN SYSTEM (--plugin, --list-plugins)
+# =============================================================================
+
+class PluginBase:
+    """Classe base abstrata para plugins do TSiJUKEBOX."""
+    
+    # Metadados obrigatórios
+    name: str = "unnamed"
+    version: str = "0.0.0"
+    description: str = ""
+    author: str = ""
+    
+    # Dependências
+    required_packages: List[str] = []
+    required_commands: List[str] = []
+    
+    def __init__(self, args: Optional[argparse.Namespace] = None):
+        self.args = args
+        self.enabled = True
+    
+    def install(self) -> bool:
+        """Executa a instalação do plugin. Deve ser implementado."""
+        raise NotImplementedError("Plugin deve implementar install()")
+    
+    def uninstall(self) -> bool:
+        """Remove o plugin (opcional)."""
+        return True
+    
+    def validate(self) -> bool:
+        """Valida se o plugin está funcionando."""
+        for cmd in self.required_commands:
+            if not shutil.which(cmd):
+                return False
+        return True
+    
+    def get_info(self) -> Dict[str, Any]:
+        """Retorna informações do plugin."""
+        return {
+            'name': self.name,
+            'version': self.version,
+            'description': self.description,
+            'author': self.author,
+            'required_packages': self.required_packages,
+            'required_commands': self.required_commands,
+        }
+
+
+class PluginManager:
+    """Gerencia descoberta e carregamento de plugins."""
+    
+    PLUGINS_DIR = Path(__file__).parent / "plugins"
+    
+    # Plugins built-in registrados manualmente
+    BUILTIN_PLUGINS: Dict[str, type] = {}
+    
+    def __init__(self):
+        self.plugins: Dict[str, type] = {}
+        self._register_builtin_plugins()
+        self._discover_plugins()
+    
+    def _register_builtin_plugins(self):
+        """Registra plugins built-in."""
+        
+        # Plugin: spotify-downloader
+        class SpotifyDownloaderPlugin(PluginBase):
+            name = "spotify-downloader"
+            version = "1.0.0"
+            description = "Baixa músicas do Spotify usando spotdl"
+            author = "B0.y_Z4kr14"
+            required_packages = ['python-spotdl']
+            required_commands = ['spotdl']
+            
+            def install(self) -> bool:
+                log_step("Instalando spotify-downloader (spotdl)...")
+                code, _, stderr = run_command(
+                    ['pip', 'install', '--user', 'spotdl'],
+                    check=False, capture=True
+                )
+                if code == 0:
+                    log_success("spotify-downloader instalado!")
+                    log_info("  Uso: spotdl <URL do Spotify>")
+                    return True
+                else:
+                    log_error(f"Falha na instalação: {stderr}")
+                    return False
+        
+        # Plugin: youtube-dl
+        class YoutubeDLPlugin(PluginBase):
+            name = "youtube-dl"
+            version = "1.0.0"
+            description = "Baixa músicas/vídeos do YouTube usando yt-dlp"
+            author = "B0.y_Z4kr14"
+            required_packages = ['yt-dlp']
+            required_commands = ['yt-dlp']
+            
+            def install(self) -> bool:
+                log_step("Instalando yt-dlp...")
+                # Tentar via pacman primeiro
+                code, _, _ = run_command(['pacman', '-S', '--noconfirm', 'yt-dlp'], check=False, capture=True)
+                if code == 0:
+                    log_success("yt-dlp instalado via pacman!")
+                    return True
+                # Fallback para pip
+                code, _, _ = run_command(['pip', 'install', '--user', 'yt-dlp'], check=False, capture=True)
+                if code == 0:
+                    log_success("yt-dlp instalado via pip!")
+                    return True
+                log_error("Falha ao instalar yt-dlp")
+                return False
+        
+        # Plugin: lyrics-fetcher
+        class LyricsFetcherPlugin(PluginBase):
+            name = "lyrics-fetcher"
+            version = "1.0.0"
+            description = "Busca letras de músicas automaticamente"
+            author = "B0.y_Z4kr14"
+            required_packages = ['syncedlyrics']
+            required_commands = ['syncedlyrics']
+            
+            def install(self) -> bool:
+                log_step("Instalando lyrics-fetcher (syncedlyrics)...")
+                code, _, _ = run_command(
+                    ['pip', 'install', '--user', 'syncedlyrics'],
+                    check=False, capture=True
+                )
+                if code == 0:
+                    log_success("syncedlyrics instalado!")
+                    log_info("  Uso: syncedlyrics 'Artist - Song'")
+                    return True
+                log_error("Falha na instalação")
+                return False
+        
+        # Registrar plugins
+        self.BUILTIN_PLUGINS = {
+            'spotify-downloader': SpotifyDownloaderPlugin,
+            'youtube-dl': YoutubeDLPlugin,
+            'lyrics-fetcher': LyricsFetcherPlugin,
+        }
+        self.plugins.update(self.BUILTIN_PLUGINS)
+    
+    def _discover_plugins(self):
+        """Descobre plugins no diretório de plugins."""
+        if not self.PLUGINS_DIR.exists():
+            return
+        
+        import importlib.util
+        
+        for plugin_dir in self.PLUGINS_DIR.iterdir():
+            if plugin_dir.is_dir() and (plugin_dir / "plugin.py").exists():
+                try:
+                    spec = importlib.util.spec_from_file_location(
+                        f"plugins.{plugin_dir.name}",
+                        plugin_dir / "plugin.py"
+                    )
+                    if spec and spec.loader:
+                        module = importlib.util.module_from_spec(spec)
+                        spec.loader.exec_module(module)
+                        
+                        if hasattr(module, 'Plugin'):
+                            self.plugins[plugin_dir.name] = module.Plugin
+                except Exception as e:
+                    log_warning(f"Falha ao carregar plugin {plugin_dir.name}: {e}")
+    
+    def list_plugins(self):
+        """Lista plugins disponíveis."""
+        print(f"""
+{Colors.CYAN}╔════════════════════════════════════════════════════════════════╗
+║   {Colors.BOLD}{Colors.WHITE}🔌 PLUGINS DISPONÍVEIS{Colors.RESET}{Colors.CYAN}                                       ║
+╚════════════════════════════════════════════════════════════════╝{Colors.RESET}
+""")
+        
+        if not self.plugins:
+            log_warning("Nenhum plugin encontrado")
+            return
+        
+        for name, plugin_class in sorted(self.plugins.items()):
+            try:
+                p = plugin_class(None)
+                installed = p.validate()
+                status = f"{Colors.GREEN}[instalado]{Colors.RESET}" if installed else f"{Colors.YELLOW}[disponível]{Colors.RESET}"
+                print(f"  {Colors.GREEN}•{Colors.RESET} {p.name} v{p.version} {status}")
+                print(f"    {Colors.WHITE}{p.description}{Colors.RESET}")
+                if p.required_commands:
+                    print(f"    {Colors.CYAN}Comandos: {', '.join(p.required_commands)}{Colors.RESET}")
+                print()
+            except Exception as e:
+                print(f"  {Colors.RED}•{Colors.RESET} {name} (erro: {e})")
+        
+        print(f"{Colors.CYAN}Para instalar: sudo python3 install.py --plugin <nome>{Colors.RESET}\n")
+    
+    def run_plugin(self, name: str, args: Optional[argparse.Namespace] = None) -> bool:
+        """Executa um plugin específico."""
+        if name not in self.plugins:
+            log_error(f"Plugin não encontrado: {name}")
+            log_info(f"Use --list-plugins para ver plugins disponíveis")
+            return False
+        
+        plugin_class = self.plugins[name]
+        plugin = plugin_class(args)
+        
+        print(f"""
+{Colors.CYAN}╔════════════════════════════════════════════════════════════════╗
+║   {Colors.BOLD}{Colors.WHITE}🔌 EXECUTANDO PLUGIN{Colors.RESET}{Colors.CYAN}                                         ║
+╚════════════════════════════════════════════════════════════════╝{Colors.RESET}
+""")
+        log_info(f"Plugin: {plugin.name} v{plugin.version}")
+        log_info(f"Descrição: {plugin.description}")
+        print()
+        
+        try:
+            success = plugin.install()
+            if success:
+                log_success(f"Plugin {plugin.name} executado com sucesso!")
+            else:
+                log_error(f"Plugin {plugin.name} falhou")
+            return success
+        except Exception as e:
+            log_error(f"Erro ao executar plugin: {e}")
+            return False
+
+
+# =============================================================================
+# DOCTOR DIAGNOSTIC (--doctor, --doctor-fix)
+# =============================================================================
+
 class DoctorDiagnostic:
     """Diagnostica problemas e sugere/aplica correções."""
     
@@ -2116,6 +2444,16 @@ def main():
     parser.add_argument('--export-report', type=str, metavar='FILE',
                        help='Exportar relatório do doctor (suporta .json e .html)')
     
+    # Health check para monitoramento
+    parser.add_argument('--health-check', action='store_true',
+                       help='Verificação rápida de saúde (retorna código de saída para monitoramento)')
+    
+    # Sistema de plugins
+    parser.add_argument('--plugin', type=str, metavar='NAME',
+                       help='Executar plugin de extensão (ex: --plugin spotify-downloader)')
+    parser.add_argument('--list-plugins', action='store_true',
+                       help='Listar plugins disponíveis')
+    
     # Outros
     parser.add_argument('--uninstall', action='store_true',
                        help='Remover instalação existente')
@@ -2192,6 +2530,24 @@ def main():
         log_info("🔍 Executando validação pós-instalação...")
         validator = PostInstallValidator(args)
         success = validator.validate_all()
+        sys.exit(0 if success else 1)
+    
+    # --health-check: Verificação rápida para monitoramento
+    if args.health_check:
+        health = HealthCheck(verbose=args.verbose)
+        exit_code = health.run()
+        sys.exit(exit_code)
+    
+    # --list-plugins: Listar plugins disponíveis
+    if args.list_plugins:
+        plugin_mgr = PluginManager()
+        plugin_mgr.list_plugins()
+        sys.exit(0)
+    
+    # --plugin: Executar plugin específico
+    if args.plugin:
+        plugin_mgr = PluginManager()
+        success = plugin_mgr.run_plugin(args.plugin, args)
         sys.exit(0 if success else 1)
     
     # =========================================================================

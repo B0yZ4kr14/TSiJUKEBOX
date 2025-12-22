@@ -50,3 +50,6 @@ verify_jwt = false
 
 [functions.screenshot-service]
 verify_jwt = false
+
+[functions.health-monitor-ws]
+verify_jwt = false

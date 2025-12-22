@@ -38,6 +38,7 @@ export interface SettingsContextType {
   setSpotifyUser: (user: SpotifyUser | null) => void;
   clearSpotifyAuth: () => void;
   youtubeMusic: YouTubeMusicSettings;
+  setYouTubeMusicCredentials: (clientId: string, clientSecret: string) => void;
   setYouTubeMusicTokens: (tokens: YouTubeMusicTokens | null) => void;
   setYouTubeMusicUser: (user: YouTubeMusicUser | null) => void;
   clearYouTubeMusicAuth: () => void;
@@ -93,6 +94,7 @@ function SettingsAggregator({ children }: { children: React.ReactNode }) {
     clearSpotifyAuth: spotifyContext.clearSpotifyAuth,
     // YouTube Music
     youtubeMusic: youtubeMusicContext.youtubeMusic,
+    setYouTubeMusicCredentials: youtubeMusicContext.setYouTubeMusicCredentials,
     setYouTubeMusicTokens: youtubeMusicContext.setYouTubeMusicTokens,
     setYouTubeMusicUser: youtubeMusicContext.setYouTubeMusicUser,
     clearYouTubeMusicAuth: youtubeMusicContext.clearYouTubeMusicAuth,
@@ -129,6 +131,7 @@ function SettingsAggregator({ children }: { children: React.ReactNode }) {
     spotifyContext.clearSpotifyAuth,
     // YouTube deps
     youtubeMusicContext.youtubeMusic,
+    youtubeMusicContext.setYouTubeMusicCredentials,
     youtubeMusicContext.setYouTubeMusicTokens,
     youtubeMusicContext.setYouTubeMusicUser,
     youtubeMusicContext.clearYouTubeMusicAuth,

@@ -1,4 +1,5 @@
 export { SettingsSection } from './SettingsSection';
+export { YouTubeMusicSetupWizard } from './YouTubeMusicSetupWizard';
 export { ThemeSection } from './ThemeSection';
 export { AlertConfigSection } from './AlertConfigSection';
 export { CloudConnectionSection } from './CloudConnectionSection';

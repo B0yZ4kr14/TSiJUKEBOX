@@ -2744,30 +2744,76 @@ def setup_sqlite_database() -> bool:
     """Configura SQLite como banco de dados padrão."""
     log_step("Configurando SQLite como banco de dados")
     
+    import sqlite3
+    
     # Criar diretório de dados
     DATA_DIR.mkdir(parents=True, exist_ok=True)
-    
-    # Instalar sqlite se não estiver instalado
-    if 'sqlite' not in get_installed_packages():
-        install_packages(['sqlite'])
-    
-    # Criar arquivo de configuração do banco
-    db_config = {
-        "type": "sqlite",
-        "path": str(DATA_DIR / "tsijukebox.db"),
-        "options": {
-            "journal_mode": "WAL",
-            "synchronous": "NORMAL",
-            "cache_size": -64000,
-            "foreign_keys": True
-        }
-    }
-    
     CONFIG_DIR.mkdir(parents=True, exist_ok=True)
-    config_file = CONFIG_DIR / 'database.json'
-    config_file.write_text(json.dumps(db_config, indent=2))
     
-    log_success(f"SQLite configurado: {DATA_DIR / 'tsijukebox.db'}")
+    db_path = DATA_DIR / "tsijukebox.db"
+    
+    try:
+        # Criar banco com schema inicial
+        conn = sqlite3.connect(str(db_path))
+        cursor = conn.cursor()
+        
+        cursor.execute("PRAGMA journal_mode=WAL")
+        cursor.execute("PRAGMA synchronous=NORMAL")
+        cursor.execute("PRAGMA foreign_keys=ON")
+        
+        cursor.execute('''
+            CREATE TABLE IF NOT EXISTS settings (
+                key TEXT PRIMARY KEY,
+                value TEXT,
+                updated_at DATETIME DEFAULT CURRENT_TIMESTAMP
+            )
+        ''')
+        
+        cursor.execute('''
+            CREATE TABLE IF NOT EXISTS playback_stats (
+                id INTEGER PRIMARY KEY AUTOINCREMENT,
+                track_id TEXT NOT NULL,
+                track_name TEXT NOT NULL,
+                artist_name TEXT NOT NULL,
+                played_at DATETIME DEFAULT CURRENT_TIMESTAMP
+            )
+        ''')
+        
+        cursor.execute('INSERT OR IGNORE INTO settings (key, value) VALUES (?, ?)', ('version', VERSION))
+        
+        conn.commit()
+        conn.close()
+        
+        # Corrigir ownership
+        user = os.environ.get('SUDO_USER', 'root')
+        run_command(['chown', '-R', f'{user}:{user}', str(DATA_DIR)])
+        
+    except Exception as e:
+        log_warning(f"Falha ao criar banco: {e}")
+    
+    # Criar config.yaml
+    create_config_yaml()
+    
+    log_success(f"SQLite configurado: {db_path}")
+    return True
+
+
+def create_config_yaml() -> bool:
+    """Cria arquivo config.yaml."""
+    config_content = f"""version: "{VERSION}"
+server:
+  port: 5173
+  host: "0.0.0.0"
+database:
+  type: sqlite
+  path: {DATA_DIR / 'tsijukebox.db'}
+spotify:
+  enabled: true
+monitoring:
+  enabled: true
+"""
+    config_file = CONFIG_DIR / 'config.yaml'
+    config_file.write_text(config_content)
     return True
 
 
@@ -2850,7 +2896,7 @@ def install_spotify_spicetify(user: str, system_info: SystemInfo) -> bool:
         # Criar instância com o usuário alvo
         spicetify = SpicetifySetup(user=user)
         
-        # Iniciar Spotify brevemente para garantir criação do prefs
+        # Iniciar Spotify brevemente para garantir criação do prefs (tempo maior)
         log_info("Iniciando Spotify para criar arquivo de configuração...")
         try:
             proc = subprocess.Popen(
@@ -2860,9 +2906,19 @@ def install_spotify_spicetify(user: str, system_info: SystemInfo) -> bool:
                 start_new_session=True
             )
             import time
-            time.sleep(5)
+            time.sleep(10)  # Aumentado de 5 para 10 segundos
             subprocess.run(['pkill', '-f', 'spotify'], capture_output=True)
-            time.sleep(1)
+            time.sleep(2)
+            
+            # Criar prefs manualmente se não existir
+            home = Path(pwd.getpwnam(user).pw_dir)
+            prefs_dir = home / ".config/spotify"
+            prefs_path = prefs_dir / "prefs"
+            if not prefs_path.exists():
+                prefs_dir.mkdir(parents=True, exist_ok=True)
+                prefs_path.touch()
+                run_command(['chown', '-R', f'{user}:{user}', str(prefs_dir)])
+                log_info("Arquivo prefs criado manualmente")
         except Exception as e:
             log_warning(f"Não foi possível iniciar Spotify: {e}")
         

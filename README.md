@@ -13,6 +13,10 @@
 [![TypeScript](https://img.shields.io/badge/TypeScript-5.0-3178c6?style=for-the-badge&logo=typescript)](https://typescriptlang.org)
 [![Vite](https://img.shields.io/badge/Vite-5.0-646CFF?style=for-the-badge&logo=vite)](https://vitejs.dev)
 [![Tailwind CSS](https://img.shields.io/badge/Tailwind-3.4-06B6D4?style=for-the-badge&logo=tailwindcss)](https://tailwindcss.com)
+[![Build Status](https://img.shields.io/github/actions/workflow/status/B0yZ4kr14/tsijukebox/ci.yml?style=for-the-badge&logo=github-actions)](https://github.com/B0yZ4kr14/tsijukebox/actions)
+[![Last Commit](https://img.shields.io/github/last-commit/B0yZ4kr14/tsijukebox?style=for-the-badge&logo=git)](https://github.com/B0yZ4kr14/tsijukebox/commits)
+[![Issues](https://img.shields.io/github/issues/B0yZ4kr14/tsijukebox?style=for-the-badge&logo=github)](https://github.com/B0yZ4kr14/tsijukebox/issues)
+[![Stars](https://img.shields.io/github/stars/B0yZ4kr14/tsijukebox?style=for-the-badge&logo=github)](https://github.com/B0yZ4kr14/tsijukebox/stargazers)
 
 **Sistema kiosk musical profissional com integração Spotify, YouTube Music e arquivos locais.**
 
@@ -65,7 +69,7 @@ curl -fsSL https://raw.githubusercontent.com/B0yZ4kr14/TSiJUKEBOX/main/scripts/i
 
 ### 🎯 Setup Wizard
 
-<img src="public/screenshots/preview-setup-wizard.svg" alt="Setup Wizard" width="800">
+<img src="public/screenshots/preview-setup-wizard.png" alt="Setup Wizard" width="800">
 
 *Configuração inicial guiada com 9 etapas intuitivas para personalizar completamente sua experiência.*
 
@@ -73,7 +77,7 @@ curl -fsSL https://raw.githubusercontent.com/B0yZ4kr14/TSiJUKEBOX/main/scripts/i
 
 ### 📊 Dashboard de Estatísticas
 
-<img src="public/screenshots/preview-dashboard.svg" alt="Dashboard" width="800">
+<img src="public/screenshots/preview-dashboard.png" alt="Dashboard" width="800">
 
 *Monitoramento em tempo real de CPU, Memória, Temperatura e Top Músicas com gráficos interativos.*
 
@@ -81,7 +85,7 @@ curl -fsSL https://raw.githubusercontent.com/B0yZ4kr14/TSiJUKEBOX/main/scripts/i
 
 ### 🎵 Integração Spotify
 
-<img src="public/screenshots/preview-spotify.svg" alt="Spotify Integration" width="800">
+<img src="public/screenshots/preview-spotify.png" alt="Spotify Integration" width="800">
 
 *Conecte sua conta Spotify e acesse todas as suas playlists com controle total de reprodução.*
 
@@ -89,7 +93,7 @@ curl -fsSL https://raw.githubusercontent.com/B0yZ4kr14/TSiJUKEBOX/main/scripts/i
 
 ### 🎨 Brand Guidelines
 
-<img src="public/screenshots/preview-brand.svg" alt="Brand Guidelines" width="800">
+<img src="public/screenshots/preview-brand.png" alt="Brand Guidelines" width="800">
 
 *Paleta Neon completa com gradientes, tipografia e componentes do Design System.*
 
@@ -97,7 +101,7 @@ curl -fsSL https://raw.githubusercontent.com/B0yZ4kr14/TSiJUKEBOX/main/scripts/i
 
 ### 🎬 Demo em Ação
 
-<img src="public/screenshots/demo-animated.svg" alt="Demo Animado" width="800">
+<img src="public/screenshots/demo-animated.gif" alt="Demo Animado" width="800">
 
 *Navegação animada pelo sistema mostrando Setup Wizard, Dashboard, Spotify Connect e Karaoke Mode.*
 
@@ -262,6 +266,84 @@ cd scripts && pytest tests/ --cov=. --cov-report=term-missing
 | **Spicetify** | CLI + Extensions |
 | **Grafana** | Dashboards |
 | **Prometheus** | Metrics |
+
+---
+
+## ❓ FAQ (Perguntas Frequentes)
+
+### Instalação e Configuração
+
+**P: Quais sistemas operacionais são suportados?**
+
+R: O TSiJUKEBOX é compatível com Linux (CachyOS, Arch, Manjaro, EndeavourOS recomendados), Windows e macOS. Para melhor experiência, recomendamos CachyOS com Openbox.
+
+**P: Preciso de uma conta Spotify Premium?**
+
+R: Não é obrigatório, mas o Spotify Premium é altamente recomendado para acesso completo a recursos como Spotify Connect e streaming de alta qualidade.
+
+**P: Como altero a senha padrão?**
+
+R: Após o primeiro login com `admin`/`admin`, acesse **Configurações > Segurança > Alterar Senha** e defina uma nova senha.
+
+**P: O instalador funciona em outras distribuições Linux?**
+
+R: O instalador automático é otimizado para Arch Linux e derivados. Para outras distribuições, consulte o [Guia de Instalação Manual](docs/INSTALLATION.md).
+
+---
+
+### Uso e Funcionalidades
+
+**P: Como adiciono músicas locais?**
+
+R: Acesse **Biblioteca > Arquivos Locais > Adicionar Pasta** e selecione o diretório com suas músicas. Formatos suportados: MP3, FLAC, AAC, OGG, WAV, OPUS. [Guia completo](https://github.com/B0yZ4kr14/TSiJUKEBOX/wiki/User-Guide-Local-Files)
+
+**P: Posso usar o TSiJUKEBOX em um bar ou restaurante?**
+
+R: Sim! Use o Modo Kiosk que oferece interface simplificada, bloqueio de configurações e interface touch otimizada. [Tutorial Modo Kiosk](https://github.com/B0yZ4kr14/TSiJUKEBOX/wiki/Tutorial-Kiosk-Mode)
+
+**P: Como ativo o modo Karaoke?**
+
+R: Acesse **Configurações > Modos > Karaoke** ou instale com `sudo python3 install.py --mode kiosk` e ative o modo Karaoke nas configurações. [Tutorial Karaoke](https://github.com/B0yZ4kr14/TSiJUKEBOX/wiki/Tutorial-Karaoke-Mode)
+
+**P: É possível controlar o TSiJUKEBOX remotamente?**
+
+R: Sim! Use a API REST ou integre com Home Assistant. [Documentação da API](https://github.com/B0yZ4kr14/TSiJUKEBOX/wiki/Dev-API-Reference)
+
+---
+
+### Problemas Comuns
+
+**P: O Spotify não conecta. O que fazer?**
+
+R: Verifique se suas credenciais de API estão corretas em `.env`, confirme que o redirect URI está configurado no Spotify Dashboard e limpe o cache do navegador.
+
+**P: As músicas locais não aparecem na biblioteca.**
+
+R: Verifique as permissões da pasta (`ls -la /caminho/musicas`), confirme que os arquivos têm extensões suportadas e force uma reindexação com `tsijukebox-cli library rescan`.
+
+**P: O sistema está lento. Como otimizo?**
+
+R: Desative análise de áudio em **Configurações > Arquivos Locais**, aumente o cache do banco de dados em **Configurações > Banco de Dados** e considere usar SSD ao invés de HDD.
+
+**P: Como faço backup da minha biblioteca?**
+
+R: Configure backup automático para Storj, Google Drive ou AWS S3 em **Configurações > Backup na Nuvem**. [Guia de Backup](https://github.com/B0yZ4kr14/TSiJUKEBOX/wiki/Config-Cloud-Backup)
+
+---
+
+### Desenvolvimento e Contribuição
+
+**P: Como posso contribuir para o projeto?**
+
+R: Consulte o [Guia de Contribuição](https://github.com/B0yZ4kr14/TSiJUKEBOX/wiki/Dev-Contributing) para instruções sobre como reportar bugs, sugerir features e enviar pull requests.
+
+**P: Onde encontro a documentação da API?**
+
+R: A documentação completa da API está disponível na [Wiki](https://github.com/B0yZ4kr14/TSiJUKEBOX/wiki/Dev-API-Reference) e em [docs/API-REFERENCE.md](docs/API-REFERENCE.md).
+
+**P: Como executo os testes?**
+
+R: Execute `npm run test:all` para todos os testes ou consulte o [Guia de Testes](https://github.com/B0yZ4kr14/TSiJUKEBOX/wiki/Dev-Testing) para opções específicas.
 
 ---
 

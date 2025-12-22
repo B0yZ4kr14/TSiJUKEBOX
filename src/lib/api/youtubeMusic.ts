@@ -43,14 +43,32 @@ export interface YouTubeMusicAlbum {
   trackCount: number;
 }
 
+interface YouTubeMusicCredentials {
+  clientId: string;
+  clientSecret: string;
+}
+
 class YouTubeMusicClient {
   private tokens: YouTubeMusicTokens | null = null;
+  private credentials: YouTubeMusicCredentials | null = null;
   private baseUrl: string;
   private timeout: number;
 
   constructor(baseUrl: string = API_BASE_URL, timeout: number = 10000) {
     this.baseUrl = baseUrl;
     this.timeout = timeout;
+  }
+
+  setCredentials(credentials: YouTubeMusicCredentials) {
+    this.credentials = credentials;
+  }
+
+  getCredentials(): YouTubeMusicCredentials | null {
+    return this.credentials;
+  }
+
+  clearCredentials() {
+    this.credentials = null;
   }
 
   setTokens(tokens: YouTubeMusicTokens | null) {
@@ -104,18 +122,38 @@ class YouTubeMusicClient {
 
   // OAuth via Edge Function
   async getAuthUrl(redirectUri: string): Promise<{ authUrl: string }> {
+    if (!this.credentials?.clientId) {
+      throw new ApiError('Client ID não configurado. Configure as credenciais primeiro.', 'unknown');
+    }
+    
     const { data, error } = await supabase.functions.invoke('youtube-music-auth', {
-      body: { action: 'getAuthUrl', redirectUri },
+      body: { 
+        action: 'getAuthUrl', 
+        redirectUri,
+        clientId: this.credentials.clientId,
+      },
     });
     if (error) throw new ApiError(error.message, 'server');
+    if (data?.error) throw new ApiError(data.error, 'server');
     return data;
   }
 
   async exchangeCode(code: string, redirectUri: string): Promise<YouTubeMusicTokens> {
+    if (!this.credentials?.clientId || !this.credentials?.clientSecret) {
+      throw new ApiError('Credenciais não configuradas', 'unknown');
+    }
+    
     const { data, error } = await supabase.functions.invoke('youtube-music-auth', {
-      body: { action: 'exchangeCode', code, redirectUri },
+      body: { 
+        action: 'exchangeCode', 
+        code, 
+        redirectUri,
+        clientId: this.credentials.clientId,
+        clientSecret: this.credentials.clientSecret,
+      },
     });
     if (error) throw new ApiError(error.message, 'server');
+    if (data?.error) throw new ApiError(data.error, 'server');
     this.tokens = data;
     return data;
   }
@@ -124,10 +162,20 @@ class YouTubeMusicClient {
     if (!this.tokens?.refreshToken) {
       throw new ApiError('No refresh token available', 'unknown');
     }
+    if (!this.credentials?.clientId || !this.credentials?.clientSecret) {
+      throw new ApiError('Credenciais não configuradas', 'unknown');
+    }
+    
     const { data, error } = await supabase.functions.invoke('youtube-music-auth', {
-      body: { action: 'refreshToken', refreshToken: this.tokens.refreshToken },
+      body: { 
+        action: 'refreshToken', 
+        refreshToken: this.tokens.refreshToken,
+        clientId: this.credentials.clientId,
+        clientSecret: this.credentials.clientSecret,
+      },
     });
     if (error) throw new ApiError(error.message, 'server');
+    if (data?.error) throw new ApiError(data.error, 'server');
     this.tokens = data;
     return data;
   }

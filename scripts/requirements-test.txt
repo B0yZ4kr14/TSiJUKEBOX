@@ -19,3 +19,6 @@ freezegun>=1.2.0
 # Additional pytest plugins
 pytest-timeout>=2.2.0
 pytest-sugar>=1.0.0
+
+# Performance benchmarking
+pytest-benchmark>=4.0.0

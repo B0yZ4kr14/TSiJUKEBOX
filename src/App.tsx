@@ -51,6 +51,8 @@ const JukeboxStatsDashboard = lazy(() => import("./pages/JukeboxStatsDashboard")
 const VersionComparison = lazy(() => import("./pages/VersionComparison"));
 const LandingPage = lazy(() => import("./pages/LandingPage"));
 const LogoGitHubPreview = lazy(() => import("./pages/LogoGitHubPreview"));
+const HealthDashboard = lazy(() => import("./pages/HealthDashboard"));
+const SpicetifyThemeGallery = lazy(() => import("./pages/SpicetifyThemeGallery"));
 const JamSession = lazy(() => import("./pages/JamSession"));
 
 const queryClient = new QueryClient({
@@ -129,6 +131,16 @@ function AppRoutes() {
         <Route path="/stats" element={
           <ProtectedRoute requiredPermission="canAccessSettings">
             <JukeboxStatsDashboard />
+          </ProtectedRoute>
+        } />
+        <Route path="/health" element={
+          <ProtectedRoute requiredPermission="canAccessSettings">
+            <HealthDashboard />
+          </ProtectedRoute>
+        } />
+        <Route path="/spicetify-themes" element={
+          <ProtectedRoute requiredPermission="canAccessSettings">
+            <SpicetifyThemeGallery />
           </ProtectedRoute>
         } />
         

@@ -1,6 +1,6 @@
 import { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { LineChart, Activity, RefreshCw, SlidersHorizontal, Power, ChevronRight, ChevronLeft, HelpCircle, Music, Youtube } from 'lucide-react';
+import { LineChart, Activity, RefreshCw, SlidersHorizontal, Power, ChevronRight, HelpCircle, Music, Youtube, Menu } from 'lucide-react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { toast } from 'sonner';
 import { api } from '@/lib/api/client';
@@ -98,8 +98,8 @@ const containerVariants = {
   visible: {
     opacity: 1,
     transition: {
-      staggerChildren: 0.1,
-      delayChildren: 0.15,
+      staggerChildren: 0.08,
+      delayChildren: 0.1,
     }
   }
 };
@@ -107,20 +107,17 @@ const containerVariants = {
 const buttonVariants = {
   hidden: { 
     opacity: 0, 
-    x: -25,
-    scale: 0.7,
-    rotateZ: -8,
+    y: 10,
+    scale: 0.8,
   },
   visible: { 
     opacity: 1, 
-    x: 0,
+    y: 0,
     scale: 1,
-    rotateZ: 0,
     transition: {
       type: "spring",
-      stiffness: 350,
-      damping: 22,
-      mass: 0.8
+      stiffness: 400,
+      damping: 25,
     }
   }
 };
@@ -145,36 +142,30 @@ function DeckButton({ icon, label, tooltip, onClick, color, disabled }: DeckButt
             onClick={handleClick}
             disabled={disabled}
             className={`
-              relative flex flex-col items-center justify-center gap-1.5
-              w-[72px] h-[72px] rounded-2xl overflow-hidden
-              ${colors.bg} border-2 ${colors.border}
+              relative flex flex-col items-center justify-center gap-1
+              w-14 h-14 rounded-xl overflow-hidden
+              ${colors.bg} border ${colors.border}
               ${colors.pulseClass}
               transition-all duration-200
               disabled:opacity-50 disabled:cursor-not-allowed
               ${colors.glow} ${colors.hover}
             `}
-            whileHover={{ y: -6, scale: 1.08 }}
-            whileTap={{ y: 2, scale: 0.95 }}
-            transition={{ type: "spring", stiffness: 350, damping: 20 }}
+            whileHover={{ scale: 1.08 }}
+            whileTap={{ scale: 0.95 }}
+            transition={{ type: "spring", stiffness: 400, damping: 25 }}
           >
             <RippleContainer ripples={ripples} color={color} />
             
             {/* Top highlight */}
-            <div className="absolute inset-x-2 top-1 h-0.5 bg-gradient-to-r from-transparent via-white/40 to-transparent rounded-full z-10" />
-            
-            {/* Left highlight */}
-            <div className="absolute left-1 inset-y-2 w-0.5 bg-gradient-to-b from-white/30 via-white/10 to-transparent rounded-full z-10" />
+            <div className="absolute inset-x-1 top-0.5 h-px bg-gradient-to-r from-transparent via-white/30 to-transparent z-10" />
             
             {/* Icon */}
             <span className={`${colors.icon} relative z-10`}>{icon}</span>
             
             {/* Label */}
-            <span className={`text-[9px] font-bold ${colors.text} uppercase tracking-wider relative z-10`}>
+            <span className={`text-[7px] font-bold ${colors.text} uppercase tracking-wider relative z-10`}>
               {label}
             </span>
-
-            {/* Bottom shadow */}
-            <div className="absolute inset-x-2 bottom-1 h-1 bg-gradient-to-r from-transparent via-black/60 to-transparent rounded-full z-10" />
           </motion.button>
         </TooltipTrigger>
         <TooltipContent side="right" className="bg-slate-900 border-cyan-500/50 text-cyan-100 shadow-xl">
@@ -259,57 +250,52 @@ export function CommandDeck({ disabled = false }: CommandDeckProps) {
 
   return (
     <>
-      {/* Fixed container */}
-      <div className="fixed left-0 top-1/2 -translate-y-1/2 z-50 flex items-center">
-        {/* Circular Toggle Button - Always visible */}
+      {/* Mini Rail - Positioned bottom-left, above VoiceControl */}
+      <div className="fixed bottom-24 left-0 z-40 flex items-end">
+        {/* Mini Rail Toggle */}
         <motion.button
           onClick={() => {
             const newState = !isExpanded;
             setIsExpanded(newState);
             playSound(newState ? 'open' : 'close');
           }}
-          className="command-deck-toggle-circular"
+          className="command-deck-mini-rail"
           aria-label={isExpanded ? t('commandDeck.collapse') : t('commandDeck.expand')}
           aria-expanded={isExpanded}
-          initial={{ scale: 0, rotate: -180 }}
-          animate={{ 
-            scale: 1, 
-            rotate: isExpanded ? 180 : 0,
-            x: isExpanded ? 6 : 0
-          }}
-          whileHover={{ scale: 1.12 }}
-          whileTap={{ scale: 0.9 }}
-          transition={{ type: "spring", stiffness: 400, damping: 25 }}
+          initial={{ x: -28 }}
+          animate={{ x: 0 }}
+          whileHover={{ width: 32 }}
+          transition={{ type: "spring", stiffness: 400, damping: 30 }}
         >
-          {isExpanded ? (
-            <ChevronLeft className="w-5 h-5 text-cyan-300" />
-          ) : (
-            <ChevronRight className="w-5 h-5 text-cyan-300" />
-          )}
+          <div className="flex flex-col items-center gap-1 py-2 px-1">
+            <Menu className={`w-4 h-4 text-cyan-300 transition-transform duration-300 ${isExpanded ? 'rotate-90' : ''}`} />
+            <span className="text-[7px] text-cyan-300/80 uppercase tracking-wider font-medium writing-mode-vertical">
+              {isExpanded ? '×' : '≡'}
+            </span>
+          </div>
         </motion.button>
 
-        {/* Main Container - Slides in/out completely */}
+        {/* Expanded Menu - Horizontal bar */}
         <AnimatePresence>
           {isExpanded && (
             <motion.div
-              className="command-deck-vertical-ultra ml-2"
-              initial={{ x: -220, opacity: 0, scale: 0.85, rotateY: -20 }}
-              animate={{ x: 0, opacity: 1, scale: 1, rotateY: 0 }}
-              exit={{ x: -220, opacity: 0, scale: 0.85, rotateY: -20 }}
-              transition={{ type: "spring", stiffness: 280, damping: 26, mass: 0.9 }}
+              className="command-deck-expanded-bar ml-1"
+              initial={{ opacity: 0, x: -20, scale: 0.9 }}
+              animate={{ opacity: 1, x: 0, scale: 1 }}
+              exit={{ opacity: 0, x: -20, scale: 0.9 }}
+              transition={{ type: "spring", stiffness: 350, damping: 28 }}
             >
-              {/* Buttons with cascade animation */}
               <motion.div 
-                className="flex flex-col gap-2 p-3"
+                className="flex flex-wrap gap-1.5 p-2"
                 variants={containerVariants}
                 initial="hidden"
                 animate="visible"
                 exit="hidden"
               >
-                {/* Info Buttons (Cyan) */}
+                {/* Row 1: Info Buttons */}
                 <motion.div variants={buttonVariants}>
                   <DeckButton
-                    icon={<LineChart className="w-5 h-5" />}
+                    icon={<LineChart className="w-4 h-4" />}
                     label={t('commandDeck.dashboard')}
                     tooltip={t('commandDeck.tooltips.dashboard')}
                     onClick={handleDashboard}
@@ -319,7 +305,7 @@ export function CommandDeck({ disabled = false }: CommandDeckProps) {
                 </motion.div>
                 <motion.div variants={buttonVariants}>
                   <DeckButton
-                    icon={<Activity className="w-5 h-5" />}
+                    icon={<Activity className="w-4 h-4" />}
                     label={t('commandDeck.datasource')}
                     tooltip={t('commandDeck.tooltips.datasource')}
                     onClick={handleDatasource}
@@ -328,15 +314,10 @@ export function CommandDeck({ disabled = false }: CommandDeckProps) {
                   />
                 </motion.div>
 
-                {/* Divider */}
-                <motion.div variants={buttonVariants}>
-                  <div className="h-px bg-gradient-to-r from-transparent via-cyan-500/40 to-transparent" />
-                </motion.div>
-
-                {/* Action Button (Amber) */}
+                {/* Action Button */}
                 <motion.div variants={buttonVariants}>
                   <DeckButton
-                    icon={<RefreshCw className={`w-5 h-5 ${isReloading ? 'animate-spin' : ''}`} />}
+                    icon={<RefreshCw className={`w-4 h-4 ${isReloading ? 'animate-spin' : ''}`} />}
                     label={t('commandDeck.reload')}
                     tooltip={t('commandDeck.tooltips.reload')}
                     onClick={handleReload}
@@ -345,10 +326,10 @@ export function CommandDeck({ disabled = false }: CommandDeckProps) {
                   />
                 </motion.div>
 
-                {/* Setup Button (White) */}
+                {/* Setup */}
                 <motion.div variants={buttonVariants}>
                   <DeckButton
-                    icon={<SlidersHorizontal className="w-5 h-5" />}
+                    icon={<SlidersHorizontal className="w-4 h-4" />}
                     label={t('commandDeck.setup')}
                     tooltip={t('commandDeck.tooltips.setup')}
                     onClick={handleSetup}
@@ -357,10 +338,10 @@ export function CommandDeck({ disabled = false }: CommandDeckProps) {
                   />
                 </motion.div>
 
-                {/* Help Button (White) */}
+                {/* Help */}
                 <motion.div variants={buttonVariants}>
                   <DeckButton
-                    icon={<HelpCircle className="w-5 h-5" />}
+                    icon={<HelpCircle className="w-4 h-4" />}
                     label={t('commandDeck.help')}
                     tooltip={t('commandDeck.tooltips.help')}
                     onClick={() => navigate('/help')}
@@ -369,15 +350,16 @@ export function CommandDeck({ disabled = false }: CommandDeckProps) {
                   />
                 </motion.div>
 
-                {/* Music Provider Divider */}
-                <motion.div variants={buttonVariants}>
-                  <div className="h-px bg-gradient-to-r from-transparent via-green-500/40 to-transparent" />
-                </motion.div>
+                {/* Divider vertical */}
+                <motion.div 
+                  variants={buttonVariants}
+                  className="w-px h-14 bg-gradient-to-b from-transparent via-cyan-500/40 to-transparent mx-1"
+                />
 
-                {/* Spotify Button (Green) */}
+                {/* Spotify */}
                 <motion.div variants={buttonVariants}>
                   <DeckButton
-                    icon={<Music className="w-5 h-5" />}
+                    icon={<Music className="w-4 h-4" />}
                     label="SPOTIFY"
                     tooltip={t('commandDeck.tooltips.spotify')}
                     onClick={() => navigate('/spotify')}
@@ -386,10 +368,10 @@ export function CommandDeck({ disabled = false }: CommandDeckProps) {
                   />
                 </motion.div>
 
-                {/* YouTube Music Button (Red) */}
+                {/* YouTube */}
                 <motion.div variants={buttonVariants}>
                   <DeckButton
-                    icon={<Youtube className="w-5 h-5" />}
+                    icon={<Youtube className="w-4 h-4" />}
                     label="YOUTUBE"
                     tooltip={t('commandDeck.tooltips.youtube')}
                     onClick={() => navigate('/youtube-music')}
@@ -399,14 +381,15 @@ export function CommandDeck({ disabled = false }: CommandDeckProps) {
                 </motion.div>
 
                 {/* Divider */}
-                <motion.div variants={buttonVariants}>
-                  <div className="h-px bg-gradient-to-r from-transparent via-red-500/40 to-transparent" />
-                </motion.div>
+                <motion.div 
+                  variants={buttonVariants}
+                  className="w-px h-14 bg-gradient-to-b from-transparent via-red-500/40 to-transparent mx-1"
+                />
 
-                {/* Critical Button (Red) */}
+                {/* Reboot */}
                 <motion.div variants={buttonVariants}>
                   <DeckButton
-                    icon={<Power className="w-5 h-5" />}
+                    icon={<Power className="w-4 h-4" />}
                     label={t('commandDeck.reboot')}
                     tooltip={t('commandDeck.tooltips.reboot')}
                     onClick={() => setShowRebootDialog(true)}
@@ -415,9 +398,6 @@ export function CommandDeck({ disabled = false }: CommandDeckProps) {
                   />
                 </motion.div>
               </motion.div>
-              
-              {/* Reflection effect */}
-              <div className="command-deck-reflection" />
             </motion.div>
           )}
         </AnimatePresence>

@@ -7,6 +7,7 @@
   
   [![GitHub](https://img.shields.io/badge/GitHub-TSiJUKEBOX-181717?style=flat-square&logo=github)](https://github.com/B0yZ4kr14/TSiJUKEBOX)
   [![CI/CD](https://github.com/B0yZ4kr14/TSiJUKEBOX/actions/workflows/tsijukebox-cicd.yml/badge.svg)](https://github.com/B0yZ4kr14/TSiJUKEBOX/actions/workflows/tsijukebox-cicd.yml)
+  [![Coverage](https://img.shields.io/badge/dynamic/json?url=https://B0yZ4kr14.github.io/TSiJUKEBOX/coverage-summary.json&query=$.total.lines.pct&suffix=%25&label=coverage&color=brightgreen&style=flat-square)](https://B0yZ4kr14.github.io/TSiJUKEBOX/)
   ![Version](https://img.shields.io/badge/version-4.0.0-blue?style=flat-square)
   ![License](https://img.shields.io/badge/license-Public_Domain-green?style=flat-square)
   ![React](https://img.shields.io/badge/React-18.3-61dafb?style=flat-square&logo=react)
@@ -139,6 +140,26 @@ npm run dev
 ```
 
 Acesse **http://localhost:5173** • Login padrão: `admin` / `admin`
+
+---
+
+## 🧪 Testes
+
+| Tipo | Comando | Descrição |
+|------|---------|-----------|
+| 🔬 **Unit** | `npm run test:unit` | Testes unitários |
+| 🔗 **Integration** | `npm run test:integration` | Testes de integração |
+| 🌐 **E2E** | `npm run test:e2e` | Testes end-to-end (Playwright) |
+| 📊 **Coverage** | `npm run test:coverage` | Relatório de cobertura |
+| 🖥️ **UI** | `npm run test:ui` | Vitest UI no navegador |
+| 📋 **All** | `npm run test:all` | Executar todos os testes |
+
+**📊 [Dashboard de Cobertura](https://B0yZ4kr14.github.io/TSiJUKEBOX/)**
+
+```bash
+# Gerar relatório de cobertura local
+./scripts/coverage-report.sh
+```
 
 ---
 

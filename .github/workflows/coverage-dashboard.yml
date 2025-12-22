@@ -1,0 +1,250 @@
+name: 📊 Coverage Dashboard
+
+on:
+  push:
+    branches: [main]
+  workflow_dispatch:
+
+permissions:
+  contents: write
+  pages: write
+  id-token: write
+
+concurrency:
+  group: "pages"
+  cancel-in-progress: false
+
+jobs:
+  build-coverage:
+    name: 📊 Build Coverage Report
+    runs-on: ubuntu-latest
+    
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+          cache: 'npm'
+
+      - name: Install dependencies
+        run: npm ci --legacy-peer-deps
+
+      - name: Run tests with coverage
+        run: npx vitest run --coverage
+        continue-on-error: true
+
+      - name: Generate coverage badge
+        uses: jaywcjlove/coverage-badges-cli@main
+        with:
+          source: coverage/vitest/coverage-summary.json
+          output: coverage/vitest/badges.svg
+
+      - name: Create dashboard HTML
+        run: |
+          cat > coverage/vitest/index.html << 'DASHBOARD_EOF'
+          <!DOCTYPE html>
+          <html lang="pt-BR">
+          <head>
+            <meta charset="UTF-8">
+            <meta name="viewport" content="width=device-width, initial-scale=1.0">
+            <title>TSiJUKEBOX - Coverage Dashboard</title>
+            <link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>📊</text></svg>">
+            <style>
+              :root {
+                --bg-primary: #0a0a0f;
+                --bg-secondary: #1a1a2e;
+                --bg-tertiary: #16213e;
+                --text-primary: #ffffff;
+                --text-secondary: #a0a0a0;
+                --accent-cyan: #00d4ff;
+                --accent-magenta: #ff00ff;
+                --accent-green: #00ff88;
+                --accent-yellow: #ffff00;
+              }
+              * { margin: 0; padding: 0; box-sizing: border-box; }
+              body {
+                font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+                background: var(--bg-primary);
+                color: var(--text-primary);
+                min-height: 100vh;
+                padding: 2rem;
+              }
+              .container { max-width: 1400px; margin: 0 auto; }
+              header {
+                text-align: center;
+                margin-bottom: 2rem;
+              }
+              h1 {
+                background: linear-gradient(135deg, var(--accent-cyan), var(--accent-magenta));
+                -webkit-background-clip: text;
+                -webkit-text-fill-color: transparent;
+                background-clip: text;
+                font-size: 2.5rem;
+                margin-bottom: 0.5rem;
+              }
+              .subtitle {
+                color: var(--text-secondary);
+                font-size: 1rem;
+              }
+              .badge-container {
+                display: flex;
+                justify-content: center;
+                gap: 1rem;
+                margin: 2rem 0;
+                flex-wrap: wrap;
+              }
+              .card {
+                background: var(--bg-secondary);
+                border-radius: 16px;
+                padding: 1.5rem;
+                border: 1px solid rgba(255,255,255,0.1);
+                margin-bottom: 1.5rem;
+              }
+              .card-title {
+                color: var(--accent-cyan);
+                font-size: 1.25rem;
+                margin-bottom: 1rem;
+                display: flex;
+                align-items: center;
+                gap: 0.5rem;
+              }
+              .report-frame {
+                width: 100%;
+                height: 75vh;
+                border: none;
+                border-radius: 12px;
+                background: var(--bg-tertiary);
+              }
+              .stats-grid {
+                display: grid;
+                grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+                gap: 1rem;
+                margin-bottom: 1.5rem;
+              }
+              .stat-card {
+                background: var(--bg-tertiary);
+                border-radius: 12px;
+                padding: 1.25rem;
+                text-align: center;
+                border: 1px solid rgba(255,255,255,0.05);
+              }
+              .stat-value {
+                font-size: 2rem;
+                font-weight: bold;
+                margin-bottom: 0.25rem;
+              }
+              .stat-label {
+                color: var(--text-secondary);
+                font-size: 0.875rem;
+              }
+              .green { color: var(--accent-green); }
+              .cyan { color: var(--accent-cyan); }
+              .magenta { color: var(--accent-magenta); }
+              .yellow { color: var(--accent-yellow); }
+              footer {
+                text-align: center;
+                color: var(--text-secondary);
+                font-size: 0.875rem;
+                margin-top: 2rem;
+                padding-top: 1rem;
+                border-top: 1px solid rgba(255,255,255,0.1);
+              }
+              footer a {
+                color: var(--accent-cyan);
+                text-decoration: none;
+              }
+              footer a:hover {
+                text-decoration: underline;
+              }
+              .links {
+                display: flex;
+                justify-content: center;
+                gap: 2rem;
+                margin-top: 1rem;
+              }
+              .link-btn {
+                background: var(--bg-tertiary);
+                color: var(--text-primary);
+                padding: 0.75rem 1.5rem;
+                border-radius: 8px;
+                text-decoration: none;
+                border: 1px solid rgba(255,255,255,0.1);
+                transition: all 0.2s ease;
+              }
+              .link-btn:hover {
+                background: var(--accent-cyan);
+                color: var(--bg-primary);
+                border-color: var(--accent-cyan);
+              }
+            </style>
+          </head>
+          <body>
+            <div class="container">
+              <header>
+                <h1>📊 TSiJUKEBOX Coverage</h1>
+                <p class="subtitle">Relatório de Cobertura de Testes</p>
+              </header>
+              
+              <div class="badge-container">
+                <img src="badges.svg" alt="Coverage Badge">
+              </div>
+              
+              <div class="stats-grid">
+                <div class="stat-card">
+                  <div class="stat-value green">70%</div>
+                  <div class="stat-label">Meta de Cobertura</div>
+                </div>
+                <div class="stat-card">
+                  <div class="stat-value cyan">124+</div>
+                  <div class="stat-label">Testes de Integração</div>
+                </div>
+                <div class="stat-card">
+                  <div class="stat-value magenta">20</div>
+                  <div class="stat-label">Edge Functions</div>
+                </div>
+                <div class="stat-card">
+                  <div class="stat-value yellow">5</div>
+                  <div class="stat-label">Funções Testadas</div>
+                </div>
+              </div>
+              
+              <div class="card">
+                <h2 class="card-title">📈 Relatório Detalhado</h2>
+                <iframe class="report-frame" src="lcov-report/index.html"></iframe>
+              </div>
+              
+              <div class="links">
+                <a href="https://github.com/B0yZ4kr14/TSiJUKEBOX" class="link-btn">📂 Repositório</a>
+                <a href="https://github.com/B0yZ4kr14/TSiJUKEBOX/actions" class="link-btn">⚙️ CI/CD</a>
+                <a href="lcov-report/index.html" class="link-btn" target="_blank">📊 LCOV Report</a>
+              </div>
+              
+              <footer>
+                <p>Gerado automaticamente pelo GitHub Actions</p>
+                <p>TSiJUKEBOX Enterprise — <a href="https://github.com/B0yZ4kr14/TSiJUKEBOX">Domínio Público</a></p>
+              </footer>
+            </div>
+          </body>
+          </html>
+          DASHBOARD_EOF
+
+      - name: Upload Pages artifact
+        uses: actions/upload-pages-artifact@v3
+        with:
+          path: coverage/vitest
+
+  deploy:
+    name: 🚀 Deploy to GitHub Pages
+    needs: build-coverage
+    runs-on: ubuntu-latest
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+    
+    steps:
+      - name: Deploy to GitHub Pages
+        id: deployment
+        uses: actions/deploy-pages@v4

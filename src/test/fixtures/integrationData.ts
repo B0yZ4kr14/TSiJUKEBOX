@@ -304,3 +304,188 @@ export const mockMaxParticipantsError = {
   message: 'Session has reached maximum participants',
   code: 'MAX_PARTICIPANTS',
 };
+
+// ============================================
+// SPOTIFY AUTH DATA
+// ============================================
+
+export const mockSpotifyAuthData = {
+  loginRequest: {
+    clientId: 'spotify-client-id-123',
+    clientSecret: 'spotify-client-secret-456',
+    redirectUri: 'https://example.com/callback',
+  },
+  exchangeRequest: {
+    clientId: 'spotify-client-id-123',
+    clientSecret: 'spotify-client-secret-456',
+    redirectUri: 'https://example.com/callback',
+    code: 'auth-code-from-spotify',
+  },
+  refreshRequest: {
+    clientId: 'spotify-client-id-123',
+    clientSecret: 'spotify-client-secret-456',
+    refreshToken: 'refresh-token-abc123',
+  },
+  tokenResponse: {
+    accessToken: 'access-token-xyz789',
+    refreshToken: 'refresh-token-abc123',
+    expiresAt: Date.now() + 3600000,
+    scope: 'user-read-playback-state playlist-read-private',
+  },
+  validateResponse: {
+    valid: true,
+    user: {
+      id: 'spotify-user-123',
+      displayName: 'Test User',
+      email: 'test@example.com',
+      imageUrl: 'https://i.scdn.co/image/avatar.jpg',
+      product: 'premium',
+    },
+  },
+};
+
+// ============================================
+// YOUTUBE MUSIC AUTH DATA
+// ============================================
+
+export const mockYouTubeAuthData = {
+  getAuthUrlRequest: {
+    action: 'getAuthUrl' as const,
+    clientId: 'google-client-id-123',
+    redirectUri: 'https://example.com/youtube-callback',
+  },
+  exchangeCodeRequest: {
+    action: 'exchangeCode' as const,
+    code: 'google-auth-code-abc',
+    clientId: 'google-client-id-123',
+    clientSecret: 'google-client-secret-456',
+    redirectUri: 'https://example.com/youtube-callback',
+  },
+  refreshTokenRequest: {
+    action: 'refreshToken' as const,
+    refreshToken: 'google-refresh-token-xyz',
+    clientId: 'google-client-id-123',
+    clientSecret: 'google-client-secret-456',
+  },
+  tokenResponse: {
+    accessToken: 'ya29.google-access-token',
+    refreshToken: 'google-refresh-token-xyz',
+    expiresIn: 3600,
+    user: {
+      id: 'google-user-123',
+      name: 'YouTube User',
+      email: 'user@gmail.com',
+      imageUrl: 'https://lh3.googleusercontent.com/photo.jpg',
+    },
+  },
+  refreshResponse: {
+    accessToken: 'ya29.new-access-token',
+    expiresIn: 3600,
+  },
+};
+
+// ============================================
+// ANALYZE JAM DATA
+// ============================================
+
+export const mockAnalyzeJamData = {
+  suggestTracksRequest: {
+    action: 'suggest-tracks' as const,
+    queue: [
+      { trackName: 'Bohemian Rhapsody', artistName: 'Queen' },
+      { trackName: 'Stairway to Heaven', artistName: 'Led Zeppelin' },
+    ],
+    sessionName: 'Friday Night Jam',
+  },
+  suggestTracksResponse: {
+    suggestions: [
+      { trackName: 'Comfortably Numb', artistName: 'Pink Floyd', reason: 'Similar epic rock ballad' },
+      { trackName: 'Hotel California', artistName: 'Eagles', reason: 'Classic rock anthem' },
+    ],
+    mood: 'epic and nostalgic',
+    genre: 'classic rock',
+  },
+  analyzeMoodRequest: {
+    action: 'analyze-mood' as const,
+    queue: [
+      { trackName: 'Bohemian Rhapsody', artistName: 'Queen' },
+    ],
+  },
+  analyzeMoodResponse: {
+    mood: 'dramatic and theatrical',
+    energy: 'high' as const,
+    genres: ['rock', 'progressive rock'],
+    vibe: 'Epic rock journey with theatrical elements',
+  },
+  getSimilarRequest: {
+    action: 'get-similar' as const,
+    queue: [],
+    currentTrack: { trackName: 'Bohemian Rhapsody', artistName: 'Queen' },
+  },
+  getSimilarResponse: {
+    similar: [
+      { trackName: 'A Day in the Life', artistName: 'The Beatles', similarity: 'Complex song structure' },
+      { trackName: 'November Rain', artistName: "Guns N' Roses", similarity: 'Epic rock ballad' },
+    ],
+  },
+};
+
+// ============================================
+// LYRICS SEARCH DATA
+// ============================================
+
+export const mockLyricsSearchData = {
+  validRequest: {
+    trackName: 'Bohemian Rhapsody',
+    artistName: 'Queen',
+  },
+  lrclibSyncedResponse: {
+    source: 'lrclib' as const,
+    synced: true,
+    lines: [
+      { time: 0, text: 'Is this the real life?' },
+      { time: 4, text: 'Is this just fantasy?' },
+      { time: 8, text: 'Caught in a landslide' },
+    ],
+    plainText: 'Is this the real life?\nIs this just fantasy?',
+    trackName: 'Bohemian Rhapsody',
+    artistName: 'Queen',
+  },
+  lrclibPlainResponse: {
+    source: 'lrclib' as const,
+    synced: false,
+    lines: [{ time: 0, text: 'Is this the real life?' }],
+    plainText: 'Is this the real life?\nIs this just fantasy?',
+    trackName: 'Bohemian Rhapsody',
+    artistName: 'Queen',
+  },
+  geniusResponse: {
+    source: 'genius' as const,
+    synced: false,
+    lines: [{ time: 0, text: 'Is this the real life?' }],
+    plainText: 'Is this the real life?',
+    trackName: 'Bohemian Rhapsody',
+    artistName: 'Queen',
+  },
+  enhancedLrcResponse: {
+    source: 'lrclib' as const,
+    synced: true,
+    lines: [{
+      time: 0,
+      text: 'Is this the real life',
+      words: [
+        { word: 'Is', startTime: 0, endTime: 0.3 },
+        { word: 'this', startTime: 0.3, endTime: 0.6 },
+      ],
+    }],
+    trackName: 'Bohemian Rhapsody',
+    artistName: 'Queen',
+  },
+  notFoundResponse: {
+    source: 'none' as const,
+    synced: false,
+    lines: [],
+    trackName: 'Unknown Song',
+    artistName: 'Unknown Artist',
+  },
+};

@@ -37,7 +37,7 @@ O sistema de plugins do TSiJUKEBOX permite extensões modulares que adicionam fu
 ### Características
 
 | Feature | Descrição |
-|---------|-----------|
+|---------|------------|
 | **Modular** | Plugins são independentes e isolados |
 | **Hot Reload** | Atualização sem reiniciar o serviço |
 | **Versionado** | Compatibilidade por versão semântica |
@@ -102,12 +102,6 @@ Download de músicas do Spotify via spotdl.
 sudo python3 install.py --plugin spotify-downloader
 ```
 
-**Funcionalidades:**
-- Download via YouTube (melhor qualidade)
-- Sincronização de playlists
-- Atualização automática de biblioteca
-- Suporte a álbuns e artistas
-
 ---
 
 ### 3. discord-integration
@@ -121,29 +115,6 @@ Integração com Discord: Rich Presence e Webhooks.
 | **Dependências** | pypresence |
 | **Tamanho** | ~5MB |
 
-**Instalação:**
-```bash
-sudo python3 install.py --plugin discord-integration
-```
-
-**Funcionalidades:**
-- Rich Presence mostrando música atual
-- Webhooks para alertas e notificações
-- Integração com bot de música
-- Status customizável
-
-**Configuração:**
-```json
-{
-  "discord": {
-    "client_id": "YOUR_DISCORD_APP_ID",
-    "webhook_url": "https://discord.com/api/webhooks/...",
-    "show_album_art": true,
-    "show_progress": true
-  }
-}
-```
-
 ---
 
 ### 4. lyrics-fetcher
@@ -154,26 +125,11 @@ Busca de letras de múltiplas fontes.
 |-------------|-------|
 | **ID** | `lyrics-fetcher` |
 | **Versão** | 1.0.0 |
-| **Dependências** | - |
-| **Tamanho** | ~2MB |
-
-**Instalação:**
-```bash
-sudo python3 install.py --plugin lyrics-fetcher
-```
-
-**Fontes suportadas:**
-- Genius
-- Musixmatch
-- AZLyrics
-- LyricsOVH
-- Local cache
+| **Fontes** | Genius, Musixmatch, AZLyrics |
 
 ---
 
 ## 🔧 Instalação de Plugins
-
-### Via Instalador
 
 ```bash
 # Listar plugins disponíveis
@@ -182,21 +138,8 @@ python3 install.py --list-plugins
 # Instalar plugin específico
 sudo python3 install.py --plugin PLUGIN_NAME
 
-# Instalar múltiplos plugins
-sudo python3 install.py --plugin youtube-music-dl --plugin discord-integration
-
 # Instalar todos os plugins
 sudo python3 install.py --all-plugins
-```
-
-### Via CLI
-
-```bash
-# Após instalação do TSiJUKEBOX
-tsijukebox plugin list
-tsijukebox plugin install youtube-music-dl
-tsijukebox plugin remove youtube-music-dl
-tsijukebox plugin update youtube-music-dl
 ```
 
 ---
@@ -224,62 +167,26 @@ plugins/
   "version": "1.0.0",
   "description": "Descrição do plugin",
   "author": "Seu Nome",
-  "license": "MIT",
-  "homepage": "https://github.com/...",
-  "main": "src/main.py",
   "tsijukebox": {
-    "minVersion": "4.0.0",
-    "maxVersion": "5.0.0"
+    "minVersion": "4.0.0"
   },
-  "dependencies": {
-    "python": ["requests>=2.28.0"],
-    "system": ["ffmpeg"]
-  },
-  "hooks": ["on_track_change", "on_playback_start"],
-  "settings": {
-    "api_key": {
-      "type": "string",
-      "required": true,
-      "description": "API Key para o serviço"
-    }
-  }
+  "hooks": ["on_track_change", "on_playback_start"]
 }
 ```
 
 ### Implementação (__init__.py)
 
 ```python
-"""My Custom Plugin for TSiJUKEBOX"""
-
 from tsijukebox.plugins import PluginBase, hook
 
 class MyPlugin(PluginBase):
-    """Plugin customizado exemplo."""
-    
-    def __init__(self, config: dict):
-        super().__init__(config)
-        self.api_key = config.get("api_key")
-    
     def on_load(self):
-        """Chamado quando o plugin é carregado."""
-        self.logger.info("MyPlugin carregado com sucesso!")
-    
-    def on_unload(self):
-        """Chamado quando o plugin é descarregado."""
-        self.logger.info("MyPlugin descarregado.")
+        self.logger.info("MyPlugin carregado!")
     
     @hook("on_track_change")
     def handle_track_change(self, track: dict):
-        """Chamado quando a faixa muda."""
-        self.logger.info(f"Nova faixa: {track['title']} - {track['artist']}")
-        # Sua lógica aqui
-    
-    @hook("on_playback_start")
-    def handle_playback_start(self, track: dict):
-        """Chamado quando a reprodução inicia."""
-        pass
+        self.logger.info(f"Nova faixa: {track['title']}")
 
-# Export da classe principal
 __plugin__ = MyPlugin
 ```
 
@@ -287,144 +194,33 @@ __plugin__ = MyPlugin
 
 ## 📖 API de Plugins
 
-### Classe Base
-
-```python
-from tsijukebox.plugins import PluginBase
-
-class PluginBase:
-    """Classe base para todos os plugins."""
-    
-    # Atributos
-    config: dict          # Configurações do plugin
-    logger: Logger        # Logger do plugin
-    storage: Storage      # Armazenamento persistente
-    
-    # Métodos de ciclo de vida
-    def on_load(self) -> None: ...
-    def on_unload(self) -> None: ...
-    def on_config_change(self, key: str, value: Any) -> None: ...
-    
-    # Métodos utilitários
-    def get_setting(self, key: str, default: Any = None) -> Any: ...
-    def set_setting(self, key: str, value: Any) -> None: ...
-    def emit_event(self, event: str, data: dict) -> None: ...
-```
-
 ### Hooks Disponíveis
 
 | Hook | Parâmetros | Descrição |
-|------|------------|-----------|
+|------|------------|------------|
 | `on_track_change` | `track: dict` | Faixa mudou |
 | `on_playback_start` | `track: dict` | Reprodução iniciou |
 | `on_playback_pause` | `track: dict` | Reprodução pausada |
-| `on_playback_stop` | `track: dict` | Reprodução parou |
 | `on_volume_change` | `volume: int` | Volume alterado |
 | `on_queue_update` | `queue: list` | Fila atualizada |
-| `on_playlist_change` | `playlist: dict` | Playlist selecionada |
-| `on_search` | `query: str` | Busca realizada |
-
-### Storage API
-
-```python
-# Armazenar dados
-self.storage.set("key", {"data": "value"})
-
-# Recuperar dados
-data = self.storage.get("key", default={})
-
-# Remover dados
-self.storage.delete("key")
-
-# Listar chaves
-keys = self.storage.keys()
-```
 
 ---
 
 ## ⚙️ Configuração
 
-### Arquivo de Configuração
-
-Os plugins são configurados em `~/.config/tsijukebox/plugins.json`:
+Plugins são configurados em `~/.config/tsijukebox/plugins.json`:
 
 ```json
 {
-  "enabled": [
-    "youtube-music-dl",
-    "discord-integration"
-  ],
+  "enabled": ["youtube-music-dl", "discord-integration"],
   "settings": {
     "youtube-music-dl": {
       "output_format": "mp3",
-      "quality": "320k",
-      "output_dir": "~/Music/Downloads"
-    },
-    "discord-integration": {
-      "client_id": "123456789",
-      "show_album_art": true
+      "quality": "320k"
     }
   }
 }
 ```
-
-### Variáveis de Ambiente
-
-```bash
-# Diretório de plugins customizados
-export TSIJUKEBOX_PLUGINS_DIR="$HOME/.local/share/tsijukebox/plugins"
-
-# Modo debug para plugins
-export TSIJUKEBOX_PLUGINS_DEBUG="true"
-
-# Desabilitar hot reload
-export TSIJUKEBOX_PLUGINS_HOT_RELOAD="false"
-```
-
----
-
-## 🆘 Troubleshooting
-
-### Plugin não carrega
-
-```bash
-# Verificar logs do plugin
-journalctl -u tsijukebox -f | grep "plugin"
-
-# Testar plugin isoladamente
-python3 -m tsijukebox.plugins.test my-plugin
-
-# Verificar dependências
-pip check
-```
-
-### Conflito de versões
-
-```bash
-# Verificar compatibilidade
-tsijukebox plugin check my-plugin
-
-# Forçar reinstalação
-sudo python3 install.py --plugin my-plugin --force
-```
-
-### Hot reload não funciona
-
-```bash
-# Reiniciar serviço de plugins
-systemctl restart tsijukebox-plugins
-
-# Verificar inotify
-cat /proc/sys/fs/inotify/max_user_watches
-```
-
----
-
-## 📚 Recursos Adicionais
-
-- [API Reference](API-REFERENCE.md) - Referência completa de APIs
-- [Developer Guide](DEVELOPER-GUIDE.md) - Guia de desenvolvimento
-- [Contributing](CONTRIBUTING.md) - Como contribuir
 
 ---
 

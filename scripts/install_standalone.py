@@ -28,7 +28,7 @@ from dataclasses import dataclass, field
 # CONSTANTES
 # =============================================================================
 
-VERSION = "4.2.0"
+VERSION = "4.3.0"
 INSTALL_DIR = Path("/opt/tsijukebox")
 CONFIG_DIR = Path("/etc/tsijukebox")
 LOG_DIR = Path("/var/log/tsijukebox")

@@ -1,29 +1,20 @@
-# TSiJUKEBOX Changelog
+# Changelog
+
+All notable changes to TSiJUKEBOX will be documented in this file.
 
 ## [4.1.0] - 2025-12-22
 
 ### Added
-- GitHub Dashboard with full repository stats visualization
-- Auto-sync functionality for automatic GitHub pushes
-- Health monitoring with WebSocket support
-- Plugin system documentation
-- Spicetify theme gallery
-- Claude Opus refactor integration
-- Full repository sync edge function
+- Full repository sync system
+- Real-time GitHub synchronization
+- Auto-fix functionality in diagnose-service.py
+- E2E tests for service diagnostics
+- systemd-notify integration
+- tsi-status command
 
 ### Changed
-- Improved data sanitization for GitHub API responses
-- Enhanced error handling with null-checks
-- Refactored front-end components for robustness
+- Improved GitHub dashboard with sync progress
+- Enhanced tsijukebox-doctor with service log analysis
 
 ### Fixed
-- TypeError bugs in GitHubDashboard components
-- Null reference errors in commit/release processing
-
-## [4.0.0] - 2025-12-01
-
-### Added
-- Initial Lovable integration
-- Supabase backend
-- Jam Sessions feature
-- Playback statistics
+- Various bug fixes and performance improvements

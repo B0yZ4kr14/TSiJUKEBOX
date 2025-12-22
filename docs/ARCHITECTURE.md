@@ -7,7 +7,7 @@
 <p align="center">
   <strong>Documentação Técnica da Arquitetura</strong>
   <br>
-  Versão 4.0.0
+  Versão 4.2.0
 </p>
 
 ---
@@ -16,6 +16,7 @@
 
 - [Visão Geral](#visão-geral)
 - [Arquitetura de Alto Nível](#arquitetura-de-alto-nível)
+- [Sistema de Rotas](#sistema-de-rotas)
 - [Fluxo de Dados](#fluxo-de-dados)
 - [Estrutura de Componentes](#estrutura-de-componentes)
 - [Modelo de Dados](#modelo-de-dados)
@@ -45,7 +46,8 @@ TSiJUKEBOX é uma Progressive Web Application (PWA) enterprise para sistemas de 
 graph TB
     subgraph "🖥️ Frontend - React + Vite"
         UI["🎨 UI Components<br/>(shadcn/ui + Tailwind)"]
-        Pages["📄 32 Pages<br/>(React Router)"]
+        Pages["📄 40+ Pages<br/>(9 categorias)"]
+        Routes["🛣️ Route System<br/>(src/routes)"]
         Hooks["🪝 Custom Hooks<br/>(6 domínios)"]
         Contexts["🔄 Context Providers<br/>(5 providers)"]
         ReactQuery["⚡ React Query<br/>(Cache + State)"]
@@ -67,7 +69,8 @@ graph TB
     end
     
     UI --> Hooks
-    Pages --> Hooks
+    Pages --> Routes
+    Routes --> Hooks
     Hooks --> Contexts
     Hooks --> ReactQuery
     ReactQuery --> Edge
@@ -76,6 +79,82 @@ graph TB
     Edge --> YouTube
     Contexts --> Auth
     Storage --> Storj
+```
+
+---
+
+## Sistema de Rotas
+
+O sistema de rotas foi refatorado para usar uma arquitetura centralizada em `src/routes/index.tsx`.
+
+### Diagrama de Rotas
+
+```mermaid
+graph TD
+    subgraph "🛣️ Route System (src/routes)"
+        AllRoutes["allRoutes"]
+    end
+    
+    subgraph "📂 Categorias de Rotas"
+        Public["🌐 publicRoutes<br/>(9 rotas)"]
+        Protected["🔒 protectedRoutes<br/>(5 rotas)"]
+        Dashboard["📊 dashboardRoutes<br/>(7 rotas)"]
+        Spotify["🎵 spotifyRoutes<br/>(4 rotas)"]
+        YouTube["📺 youtubeRoutes<br/>(4 rotas)"]
+        Admin["👤 adminRoutes<br/>(4 rotas)"]
+        CatchAll["❓ catchAllRoute<br/>(404)"]
+    end
+    
+    AllRoutes --> Public
+    AllRoutes --> Protected
+    AllRoutes --> Dashboard
+    AllRoutes --> Spotify
+    AllRoutes --> YouTube
+    AllRoutes --> Admin
+    AllRoutes --> CatchAll
+    
+    subgraph "📁 Organização de Páginas"
+        PagesPublic["src/pages/public/"]
+        PagesAdmin["src/pages/admin/"]
+        PagesDash["src/pages/dashboards/"]
+        PagesSpotify["src/pages/spotify/"]
+        PagesYouTube["src/pages/youtube/"]
+        PagesSettings["src/pages/settings/"]
+        PagesBrand["src/pages/brand/"]
+        PagesTools["src/pages/tools/"]
+        PagesSocial["src/pages/social/"]
+    end
+```
+
+### Categorias de Rotas
+
+| Categoria | Quantidade | Permissão | Descrição |
+|-----------|------------|-----------|-----------|
+| **Public** | 9 | Nenhuma | Acessíveis sem autenticação |
+| **Protected** | 5 | `canAccessSettings` | Requerem autenticação |
+| **Dashboard** | 7 | `canAccessSystemControls` | Dashboards do sistema |
+| **Spotify** | 4 | Nenhuma | Integração Spotify |
+| **YouTube** | 4 | Nenhuma | Integração YouTube Music |
+| **Admin** | 4 | `canManageUsers` | Administração |
+
+### Uso do Sistema de Rotas
+
+```typescript
+// Importação centralizada
+import { allRoutes, getProtectedRoutes, getRoutesByCategory } from '@/routes';
+
+// Todas as rotas
+<Routes>
+  {allRoutes.map(route => (
+    <Route key={route.path} path={route.path} element={route.element} />
+  ))}
+</Routes>
+
+// Rotas por categoria
+const { public: publicRoutes, admin: adminRoutes } = getRoutesByCategory();
+
+// Apenas rotas protegidas
+const protectedRoutes = getProtectedRoutes();
 ```
 
 ---
@@ -144,22 +223,30 @@ graph TD
     
     subgraph "🛣️ Routing"
         BR["BrowserRouter"]
-        Routes["Routes"]
+        Routes["Routes (src/routes)"]
     end
     
-    subgraph "📄 Page Types"
-        Public["Public Pages<br/>(Login, Help, Wiki)"]
-        Protected["Protected Pages<br/>(Dashboard, Settings)"]
-        Admin["Admin Pages<br/>(Admin, Logs, Library)"]
+    subgraph "📄 Page Categories (9)"
+        Public["📁 public/<br/>(Auth, Help, Wiki...)"]
+        Admin["📁 admin/<br/>(Admin, Logs...)"]
+        Dashboards["📁 dashboards/<br/>(7 dashboards)"]
+        Spotify["📁 spotify/<br/>(Browser, Search...)"]
+        YouTube["📁 youtube/<br/>(Browser, Search...)"]
+        Settings["📁 settings/<br/>(Settings, Theme...)"]
+        Brand["📁 brand/<br/>(Guidelines, Logo...)"]
+        Tools["📁 tools/<br/>(Showcase, Tests...)"]
+        Social["📁 social/<br/>(Jam Session)"]
     end
     
-    subgraph "🧩 Component Categories"
-        Player["Player Components<br/>(12 components)"]
-        Settings["Settings Components<br/>(28 components)"]
-        Auth["Auth Components<br/>(6 components)"]
-        UILib["UI Library<br/>(50+ shadcn)"]
-        Spotify["Spotify Components<br/>(8 components)"]
-        YouTube["YouTube Components<br/>(5 components)"]
+    subgraph "🧩 Settings Components (8 subcategorias)"
+        Database["📁 database/"]
+        Integrations["📁 integrations/"]
+        System["📁 system/"]
+        Users["📁 users/"]
+        Appearance["📁 appearance/"]
+        Developer["📁 developer/"]
+        Voice["📁 voice/"]
+        UISettings["📁 ui/"]
     end
     
     App --> QCP
@@ -170,14 +257,23 @@ graph TD
     THP --> BR
     BR --> Routes
     Routes --> Public
-    Routes --> Protected
     Routes --> Admin
+    Routes --> Dashboards
+    Routes --> Spotify
+    Routes --> YouTube
+    Routes --> Settings
+    Routes --> Brand
+    Routes --> Tools
+    Routes --> Social
     
-    Protected --> Player
-    Protected --> Settings
-    Public --> Auth
-    Player --> UILib
-    Settings --> UILib
+    Settings --> Database
+    Settings --> Integrations
+    Settings --> System
+    Settings --> Users
+    Settings --> Appearance
+    Settings --> Developer
+    Settings --> Voice
+    Settings --> UISettings
 ```
 
 ---
@@ -598,7 +694,15 @@ TSiJUKEBOX/
 │   ├── 📁 components/          # Componentes React
 │   │   ├── 📁 auth/            # Autenticação (6)
 │   │   ├── 📁 player/          # Player de música (12)
-│   │   ├── 📁 settings/        # Configurações (28)
+│   │   ├── 📁 settings/        # Configurações (50+ em 8 subcategorias)
+│   │   │   ├── 📁 database/    # Configurações de BD
+│   │   │   ├── 📁 integrations/# Integrações externas
+│   │   │   ├── 📁 system/      # Sistema
+│   │   │   ├── 📁 users/       # Usuários
+│   │   │   ├── 📁 appearance/  # Aparência
+│   │   │   ├── 📁 developer/   # Desenvolvedor
+│   │   │   ├── 📁 voice/       # Comandos de voz
+│   │   │   └── 📁 ui/          # UI compartilhada
 │   │   ├── 📁 spotify/         # Spotify (8)
 │   │   ├── 📁 youtube/         # YouTube (5)
 │   │   ├── 📁 ui/              # shadcn/ui (50+)
@@ -621,9 +725,31 @@ TSiJUKEBOX/
 │   │   ├── 📁 system/          # System hooks (12)
 │   │   └── 📁 youtube/         # YouTube hooks (3)
 │   │
-│   ├── 📁 pages/               # 32 Pages
+│   ├── 📁 pages/               # 40+ Pages (reorganizadas em 9 categorias)
+│   │   ├── 📁 public/          # Páginas públicas (Auth, Help, Wiki...)
+│   │   ├── 📁 admin/           # Páginas administrativas
+│   │   ├── 📁 dashboards/      # 7 Dashboards
+│   │   ├── 📁 spotify/         # Integração Spotify
+│   │   ├── 📁 youtube/         # Integração YouTube Music
+│   │   ├── 📁 settings/        # Configurações
+│   │   ├── 📁 brand/           # Identidade visual
+│   │   ├── 📁 tools/           # Ferramentas
+│   │   └── 📁 social/          # Jam Session
+│   │
+│   ├── 📁 routes/              # Sistema de Rotas Centralizado
+│   │   └── index.tsx           # Definição de todas as rotas
+│   │
 │   ├── 📁 lib/                 # Utilitários
-│   ├── 📁 types/               # TypeScript types
+│   ├── 📁 types/               # TypeScript types (10+ arquivos)
+│   │   ├── track.ts
+│   │   ├── user.ts
+│   │   ├── lyrics.ts
+│   │   ├── spotify-api.ts
+│   │   ├── kiosk.ts
+│   │   ├── audit.ts
+│   │   ├── settings.ts
+│   │   ├── weather.ts
+│   │   └── notifications.ts
 │   ├── 📁 i18n/                # Internacionalização
 │   └── 📁 integrations/        # Supabase client
 │
@@ -632,7 +758,15 @@ TSiJUKEBOX/
 │   └── config.toml             # Supabase config
 │
 ├── 📁 docs/                    # Documentação
-├── 📁 e2e/                     # Testes E2E
+│   ├── ARCHITECTURE.md         # Este arquivo
+│   ├── ROUTES.md               # Documentação de rotas
+│   ├── TESTING.md              # Guia de testes
+│   └── 📁 wiki/                # Wiki do projeto
+│
+├── 📁 e2e/                     # Testes E2E (Playwright)
+│   └── 📁 specs/               # Especificações de teste
+│       └── routes-validation.spec.ts
+│
 ├── 📁 scripts/                 # Scripts de automação
 └── 📁 packaging/               # Pacotes de distribuição
     └── 📁 arch/                # Arch Linux PKGBUILD
@@ -692,6 +826,7 @@ graph TD
         Settings["Settings<br/>(lazy)"]
         Spotify["Spotify Browser<br/>(lazy)"]
         YouTube["YouTube Browser<br/>(lazy)"]
+        Dashboards["Dashboards<br/>(lazy)"]
     end
     
     subgraph "⚡ Eager Load"
@@ -707,6 +842,7 @@ graph TD
     App -.-> |"lazy()"| Settings
     App -.-> |"lazy()"| Spotify
     App -.-> |"lazy()"| YouTube
+    App -.-> |"lazy()"| Dashboards
 ```
 
 ### Caching Strategy
@@ -760,6 +896,10 @@ graph TB
 - [x] ~~Implementar CI/CD pipeline completo~~ ✅ (Sistema de Auto-Sync)
 - [x] ~~Sistema de detecção de mudanças~~ ✅ (useFileChangeDetector + DevFileChangeMonitor)
 - [x] ~~Testes unitários para hooks de sistema~~ ✅ (useAutoSync + useFileChangeDetector tests)
+- [x] ~~Refatoração de páginas em categorias~~ ✅ (9 categorias em src/pages/)
+- [x] ~~Sistema de rotas centralizado~~ ✅ (src/routes/index.tsx)
+- [x] ~~Reorganização de componentes settings~~ ✅ (8 subcategorias)
+- [x] ~~Centralização de tipos~~ ✅ (10+ arquivos em src/types/)
 - [ ] Adicionar suporte a múltiplos idiomas (i18n completo)
 - [ ] Implementar modo offline com IndexedDB
 - [ ] Adicionar testes E2E para Edge Functions

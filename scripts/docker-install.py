@@ -39,12 +39,13 @@ from typing import Any, Dict, List, Optional, Tuple
 @dataclass(frozen=True)
 class Config:
     """Configuração imutável do instalador."""
-    VERSION: str = "5.0.0"
+    VERSION: str = "5.1.0"
     IMAGE: str = "ghcr.io/b0yz4kr14/tsijukebox:latest"
     IMAGE_MONITORING: str = "prom/prometheus:latest"
     IMAGE_GRAFANA: str = "grafana/grafana:latest"
     IMAGE_NGINX: str = "nginx:alpine"
     IMAGE_CERTBOT: str = "certbot/certbot:latest"
+    IMAGE_CERTBOT_DNS_CLOUDFLARE: str = "certbot/dns-cloudflare:latest"
     IMAGE_REDIS: str = "redis:alpine"
     
     INSTALL_DIR: Path = field(default_factory=lambda: Path("/opt/tsijukebox"))
@@ -54,6 +55,7 @@ class Config:
     BACKUP_DIR: Path = field(default_factory=lambda: Path("/var/backups/tsijukebox"))
     CERTS_DIR: Path = field(default_factory=lambda: Path("/etc/letsencrypt"))
     WEBROOT_DIR: Path = field(default_factory=lambda: Path("/var/www/certbot"))
+    CLOUDFLARE_CREDENTIALS_PATH: Path = field(default_factory=lambda: Path("/etc/letsencrypt/cloudflare.ini"))
     
     SERVICE_NAME: str = "tsijukebox"
     CONTAINER_NAME: str = "tsijukebox-app"
@@ -728,6 +730,157 @@ class CertbotManager:
 
 
 # ============================================================================
+# GERENCIADOR DE DNS CLOUDFLARE PARA CERTBOT
+# ============================================================================
+
+class CloudflareDNSManager:
+    """Gerencia certificados SSL via Cloudflare DNS-01 challenge."""
+    
+    def __init__(self, domain: str, email: str, api_token: str, staging: bool = False, wildcard: bool = False):
+        self.domain = domain
+        self.email = email
+        self.api_token = api_token
+        self.staging = staging
+        self.wildcard = wildcard
+        self.certs_dir = CONFIG.CERTS_DIR
+        self.credentials_path = CONFIG.CLOUDFLARE_CREDENTIALS_PATH
+    
+    def validate_token(self) -> bool:
+        """Valida se o token Cloudflare tem formato correto."""
+        if not self.api_token:
+            Logger.error("Cloudflare API Token não fornecido (use --cloudflare-token)")
+            return False
+        
+        # Token deve ter pelo menos 32 caracteres
+        if len(self.api_token) < 32:
+            Logger.warning("Cloudflare API Token parece muito curto")
+        
+        return True
+    
+    def setup_directories(self) -> bool:
+        """Cria diretórios necessários para Certbot com Cloudflare."""
+        Logger.info("Preparando diretórios para Cloudflare DNS challenge...")
+        
+        try:
+            self.certs_dir.mkdir(parents=True, exist_ok=True)
+            self.credentials_path.parent.mkdir(parents=True, exist_ok=True)
+            Logger.success("Diretórios criados")
+            return True
+        except Exception as e:
+            Logger.error(f"Falha ao criar diretórios: {e}")
+            return False
+    
+    def create_credentials_file(self) -> bool:
+        """Cria arquivo de credenciais para Certbot DNS Cloudflare."""
+        Logger.info("Criando arquivo de credenciais Cloudflare...")
+        
+        try:
+            # Cria arquivo com permissões restritas
+            credentials_content = f"""# Cloudflare API token for Certbot DNS challenge
+# Created by TSiJUKEBOX Installer
+dns_cloudflare_api_token = {self.api_token}
+"""
+            
+            self.credentials_path.write_text(credentials_content)
+            
+            # Define permissões restritas (600)
+            os.chmod(self.credentials_path, 0o600)
+            
+            Logger.success(f"Credenciais salvas em {self.credentials_path}")
+            return True
+            
+        except Exception as e:
+            Logger.error(f"Falha ao criar arquivo de credenciais: {e}")
+            return False
+    
+    def request_certificate(self) -> bool:
+        """Solicita certificado via Cloudflare DNS-01 challenge."""
+        domains = [self.domain]
+        
+        if self.wildcard:
+            domains.append(f"*.{self.domain}")
+            Logger.info(f"Solicitando certificado wildcard para {self.domain} e *.{self.domain}...")
+        else:
+            Logger.info(f"Solicitando certificado SSL para {self.domain} via Cloudflare DNS...")
+        
+        # Monta comando base
+        cmd = [
+            "docker", "run", "--rm",
+            "-v", f"{self.certs_dir}:/etc/letsencrypt",
+            "-v", f"{self.credentials_path}:/etc/letsencrypt/cloudflare.ini:ro",
+            CONFIG.IMAGE_CERTBOT_DNS_CLOUDFLARE,
+            "certonly",
+            "--dns-cloudflare",
+            "--dns-cloudflare-credentials", "/etc/letsencrypt/cloudflare.ini",
+            "--dns-cloudflare-propagation-seconds", "30",
+            "--email", self.email,
+            "--agree-tos",
+            "--non-interactive",
+            "--keep-until-expiring"
+        ]
+        
+        # Adiciona domínios
+        for d in domains:
+            cmd.extend(["-d", d])
+        
+        if self.staging:
+            cmd.append("--staging")
+            Logger.warning("Usando ambiente STAGING do Let's Encrypt (apenas para testes)")
+        
+        code, stdout, stderr = CommandRunner.run(cmd, check=False, timeout=300)
+        
+        if code == 0:
+            if self.wildcard:
+                Logger.success(f"Certificado wildcard obtido para *.{self.domain}")
+            else:
+                Logger.success(f"Certificado SSL obtido para {self.domain}")
+            return True
+        else:
+            Logger.error(f"Falha ao obter certificado: {stderr}")
+            Logger.debug(f"Stdout: {stdout}")
+            return False
+    
+    def renew_certificate(self) -> bool:
+        """Renova certificados via Cloudflare DNS challenge."""
+        Logger.info("Renovando certificados via Cloudflare DNS...")
+        
+        cmd = [
+            "docker", "run", "--rm",
+            "-v", f"{self.certs_dir}:/etc/letsencrypt",
+            "-v", f"{self.credentials_path}:/etc/letsencrypt/cloudflare.ini:ro",
+            CONFIG.IMAGE_CERTBOT_DNS_CLOUDFLARE,
+            "renew", "--quiet",
+            "--dns-cloudflare",
+            "--dns-cloudflare-credentials", "/etc/letsencrypt/cloudflare.ini"
+        ]
+        
+        code, stdout, stderr = CommandRunner.run(cmd, check=False, timeout=300)
+        
+        if code == 0:
+            Logger.success("Certificados renovados com sucesso")
+            return True
+        else:
+            Logger.warning(f"Renovação retornou: {stderr}")
+            return code == 0
+    
+    def check_certificate_exists(self) -> bool:
+        """Verifica se já existe certificado para o domínio."""
+        cert_path = self.certs_dir / "live" / self.domain / "fullchain.pem"
+        return cert_path.exists()
+    
+    def cleanup_credentials(self) -> bool:
+        """Remove arquivo de credenciais (segurança)."""
+        try:
+            if self.credentials_path.exists():
+                self.credentials_path.unlink()
+                Logger.debug("Arquivo de credenciais removido")
+            return True
+        except Exception as e:
+            Logger.warning(f"Não foi possível remover credenciais: {e}")
+            return False
+
+
+# ============================================================================
 # GERENCIADOR DE DOCKER COMPOSE
 # ============================================================================
 
@@ -744,8 +897,12 @@ class ComposeManager:
         monitoring = getattr(self.options, "monitoring", False)
         ssl = getattr(self.options, "ssl", False)
         ssl_letsencrypt = getattr(self.options, "ssl_letsencrypt", False)
+        ssl_cloudflare = getattr(self.options, "ssl_cloudflare", False)
         cache = getattr(self.options, "cache", False)
         domain = getattr(self.options, "domain", "localhost")
+        
+        # Qualquer tipo de SSL ativo
+        any_ssl = ssl or ssl_letsencrypt or ssl_cloudflare
         
         compose = {
             "version": "3.9",
@@ -754,7 +911,7 @@ class ComposeManager:
                     "image": CONFIG.IMAGE,
                     "container_name": CONFIG.CONTAINER_NAME,
                     "restart": "unless-stopped",
-                    "ports": [f"{port}:80"] if not (ssl or ssl_letsencrypt) else [],
+                    "ports": [f"{port}:80"] if not any_ssl else [],
                     "environment": [
                         "TZ=America/Sao_Paulo",
                         "VITE_SUPABASE_URL=${SUPABASE_URL:-}",
@@ -789,15 +946,15 @@ class ComposeManager:
             }
         }
         
-        # Adiciona Nginx Proxy para SSL (com ou sem Let's Encrypt)
-        if ssl or ssl_letsencrypt:
+        # Adiciona Nginx Proxy para SSL (qualquer tipo)
+        if any_ssl:
             nginx_volumes = [
                 "./nginx/nginx.conf:/etc/nginx/nginx.conf:ro",
                 "tsijukebox-logs:/var/log/nginx"
             ]
             
-            if ssl_letsencrypt:
-                # Let's Encrypt usa certs do host
+            if ssl_letsencrypt or ssl_cloudflare:
+                # Let's Encrypt / Cloudflare usam certs do host
                 nginx_volumes.extend([
                     f"{CONFIG.CERTS_DIR}:/etc/letsencrypt:ro",
                     "certbot-webroot:/var/www/certbot:ro"
@@ -814,14 +971,14 @@ class ComposeManager:
                 "volumes": nginx_volumes,
                 "depends_on": ["app"],
                 "networks": [CONFIG.NETWORK_NAME],
-                "profiles": ["ssl", "ssl-letsencrypt"]
+                "profiles": ["ssl", "ssl-letsencrypt", "ssl-cloudflare"]
             }
             
-            # Adiciona webroot volume para Let's Encrypt
-            if ssl_letsencrypt:
+            # Adiciona webroot volume para Let's Encrypt / Cloudflare
+            if ssl_letsencrypt or ssl_cloudflare:
                 compose["volumes"]["certbot-webroot"] = {}
         
-        # Adiciona container Certbot para renovação automática
+        # Adiciona container Certbot para renovação automática (HTTP-01)
         if ssl_letsencrypt:
             compose["services"]["certbot"] = {
                 "image": CONFIG.IMAGE_CERTBOT,
@@ -834,6 +991,20 @@ class ComposeManager:
                 "depends_on": ["nginx"],
                 "networks": [CONFIG.NETWORK_NAME],
                 "profiles": ["ssl-letsencrypt"]
+            }
+        
+        # Adiciona container Certbot DNS Cloudflare para renovação automática
+        if ssl_cloudflare:
+            compose["services"]["certbot-dns"] = {
+                "image": CONFIG.IMAGE_CERTBOT_DNS_CLOUDFLARE,
+                "container_name": "tsijukebox-certbot-dns",
+                "volumes": [
+                    f"{CONFIG.CERTS_DIR}:/etc/letsencrypt",
+                    f"{CONFIG.CLOUDFLARE_CREDENTIALS_PATH}:/etc/letsencrypt/cloudflare.ini:ro"
+                ],
+                "entrypoint": "/bin/sh -c 'trap exit TERM; while :; do certbot renew --quiet --dns-cloudflare --dns-cloudflare-credentials /etc/letsencrypt/cloudflare.ini; sleep 12h & wait $${!}; done;'",
+                "networks": [CONFIG.NETWORK_NAME],
+                "profiles": ["ssl-cloudflare"]
             }
         
         # Adiciona Redis cache
@@ -1658,6 +1829,29 @@ class TSiJUKEBOXInstaller:
         if self.options.dry_run:
             Logger.warning("Modo dry-run: nenhuma alteração será feita")
         
+        # Determina tipo de SSL
+        ssl_letsencrypt = getattr(self.options, "ssl_letsencrypt", False)
+        ssl_cloudflare = getattr(self.options, "ssl_cloudflare", False)
+        ssl_self_signed = getattr(self.options, "ssl", False)
+        any_ssl = ssl_letsencrypt or ssl_cloudflare or ssl_self_signed
+        
+        # Valida opções SSL
+        if ssl_cloudflare:
+            cloudflare_token = getattr(self.options, "cloudflare_token", "")
+            if not cloudflare_token:
+                Logger.error("--cloudflare-token é obrigatório com --ssl-cloudflare")
+                return False
+            ssl_email = getattr(self.options, "ssl_email", "")
+            if not ssl_email:
+                Logger.error("--ssl-email é obrigatório com --ssl-cloudflare")
+                return False
+        
+        if ssl_letsencrypt:
+            ssl_email = getattr(self.options, "ssl_email", "")
+            if not ssl_email:
+                Logger.error("--ssl-email é obrigatório com --ssl-letsencrypt")
+                return False
+        
         # 1. Pre-flight checks
         if not self.pre_flight_check():
             return False
@@ -1707,6 +1901,78 @@ class TSiJUKEBOXInstaller:
         else:
             Logger.info(f"(dry-run) Imagem {CONFIG.IMAGE} seria baixada")
         
+        # 5.5 Configurar SSL Cloudflare (se ativado)
+        if ssl_cloudflare and not self.options.dry_run:
+            Logger.step(5, self.TOTAL_STEPS, "Configurando SSL via Cloudflare DNS")
+            
+            domain = getattr(self.options, "domain", "localhost")
+            ssl_email = getattr(self.options, "ssl_email", "")
+            cloudflare_token = getattr(self.options, "cloudflare_token", "")
+            ssl_staging = getattr(self.options, "ssl_staging", False)
+            ssl_wildcard = getattr(self.options, "ssl_wildcard", False)
+            
+            cloudflare_mgr = CloudflareDNSManager(
+                domain=domain,
+                email=ssl_email,
+                api_token=cloudflare_token,
+                staging=ssl_staging,
+                wildcard=ssl_wildcard
+            )
+            
+            if not cloudflare_mgr.validate_token():
+                return False
+            
+            if not cloudflare_mgr.setup_directories():
+                return False
+            
+            if not cloudflare_mgr.create_credentials_file():
+                return False
+            
+            if not cloudflare_mgr.check_certificate_exists():
+                if not cloudflare_mgr.request_certificate():
+                    Logger.error("Falha ao obter certificado via Cloudflare DNS")
+                    return False
+            else:
+                Logger.info("Certificado já existe, pulando solicitação")
+        
+        # 5.5 Configurar SSL Let's Encrypt HTTP-01 (se ativado)
+        elif ssl_letsencrypt and not self.options.dry_run:
+            domain = getattr(self.options, "domain", "localhost")
+            ssl_email = getattr(self.options, "ssl_email", "")
+            ssl_staging = getattr(self.options, "ssl_staging", False)
+            
+            certbot_mgr = CertbotManager(
+                domain=domain,
+                email=ssl_email,
+                staging=ssl_staging
+            )
+            
+            if not certbot_mgr.setup_directories():
+                return False
+            
+            if not certbot_mgr.check_certificate_exists():
+                # Precisa iniciar nginx temporário para ACME challenge
+                Logger.info("Iniciando Nginx temporário para ACME challenge...")
+                # O certificado será obtido após iniciar containers
+            else:
+                Logger.info("Certificado já existe")
+        
+        # 5.5 Configurar SSL auto-assinado (se ativado)
+        elif ssl_self_signed and not self.options.dry_run:
+            domain = getattr(self.options, "domain", "localhost")
+            
+            certbot_mgr = CertbotManager(
+                domain=domain,
+                email="",
+                staging=False
+            )
+            
+            if not certbot_mgr.generate_self_signed():
+                Logger.warning("Falha ao gerar certificado auto-assinado")
+            
+            if not certbot_mgr.create_dhparam():
+                Logger.warning("Falha ao gerar DH params")
+        
         # 6. Iniciar containers
         Logger.step(6, self.TOTAL_STEPS, "Iniciando containers")
         if not self.options.dry_run:
@@ -1726,10 +1992,27 @@ class TSiJUKEBOXInstaller:
         # 8. Criar serviço systemd
         Logger.step(8, self.TOTAL_STEPS, "Configurando serviço systemd")
         if not self.options.dry_run:
-            if not self.systemd.create_service():
+            # Determina profiles ativos
+            profiles = []
+            if ssl_self_signed:
+                profiles.append("ssl")
+            if ssl_letsencrypt:
+                profiles.append("ssl-letsencrypt")
+            if ssl_cloudflare:
+                profiles.append("ssl-cloudflare")
+            if getattr(self.options, "monitoring", False):
+                profiles.append("monitoring")
+            if getattr(self.options, "cache", False):
+                profiles.append("cache")
+            
+            if not self.systemd.create_service(profiles):
                 Logger.warning("Falha ao criar serviço systemd")
             else:
                 self.systemd.enable()
+            
+            # Configura renovação automática para SSL
+            if ssl_letsencrypt or ssl_cloudflare:
+                self.systemd.create_certbot_renewal()
         else:
             Logger.info("(dry-run) Serviço systemd seria criado")
         
@@ -1970,6 +2253,25 @@ Exemplos:
         help="Habilitar HTTPS com Let's Encrypt (produção - requer domínio público)"
     )
     ssl_group.add_argument(
+        "--ssl-cloudflare",
+        action="store_true",
+        dest="ssl_cloudflare",
+        help="Habilitar HTTPS via Cloudflare DNS challenge (não requer porta 80 pública)"
+    )
+    ssl_group.add_argument(
+        "--cloudflare-token",
+        type=str,
+        dest="cloudflare_token",
+        default="",
+        help="Cloudflare API Token com permissão DNS:Edit (obrigatório com --ssl-cloudflare)"
+    )
+    ssl_group.add_argument(
+        "--ssl-wildcard",
+        action="store_true",
+        dest="ssl_wildcard",
+        help="Gerar certificado wildcard (*.domain.com) - requer DNS challenge"
+    )
+    ssl_group.add_argument(
         "--domain",
         type=str,
         default="localhost",
@@ -1980,7 +2282,7 @@ Exemplos:
         type=str,
         dest="ssl_email",
         default="",
-        help="Email para notificações do Let's Encrypt (obrigatório com --ssl-letsencrypt)"
+        help="Email para notificações do Let's Encrypt (obrigatório com --ssl-letsencrypt ou --ssl-cloudflare)"
     )
     ssl_group.add_argument(
         "--ssl-staging",

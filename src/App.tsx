@@ -54,6 +54,7 @@ const LogoGitHubPreview = lazy(() => import("./pages/LogoGitHubPreview"));
 const HealthDashboard = lazy(() => import("./pages/HealthDashboard"));
 const SpicetifyThemeGallery = lazy(() => import("./pages/SpicetifyThemeGallery"));
 const JamSession = lazy(() => import("./pages/JamSession"));
+const KioskMonitorDashboard = lazy(() => import("./pages/KioskMonitorDashboard"));
 
 // DEV-only file change monitor wrapper with hooks connected
 function DevFileChangeMonitorWrapper() {
@@ -172,6 +173,11 @@ function AppRoutes() {
         <Route path="/spicetify-themes" element={
           <ProtectedRoute requiredPermission="canAccessSettings">
             <SpicetifyThemeGallery />
+          </ProtectedRoute>
+        } />
+        <Route path="/kiosk-monitor" element={
+          <ProtectedRoute requiredPermission="canAccessSettings">
+            <KioskMonitorDashboard />
           </ProtectedRoute>
         } />
         

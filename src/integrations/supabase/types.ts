@@ -319,9 +319,46 @@ export type Database = {
         }
         Relationships: []
       }
+      kiosk_commands: {
+        Row: {
+          command: string
+          created_at: string | null
+          created_by: string | null
+          executed_at: string | null
+          id: string
+          machine_id: string
+          params: Json | null
+          result: string | null
+          status: string | null
+        }
+        Insert: {
+          command: string
+          created_at?: string | null
+          created_by?: string | null
+          executed_at?: string | null
+          id?: string
+          machine_id: string
+          params?: Json | null
+          result?: string | null
+          status?: string | null
+        }
+        Update: {
+          command?: string
+          created_at?: string | null
+          created_by?: string | null
+          executed_at?: string | null
+          id?: string
+          machine_id?: string
+          params?: Json | null
+          result?: string | null
+          status?: string | null
+        }
+        Relationships: []
+      }
       kiosk_connections: {
         Row: {
           config: Json | null
+          cpu_usage_percent: number | null
           crash_count: number | null
           created_at: string | null
           events: Json | null
@@ -332,7 +369,9 @@ export type Database = {
           last_event: string | null
           last_event_at: string | null
           last_heartbeat: string | null
+          last_screenshot_url: string | null
           machine_id: string | null
+          memory_used_mb: number | null
           metrics: Json | null
           status: string | null
           updated_at: string | null
@@ -340,6 +379,7 @@ export type Database = {
         }
         Insert: {
           config?: Json | null
+          cpu_usage_percent?: number | null
           crash_count?: number | null
           created_at?: string | null
           events?: Json | null
@@ -350,7 +390,9 @@ export type Database = {
           last_event?: string | null
           last_event_at?: string | null
           last_heartbeat?: string | null
+          last_screenshot_url?: string | null
           machine_id?: string | null
+          memory_used_mb?: number | null
           metrics?: Json | null
           status?: string | null
           updated_at?: string | null
@@ -358,6 +400,7 @@ export type Database = {
         }
         Update: {
           config?: Json | null
+          cpu_usage_percent?: number | null
           crash_count?: number | null
           created_at?: string | null
           events?: Json | null
@@ -368,7 +411,9 @@ export type Database = {
           last_event?: string | null
           last_event_at?: string | null
           last_heartbeat?: string | null
+          last_screenshot_url?: string | null
           machine_id?: string | null
+          memory_used_mb?: number | null
           metrics?: Json | null
           status?: string | null
           updated_at?: string | null

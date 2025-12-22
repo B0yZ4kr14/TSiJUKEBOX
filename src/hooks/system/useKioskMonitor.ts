@@ -118,10 +118,7 @@ export function useKioskMonitor() {
           
           if (payload.eventType === 'INSERT') {
             setKiosks(prev => [payload.new as KioskConnection, ...prev]);
-            toast({
-              title: 'Novo Kiosk Conectado',
-              description: `${(payload.new as KioskConnection).hostname} está online`,
-            });
+            toast.success(`Novo Kiosk Conectado: ${(payload.new as KioskConnection).hostname} está online`);
           } else if (payload.eventType === 'UPDATE') {
             setKiosks(prev => 
               prev.map(k => k.id === (payload.new as KioskConnection).id ? payload.new as KioskConnection : k)
@@ -133,16 +130,9 @@ export function useKioskMonitor() {
             
             if (oldStatus !== newStatus) {
               if (newStatus === 'error' || newStatus === 'offline') {
-                toast({
-                  title: 'Kiosk Offline',
-                  description: `${(payload.new as KioskConnection).hostname} está ${newStatus}`,
-                  variant: 'destructive',
-                });
+                toast.error(`Kiosk Offline: ${(payload.new as KioskConnection).hostname} está ${newStatus}`);
               } else if (newStatus === 'online' && oldStatus !== 'online') {
-                toast({
-                  title: 'Kiosk Online',
-                  description: `${(payload.new as KioskConnection).hostname} está online novamente`,
-                });
+                toast.success(`Kiosk Online: ${(payload.new as KioskConnection).hostname} está online novamente`);
               }
             }
           } else if (payload.eventType === 'DELETE') {
@@ -159,7 +149,7 @@ export function useKioskMonitor() {
       supabase.removeChannel(channel);
       clearInterval(pollInterval);
     };
-  }, [fetchKiosks, toast]);
+  }, [fetchKiosks]);
 
   // Get time since last heartbeat
   const getTimeSinceHeartbeat = useCallback((lastHeartbeat: string | null): string => {

@@ -7,7 +7,8 @@ const corsHeaders = {
 
 interface KioskEvent {
   event: 'heartbeat' | 'chromium_restart' | 'container_restart' | 'health_check_failed' | 
-         'recovery_started' | 'boot_complete' | 'watchdog_started' | 'error';
+         'recovery_started' | 'boot_complete' | 'watchdog_started' | 'error' | 'screenshot' |
+         'command_result' | 'container_updated';
   hostname: string;
   machine_id: string;
   ip_address?: string;
@@ -21,6 +22,9 @@ interface KioskEvent {
   };
   error_message?: string;
   install_id?: string;
+  command_id?: string;
+  result?: string;
+  screenshot_data?: string;
 }
 
 interface KioskConnection {
@@ -42,6 +46,9 @@ interface KioskConnection {
   metrics?: Record<string, unknown>;
   uptime_seconds?: number;
   crash_count?: number;
+  cpu_usage_percent?: number;
+  memory_used_mb?: number;
+  last_screenshot_url?: string;
 }
 
 Deno.serve(async (req) => {
@@ -93,6 +100,52 @@ Deno.serve(async (req) => {
         success: true, 
         kiosks: updatedKiosks,
         timestamp: now.toISOString()
+      }), {
+        headers: { ...corsHeaders, "Content-Type": "application/json" },
+      });
+    }
+
+    // GET /kiosk-webhook/commands?machine_id=XXX - Retorna comandos pendentes para um kiosk
+    if (req.method === "GET" && path === "commands") {
+      const machineId = url.searchParams.get("machine_id");
+      
+      if (!machineId) {
+        return new Response(JSON.stringify({ error: "machine_id required" }), {
+          status: 400,
+          headers: { ...corsHeaders, "Content-Type": "application/json" },
+        });
+      }
+
+      console.log(`[kiosk-webhook] GET /commands for machine_id: ${machineId}`);
+
+      const { data: commands, error } = await supabase
+        .from("kiosk_commands")
+        .select("*")
+        .eq("machine_id", machineId)
+        .eq("status", "pending")
+        .order("created_at", { ascending: true })
+        .limit(1);
+
+      if (error) throw error;
+
+      if (commands && commands.length > 0) {
+        // Marcar como em execução
+        await supabase
+          .from("kiosk_commands")
+          .update({ status: "executing" })
+          .eq("id", commands[0].id);
+
+        return new Response(JSON.stringify({ 
+          success: true, 
+          command: commands[0] 
+        }), {
+          headers: { ...corsHeaders, "Content-Type": "application/json" },
+        });
+      }
+
+      return new Response(JSON.stringify({ 
+        success: true, 
+        command: null 
       }), {
         headers: { ...corsHeaders, "Content-Type": "application/json" },
       });
@@ -150,6 +203,31 @@ Deno.serve(async (req) => {
       });
     }
 
+    // POST /kiosk-webhook/commands/:id/complete - Marca comando como executado
+    if (req.method === "POST" && url.pathname.includes("/commands/") && url.pathname.endsWith("/complete")) {
+      const parts = url.pathname.split("/");
+      const commandId = parts[parts.length - 2];
+      
+      const body = await req.json().catch(() => ({}));
+      
+      console.log(`[kiosk-webhook] POST /commands/${commandId}/complete`);
+
+      const { error } = await supabase
+        .from("kiosk_commands")
+        .update({ 
+          status: body.success ? "completed" : "failed",
+          result: body.result || null,
+          executed_at: new Date().toISOString()
+        })
+        .eq("id", commandId);
+
+      if (error) throw error;
+
+      return new Response(JSON.stringify({ success: true }), {
+        headers: { ...corsHeaders, "Content-Type": "application/json" },
+      });
+    }
+
     // POST /kiosk-webhook - Receber evento do kiosk
     if (req.method === "POST") {
       const event: KioskEvent = await req.json();
@@ -165,6 +243,18 @@ Deno.serve(async (req) => {
         });
       }
 
+      // Se for resultado de comando, atualizar comando
+      if (event.event === 'command_result' && event.command_id) {
+        await supabase
+          .from("kiosk_commands")
+          .update({ 
+            status: "completed",
+            result: event.result || null,
+            executed_at: new Date().toISOString()
+          })
+          .eq("id", event.command_id);
+      }
+
       // Determinar status baseado no evento
       let status: KioskConnection['status'] = 'online';
       switch (event.event) {
@@ -178,6 +268,7 @@ Deno.serve(async (req) => {
         case 'heartbeat':
         case 'boot_complete':
         case 'watchdog_started':
+        case 'container_updated':
           status = 'online';
           break;
       }
@@ -221,7 +312,34 @@ Deno.serve(async (req) => {
         metrics: event.metrics,
         uptime_seconds: event.metrics?.uptime_seconds,
         crash_count: crashCount,
+        cpu_usage_percent: event.metrics?.cpu_usage_percent,
+        memory_used_mb: event.metrics?.memory_used_mb,
       };
+
+      // Handle screenshot upload
+      if (event.event === 'screenshot' && event.screenshot_data) {
+        try {
+          const fileName = `kiosk-${event.machine_id}-${Date.now()}.png`;
+          const imageData = Uint8Array.from(atob(event.screenshot_data), c => c.charCodeAt(0));
+          
+          const { data: uploadData, error: uploadError } = await supabase.storage
+            .from('screenshots')
+            .upload(fileName, imageData, {
+              contentType: 'image/png',
+              upsert: true
+            });
+
+          if (!uploadError && uploadData) {
+            const { data: publicUrl } = supabase.storage
+              .from('screenshots')
+              .getPublicUrl(fileName);
+            
+            kioskData.last_screenshot_url = publicUrl.publicUrl;
+          }
+        } catch (e) {
+          console.error('[kiosk-webhook] Error uploading screenshot:', e);
+        }
+      }
 
       // Remover campos undefined
       Object.keys(kioskData).forEach(key => {

@@ -65,7 +65,7 @@ jobs:
           fi
       
       - name: Upload Vitest coverage
-        uses: actions/upload-artifact@v4
+        uses: actions/upload-artifact@v6
         if: always()
         with:
           name: vitest-coverage
@@ -73,7 +73,7 @@ jobs:
           retention-days: 30
       
       - name: Upload Playwright report
-        uses: actions/upload-artifact@v4
+        uses: actions/upload-artifact@v6
         if: always()
         with:
           name: playwright-report
@@ -81,7 +81,7 @@ jobs:
           retention-days: 30
       
       - name: Upload combined coverage
-        uses: actions/upload-artifact@v4
+        uses: actions/upload-artifact@v6
         if: always()
         with:
           name: combined-coverage
@@ -89,7 +89,7 @@ jobs:
           retention-days: 30
       
       - name: Upload coverage badges
-        uses: actions/upload-artifact@v4
+        uses: actions/upload-artifact@v6
         if: always()
         with:
           name: coverage-badges
@@ -97,7 +97,7 @@ jobs:
           retention-days: 30
       
       - name: Upload test results
-        uses: actions/upload-artifact@v4
+        uses: actions/upload-artifact@v6
         if: failure()
         with:
           name: test-results

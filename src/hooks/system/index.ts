@@ -70,3 +70,9 @@ export {
   type UseInstallerMetricsReturn
 } from './useInstallerMetrics';
 export { useFailureRateAlert } from './useFailureRateAlert';
+export {
+  useGitHubFullSync,
+  type FileToSync,
+  type SyncResult,
+  type UseGitHubFullSyncReturn
+} from './useGitHubFullSync';

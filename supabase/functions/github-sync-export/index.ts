@@ -322,7 +322,8 @@ Deno.serve(async (req) => {
   }
 
   try {
-    const GITHUB_TOKEN = Deno.env.get('GITHUB_ACCESS_TOKEN');
+    // Prioritize GITHUB_ACCESS_TOKEN_FULL (has push permissions)
+    const GITHUB_TOKEN = Deno.env.get('GITHUB_ACCESS_TOKEN_FULL') || Deno.env.get('GITHUB_ACCESS_TOKEN');
     
     if (!GITHUB_TOKEN) {
       console.error('[github-sync-export] GITHUB_ACCESS_TOKEN not configured');

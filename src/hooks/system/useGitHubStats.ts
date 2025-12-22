@@ -47,7 +47,7 @@ export interface GitHubRelease {
   id: number;
   tag_name: string;
   name: string;
-  published_at: string;
+  published_at: string | null;
   html_url: string;
   prerelease: boolean;
   draft: boolean;

@@ -349,11 +349,58 @@ Tests run automatically on PR:
 
 ---
 
+## 🐍 Python Installer Tests
+
+Para documentação completa dos testes Python do instalador, veja **[PYTHON_TESTING.md](PYTHON_TESTING.md)**.
+
+### Quick Start
+
+```bash
+cd scripts
+./run-coverage.sh
+```
+
+### Comandos Principais
+
+| Comando | Descrição |
+|---------|-----------|
+| `./run-coverage.sh` | Todos os testes + cobertura |
+| `./run-coverage.sh unit` | Apenas unitários |
+| `./run-coverage.sh quick` | Testes rápidos |
+| `pytest tests/test_*security*.py -v` | Testes de segurança |
+
+### Estrutura de Testes Python
+
+```
+scripts/tests/
+├── test_*.py                    # Testes unitários
+├── test_*_integration.py        # Testes de integração
+├── test_*_edge_cases.py         # Edge cases
+├── test_*_security.py           # Testes de segurança
+├── test_*_benchmark.py          # Performance
+└── e2e/                         # E2E em Docker
+```
+
+### CI/CD Python
+
+Os testes Python são executados via `.github/workflows/python-installer-tests.yml` com 7 jobs:
+
+1. **lint** - Verificação com ruff
+2. **unit-tests** - Unitários + cobertura
+3. **edge-case-tests** - Edge cases
+4. **integration-tests** - Integração
+5. **benchmark-tests** - Performance (main/develop)
+6. **e2e-docker-tests** - E2E Docker (main)
+7. **test-status** - Status final
+
+---
+
 ## Resources
 
 - [Vitest Documentation](https://vitest.dev/)
 - [Testing Library Docs](https://testing-library.com/)
 - [Playwright Documentation](https://playwright.dev/docs/intro)
+- [pytest Documentation](https://docs.pytest.org/)
 - [Testing Philosophy](https://kentcdodds.com/blog/testing-implementation-details)
 
 ---

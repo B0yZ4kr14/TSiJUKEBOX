@@ -61,11 +61,12 @@ except ImportError:
 # CONSTANTES E CONFIGURAÇÃO
 # =============================================================================
 
-VERSION = "4.1.0"
+VERSION = "4.3.0"
 INSTALL_DIR = Path("/opt/tsijukebox")
 CONFIG_DIR = Path("/etc/tsijukebox")
 LOG_DIR = Path("/var/log/tsijukebox")
 DATA_DIR = Path("/var/lib/tsijukebox")
+REPO_URL = "https://github.com/B0yZ4kr14/TSiJUKEBOX.git"
 
 # Modos globais
 DRY_RUN = False
@@ -269,6 +270,12 @@ class PostInstallValidator:
     SERVICES = ['tsijukebox']
     OPTIONAL_SERVICES = ['grafana', 'prometheus', 'prometheus-node-exporter']
     REQUIRED_DIRS = [INSTALL_DIR, CONFIG_DIR, LOG_DIR, DATA_DIR]
+    REQUIRED_FILES = {
+        INSTALL_DIR / 'package.json': 'Repositório clonado',
+        INSTALL_DIR / 'node_modules': 'npm dependencies',
+        CONFIG_DIR / 'config.yaml': 'Configuração YAML',
+        DATA_DIR / 'tsijukebox.db': 'Banco SQLite',
+    }
     PORTS = {
         5173: 'TSiJUKEBOX Web',
         3000: 'Grafana',
@@ -279,6 +286,7 @@ class PostInstallValidator:
     def __init__(self, args: argparse.Namespace):
         self.args = args
         self.results: List[Tuple[str, bool, str, str]] = []  # (name, ok, level, message)
+        self.repair_commands: List[str] = []  # Comandos de correção
     
     def _add_result(self, name: str, ok: bool, level: str, message: str = ""):
         """Adiciona resultado de verificação."""
@@ -330,8 +338,34 @@ class PostInstallValidator:
                 self._add_result(f"Diretório {dir_path}", True, "OK", "existe")
             else:
                 self._add_result(f"Diretório {dir_path}", False, "ERROR", "não encontrado")
+                self.repair_commands.append(f"sudo mkdir -p {dir_path}")
                 all_ok = False
         return all_ok
+    
+    def check_repository(self) -> bool:
+        """Verifica se repositório foi clonado corretamente."""
+        package_json = INSTALL_DIR / 'package.json'
+        node_modules = INSTALL_DIR / 'node_modules'
+        
+        if not INSTALL_DIR.exists():
+            self._add_result("Repositório clonado", False, "ERROR", f"{INSTALL_DIR} não existe")
+            self.repair_commands.append(f"sudo git clone --depth 1 {REPO_URL} {INSTALL_DIR}")
+            return False
+        
+        if not package_json.exists():
+            self._add_result("package.json", False, "ERROR", "repositório incompleto")
+            self.repair_commands.append(f"sudo rm -rf {INSTALL_DIR} && sudo git clone --depth 1 {REPO_URL} {INSTALL_DIR}")
+            return False
+        
+        self._add_result("Repositório clonado", True, "OK", str(INSTALL_DIR))
+        
+        if not node_modules.exists():
+            self._add_result("node_modules", False, "WARN", "npm install necessário")
+            self.repair_commands.append(f"cd {INSTALL_DIR} && sudo npm install")
+            return True  # Não é erro crítico
+        
+        self._add_result("npm dependencies", True, "OK", "instaladas")
+        return True
     
     def check_database(self) -> bool:
         """Verifica se banco de dados está acessível."""
@@ -367,8 +401,12 @@ class PostInstallValidator:
 ╚════════════════════════════════════════════════════════════════╝{Colors.RESET}
 """)
         
+        # Repositório e npm
+        print(f"{Colors.YELLOW}━━━ REPOSITÓRIO ━━━{Colors.RESET}")
+        self.check_repository()
+        
         # Serviços obrigatórios
-        print(f"{Colors.YELLOW}━━━ SERVIÇOS SYSTEMD ━━━{Colors.RESET}")
+        print(f"\n{Colors.YELLOW}━━━ SERVIÇOS SYSTEMD ━━━{Colors.RESET}")
         for service in self.SERVICES:
             self.check_service(service, required=True)
         
@@ -421,6 +459,12 @@ class PostInstallValidator:
         total = len(self.results)
         passed = sum(1 for _, ok, _, _ in self.results if ok)
         errors = sum(1 for _, ok, level, _ in self.results if not ok and level == "ERROR")
+        
+        # Mostrar comandos de reparo se houver erros
+        if self.repair_commands:
+            print(f"\n{Colors.YELLOW}━━━ COMANDOS DE CORREÇÃO ━━━{Colors.RESET}\n")
+            for cmd in self.repair_commands:
+                print(f"  {Colors.CYAN}${Colors.RESET} {cmd}")
         warns = sum(1 for _, ok, level, _ in self.results if not ok and level == "WARN")
         
         print()
@@ -2988,6 +3032,62 @@ def install_spotify_cli_tools(user: str) -> bool:
 # CRIAÇÃO DE SERVIÇOS SYSTEMD
 # =============================================================================
 
+def clone_and_setup_repository(user: str) -> bool:
+    """Clona repositório TSiJUKEBOX e instala dependências npm."""
+    log_step("Clonando repositório TSiJUKEBOX...")
+    
+    if INSTALL_DIR.exists():
+        # Verificar se é um repositório git válido
+        if (INSTALL_DIR / '.git').exists():
+            log_info("Repositório já existe, atualizando...")
+            result = subprocess.run(
+                ['git', 'pull'],
+                cwd=str(INSTALL_DIR),
+                capture_output=True,
+                text=True
+            )
+            if result.returncode != 0:
+                log_warning(f"Falha ao atualizar: {result.stderr}")
+        else:
+            log_warning(f"{INSTALL_DIR} existe mas não é repositório git")
+            shutil.rmtree(INSTALL_DIR)
+    
+    if not INSTALL_DIR.exists():
+        INSTALL_DIR.parent.mkdir(parents=True, exist_ok=True)
+        code, _, err = run_command([
+            'git', 'clone', '--depth', '1', REPO_URL, str(INSTALL_DIR)
+        ])
+        if code != 0:
+            log_error(f"Falha ao clonar repositório: {err}")
+            return False
+        log_success(f"Repositório clonado em {INSTALL_DIR}")
+    
+    # Corrigir ownership antes de npm install
+    run_command(['chown', '-R', f'{user}:{user}', str(INSTALL_DIR)])
+    
+    # Instalar dependências npm
+    log_step("Instalando dependências npm...")
+    package_json = INSTALL_DIR / 'package.json'
+    if not package_json.exists():
+        log_error("package.json não encontrado no repositório")
+        return False
+    
+    result = subprocess.run(
+        ['sudo', '-u', user, 'npm', 'install'],
+        cwd=str(INSTALL_DIR),
+        capture_output=True,
+        text=True,
+        timeout=600
+    )
+    
+    if result.returncode == 0:
+        log_success("Dependências npm instaladas")
+    else:
+        log_warning(f"npm install pode ter falhado: {result.stderr[:200]}")
+    
+    return True
+
+
 def create_systemd_services(user: str) -> bool:
     """Cria serviços systemd para TSiJUKEBOX."""
     log_step("Criando serviços systemd")
@@ -2996,6 +3096,7 @@ def create_systemd_services(user: str) -> bool:
     service_content = f"""[Unit]
 Description=TSiJUKEBOX Enterprise Music System
 After=network.target
+Wants=network.target
 
 [Service]
 Type=simple
@@ -3007,6 +3108,13 @@ RestartSec=10
 Environment=NODE_ENV=production
 Environment=PORT=5173
 
+# Hardening
+NoNewPrivileges=true
+ProtectSystem=strict
+ProtectHome=read-only
+PrivateTmp=true
+ReadWritePaths={DATA_DIR} {LOG_DIR}
+
 [Install]
 WantedBy=multi-user.target
 """
@@ -3017,6 +3125,24 @@ WantedBy=multi-user.target
     # Recarregar e habilitar
     run_command(['systemctl', 'daemon-reload'])
     run_command(['systemctl', 'enable', 'tsijukebox.service'], check=False)
+    
+    # Iniciar serviço se repositório e npm estão prontos
+    node_modules = INSTALL_DIR / 'node_modules'
+    if node_modules.exists():
+        log_step("Iniciando serviço TSiJUKEBOX...")
+        run_command(['systemctl', 'start', 'tsijukebox.service'], check=False)
+        
+        # Verificar se iniciou
+        import time
+        time.sleep(3)
+        code, stdout, _ = run_command(['systemctl', 'is-active', 'tsijukebox.service'], capture=True, check=False)
+        if stdout.strip() == 'active':
+            log_success("Serviço TSiJUKEBOX ativo!")
+        else:
+            log_warning("Serviço não iniciou. Verifique: journalctl -u tsijukebox -f")
+    else:
+        log_warning("node_modules não encontrado - serviço não iniciado")
+        log_info("Execute: cd /opt/tsijukebox && npm install && systemctl start tsijukebox")
     
     log_success("Serviço systemd criado e habilitado")
     return True
@@ -3108,10 +3234,15 @@ def run_installation(args: argparse.Namespace) -> bool:
     # 10. Instalar Nginx
     install_packages(WEB_PACKAGES, system_info=system_info)
     
-    # 11. Criar serviços systemd
+    # 11. Clonar repositório e instalar npm dependencies
+    if not clone_and_setup_repository(user):
+        log_error("Falha ao configurar repositório")
+        return False
+    
+    # 12. Criar serviços systemd (e iniciar)
     create_systemd_services(user)
     
-    # 12. Validação pós-instalação automática
+    # 13. Validação pós-instalação automática
     if not DRY_RUN:
         print()
         log_step("Executando validação pós-instalação...")

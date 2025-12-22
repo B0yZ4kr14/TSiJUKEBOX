@@ -16,8 +16,9 @@ import {
   Legend,
 } from 'recharts';
 import { GitHubCommit, GitHubContributor, GitHubLanguages, GitHubRelease } from '@/hooks/system/useGitHubStats';
-import { format, parseISO, subDays, startOfDay } from 'date-fns';
+import { format, subDays, startOfDay } from 'date-fns';
 import { ptBR } from 'date-fns/locale';
+import { safeParseISO } from '@/lib/date-utils';
 
 interface GitHubDashboardChartsProps {
   commits: GitHubCommit[];
@@ -62,7 +63,11 @@ export function GitHubDashboardCharts({
     });
 
     commits.forEach((commit) => {
-      const commitDate = startOfDay(parseISO(commit.commit.author.date));
+      const dateString = commit.commit?.author?.date;
+      const parsedDate = safeParseISO(dateString);
+      if (!parsedDate) return;
+      
+      const commitDate = startOfDay(parsedDate);
       const dayEntry = last30Days.find(
         (d) => d.date.getTime() === commitDate.getTime()
       );
@@ -105,13 +110,17 @@ export function GitHubDashboardCharts({
   // Process releases timeline
   const releaseTimeline = useMemo(() => {
     return releases
+      .filter((r) => r.published_at != null)
       .slice(0, 10)
       .reverse()
-      .map((r) => ({
-        name: r.tag_name,
-        date: format(parseISO(r.published_at), 'dd/MM/yy', { locale: ptBR }),
-        isPrerelease: r.prerelease,
-      }));
+      .map((r) => {
+        const parsedDate = safeParseISO(r.published_at);
+        return {
+          name: r.tag_name,
+          date: parsedDate ? format(parsedDate, 'dd/MM/yy', { locale: ptBR }) : 'N/A',
+          isPrerelease: r.prerelease,
+        };
+      });
   }, [releases]);
 
   return (

@@ -72,6 +72,20 @@ REPO_URL = "https://github.com/B0yZ4kr14/TSiJUKEBOX.git"
 DRY_RUN = False
 QUIET_MODE = False
 ROLLBACK_DRY_RUN = False
+RUNNING_FROM_CURL = False
+
+def is_running_from_curl() -> bool:
+    """Detecta se está sendo executado via curl pipe (stdin não é terminal)."""
+    import os
+    try:
+        # Se stdin não é um terminal OU __file__ é '<stdin>', estamos via curl
+        if not os.isatty(sys.stdin.fileno()):
+            return True
+        if not hasattr(sys.modules[__name__], '__file__') or __file__ in ('<stdin>', None):
+            return True
+        return False
+    except (AttributeError, OSError):
+        return True
 
 # Cores ANSI
 class Colors:
@@ -3000,6 +3014,87 @@ monitoring:
 # INSTALAÇÃO DO SPOTIFY E SPICETIFY
 # =============================================================================
 
+def configure_spicetify_inline(user: str) -> bool:
+    """
+    Configura Spicetify sem depender de módulos externos.
+    Usado quando o instalador é executado via curl pipe.
+    """
+    home = Path(pwd.getpwnam(user).pw_dir)
+    spicetify_bin = home / ".spicetify" / "spicetify"
+    
+    # Verificar se spicetify está instalado
+    if not spicetify_bin.exists():
+        # Tentar encontrar no PATH
+        code, stdout, _ = run_command(['which', 'spicetify'], capture=True, check=False)
+        if code != 0:
+            log_warning("Spicetify não encontrado")
+            return False
+        spicetify_bin = Path(stdout.strip())
+    
+    log_info("Configurando Spicetify (modo inline)...")
+    
+    # Iniciar Spotify brevemente para criar arquivo prefs
+    try:
+        log_info("Iniciando Spotify para criar arquivo de configuração...")
+        proc = subprocess.Popen(
+            ['sudo', '-u', user, 'spotify', '--no-zygote'],
+            stdout=subprocess.DEVNULL,
+            stderr=subprocess.DEVNULL,
+            start_new_session=True
+        )
+        import time
+        time.sleep(8)
+        subprocess.run(['pkill', '-f', 'spotify'], capture_output=True)
+        time.sleep(2)
+    except Exception as e:
+        log_warning(f"Não foi possível iniciar Spotify: {e}")
+    
+    # Criar diretório de config se não existir
+    prefs_dir = home / ".config/spotify"
+    prefs_path = prefs_dir / "prefs"
+    if not prefs_path.exists():
+        prefs_dir.mkdir(parents=True, exist_ok=True)
+        prefs_path.touch()
+        run_command(['chown', '-R', f'{user}:{user}', str(prefs_dir)])
+        log_info("Arquivo prefs criado manualmente")
+    
+    # Executar backup
+    result = subprocess.run(
+        ['sudo', '-u', user, str(spicetify_bin), 'backup', 'apply'],
+        capture_output=True, text=True
+    )
+    if result.returncode != 0:
+        log_warning(f"Spicetify backup falhou: {result.stderr[:100] if result.stderr else 'erro desconhecido'}")
+    
+    # Aplicar configurações básicas
+    configs = [
+        ['config', 'inject_css', '1'],
+        ['config', 'replace_colors', '1'],
+        ['config', 'overwrite_assets', '1'],
+        ['config', 'check_spicetify_update', '0'],
+    ]
+    
+    for cfg in configs:
+        subprocess.run(
+            ['sudo', '-u', user, str(spicetify_bin)] + cfg,
+            capture_output=True, check=False
+        )
+    
+    # Aplicar
+    result = subprocess.run(
+        ['sudo', '-u', user, str(spicetify_bin), 'apply'],
+        capture_output=True, text=True
+    )
+    
+    if result.returncode == 0:
+        log_success("Spicetify configurado com sucesso (modo inline)")
+        return True
+    else:
+        log_warning("Spicetify apply falhou - pode precisar de configuração manual")
+        log_info("Execute: spicetify backup apply && spicetify apply")
+        return True  # Retorna True pois instalação básica foi feita
+
+
 def install_spotify_spicetify(user: str, system_info: SystemInfo) -> bool:
     """Instala Spotify e Spicetify com auto-configuração."""
     log_step("Instalando Spotify + Spicetify")
@@ -3064,6 +3159,12 @@ def install_spotify_spicetify(user: str, system_info: SystemInfo) -> bool:
     # ===== AUTO-CONFIGURAÇÃO DO SPICETIFY =====
     log_info("Auto-configurando Spicetify...")
     
+    # Se executando via curl, usar configuração inline
+    if RUNNING_FROM_CURL:
+        log_info("Detectado execução via curl - usando configuração inline")
+        return configure_spicetify_inline(user)
+    
+    # Tentar usar módulo SpicetifySetup
     try:
         # Importar SpicetifySetup
         installer_path = Path(__file__).parent / 'installer'
@@ -3122,12 +3223,13 @@ def install_spotify_spicetify(user: str, system_info: SystemInfo) -> bool:
             
     except ImportError as e:
         log_warning(f"Não foi possível importar SpicetifySetup: {e}")
-        log_info("Spicetify instalado, mas requer configuração manual")
-        return True
+        # Fallback para configuração inline
+        log_info("Usando configuração inline como fallback...")
+        return configure_spicetify_inline(user)
     except Exception as e:
         log_warning(f"Erro na auto-configuração: {e}")
-        log_info("Spicetify instalado, mas requer configuração manual")
-        return True
+        # Fallback para configuração inline
+        return configure_spicetify_inline(user)
 
 
 # =============================================================================
@@ -3227,7 +3329,26 @@ def create_systemd_services(user: str) -> bool:
     """Cria serviços systemd para TSiJUKEBOX."""
     log_step("Criando serviços systemd")
     
+    # Build da aplicação antes de criar o serviço
+    node_modules = INSTALL_DIR / 'node_modules'
+    dist_dir = INSTALL_DIR / 'dist'
+    
+    if node_modules.exists() and not dist_dir.exists():
+        log_info("Executando build da aplicação...")
+        build_result = subprocess.run(
+            ['npm', 'run', 'build'],
+            cwd=str(INSTALL_DIR),
+            capture_output=True,
+            text=True
+        )
+        if build_result.returncode == 0:
+            log_success("Build concluído com sucesso")
+        else:
+            log_warning(f"Build falhou: {build_result.stderr[:200] if build_result.stderr else 'erro desconhecido'}")
+    
     # Serviço principal do TSiJUKEBOX
+    # Usa 'npm run preview' que serve o dist (comando padrão do Vite)
+    # ExecStartPre faz o build antes de iniciar
     service_content = f"""[Unit]
 Description=TSiJUKEBOX Enterprise Music System
 After=network.target
@@ -3237,18 +3358,19 @@ Wants=network.target
 Type=simple
 User={user}
 WorkingDirectory={INSTALL_DIR}
-ExecStart=/usr/bin/npm run start
+ExecStartPre=/usr/bin/npm run build
+ExecStart=/usr/bin/npm run preview -- --port 5173 --host 0.0.0.0
 Restart=always
 RestartSec=10
 Environment=NODE_ENV=production
 Environment=PORT=5173
+Environment=HOME=/home/{user}
 
-# Hardening
+# Hardening (removido ProtectHome para permitir acesso ao npm cache)
 NoNewPrivileges=true
 ProtectSystem=strict
-ProtectHome=read-only
 PrivateTmp=true
-ReadWritePaths={DATA_DIR} {LOG_DIR}
+ReadWritePaths={DATA_DIR} {LOG_DIR} {INSTALL_DIR}
 
 [Install]
 WantedBy=multi-user.target
@@ -3262,19 +3384,22 @@ WantedBy=multi-user.target
     run_command(['systemctl', 'enable', 'tsijukebox.service'], check=False)
     
     # Iniciar serviço se repositório e npm estão prontos
-    node_modules = INSTALL_DIR / 'node_modules'
     if node_modules.exists():
         log_step("Iniciando serviço TSiJUKEBOX...")
         run_command(['systemctl', 'start', 'tsijukebox.service'], check=False)
         
-        # Verificar se iniciou
+        # Verificar se iniciou (dar mais tempo para o build)
         import time
-        time.sleep(3)
+        time.sleep(10)  # Aumentado para 10s para dar tempo do build
         code, stdout, _ = run_command(['systemctl', 'is-active', 'tsijukebox.service'], capture=True, check=False)
         if stdout.strip() == 'active':
             log_success("Serviço TSiJUKEBOX ativo!")
         else:
             log_warning("Serviço não iniciou. Verifique: journalctl -u tsijukebox -f")
+            # Tentar mostrar o erro
+            _, stderr, _ = run_command(['journalctl', '-u', 'tsijukebox', '-n', '5', '--no-pager'], capture=True, check=False)
+            if stderr:
+                log_info(f"Últimas linhas do log: {stderr[:300]}")
     else:
         log_warning("node_modules não encontrado - serviço não iniciado")
         log_info("Execute: cd /opt/tsijukebox && npm install && systemctl start tsijukebox")
@@ -3736,6 +3861,12 @@ def main():
     global QUIET_MODE
     if args.quiet:
         QUIET_MODE = True
+    
+    # Detectar se está executando via curl pipe
+    global RUNNING_FROM_CURL
+    RUNNING_FROM_CURL = is_running_from_curl()
+    if RUNNING_FROM_CURL and not QUIET_MODE:
+        log_info("📥 Detectado execução via curl pipe")
     
     # Ativar modo dry-run
     global DRY_RUN

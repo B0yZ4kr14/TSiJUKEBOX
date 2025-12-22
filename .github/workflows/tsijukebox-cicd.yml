@@ -247,6 +247,107 @@ jobs:
         continue-on-error: true
 
   # ============================================
+  # Job 5b: Python Performance Benchmarks
+  # ============================================
+  test-python-benchmark:
+    name: Python Performance Benchmarks
+    runs-on: ubuntu-latest
+    needs: test-python
+    if: github.ref == 'refs/heads/main' || github.ref == 'refs/heads/develop'
+    services:
+      docker:
+        image: docker:dind
+        options: --privileged
+        ports:
+          - 2375:2375
+        env:
+          DOCKER_TLS_CERTDIR: ""
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Setup Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: ${{ env.PYTHON_VERSION }}
+          cache: 'pip'
+          cache-dependency-path: scripts/requirements-test.txt
+
+      - name: Install test dependencies
+        run: pip install -r scripts/requirements-test.txt
+
+      - name: Wait for Docker
+        run: |
+          timeout 30 sh -c 'until docker info; do sleep 1; done'
+        env:
+          DOCKER_HOST: tcp://localhost:2375
+
+      - name: Run benchmark tests (excluding slow)
+        run: |
+          cd scripts
+          pytest tests/test_backup_manager_performance.py \
+            -m "benchmark and not slow" \
+            --benchmark-autosave \
+            --benchmark-json=../benchmark-results.json \
+            --benchmark-columns=mean,stddev,min,max,rounds \
+            -v \
+            --timeout=300
+        env:
+          CI: true
+          DOCKER_HOST: tcp://localhost:2375
+        continue-on-error: true
+
+      - name: Upload benchmark results
+        uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: benchmark-results
+          path: benchmark-results.json
+          retention-days: 30
+
+      - name: Generate benchmark summary
+        if: always()
+        run: |
+          echo "## 📊 BackupManager Performance Benchmarks" >> $GITHUB_STEP_SUMMARY
+          echo "" >> $GITHUB_STEP_SUMMARY
+          if [ -f benchmark-results.json ]; then
+            echo "| Test | Mean | Min | Max | StdDev | Rounds |" >> $GITHUB_STEP_SUMMARY
+            echo "|------|------|-----|-----|--------|--------|" >> $GITHUB_STEP_SUMMARY
+            python3 -c "
+          import json
+          import sys
+          try:
+              with open('benchmark-results.json') as f:
+                  data = json.load(f)
+              for b in data.get('benchmarks', []):
+                  name = b['name'].replace('test_', '').replace('_', ' ').title()
+                  stats = b['stats']
+                  mean = stats['mean']
+                  min_t = stats['min']
+                  max_t = stats['max']
+                  std = stats['stddev']
+                  rounds = stats['rounds']
+                  # Format time appropriately
+                  if mean < 0.001:
+                      unit = 'μs'
+                      mult = 1000000
+                  elif mean < 1:
+                      unit = 'ms'
+                      mult = 1000
+                  else:
+                      unit = 's'
+                      mult = 1
+                  print(f'| {name[:40]} | {mean*mult:.2f}{unit} | {min_t*mult:.2f}{unit} | {max_t*mult:.2f}{unit} | {std*mult:.2f}{unit} | {rounds} |')
+          except Exception as e:
+              print(f'Error parsing benchmark results: {e}', file=sys.stderr)
+          " >> $GITHUB_STEP_SUMMARY
+            echo "" >> $GITHUB_STEP_SUMMARY
+            echo "✅ Benchmark completed successfully" >> $GITHUB_STEP_SUMMARY
+          else
+            echo "⚠️ No benchmark results found" >> $GITHUB_STEP_SUMMARY
+          fi
+
+  # ============================================
   # Job 6: Production Build
   # ============================================
   build:

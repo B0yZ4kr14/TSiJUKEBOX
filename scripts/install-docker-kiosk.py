@@ -1354,15 +1354,144 @@ exec chromium \\
         return InstallResult(True, "Script do Chromium kiosk criado")
     
     def phase_setup_watchdog(self) -> InstallResult:
-        """Configura watchdog para recovery automático."""
+        """Configura watchdog para recovery automático com heartbeat e comandos remotos."""
         webhook_cmd = ""
         if self.config.webhook_url:
             webhook_cmd = f"""
+WEBHOOK_URL="{self.config.webhook_url}"
+MACHINE_ID=$(cat /etc/machine-id)
+
 notify_webhook() {{
-    curl -sf -X POST "{self.config.webhook_url}" \\
+    local event="$1"
+    local metrics="$2"
+    
+    curl -sf -X POST "$WEBHOOK_URL" \\
         -H "Content-Type: application/json" \\
-        -d '{{"event": "'$1'", "timestamp": "'$(date -Iseconds)'", "hostname": "'$(hostname)'", "details": "'$2'"}}' \\
+        -d "{{
+            \\"event\\": \\"$event\\",
+            \\"timestamp\\": \\"$(date -Iseconds)\\",
+            \\"hostname\\": \\"$(hostname)\\",
+            \\"machine_id\\": \\"$MACHINE_ID\\",
+            \\"ip_address\\": \\"$(hostname -I | awk '{{print $1}}')\\",
+            \\"metrics\\": $metrics
+        }}" \\
         > /dev/null 2>&1 || true
+}}
+
+send_heartbeat() {{
+    local chromium_pid=$(pgrep -x chromium || echo 0)
+    local container_status=$(docker ps -q -f name=tsijukebox | wc -l)
+    local uptime_sec=$(cat /proc/uptime | cut -d. -f1)
+    local mem_total=$(grep MemTotal /proc/meminfo | awk '{{print $2}}')
+    local mem_avail=$(grep MemAvailable /proc/meminfo | awk '{{print $2}}')
+    local mem_used=$(( (mem_total - mem_avail) / 1024 ))
+    local cpu_usage=$(top -bn1 | grep "Cpu(s)" | awk '{{print $2}}' | cut -d. -f1)
+    
+    local metrics="{{
+        \\"chromium_pid\\": $chromium_pid,
+        \\"container_running\\": $container_status,
+        \\"uptime_seconds\\": $uptime_sec,
+        \\"memory_used_mb\\": $mem_used,
+        \\"cpu_usage_percent\\": ${{cpu_usage:-0}}
+    }}"
+    
+    notify_webhook "heartbeat" "$metrics"
+}}
+
+check_pending_commands() {{
+    if [ -n "$WEBHOOK_URL" ]; then
+        local response=$(curl -sf "$WEBHOOK_URL/commands?machine_id=$MACHINE_ID" 2>/dev/null || echo "")
+        
+        if [ -n "$response" ] && echo "$response" | jq -e '.command != null' > /dev/null 2>&1; then
+            local command=$(echo "$response" | jq -r '.command.command')
+            local command_id=$(echo "$response" | jq -r '.command.id')
+            local params=$(echo "$response" | jq -r '.command.params // {{}}'')
+            
+            log "Recebido comando remoto: $command (ID: $command_id)"
+            
+            case "$command" in
+                "chromium_restart")
+                    restart_chromium
+                    mark_command_complete "$command_id" "true" "Chromium reiniciado"
+                    ;;
+                "container_restart")
+                    restart_container
+                    mark_command_complete "$command_id" "true" "Container reiniciado"
+                    ;;
+                "container_update")
+                    update_container
+                    mark_command_complete "$command_id" "true" "Container atualizado"
+                    ;;
+                "screenshot")
+                    capture_screenshot "$command_id"
+                    ;;
+                "custom_command")
+                    local custom_cmd=$(echo "$params" | jq -r '.command // ""')
+                    if [ -n "$custom_cmd" ]; then
+                        log "Executando comando personalizado: $custom_cmd"
+                        local result=$(eval "$custom_cmd" 2>&1 || echo "Erro ao executar")
+                        mark_command_complete "$command_id" "true" "$result"
+                    fi
+                    ;;
+                *)
+                    log "Comando desconhecido: $command"
+                    mark_command_complete "$command_id" "false" "Comando desconhecido"
+                    ;;
+            esac
+        fi
+    fi
+}}
+
+mark_command_complete() {{
+    local cmd_id="$1"
+    local success="$2"
+    local result="$3"
+    
+    curl -sf -X POST "$WEBHOOK_URL/commands/$cmd_id/complete" \\
+        -H "Content-Type: application/json" \\
+        -d "{{
+            \\"success\\": $success,
+            \\"result\\": \\"$result\\"
+        }}" > /dev/null 2>&1 || true
+}}
+
+capture_screenshot() {{
+    local cmd_id="$1"
+    log "Capturando screenshot..."
+    
+    if command -v scrot &> /dev/null; then
+        DISPLAY=:0 scrot /tmp/kiosk-screenshot.png
+        
+        # Enviar screenshot como base64
+        local screenshot_data=$(base64 -w0 /tmp/kiosk-screenshot.png)
+        
+        curl -sf -X POST "$WEBHOOK_URL" \\
+            -H "Content-Type: application/json" \\
+            -d "{{
+                \\"event\\": \\"screenshot\\",
+                \\"timestamp\\": \\"$(date -Iseconds)\\",
+                \\"hostname\\": \\"$(hostname)\\",
+                \\"machine_id\\": \\"$MACHINE_ID\\",
+                \\"command_id\\": \\"$cmd_id\\",
+                \\"screenshot_data\\": \\"$screenshot_data\\"
+            }}" > /dev/null 2>&1
+        
+        rm -f /tmp/kiosk-screenshot.png
+        log "Screenshot enviado"
+    else
+        mark_command_complete "$cmd_id" "false" "scrot não instalado"
+    fi
+}}
+
+update_container() {{
+    log "Atualizando container..."
+    cd {self.config.install_dir}
+    docker compose pull
+    docker compose down || true
+    sleep 3
+    docker compose up -d
+    notify_webhook "container_updated" "{{\\"message\\": \\"Container atualizado com sucesso\\"}}"
+    sleep 10
 }}
 """
         else:
@@ -1370,21 +1499,36 @@ notify_webhook() {{
 notify_webhook() {
     echo "[$(date)] Event: $1 - $2"
 }
+
+send_heartbeat() {
+    log "Heartbeat: sistema funcionando normalmente"
+}
+
+check_pending_commands() {
+    # Sem webhook configurado
+    :
+}
 """
         
         watchdog_script = f"""#!/bin/bash
 # TSiJUKEBOX Kiosk Watchdog
 # Monitora e reinicia componentes em caso de falha
+# Inclui heartbeat periódico e execução de comandos remotos
 
 LOG_FILE="{self.config.log_dir}/watchdog.log"
 APP_URL="http://localhost:{self.config.app_port}"
+INSTALL_DIR="{self.config.install_dir}"
 CHECK_INTERVAL=30
-MAX_FAILURES=3
+HEARTBEAT_INTERVAL=30
 
 # Contadores de falha
 chromium_failures=0
 docker_failures=0
 health_failures=0
+MAX_FAILURES=3
+
+# Contador de loops para heartbeat
+loop_count=0
 
 log() {{
     echo "[$(date '+%Y-%m-%d %H:%M:%S')] $1" | tee -a "$LOG_FILE"
@@ -1397,17 +1541,17 @@ restart_chromium() {{
     pkill -9 chromium || true
     sleep 2
     DISPLAY=:0 /usr/local/bin/start-kiosk.sh &
-    notify_webhook "chromium_restart" "Chromium reiniciado após $chromium_failures falhas"
+    notify_webhook "chromium_restart" "{{\\"message\\": \\"Chromium reiniciado após $chromium_failures falhas\\"}}"
     chromium_failures=0
 }}
 
 restart_container() {{
     log "Reiniciando container Docker..."
-    cd {self.config.install_dir}
+    cd $INSTALL_DIR
     docker compose down || true
     sleep 3
     docker compose up -d
-    notify_webhook "container_restart" "Container reiniciado após $docker_failures falhas"
+    notify_webhook "container_restart" "{{\\"message\\": \\"Container reiniciado após $docker_failures falhas\\"}}"
     docker_failures=0
     # Aguardar container iniciar
     sleep 10
@@ -1419,7 +1563,7 @@ check_health() {{
         log "Health check falhou ($health_failures/$MAX_FAILURES)"
         
         if [ $health_failures -ge $MAX_FAILURES ]; then
-            notify_webhook "health_check_failed" "$health_failures falhas consecutivas"
+            notify_webhook "health_check_failed" "{{\\"failures\\": $health_failures}}"
             restart_container
             health_failures=0
         fi
@@ -1457,23 +1601,46 @@ check_docker() {{
     return 0
 }}
 
+# Instalação de dependência se necessário
+if ! command -v jq &> /dev/null; then
+    log "Instalando jq para processamento JSON..."
+    pacman -S --noconfirm jq 2>/dev/null || apt-get install -y jq 2>/dev/null || true
+fi
+
 # Loop principal
-log "Watchdog iniciado"
-notify_webhook "watchdog_started" "Monitoramento ativo"
+log "Watchdog iniciado com heartbeat e comandos remotos"
+notify_webhook "watchdog_started" "{{\\"version\\": \\"2.1.0\\"}}"
+
+# Enviar heartbeat inicial
+send_heartbeat
 
 while true; do
+    # Verificar saúde do sistema
     check_docker
     sleep 2
     check_health
     sleep 2
     check_chromium
     
+    # Verificar comandos remotos pendentes
+    check_pending_commands
+    
+    # Enviar heartbeat a cada HEARTBEAT_INTERVAL segundos
+    ((loop_count++))
+    if [ $((loop_count * CHECK_INTERVAL / HEARTBEAT_INTERVAL)) -ge 1 ]; then
+        send_heartbeat
+        loop_count=0
+    fi
+    
     sleep $CHECK_INTERVAL
 done
 """
         self._write_file('/usr/local/bin/kiosk-watchdog.sh', watchdog_script, mode=0o755)
         
-        return InstallResult(True, "Watchdog configurado" + (" com webhook" if self.config.webhook_url else ""))
+        # Instalar scrot para capturas de tela
+        self._run_command(['pacman', '-S', '--noconfirm', '--needed', 'scrot'], check=False)
+        
+        return InstallResult(True, "Watchdog configurado com heartbeat e comandos remotos" + (" (webhook ativo)" if self.config.webhook_url else ""))
     
     def phase_setup_systemd(self) -> InstallResult:
         """Cria serviços systemd."""

@@ -13,7 +13,8 @@ import {
   Clock,
   ExternalLink,
   ArrowLeft,
-  Github
+  Github,
+  Upload
 } from 'lucide-react';
 import { useNavigate } from 'react-router-dom';
 import { formatDistanceToNow } from 'date-fns';
@@ -31,6 +32,7 @@ import {
 } from 'recharts';
 
 import { useGitHubStats, GitHubCommit } from '@/hooks/system/useGitHubStats';
+import { useGitHubFullSync, FileToSync } from '@/hooks/system/useGitHubFullSync';
 import { KioskLayout } from '@/components/layout/KioskLayout';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
@@ -44,6 +46,7 @@ import { CacheIndicator } from '@/components/github/CacheIndicator';
 import { GitHubDashboardCharts } from '@/components/github/GitHubDashboardCharts';
 import { getCommitTypeInfo } from '@/lib/constants/commitTypes';
 import { ComponentBoundary } from '@/components/errors';
+import { toast } from 'sonner';
 
 const LANGUAGE_COLORS: Record<string, string> = {
   TypeScript: '#3178c6',
@@ -119,11 +122,43 @@ export default function GitHubDashboard() {
     clearAllCache
   } = useGitHubStats();
 
+  const { isSyncing, syncFiles, lastSync } = useGitHubFullSync();
+
   const [filteredCommits, setFilteredCommits] = useState<GitHubCommit[]>([]);
   
   const handleFilteredCommits = useCallback((filtered: GitHubCommit[]) => {
     setFilteredCommits(filtered);
   }, []);
+
+  // Handler para sincronização completa do repositório
+  const handleFullSync = useCallback(async () => {
+    // Arquivos de documentação atualizados para v4.1.0
+    const filesToSync: FileToSync[] = [
+      {
+        path: 'docs/VERSION',
+        content: '4.1.0'
+      },
+      {
+        path: 'docs/SYNC_LOG.md',
+        content: `# Repository Sync Log
+
+## Last Sync
+- **Date**: ${new Date().toISOString()}
+- **Version**: 4.1.0
+- **Status**: ✅ Synced via Lovable
+
+## Changes
+- Updated documentation to v4.1.0
+- Added Plugin System documentation
+- Added Monitoring System documentation
+- Updated API Reference with new hooks
+- Updated Quick Install with advanced commands
+`
+      }
+    ];
+
+    await syncFiles(filesToSync, `[TSiJUKEBOX v4.1.0] Repository sync - ${new Date().toLocaleDateString('pt-BR')}`);
+  }, [syncFiles]);
 
   const displayCommits = filteredCommits.length > 0 || commits.length === 0 ? filteredCommits : commits;
 
@@ -174,6 +209,16 @@ export default function GitHubDashboard() {
           </div>
           
           <div className="flex items-center gap-3">
+            <Button 
+              variant="default" 
+              size="sm"
+              onClick={handleFullSync}
+              disabled={isSyncing}
+              className="bg-green-600 hover:bg-green-700"
+            >
+              <Upload className={`h-4 w-4 mr-2 ${isSyncing ? 'animate-pulse' : ''}`} />
+              {isSyncing ? 'Syncing...' : 'Sync Repository'}
+            </Button>
             {repoInfo && (
               <Button 
                 variant="outline" 

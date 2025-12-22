@@ -230,6 +230,15 @@ class InteractiveMenu:
 # CLASSES DE DADOS
 # =============================================================================
 
+class InstallationError(Exception):
+    """Erro durante instalação que pode ser revertido."""
+    
+    def __init__(self, message: str, stage: str = "", recoverable: bool = True):
+        super().__init__(message)
+        self.stage = stage
+        self.recoverable = recoverable
+
+
 @dataclass
 class InstallationCheckpoint:
     """Checkpoint para rollback de instalação."""
@@ -261,6 +270,8 @@ class RollbackManager:
         self.checkpoints.append(checkpoint)
         if not QUIET_MODE:
             log_info(f"📍 Checkpoint criado: {name}")
+            if rollback_commands:
+                log_info(f"   └─ {len(rollback_commands)} comando(s) de rollback registrado(s)")
     
     def has_checkpoints(self) -> bool:
         return len(self.checkpoints) > 0
@@ -313,10 +324,23 @@ class RollbackManager:
                 continue
             
             try:
-                parts = cmd.split()
-                subprocess.run(parts, capture_output=True, check=False)
+                # Usar shell=True para suportar ||, &&, pipes e comandos complexos
+                result = subprocess.run(
+                    cmd,
+                    shell=True,
+                    capture_output=True,
+                    text=True,
+                    check=False,
+                    timeout=120
+                )
+                if result.returncode == 0:
+                    log_info(f"  ✓ {cmd[:60]}{'...' if len(cmd) > 60 else ''}")
+                elif result.stderr:
+                    log_warning(f"  ⚠ Aviso: {result.stderr.strip()[:100]}")
+            except subprocess.TimeoutExpired:
+                log_warning(f"  ⏱ Timeout ao executar: {cmd[:50]}...")
             except Exception as e:
-                log_warning(f"  Falha ao executar: {cmd} ({e})")
+                log_warning(f"  ✗ Falha ao executar: {cmd[:50]}... ({e})")
     
     def cleanup(self) -> None:
         """Limpa checkpoints após sucesso."""
@@ -3259,7 +3283,10 @@ WantedBy=multi-user.target
 # =============================================================================
 
 def run_installation(args: argparse.Namespace) -> bool:
-    """Executa a instalação completa."""
+    """Executa a instalação completa com rollback automático em caso de falha."""
+    
+    # Inicializar gerenciador de rollback
+    rollback = RollbackManager()
     
     # Banner
     print(f"""
@@ -3275,11 +3302,14 @@ def run_installation(args: argparse.Namespace) -> bool:
 ╚══════════════════════════════════════════════════════════════════════╝{Colors.RESET}
 """)
     
-    # Detectar sistema
-    log_step("Detectando sistema...")
-    system_info = detect_system()
-    
-    print(f"""
+    try:
+        # ========================================================================
+        # ETAPA 0: DETECÇÃO DO SISTEMA
+        # ========================================================================
+        log_step("Detectando sistema...")
+        system_info = detect_system()
+        
+        print(f"""
 {Colors.GREEN}✓ Sistema detectado:{Colors.RESET}
   • Distribuição: {system_info.distro}
   • Usuário: {system_info.user}
@@ -3289,77 +3319,224 @@ def run_installation(args: argparse.Namespace) -> bool:
   • Spotify instalado: {'Sim' if system_info.has_spotify else 'Não'}
   • Pacotes instalados: {len(system_info.installed_packages)}
 """)
-    
-    user = args.user or system_info.user
-    music_dir = args.music_dir or "Musics"
-    
-    # 1-3. Instalação de pacotes (pular se --skip-packages)
-    if getattr(args, 'skip_packages', False):
-        log_warning("⏭️  Pulando instalação de pacotes (--skip-packages)")
-    else:
-        # 1. Instalar paru se necessário
-        if not system_info.has_paru:
-            if not install_paru():
-                log_error("Falha ao instalar paru")
-                return False
         
-        # 2. Atualizar sistema
-        log_step("Atualizando sistema com paru -Sy...")
-        run_command(['paru', '-Sy', '--noconfirm'], capture=True, check=False)
+        user = args.user or system_info.user
+        music_dir = args.music_dir or "Musics"
+        home_dir = Path(pwd.getpwnam(user).pw_dir)
         
-        # 3. Instalar pacotes base
-        log_step("Instalando pacotes base...")
-        install_packages(BASE_PACKAGES, system_info=system_info)
-    
-    # 4. Configurar diretório de músicas
-    setup_music_directory(user, music_dir)
-    
-    # 5. Configurar autologin
-    configure_autologin(user, system_info.login_manager)
-    
-    # 6. Instalar Spotify e Spicetify (se não --no-spotify)
-    if not args.no_spotify:
-        install_spotify_spicetify(user, system_info)
-        configure_spotify_only_session(user)
+        # Checkpoint inicial (estado limpo, nada a reverter)
+        rollback.create_checkpoint("pre_install", {"user": user, "started": True}, [])
         
-        # Instalar spotify-cli-linux (se não --no-spotify-cli)
-        if not args.no_spotify_cli:
-            install_spotify_cli_tools(user)
-    
-    # 7. Configurar Chromium
-    configure_chromium_homepage(user)
-    
-    # 8. Configurar SQLite
-    setup_sqlite_database()
-    
-    # 9. Instalar monitoramento (se não --no-monitoring)
-    if not args.no_monitoring:
-        log_step("Instalando stack de monitoramento...")
-        install_packages(MONITORING_PACKAGES, system_info=system_info)
-    
-    # 10. Instalar Nginx
-    install_packages(WEB_PACKAGES, system_info=system_info)
-    
-    # 11. Clonar repositório e instalar npm dependencies
-    if not clone_and_setup_repository(user):
-        log_error("Falha ao configurar repositório")
-        return False
-    
-    # 12. Criar serviços systemd (e iniciar)
-    create_systemd_services(user)
-    
-    # 13. Validação pós-instalação automática
-    if not DRY_RUN:
-        print()
-        log_step("Executando validação pós-instalação...")
-        validator = PostInstallValidator(args)
-        validation_ok = validator.validate_all()
+        # ========================================================================
+        # ETAPA 1: INSTALAÇÃO DE PACOTES BASE
+        # ========================================================================
+        if getattr(args, 'skip_packages', False):
+            log_warning("⏭️  Pulando instalação de pacotes (--skip-packages)")
+        else:
+            try:
+                # 1.1 Instalar paru se necessário
+                if not system_info.has_paru:
+                    log_step("Instalando paru (AUR helper)...")
+                    if not install_paru():
+                        raise InstallationError("Falha ao instalar paru", stage="paru")
+                    
+                    rollback.create_checkpoint("paru_installed", 
+                        {"installed": True},
+                        ["rm -rf /tmp/paru || true"]
+                    )
+                
+                # 1.2 Atualizar sistema
+                log_step("Atualizando sistema com paru -Sy...")
+                run_command(['paru', '-Sy', '--noconfirm'], capture=True, check=False)
+                
+                # 1.3 Instalar pacotes base
+                log_step("Instalando pacotes base...")
+                install_packages(BASE_PACKAGES, system_info=system_info)
+                
+                rollback.create_checkpoint("base_packages_installed",
+                    {"packages": BASE_PACKAGES},
+                    [f"pacman -R --noconfirm {' '.join(BASE_PACKAGES)} 2>/dev/null || true"]
+                )
+                
+            except InstallationError:
+                raise
+            except Exception as e:
+                raise InstallationError(f"Falha na instalação de pacotes: {e}", stage="packages")
         
-        if not validation_ok:
-            log_warning("Algumas verificações falharam. Verifique os erros acima.")
-    
-    # Relatório final
-    print(f"""
+        # ========================================================================
+        # ETAPA 2: CONFIGURAÇÃO DO SISTEMA
+        # ========================================================================
+        try:
+            # 2.1 Configurar diretório de músicas
+            log_step("Configurando diretório de músicas...")
+            setup_music_directory(user, music_dir)
+            
+            music_path = home_dir / music_dir
+            rollback.create_checkpoint("music_dir_created",
+                {"path": str(music_path)},
+                [f"rm -rf {music_path} 2>/dev/null || true"]
+            )
+            
+            # 2.2 Configurar autologin
+            log_step("Configurando autologin...")
+            configure_autologin(user, system_info.login_manager)
+            
+            rollback.create_checkpoint("autologin_configured",
+                {"user": user, "login_manager": system_info.login_manager},
+                []  # Autologin é complexo de reverter de forma segura
+            )
+            
+        except InstallationError:
+            raise
+        except Exception as e:
+            raise InstallationError(f"Falha na configuração do sistema: {e}", stage="system_config")
+        
+        # ========================================================================
+        # ETAPA 3: SPOTIFY E SPICETIFY
+        # ========================================================================
+        if not args.no_spotify:
+            try:
+                log_step("Instalando Spotify + Spicetify...")
+                install_spotify_spicetify(user, system_info)
+                configure_spotify_only_session(user)
+                
+                rollback.create_checkpoint("spotify_installed",
+                    {"user": user},
+                    [
+                        "paru -R --noconfirm spotify-launcher spicetify-cli 2>/dev/null || true",
+                        f"rm -rf {home_dir}/.spicetify 2>/dev/null || true",
+                        f"rm -rf {home_dir}/.config/spotify 2>/dev/null || true"
+                    ]
+                )
+                
+                # 3.2 Instalar spotify-cli-linux
+                if not args.no_spotify_cli:
+                    log_step("Instalando spotify-cli-linux...")
+                    install_spotify_cli_tools(user)
+                    
+                    rollback.create_checkpoint("spotify_cli_installed",
+                        {},
+                        [f"sudo -u {user} pip uninstall -y spotify-cli-linux 2>/dev/null || true"]
+                    )
+                    
+            except InstallationError:
+                raise
+            except Exception as e:
+                raise InstallationError(f"Falha na instalação do Spotify: {e}", stage="spotify")
+        
+        # ========================================================================
+        # ETAPA 4: CHROMIUM E SQLITE
+        # ========================================================================
+        try:
+            # 4.1 Configurar Chromium
+            log_step("Configurando Chromium...")
+            configure_chromium_homepage(user)
+            
+            # 4.2 Configurar SQLite
+            log_step("Configurando banco de dados SQLite...")
+            setup_sqlite_database()
+            
+            rollback.create_checkpoint("chromium_sqlite_done",
+                {},
+                [
+                    f"rm -rf {home_dir}/.config/chromium/Default/Preferences 2>/dev/null || true",
+                    f"rm -rf {DATA_DIR}/tsijukebox.db 2>/dev/null || true",
+                    f"rm -rf {CONFIG_DIR}/config.yaml 2>/dev/null || true"
+                ]
+            )
+            
+        except InstallationError:
+            raise
+        except Exception as e:
+            raise InstallationError(f"Falha na configuração do Chromium/SQLite: {e}", stage="chromium_sqlite")
+        
+        # ========================================================================
+        # ETAPA 5: MONITORAMENTO E WEB
+        # ========================================================================
+        try:
+            # 5.1 Instalar monitoramento
+            if not args.no_monitoring:
+                log_step("Instalando stack de monitoramento...")
+                install_packages(MONITORING_PACKAGES, system_info=system_info)
+                
+                rollback.create_checkpoint("monitoring_installed",
+                    {"packages": MONITORING_PACKAGES},
+                    [f"pacman -R --noconfirm {' '.join(MONITORING_PACKAGES)} 2>/dev/null || true"]
+                )
+            
+            # 5.2 Instalar pacotes web
+            log_step("Instalando pacotes web (Nginx, Avahi)...")
+            install_packages(WEB_PACKAGES, system_info=system_info)
+            
+            rollback.create_checkpoint("web_packages_installed",
+                {"packages": WEB_PACKAGES},
+                [f"pacman -R --noconfirm {' '.join(WEB_PACKAGES)} 2>/dev/null || true"]
+            )
+            
+        except InstallationError:
+            raise
+        except Exception as e:
+            raise InstallationError(f"Falha na instalação de monitoramento/web: {e}", stage="monitoring_web")
+        
+        # ========================================================================
+        # ETAPA 6: REPOSITÓRIO E NPM
+        # ========================================================================
+        try:
+            log_step("Clonando repositório e instalando dependências npm...")
+            if not clone_and_setup_repository(user):
+                raise InstallationError("Falha ao clonar repositório ou instalar npm", stage="repository")
+            
+            rollback.create_checkpoint("repository_cloned",
+                {"path": str(INSTALL_DIR)},
+                [f"rm -rf {INSTALL_DIR} 2>/dev/null || true"]
+            )
+            
+        except InstallationError:
+            raise
+        except Exception as e:
+            raise InstallationError(f"Falha ao configurar repositório: {e}", stage="repository")
+        
+        # ========================================================================
+        # ETAPA 7: SERVIÇOS SYSTEMD
+        # ========================================================================
+        try:
+            log_step("Criando e iniciando serviços systemd...")
+            create_systemd_services(user)
+            
+            rollback.create_checkpoint("services_created",
+                {},
+                [
+                    "systemctl stop tsijukebox.service 2>/dev/null || true",
+                    "systemctl disable tsijukebox.service 2>/dev/null || true",
+                    "rm -f /etc/systemd/system/tsijukebox.service 2>/dev/null || true",
+                    "systemctl daemon-reload"
+                ]
+            )
+            
+        except InstallationError:
+            raise
+        except Exception as e:
+            raise InstallationError(f"Falha ao criar serviços: {e}", stage="services")
+        
+        # ========================================================================
+        # ETAPA 8: VALIDAÇÃO PÓS-INSTALAÇÃO
+        # ========================================================================
+        if not DRY_RUN:
+            print()
+            log_step("Executando validação pós-instalação...")
+            validator = PostInstallValidator(args)
+            validation_ok = validator.validate_all()
+            
+            if not validation_ok:
+                log_warning("Algumas verificações falharam. Verifique os erros acima.")
+        
+        # ========================================================================
+        # SUCESSO! LIMPAR CHECKPOINTS
+        # ========================================================================
+        rollback.cleanup()
+        
+        # Relatório final
+        print(f"""
 {Colors.GREEN}╔══════════════════════════════════════════════════════════════════╗
 ║                    ✅ INSTALAÇÃO COMPLETA!                        ║
 ╚══════════════════════════════════════════════════════════════════════╝{Colors.RESET}
@@ -3389,8 +3566,66 @@ def run_installation(args: argparse.Namespace) -> bool:
 
 {Colors.GREEN}Obrigado por usar TSiJUKEBOX Enterprise! 🎵{Colors.RESET}
 """)
+        
+        return True
     
-    return True
+    except KeyboardInterrupt:
+        # Ctrl+C pressionado pelo usuário
+        print()
+        log_warning("⚠️  Instalação cancelada pelo usuário (Ctrl+C)")
+        
+        if rollback.has_checkpoints():
+            print()
+            try:
+                response = input(f"{Colors.YELLOW}Deseja reverter as mudanças feitas até agora? [s/N]: {Colors.RESET}")
+                if response.lower() in ('s', 'sim', 'y', 'yes'):
+                    log_step("Revertendo mudanças...")
+                    rollback.rollback_all()
+                    log_success("Mudanças revertidas com sucesso")
+                else:
+                    log_info("Mudanças mantidas. Execute com --doctor para diagnosticar problemas.")
+            except EOFError:
+                # stdin fechado, reverter automaticamente
+                log_step("Revertendo mudanças automaticamente...")
+                rollback.rollback_all()
+        
+        return False
+    
+    except InstallationError as e:
+        # Erro controlado durante instalação
+        print()
+        log_error(f"❌ Erro na etapa '{e.stage}': {e}")
+        
+        if rollback.has_checkpoints() and e.recoverable:
+            log_step("Iniciando rollback automático...")
+            rollback.rollback_all()
+            log_info("Sistema restaurado ao estado anterior.")
+            log_info("Corrija o problema e execute novamente a instalação.")
+        
+        return False
+    
+    except Exception as e:
+        # Erro inesperado
+        print()
+        log_error(f"❌ Erro fatal inesperado: {e}")
+        
+        if rollback.has_checkpoints():
+            log_step("Iniciando rollback automático de emergência...")
+            rollback.rollback_all()
+            log_info("Sistema restaurado ao estado anterior.")
+        
+        # Re-raise para que o traceback seja exibido se --verbose
+        raise
+    
+    finally:
+        # Log do estado final do rollback manager para debug
+        if not QUIET_MODE and rollback.checkpoints:
+            log_info(f"Estado do rollback: {len(rollback.checkpoints)} checkpoint(s) pendente(s)")
+
+
+# =============================================================================
+# MAIN
+# =============================================================================
 
 
 # =============================================================================

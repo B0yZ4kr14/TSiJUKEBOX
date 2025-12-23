@@ -258,6 +258,51 @@ export const FILE_CATEGORIES = {
   'Lib': [
     'src/lib/index.ts',
   ],
+  
+  // === COMPONENTS UI (15 arquivos) ===
+  'Components UI': [
+    'src/components/ui/button.tsx',
+    'src/components/ui/input.tsx',
+    'src/components/ui/card.tsx',
+    'src/components/ui/dialog.tsx',
+    'src/components/ui/toast.tsx',
+    'src/components/ui/form.tsx',
+    'src/components/ui/select.tsx',
+    'src/components/ui/tabs.tsx',
+    'src/components/ui/dropdown-menu.tsx',
+    'src/components/ui/badge.tsx',
+    'src/components/ui/progress.tsx',
+    'src/components/ui/skeleton.tsx',
+    'src/components/ui/tooltip.tsx',
+    'src/components/ui/switch.tsx',
+    'src/components/ui/index.ts',
+  ],
+  
+  // === COMPONENTS PLAYER (10 arquivos) ===
+  'Components Player': [
+    'src/components/player/NowPlaying.tsx',
+    'src/components/player/PlayerControls.tsx',
+    'src/components/player/PlaybackControls.tsx',
+    'src/components/player/VolumeSlider.tsx',
+    'src/components/player/ProgressBar.tsx',
+    'src/components/player/QueuePanel.tsx',
+    'src/components/player/LyricsDisplay.tsx',
+    'src/components/player/AudioVisualizer.tsx',
+    'src/components/player/LibraryPanel.tsx',
+    'src/components/player/index.ts',
+  ],
+  
+  // === COMPONENTS GITHUB (8 arquivos) ===
+  'Components GitHub': [
+    'src/components/github/AutoSyncPanel.tsx',
+    'src/components/github/FileSelectionModal.tsx',
+    'src/components/github/SyncHistoryPanel.tsx',
+    'src/components/github/CommitsTable.tsx',
+    'src/components/github/GitHubDashboardCharts.tsx',
+    'src/components/github/KpiCard.tsx',
+    'src/components/github/LanguagesChart.tsx',
+    'src/components/github/index.ts',
+  ],
 } as const;
 
 // Files that should have generated content (timestamps, version info)
@@ -274,7 +319,7 @@ export function isGeneratedFile(path: string): boolean {
   return GENERATED_FILES.includes(path);
 }
 
-// Only these files should be synced - prevents accidental overwrites (127 arquivos)
+// Only these files should be synced - prevents accidental overwrites (160 arquivos)
 export const SAFE_SYNC_FILES = [
   ...FILE_CATEGORIES['Documentação'],
   ...FILE_CATEGORIES['Scripts'],
@@ -294,4 +339,7 @@ export const SAFE_SYNC_FILES = [
   ...FILE_CATEGORIES['i18n'],
   ...FILE_CATEGORIES['Routes'],
   ...FILE_CATEGORIES['Lib'],
+  ...FILE_CATEGORIES['Components UI'],
+  ...FILE_CATEGORIES['Components Player'],
+  ...FILE_CATEGORIES['Components GitHub'],
 ];

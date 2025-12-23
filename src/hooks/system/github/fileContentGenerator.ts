@@ -1,5 +1,6 @@
 // Main content generator - orchestrates all template generators
 // Critical config files like package.json are NEVER generated here
+// Supports 160 files across 21 categories
 
 import { generateE2EFixtureContent } from './templates/e2eFixtureTemplates';
 import { generateE2ESpecContent } from './templates/e2eSpecTemplates';
@@ -17,8 +18,11 @@ import { generateConstantsContent } from './templates/constantsTemplates';
 import { generateI18nContent } from './templates/i18nTemplates';
 import { generateRoutesContent } from './templates/routesTemplates';
 import { generateLibIndexContent } from './templates/libIndexTemplate';
+import { generateUIComponentsContent } from './templates/uiComponentsTemplates';
+import { generatePlayerComponentsContent } from './templates/playerComponentsTemplates';
+import { generateGitHubComponentsContent } from './templates/githubComponentsTemplates';
 
-const VERSION = '4.1.0';
+const VERSION = '4.2.0';
 
 export function generateDocContent(path: string): string | null {
   const now = new Date().toISOString();
@@ -365,7 +369,7 @@ echo "Doctor check complete!"
 }
 
 // Main content generator - returns null for unknown files to prevent overwrites
-// Supports 127 files across 18 categories
+// Supports 160 files across 21 categories
 export function generateFileContent(path: string): string | null {
   // === DOCS (5 files) ===
   const docContent = generateDocContent(path);
@@ -393,10 +397,28 @@ export function generateFileContent(path: string): string | null {
     if (hookContent !== null) return hookContent;
   }
   
-  // === COMPONENTS (8 files) ===
+  // === COMPONENTS SETTINGS (8 files) ===
   if (path.startsWith('src/components/settings/')) {
     const componentContent = generateComponentContent(path);
     if (componentContent !== null) return componentContent;
+  }
+  
+  // === COMPONENTS UI (15 files) ===
+  if (path.startsWith('src/components/ui/')) {
+    const uiContent = generateUIComponentsContent(path);
+    if (uiContent !== null) return uiContent;
+  }
+  
+  // === COMPONENTS PLAYER (10 files) ===
+  if (path.startsWith('src/components/player/')) {
+    const playerContent = generatePlayerComponentsContent(path);
+    if (playerContent !== null) return playerContent;
+  }
+  
+  // === COMPONENTS GITHUB (8 files) ===
+  if (path.startsWith('src/components/github/')) {
+    const githubContent = generateGitHubComponentsContent(path);
+    if (githubContent !== null) return githubContent;
   }
   
   // === PAGES (5 files) ===

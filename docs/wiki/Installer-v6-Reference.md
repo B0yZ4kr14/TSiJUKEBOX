@@ -40,37 +40,156 @@ curl -fsSL ... | sudo python3 - --auto
 
 ### Diagrama de Fluxo
 
+```mermaid
+flowchart TD
+    subgraph PREP["🔍 PREPARAÇÃO"]
+        P0["FASE 0: Análise de Hardware<br/>CPU, RAM, GPU, Disco"]
+        P1["FASE 1: Verificação do Sistema<br/>Distro, AUR, Usuário"]
+    end
+    
+    subgraph INFRA["🏗️ INFRAESTRUTURA"]
+        P2["FASE 2: Docker"]
+        P3["FASE 3: UFW Firewall"]
+        P4["FASE 4: NTP"]
+        P5["FASE 5: Fontes"]
+        P6["FASE 6: Áudio"]
+    end
+    
+    subgraph BACKEND["⚙️ BACKEND"]
+        P7["FASE 7: Database"]
+        P8["FASE 8: Nginx"]
+        P9["FASE 9: Monitoramento"]
+        P10["FASE 10: Cloud Backup"]
+    end
+    
+    subgraph APPS["🎵 APLICAÇÕES"]
+        P11["FASE 11: Spotify"]
+        P12["FASE 12: Spicetify"]
+        P13["FASE 13: Spotify CLI"]
+        P14["FASE 14: Kiosk Mode"]
+        P15["FASE 15: Voice Control"]
+        P16["FASE 16: Dev Tools"]
+    end
+    
+    subgraph CONFIG["🔐 CONFIGURAÇÃO"]
+        P17["FASE 17: Autologin<br/>SDDM/GDM/LightDM/Ly/greetd"]
+        P18["FASE 18: Deploy App"]
+        P19["FASE 19: Systemd Services"]
+    end
+    
+    subgraph NEW["🆕 NOVO v6.0.0"]
+        P20["FASE 20: SSL/HTTPS<br/>Self-signed ou Let's Encrypt"]
+        P21["FASE 21: Avahi/mDNS<br/>midiaserver.local"]
+        P22["FASE 22: GitHub CLI"]
+        P23["FASE 23: Storj CLI"]
+    end
+    
+    subgraph FINAL["✅ FINALIZAÇÃO"]
+        P24["FASE 24: Hardware Report<br/>JSON com especificações"]
+        P25["FASE 25: Verificação Final<br/>Testes de todos serviços"]
+    end
+    
+    PREP --> INFRA
+    INFRA --> BACKEND
+    BACKEND --> APPS
+    APPS --> CONFIG
+    CONFIG --> NEW
+    NEW --> FINAL
+    
+    P0 --> P1
+    P2 --> P3 --> P4 --> P5 --> P6
+    P7 --> P8 --> P9 --> P10
+    P11 --> P12 --> P13 --> P14 --> P15 --> P16
+    P17 --> P18 --> P19
+    P20 --> P21 --> P22 --> P23
+    P24 --> P25
 ```
-┌─────────────────────────────────────────────────────────────────┐
-│           TSiJUKEBOX Enterprise Installer v6.0.0                │
-│                    26 Fases de Instalação                       │
-├─────────────────────────────────────────────────────────────────┤
-│                                                                 │
-│  FASE 0  ──► Análise de Hardware                               │
-│      │       Detecta CPU, RAM, GPU, disco                       │
-│      ▼                                                          │
-│  FASE 1  ──► Verificação do Sistema                            │
-│      │       Distro, AUR helper, usuário                        │
-│      ▼                                                          │
-│  FASES 2-6  ──► Infraestrutura Base                            │
-│      │          Docker, UFW, NTP, Fontes, Áudio                 │
-│      ▼                                                          │
-│  FASES 7-9  ──► Backend                                        │
-│      │          Database, Nginx, Monitoramento                  │
-│      ▼                                                          │
-│  FASES 10-16 ──► Aplicações                                    │
-│      │           Spotify, Spicetify, CLI, Kiosk, Voice, DevTools│
-│      ▼                                                          │
-│  FASES 17-19 ──► Configuração                                  │
-│      │           Autologin, Deploy, Systemd                     │
-│      ▼                                                          │
-│  FASES 20-23 ──► Extras v6.0.0                                 │
-│      │           SSL, Avahi, GitHub CLI, Storj                  │
-│      ▼                                                          │
-│  FASES 24-25 ──► Finalização                                   │
-│                  Hardware Report, Verificação                   │
-│                                                                 │
-└─────────────────────────────────────────────────────────────────┘
+
+### Diagrama do Sistema de Autologin (Fase 17)
+
+```mermaid
+flowchart TD
+    Start(["Iniciar Fase 17"]) --> DetectLM{"Detectar Login Manager"}
+    
+    DetectLM -->|SDDM| SDDM["Configurar<br/>/etc/sddm.conf.d/autologin.conf"]
+    DetectLM -->|GDM| GDM["Configurar<br/>/etc/gdm/custom.conf"]
+    DetectLM -->|LightDM| LightDM["Configurar<br/>/etc/lightdm/lightdm.conf"]
+    DetectLM -->|Ly| Ly["Configurar<br/>/etc/ly/config.ini"]
+    DetectLM -->|greetd| Greetd["Configurar<br/>/etc/greetd/config.toml"]
+    DetectLM -->|Nenhum| Getty["Configurar<br/>Getty TTY"]
+    
+    SDDM --> DetectUser
+    GDM --> DetectUser
+    LightDM --> DetectUser
+    Ly --> DetectUser
+    Greetd --> DetectUser
+    Getty --> DetectUser
+    
+    DetectUser{"Usuário existe?"}
+    DetectUser -->|Sim| GetInfo["Obter UserInfo<br/>+ garantir grupos"]
+    DetectUser -->|Não| CreateUser["Criar usuário 'tsi'<br/>com senha tsi123"]
+    
+    GetInfo --> ListSessions
+    CreateUser --> ListSessions
+    
+    ListSessions["Listar Sessões Disponíveis"]
+    ListSessions --> ChooseSession{"openbox disponível?"}
+    
+    ChooseSession -->|Sim| UseOpenbox["Usar openbox"]
+    ChooseSession -->|Não| UseFirst["Usar primeira sessão"]
+    
+    UseOpenbox --> Configure
+    UseFirst --> Configure
+    
+    Configure["Configurar Autologin"]
+    Configure --> IsKiosk{"Modo Kiosk?"}
+    
+    IsKiosk -->|Sim| XAutostart["Configurar X Autostart<br/>chromium --kiosk https://midiaserver.local/jukebox"]
+    IsKiosk -->|Não| Done
+    
+    XAutostart --> Done(["✓ Autologin Configurado"])
+```
+
+### Diagrama do Sistema de Fallback de IA
+
+```mermaid
+flowchart TD
+    Request(["Requisição de IA"]) --> Gateway["AI Gateway"]
+    
+    Gateway --> CheckP1{"Claude disponível?"}
+    CheckP1 -->|Sim| Claude["Claude Opus<br/>Prioridade 1"]
+    CheckP1 -->|Não| CheckP2
+    
+    Claude -->|Sucesso| Response(["Resposta"])
+    Claude -->|Erro/Sem créditos| CheckP2
+    
+    CheckP2{"OpenAI disponível?"}
+    CheckP2 -->|Sim| OpenAI["GPT-5<br/>Prioridade 2"]
+    CheckP2 -->|Não| CheckP3
+    
+    OpenAI -->|Sucesso| Response
+    OpenAI -->|Erro/Sem créditos| CheckP3
+    
+    CheckP3{"Gemini disponível?"}
+    CheckP3 -->|Sim| Gemini["Gemini 2.5<br/>Prioridade 3"]
+    CheckP3 -->|Não| CheckP4
+    
+    Gemini -->|Sucesso| Response
+    Gemini -->|Erro/Sem créditos| CheckP4
+    
+    CheckP4{"Groq disponível?"}
+    CheckP4 -->|Sim| Groq["LLama 3.3 70B<br/>Prioridade 4"]
+    CheckP4 -->|Não| CheckP5
+    
+    Groq -->|Sucesso| Response
+    Groq -->|Erro/Sem créditos| CheckP5
+    
+    CheckP5{"Manus disponível?"}
+    CheckP5 -->|Sim| Manus["Manus Agent<br/>Prioridade 5"]
+    CheckP5 -->|Não| Error
+    
+    Manus -->|Sucesso| Response
+    Manus -->|Erro| Error(["Erro: Nenhum provider disponível"])
 ```
 
 ### Detalhamento das Fases

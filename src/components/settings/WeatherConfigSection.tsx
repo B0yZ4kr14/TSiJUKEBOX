@@ -10,7 +10,14 @@ import { SettingsSection } from './SettingsSection';
 import { useSettings } from '@/contexts/SettingsContext';
 import { useWeather, useTranslation } from '@/hooks';
 import { toast } from 'sonner';
+import { cn } from '@/lib/utils';
 
+/**
+ * WeatherConfigSection Component
+ * 
+ * Configuration panel for OpenWeatherMap integration.
+ * Integrated with TSiJUKEBOX Design System tokens.
+ */
 export function WeatherConfigSection() {
   const { t } = useTranslation();
   const { weather, setWeatherConfig } = useSettings();
@@ -97,13 +104,13 @@ export function WeatherConfigSection() {
 
   return (
     <SettingsSection
-      icon={<Cloud className="w-5 h-5 icon-neon-blue" />}
+      icon={<Cloud className="w-5 h-5 text-accent-cyan drop-shadow-[0_0_8px_rgba(0,212,255,0.6)]" />}
       title={t('weatherConfig.title')}
       description={t('weatherConfig.description')}
       instructions={instructions}
       badge={
         weather.isEnabled && testWeather ? (
-          <Badge variant="outline" className="ml-2 border-cyan-400 text-cyan-400">
+          <Badge variant="primary" size="sm" className="ml-2">
             <Check className="w-3 h-3 mr-1" />
             {testWeather.temperature}°C
           </Badge>
@@ -113,17 +120,20 @@ export function WeatherConfigSection() {
     >
       <div className="space-y-4">
         {/* Enable Toggle */}
-        <div className="flex items-center justify-between p-3 rounded-lg bg-kiosk-bg/50 card-neon-border">
-          <div className="space-y-0.5">
-            <Label className="text-label-yellow">{t('weatherConfig.enableWidget')}</Label>
-            <p className="text-xs text-settings-hint">
+        <div className={cn(
+          "flex items-center justify-between p-4 rounded-lg",
+          "bg-bg-tertiary/50 backdrop-blur-sm border border-[#333333]",
+          "transition-all duration-normal"
+        )}>
+          <div className="space-y-0.5 flex-1">
+            <Label className="text-brand-gold font-medium">{t('weatherConfig.enableWidget')}</Label>
+            <p className="text-xs text-text-tertiary">
               {t('weatherConfig.enableHint')}
             </p>
           </div>
           <Switch
             checked={weather.isEnabled}
             onCheckedChange={handleToggle}
-            className="data-[state=checked]:bg-cyan-500 switch-3d"
             aria-label="Habilitar widget de clima"
           />
         </div>
@@ -131,7 +141,11 @@ export function WeatherConfigSection() {
         {/* Current Weather Preview */}
         {weather.isEnabled && testWeather && (
           <motion.div
-            className="p-4 rounded-lg bg-cyan-500/10 card-neon-border"
+            className={cn(
+              "p-4 rounded-lg",
+              "bg-accent-cyan/10 backdrop-blur-sm border border-accent-cyan/30",
+              "shadow-glow-cyan"
+            )}
             initial={{ opacity: 0, scale: 0.95 }}
             animate={{ opacity: 1, scale: 1 }}
           >
@@ -139,12 +153,12 @@ export function WeatherConfigSection() {
               <span className="text-4xl">{testWeather.icon}</span>
               <div className="flex-1">
                 <div className="flex items-center gap-2">
-                  <span className="text-2xl font-bold text-nav-neon-white">
+                  <span className="text-2xl font-bold text-text-primary">
                     {testWeather.temperature}°C
                   </span>
-                  <span className="text-description-visible">{testWeather.condition}</span>
+                  <span className="text-text-secondary">{testWeather.condition}</span>
                 </div>
-                <div className="flex items-center gap-1 text-sm text-description-visible">
+                <div className="flex items-center gap-1 text-sm text-text-tertiary">
                   <MapPin className="w-3 h-3" />
                   <span>{testWeather.location}, {testWeather.region}</span>
                 </div>
@@ -154,9 +168,12 @@ export function WeatherConfigSection() {
                 size="icon"
                 onClick={refresh}
                 disabled={isLoading}
-                className="text-description-visible hover:text-nav-neon-white"
+                className="text-text-secondary hover:text-accent-cyan"
               >
-                <RefreshCw className={`w-4 h-4 ${isLoading ? 'animate-spin' : ''}`} />
+                <RefreshCw className={cn(
+                  "w-4 h-4 transition-transform duration-normal",
+                  isLoading && "animate-spin"
+                )} />
               </Button>
             </div>
           </motion.div>
@@ -164,15 +181,18 @@ export function WeatherConfigSection() {
 
         {/* Error Display */}
         {error && (
-          <div className="p-3 rounded-lg bg-destructive/10 border border-destructive/20 flex items-center gap-2">
-            <AlertCircle className="w-4 h-4 text-destructive" />
-            <span className="text-sm text-destructive">{error}</span>
+          <div className={cn(
+            "p-3 rounded-lg flex items-center gap-2",
+            "bg-state-error/10 border border-state-error/30"
+          )}>
+            <AlertCircle className="w-4 h-4 text-state-error shrink-0" />
+            <span className="text-sm text-state-error">{error}</span>
           </div>
         )}
 
         {/* API Key Field */}
         <div className="space-y-2">
-          <Label htmlFor="weatherApiKey" className="text-label-yellow">{t('weatherConfig.apiKey')}</Label>
+          <Label htmlFor="weatherApiKey" className="text-brand-gold">{t('weatherConfig.apiKey')}</Label>
           <div className="relative">
             <Input
               id="weatherApiKey"
@@ -180,14 +200,15 @@ export function WeatherConfigSection() {
               value={localApiKey}
               onChange={(e) => setLocalApiKey(e.target.value)}
               placeholder={t('weatherConfig.apiKeyPlaceholder')}
-              className="input-3d bg-kiosk-bg border-kiosk-surface text-kiosk-text font-mono text-sm pr-10"
+              variant="default"
+              className="font-mono text-sm pr-10"
               data-tour="weather-api-key"
             />
             <Button
               type="button"
               variant="ghost"
               size="icon"
-              className="absolute right-0 top-0 h-full px-3 text-description-visible hover:text-nav-neon-white"
+              className="absolute right-0 top-0 h-full px-3 text-text-secondary hover:text-accent-cyan"
               onClick={() => setShowApiKey(!showApiKey)}
               aria-label={showApiKey ? 'Ocultar chave de API' : 'Mostrar chave de API'}
             >
@@ -198,16 +219,16 @@ export function WeatherConfigSection() {
 
         {/* City Field */}
         <div className="space-y-2">
-          <Label htmlFor="weatherCity" className="text-label-yellow">{t('weatherConfig.city')}</Label>
+          <Label htmlFor="weatherCity" className="text-brand-gold">{t('weatherConfig.city')}</Label>
           <Input
             id="weatherCity"
             value={localCity}
             onChange={(e) => setLocalCity(e.target.value)}
             placeholder={t('weatherConfig.cityPlaceholder')}
-            className="input-3d bg-kiosk-bg border-kiosk-surface text-kiosk-text"
+            variant="default"
             data-tour="weather-city"
           />
-          <p className="text-xs text-settings-hint">
+          <p className="text-xs text-text-tertiary">
             {t('weatherConfig.cityHint')}
           </p>
         </div>
@@ -217,16 +238,19 @@ export function WeatherConfigSection() {
           {hasChanges && (
             <Button
               onClick={handleSave}
-              className="flex-1 bg-cyan-600 hover:bg-cyan-700 text-white button-primary-3d"
+              variant="primary"
+              size="lg"
+              className="flex-1"
             >
               {t('weatherConfig.saveConfig')}
             </Button>
           )}
           <Button
-            variant="kiosk-outline"
+            variant="outline"
+            size="lg"
             onClick={handleTest}
             disabled={isTesting || !localApiKey || !localCity}
-            className="button-3d card-neon-border text-kiosk-text hover:bg-kiosk-surface"
+            className={cn(!hasChanges && "flex-1")}
           >
             {isTesting ? (
               <>
@@ -240,13 +264,26 @@ export function WeatherConfigSection() {
         </div>
 
         {/* Help Info */}
-        <div className="p-3 rounded-lg bg-kiosk-bg/50 card-neon-border">
-          <div className="flex items-start gap-2">
-            <AlertCircle className="w-4 h-4 icon-neon-blue mt-0.5 flex-shrink-0" />
-            <div className="text-xs text-settings-hint space-y-1">
-              <p className="text-label-neon">{t('weatherConfig.helpTitle')}</p>
-              <ol className="list-decimal list-inside space-y-0.5 ml-1">
-                <li>{t('weatherConfig.helpStep1')} <a href="https://openweathermap.org/api" target="_blank" rel="noopener noreferrer" className="text-cyan-400 hover:underline inline-flex items-center gap-1">OpenWeatherMap <ExternalLink className="w-3 h-3" /></a></li>
+        <div className={cn(
+          "p-4 rounded-lg",
+          "bg-bg-tertiary/50 backdrop-blur-sm border border-[#333333]"
+        )}>
+          <div className="flex items-start gap-3">
+            <AlertCircle className="w-4 h-4 text-accent-cyan mt-0.5 shrink-0 drop-shadow-[0_0_8px_rgba(0,212,255,0.6)]" />
+            <div className="text-xs text-text-tertiary space-y-2">
+              <p className="text-brand-gold font-medium">{t('weatherConfig.helpTitle')}</p>
+              <ol className="list-decimal list-inside space-y-1 ml-1">
+                <li>
+                  {t('weatherConfig.helpStep1')}{' '}
+                  <a 
+                    href="https://openweathermap.org/api" 
+                    target="_blank" 
+                    rel="noopener noreferrer" 
+                    className="text-accent-cyan hover:underline inline-flex items-center gap-1 transition-colors duration-normal"
+                  >
+                    OpenWeatherMap <ExternalLink className="w-3 h-3" />
+                  </a>
+                </li>
                 <li>{t('weatherConfig.helpStep2')}</li>
                 <li>{t('weatherConfig.helpStep3')}</li>
                 <li>{t('weatherConfig.helpStep4')}</li>

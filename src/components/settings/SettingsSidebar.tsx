@@ -52,6 +52,20 @@ interface SettingsSidebarProps {
   onCategoryChange: (category: SettingsCategory) => void;
 }
 
+/**
+ * SettingsSidebar Component
+ * 
+ * Navigation sidebar for Settings page with search, expand/collapse, and category filtering.
+ * Integrated with TSiJUKEBOX Design System tokens.
+ * 
+ * @example
+ * ```tsx
+ * <SettingsSidebar 
+ *   activeCategory="dashboard" 
+ *   onCategoryChange={(cat) => setCategory(cat)} 
+ * />
+ * ```
+ */
 export function SettingsSidebar({ activeCategory, onCategoryChange }: SettingsSidebarProps) {
   const navigate = useNavigate();
   const [isExpanded, setIsExpanded] = useState(false);
@@ -72,8 +86,15 @@ export function SettingsSidebar({ activeCategory, onCategoryChange }: SettingsSi
     <TooltipProvider delayDuration={100}>
       <motion.aside
         className={cn(
-          "settings-sidebar",
-          isExpanded && "settings-sidebar-expanded"
+          // Base styles with design tokens
+          "fixed left-0 top-0 h-full z-40",
+          "bg-bg-secondary/80 backdrop-blur-xl border-r border-[#222222]",
+          "flex flex-col p-3 gap-3",
+          "transition-all duration-normal",
+          // Width based on expanded state
+          isExpanded ? "w-64" : "w-16",
+          // Shadow
+          "shadow-elevation-high"
         )}
         initial={{ x: -100, opacity: 0 }}
         animate={{ x: 0, opacity: 1 }}
@@ -84,7 +105,12 @@ export function SettingsSidebar({ activeCategory, onCategoryChange }: SettingsSi
           variant="ghost"
           size="icon"
           onClick={() => setIsExpanded(!isExpanded)}
-          className="settings-sidebar-toggle"
+          className={cn(
+            "self-end shrink-0",
+            "text-text-secondary hover:text-accent-cyan",
+            "hover:bg-bg-tertiary"
+          )}
+          aria-label={isExpanded ? "Recolher sidebar" : "Expandir sidebar"}
         >
           {isExpanded ? (
             <ChevronLeft className="w-4 h-4" />
@@ -97,25 +123,28 @@ export function SettingsSidebar({ activeCategory, onCategoryChange }: SettingsSi
         <AnimatePresence>
           {isExpanded && (
             <motion.div
-              className="px-2 mb-3"
+              className="px-1"
               initial={{ opacity: 0, height: 0 }}
               animate={{ opacity: 1, height: 'auto' }}
               exit={{ opacity: 0, height: 0 }}
             >
               <div className="relative">
-                <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-kiosk-text/80" />
+                <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-text-tertiary" />
                 <Input
                   placeholder="Buscar..."
                   value={searchQuery}
                   onChange={(e) => setSearchQuery(e.target.value)}
-                  className="pl-9 pr-8 bg-kiosk-bg/50 border-kiosk-surface/50 text-sm h-9 text-kiosk-text placeholder:text-kiosk-text/80"
+                  className="pl-9 pr-8 h-9"
+                  variant="default"
+                  aria-label="Buscar configurações"
                 />
                 {searchQuery && (
                   <Button 
                     size="icon" 
                     variant="ghost" 
                     onClick={() => setSearchQuery('')}
-                    className="absolute right-1 top-1/2 -translate-y-1/2 h-6 w-6 text-kiosk-text/85 hover:text-kiosk-text"
+                    className="absolute right-1 top-1/2 -translate-y-1/2 h-6 w-6"
+                    aria-label="Limpar busca"
                   >
                     <X className="w-3 h-3" />
                   </Button>
@@ -133,19 +162,27 @@ export function SettingsSidebar({ activeCategory, onCategoryChange }: SettingsSi
                 variant="ghost"
                 size="icon"
                 onClick={() => setIsExpanded(true)}
-                className="w-10 h-10 mb-2 text-kiosk-text/85 hover:text-kiosk-text hover:bg-kiosk-surface/50"
+                className={cn(
+                  "w-10 h-10",
+                  "text-text-secondary hover:text-accent-cyan",
+                  "hover:bg-bg-tertiary"
+                )}
+                aria-label="Abrir busca"
               >
                 <Search className="w-4 h-4" />
               </Button>
             </TooltipTrigger>
-            <TooltipContent side="right" className="settings-tooltip">
+            <TooltipContent 
+              side="right" 
+              className="bg-bg-tertiary border-[#333333] text-text-primary"
+            >
               Buscar configurações
             </TooltipContent>
           </Tooltip>
         )}
 
         {/* Category Buttons */}
-        <nav className="flex flex-col gap-2">
+        <nav className="flex flex-col gap-2 flex-1 overflow-y-auto" role="navigation" aria-label="Categorias de configurações">
           {filteredCategories.map((category, index) => {
             const Icon = category.icon;
             const isActive = activeCategory === category.id;
@@ -156,20 +193,44 @@ export function SettingsSidebar({ activeCategory, onCategoryChange }: SettingsSi
                   <motion.button
                     onClick={() => onCategoryChange(category.id)}
                     className={cn(
-                      "settings-nav-button-3d relative",
-                      isActive && "active"
+                      // Base styles
+                      "relative flex items-center justify-start",
+                      "px-3 py-2.5 rounded-lg",
+                      "transition-all duration-normal",
+                      "group",
+                      // Default state
+                      "bg-bg-tertiary/50 border border-[#222222]",
+                      "text-text-secondary",
+                      // Hover state
+                      "hover:bg-bg-tertiary hover:border-accent-cyan/30",
+                      "hover:text-accent-cyan hover:shadow-glow-cyan",
+                      // Active state
+                      isActive && [
+                        "bg-accent-cyan/10 border-accent-cyan/50",
+                        "text-accent-cyan shadow-glow-cyan",
+                      ],
+                      // Focus state
+                      "focus:outline-none focus:ring-2 focus:ring-accent-cyan focus:ring-offset-2 focus:ring-offset-bg-primary"
                     )}
                     initial={{ x: -20, opacity: 0 }}
                     animate={{ x: 0, opacity: 1 }}
                     transition={{ delay: index * 0.05 }}
-                    whileHover={{ scale: 1.08 }}
-                    whileTap={{ scale: 0.95 }}
+                    whileHover={{ scale: 1.03 }}
+                    whileTap={{ scale: 0.97 }}
+                    aria-current={isActive ? "page" : undefined}
+                    aria-label={category.label}
                   >
-                    <Icon className="w-5 h-5 settings-nav-icon-3d" />
+                    <Icon 
+                      className={cn(
+                        "w-5 h-5 shrink-0",
+                        "transition-all duration-normal",
+                        isActive && "drop-shadow-[0_0_8px_rgba(0,212,255,0.6)]"
+                      )} 
+                    />
 
                     {isExpanded && (
                       <motion.span
-                        className="ml-3 text-sm font-medium whitespace-nowrap flex-1 text-left text-kiosk-text/90"
+                        className="ml-3 text-sm font-medium whitespace-nowrap flex-1 text-left"
                         initial={{ opacity: 0, x: -10 }}
                         animate={{ opacity: 1, x: 0 }}
                         transition={{ delay: 0.1 }}
@@ -180,7 +241,10 @@ export function SettingsSidebar({ activeCategory, onCategoryChange }: SettingsSi
                   </motion.button>
                 </TooltipTrigger>
                 {!isExpanded && (
-                  <TooltipContent side="right" className="settings-tooltip">
+                  <TooltipContent 
+                    side="right" 
+                    className="bg-bg-tertiary border-[#333333] text-text-primary"
+                  >
                     {category.label}
                   </TooltipContent>
                 )}
@@ -193,18 +257,34 @@ export function SettingsSidebar({ activeCategory, onCategoryChange }: SettingsSi
             <TooltipTrigger asChild>
               <motion.button
                 onClick={() => navigate('/github-dashboard')}
-                className="settings-nav-button-3d relative mt-4 border-t border-kiosk-surface/30 pt-4"
+                className={cn(
+                  // Base styles
+                  "relative flex items-center justify-start",
+                  "px-3 py-2.5 rounded-lg",
+                  "transition-all duration-normal",
+                  "group",
+                  "mt-4 border-t border-[#222222] pt-4",
+                  // Default state
+                  "bg-bg-tertiary/50 border border-[#222222]",
+                  "text-text-secondary",
+                  // Hover state
+                  "hover:bg-bg-tertiary hover:border-brand-github/30",
+                  "hover:text-brand-github hover:shadow-[0_0_20px_rgba(88,166,255,0.3)]",
+                  // Focus state
+                  "focus:outline-none focus:ring-2 focus:ring-brand-github focus:ring-offset-2 focus:ring-offset-bg-primary"
+                )}
                 initial={{ x: -20, opacity: 0 }}
                 animate={{ x: 0, opacity: 1 }}
                 transition={{ delay: 0.35 }}
-                whileHover={{ scale: 1.08 }}
-                whileTap={{ scale: 0.95 }}
+                whileHover={{ scale: 1.03 }}
+                whileTap={{ scale: 0.97 }}
+                aria-label="GitHub Dashboard"
               >
-                <Github className="w-5 h-5 settings-nav-icon-3d" />
+                <Github className="w-5 h-5 shrink-0 transition-all duration-normal" />
 
                 {isExpanded && (
                   <motion.span
-                    className="ml-3 text-sm font-medium whitespace-nowrap flex-1 text-left text-kiosk-text/90"
+                    className="ml-3 text-sm font-medium whitespace-nowrap flex-1 text-left"
                     initial={{ opacity: 0, x: -10 }}
                     animate={{ opacity: 1, x: 0 }}
                     transition={{ delay: 0.1 }}
@@ -215,7 +295,10 @@ export function SettingsSidebar({ activeCategory, onCategoryChange }: SettingsSi
               </motion.button>
             </TooltipTrigger>
             {!isExpanded && (
-              <TooltipContent side="right" className="settings-tooltip">
+              <TooltipContent 
+                side="right" 
+                className="bg-bg-tertiary border-[#333333] text-text-primary"
+              >
                 GitHub Dashboard
               </TooltipContent>
             )}
@@ -225,7 +308,7 @@ export function SettingsSidebar({ activeCategory, onCategoryChange }: SettingsSi
         {/* No results message */}
         {searchQuery && filteredCategories.length === 0 && (
           <motion.p
-            className="text-xs text-kiosk-text/85 text-center mt-4 px-2"
+            className="text-xs text-text-tertiary text-center px-2"
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
           >

@@ -10,7 +10,14 @@ import { useSettings } from '@/contexts/SettingsContext';
 import { youtubeMusicClient } from '@/lib/api/youtubeMusic';
 import { useToast } from '@/hooks';
 import { YouTubeMusicSetupWizard } from './YouTubeMusicSetupWizard';
+import { cn } from '@/lib/utils';
 
+/**
+ * YouTubeMusicSection Component
+ * 
+ * Configuration panel for YouTube Music integration with OAuth authentication.
+ * Integrated with TSiJUKEBOX Design System tokens.
+ */
 export function YouTubeMusicSection() {
   const { toast } = useToast();
   const { 
@@ -92,38 +99,45 @@ export function YouTubeMusicSection() {
 
   return (
     <>
-      <Card className="card-dark-neon-border">
+      <Card variant="glassmorphism">
         <CardHeader className="pb-3">
-          <CardTitle className="flex items-center gap-2 text-gold-neon font-bold">
-            <Youtube className="w-5 h-5 text-red-500" />
+          <CardTitle className="flex items-center gap-2 text-brand-gold font-bold">
+            <Youtube className="w-5 h-5 text-brand-youtube drop-shadow-[0_0_8px_rgba(255,0,0,0.6)]" />
             YouTube Music
           </CardTitle>
         </CardHeader>
         <CardContent className="space-y-4">
+          {/* Status Badge */}
           <div className="flex items-center justify-between">
-            <span className="text-label-yellow font-semibold">Status</span>
+            <span className="text-brand-gold font-semibold">Status</span>
             {youtubeMusic?.isConnected ? (
-              <Badge variant="default" className="bg-green-600 text-white font-bold">
+              <Badge variant="success" size="default">
                 <Check className="w-3 h-3 mr-1" />
                 Conectado
               </Badge>
             ) : (
-              <Badge variant="secondary" className="font-bold">
+              <Badge variant="default" size="default">
                 <X className="w-3 h-3 mr-1" />
                 Não conectado
               </Badge>
             )}
           </div>
 
+          {/* User Profile (when connected) */}
           {youtubeMusic?.isConnected && youtubeMusic.user && (
-            <div className="flex items-center gap-3 p-3 rounded-lg bg-kiosk-surface/70 border border-cyan-500/20">
-              <Avatar className="h-10 w-10">
+            <div className={cn(
+              "flex items-center gap-3 p-3 rounded-lg",
+              "bg-brand-youtube/10 backdrop-blur-sm border border-brand-youtube/30"
+            )}>
+              <Avatar className="h-10 w-10 ring-2 ring-brand-youtube/50">
                 <AvatarImage src={youtubeMusic.user.imageUrl || undefined} />
-                <AvatarFallback className="bg-red-600 text-white font-bold">{youtubeMusic.user.name?.[0] || 'U'}</AvatarFallback>
+                <AvatarFallback className="bg-brand-youtube text-white font-bold">
+                  {youtubeMusic.user.name?.[0] || 'U'}
+                </AvatarFallback>
               </Avatar>
               <div className="flex-1 min-w-0">
-                <p className="font-bold text-kiosk-text truncate">{youtubeMusic.user.name}</p>
-                <p className="text-xs text-kiosk-text/90 truncate">{youtubeMusic.user.email}</p>
+                <p className="font-bold text-text-primary truncate">{youtubeMusic.user.name}</p>
+                <p className="text-xs text-text-tertiary truncate">{youtubeMusic.user.email}</p>
               </div>
             </div>
           )}
@@ -133,7 +147,12 @@ export function YouTubeMusicSection() {
             <Button
               onClick={() => setShowWizard(true)}
               variant="outline"
-              className="w-full border-red-500/50 text-red-500 hover:bg-red-500/10"
+              size="lg"
+              className={cn(
+                "w-full",
+                "border-brand-youtube/50 text-brand-youtube",
+                "hover:bg-brand-youtube/10 hover:border-brand-youtube"
+              )}
             >
               <Sparkles className="w-4 h-4 mr-2" />
               Configurar com Assistente Guiado
@@ -142,24 +161,25 @@ export function YouTubeMusicSection() {
 
           {/* Credentials section - only show when not connected */}
           {!youtubeMusic?.isConnected && (
-            <div className="space-y-3 pt-2 border-t border-border/50">
-              <p className="text-xs text-muted-foreground">
+            <div className="space-y-3 pt-2 border-t border-[#333333]">
+              <p className="text-xs text-text-tertiary">
                 Credenciais OAuth do Google Cloud Console:
               </p>
               
               <div className="space-y-2">
-                <Label htmlFor="ytClientId" className="text-xs">Client ID</Label>
+                <Label htmlFor="ytClientId" className="text-brand-gold">Client ID</Label>
                 <Input
                   id="ytClientId"
                   placeholder="Seu Client ID do Google OAuth"
                   value={localCredentials.clientId}
                   onChange={(e) => setLocalCredentials(prev => ({ ...prev, clientId: e.target.value }))}
+                  variant="default"
                   className="font-mono text-sm"
                 />
               </div>
 
               <div className="space-y-2">
-                <Label htmlFor="ytClientSecret" className="text-xs">Client Secret</Label>
+                <Label htmlFor="ytClientSecret" className="text-brand-gold">Client Secret</Label>
                 <div className="relative">
                   <Input
                     id="ytClientSecret"
@@ -167,14 +187,16 @@ export function YouTubeMusicSection() {
                     placeholder="Seu Client Secret"
                     value={localCredentials.clientSecret}
                     onChange={(e) => setLocalCredentials(prev => ({ ...prev, clientSecret: e.target.value }))}
+                    variant="default"
                     className="font-mono text-sm pr-10"
                   />
                   <Button
                     type="button"
                     variant="ghost"
                     size="icon"
-                    className="absolute right-1 top-1/2 -translate-y-1/2 h-7 w-7"
+                    className="absolute right-1 top-1/2 -translate-y-1/2 h-7 w-7 text-text-secondary hover:text-accent-cyan"
                     onClick={() => setShowSecret(!showSecret)}
+                    aria-label={showSecret ? 'Ocultar secret' : 'Mostrar secret'}
                   >
                     {showSecret ? <EyeOff className="w-3 h-3" /> : <Eye className="w-3 h-3" />}
                   </Button>
@@ -185,7 +207,7 @@ export function YouTubeMusicSection() {
                 localCredentials.clientSecret !== youtubeMusic?.clientSecret) && (
                 <Button
                   variant="outline"
-                  size="sm"
+                  size="default"
                   onClick={handleSaveCredentials}
                   className="w-full"
                 >
@@ -195,12 +217,14 @@ export function YouTubeMusicSection() {
             </div>
           )}
 
+          {/* Action Buttons */}
           <div className="flex gap-2">
             {youtubeMusic?.isConnected ? (
               <Button
                 variant="outline"
+                size="lg"
                 onClick={handleDisconnect}
-                className="button-control-extreme-3d"
+                className="flex-1"
               >
                 <LogOut className="w-4 h-4 mr-2" />
                 Desconectar
@@ -209,7 +233,13 @@ export function YouTubeMusicSection() {
               <Button
                 onClick={handleConnect}
                 disabled={isConnecting || !hasCredentials}
-                className="button-control-extreme-3d bg-red-600 hover:bg-red-700 text-white font-bold"
+                size="lg"
+                className={cn(
+                  "flex-1",
+                  "bg-brand-youtube hover:bg-brand-youtube/90 text-white font-bold",
+                  "shadow-[0_0_20px_rgba(255,0,0,0.3)] hover:shadow-[0_0_30px_rgba(255,0,0,0.5)]",
+                  "transition-all duration-normal"
+                )}
               >
                 <Youtube className="w-4 h-4 mr-2" />
                 {isConnecting ? 'Conectando...' : 'Conectar com Google'}
@@ -217,14 +247,19 @@ export function YouTubeMusicSection() {
             )}
           </div>
 
-          <div className="pt-2 border-t border-cyan-500/20">
-            <p className="text-xs text-kiosk-text/90">
+          {/* Help Text */}
+          <div className="pt-2 border-t border-[#333333]">
+            <p className="text-xs text-text-tertiary">
               Conecte sua conta do YouTube Music para acessar playlists, músicas curtidas e histórico.
               <a 
                 href="https://music.youtube.com" 
                 target="_blank" 
                 rel="noopener noreferrer"
-                className="text-cyan-400 hover:underline ml-1 inline-flex items-center gap-1 font-semibold"
+                className={cn(
+                  "text-accent-cyan hover:underline ml-1",
+                  "inline-flex items-center gap-1 font-semibold",
+                  "transition-colors duration-normal"
+                )}
               >
                 Abrir YouTube Music <ExternalLink className="w-3 h-3" />
               </a>

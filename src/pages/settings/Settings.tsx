@@ -40,7 +40,8 @@ import {
   FullstackRefactorPanel,
   ScriptRefactorSection,
   ManusAutomationSection,
-  SpotifySetupWizard
+  SpotifySetupWizard,
+  AIConfigSection
 } from '@/components/settings';
 import { VolumeNormalizationSection } from '@/components/settings/VolumeNormalizationSection';
 import { VoiceControlSection } from '@/components/settings/VoiceControlSection';
@@ -237,6 +238,7 @@ export default function Settings() {
             <AuthProviderSection />
             <GitHubSyncStatus />
             <CodeScanSection />
+            <AIConfigSection />
             <ScriptRefactorSection />
             <ManusAutomationSection />
           </>

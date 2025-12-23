@@ -1,6 +1,6 @@
 // Main content generator - orchestrates all template generators
 // Critical config files like package.json are NEVER generated here
-// Supports 397 files across 45 categories
+// Supports 437 files across 55 categories
 
 import { generateE2EFixtureContent } from './templates/e2eFixtureTemplates';
 import { generateE2ESpecContent } from './templates/e2eSpecTemplates';
@@ -41,8 +41,18 @@ import { generateComponentsWikiContent } from './templates/componentsWikiTemplat
 import { generateComponentsUIExtendedContent } from './templates/componentsUIExtendedTemplates';
 import { generatePagesExtendedContent } from './templates/pagesTemplates';
 import { generateComponentsMiscContent } from './templates/componentsMiscTemplates';
+import { generateComponentsIndexPageContent } from './templates/componentsIndexPageTemplates';
+import { generateComponentsBackupContent } from './templates/componentsBackupTemplates';
+import { generatePagesSpotifyContent } from './templates/pagesSpotifyTemplates';
+import { generatePagesYouTubeContent } from './templates/pagesYouTubeTemplates';
+import { generatePagesSocialContent } from './templates/pagesSocialTemplates';
+import { generatePagesSettingsExtendedContent } from './templates/pagesSettingsExtendedTemplates';
+import { generateComponentsSpecializedContent } from './templates/componentsSpecializedTemplates';
+import { generateE2EMocksContent } from './templates/e2eMocksTemplates';
+import { generateHooksPagesContent } from './templates/hooksPagesTemplates';
+import { generatePagesRootContent } from './templates/pagesRootTemplates';
 
-const VERSION = '4.2.0';
+const VERSION = '4.3.0';
 
 export function generateDocContent(path: string): string | null {
   const now = new Date().toISOString();
@@ -488,6 +498,70 @@ export function generateFileContent(path: string): string | null {
       path.startsWith('src/pages/brand/')) {
     const pagesExtContent = generatePagesExtendedContent(path);
     if (pagesExtContent !== null) return pagesExtContent;
+  }
+  
+  // === COMPONENTS INDEX-PAGE (5 files) ===
+  if (path.startsWith('src/components/index-page/')) {
+    const indexPageContent = generateComponentsIndexPageContent(path);
+    if (indexPageContent !== null) return indexPageContent;
+  }
+  
+  // === COMPONENTS BACKUP (8 files) ===
+  if (path.startsWith('src/components/settings/backup/')) {
+    const backupContent = generateComponentsBackupContent(path);
+    if (backupContent !== null) return backupContent;
+  }
+  
+  // === PAGES SPOTIFY (5 files) ===
+  if (path.startsWith('src/pages/spotify/')) {
+    const spotifyContent = generatePagesSpotifyContent(path);
+    if (spotifyContent !== null) return spotifyContent;
+  }
+  
+  // === PAGES YOUTUBE (5 files) ===
+  if (path.startsWith('src/pages/youtube/')) {
+    const ytContent = generatePagesYouTubeContent(path);
+    if (ytContent !== null) return ytContent;
+  }
+  
+  // === PAGES SOCIAL (2 files) ===
+  if (path.startsWith('src/pages/social/')) {
+    const socialContent = generatePagesSocialContent(path);
+    if (socialContent !== null) return socialContent;
+  }
+  
+  // === PAGES SETTINGS EXTENDED (4 files) ===
+  if (path.startsWith('src/pages/settings/') && path !== 'src/pages/settings/Settings.tsx') {
+    const settingsExtContent = generatePagesSettingsExtendedContent(path);
+    if (settingsExtContent !== null) return settingsExtContent;
+  }
+  
+  // === COMPONENTS SPECIALIZED (6 files) ===
+  if (path.startsWith('src/components/dev/') ||
+      path.startsWith('src/components/audit/') ||
+      path.startsWith('src/components/weather/') ||
+      path.startsWith('src/components/spicetify/') ||
+      path.startsWith('src/components/docs/')) {
+    const specializedContent = generateComponentsSpecializedContent(path);
+    if (specializedContent !== null) return specializedContent;
+  }
+  
+  // === E2E MOCKS (2 files) ===
+  if (path.startsWith('e2e/mocks/')) {
+    const mocksContent = generateE2EMocksContent(path);
+    if (mocksContent !== null) return mocksContent;
+  }
+  
+  // === HOOKS PAGES (2 files) ===
+  if (path.startsWith('src/hooks/pages/')) {
+    const hooksPagesContent = generateHooksPagesContent(path);
+    if (hooksPagesContent !== null) return hooksPagesContent;
+  }
+  
+  // === PAGES ROOT (1 file) ===
+  if (path === 'src/pages/index.ts') {
+    const pagesRootContent = generatePagesRootContent(path);
+    if (pagesRootContent !== null) return pagesRootContent;
   }
   
   // === COMPONENTS UI EXTENDED (40 files) ===

@@ -624,6 +624,86 @@ export const FILE_CATEGORIES = {
     'src/components/system/TraceViewer.tsx',
     'src/components/upload/AudioWaveformPreview.tsx',
   ],
+
+  // === COMPONENTS INDEX-PAGE (5 arquivos) ===
+  'Components Index-Page': [
+    'src/components/index-page/index.ts',
+    'src/components/index-page/IndexHeader.tsx',
+    'src/components/index-page/IndexPanels.tsx',
+    'src/components/index-page/IndexPlayerSection.tsx',
+    'src/components/index-page/IndexStates.tsx',
+  ],
+
+  // === COMPONENTS BACKUP (8 arquivos) ===
+  'Components Backup': [
+    'src/components/settings/backup/index.ts',
+    'src/components/settings/backup/types.ts',
+    'src/components/settings/backup/BackupManager.tsx',
+    'src/components/settings/backup/BackupActions.tsx',
+    'src/components/settings/backup/BackupCard.tsx',
+    'src/components/settings/backup/BackupHistory.tsx',
+    'src/components/settings/backup/BackupScheduler.tsx',
+    'src/components/settings/backup/hooks/useBackupManager.ts',
+  ],
+
+  // === PAGES SPOTIFY (5 arquivos) ===
+  'Pages Spotify': [
+    'src/pages/spotify/index.ts',
+    'src/pages/spotify/SpotifyBrowser.tsx',
+    'src/pages/spotify/SpotifyLibrary.tsx',
+    'src/pages/spotify/SpotifyPlaylist.tsx',
+    'src/pages/spotify/SpotifySearch.tsx',
+  ],
+
+  // === PAGES YOUTUBE (5 arquivos) ===
+  'Pages YouTube': [
+    'src/pages/youtube/index.ts',
+    'src/pages/youtube/YouTubeMusicBrowser.tsx',
+    'src/pages/youtube/YouTubeMusicLibrary.tsx',
+    'src/pages/youtube/YouTubeMusicPlaylist.tsx',
+    'src/pages/youtube/YouTubeMusicSearch.tsx',
+  ],
+
+  // === PAGES SOCIAL (2 arquivos) ===
+  'Pages Social': [
+    'src/pages/social/index.ts',
+    'src/pages/social/JamSession.tsx',
+  ],
+
+  // === PAGES SETTINGS EXTENDED (4 arquivos) ===
+  'Pages Settings Extended': [
+    'src/pages/settings/index.ts',
+    'src/pages/settings/SpicetifyThemeGallery.tsx',
+    'src/pages/settings/SystemDiagnostics.tsx',
+    'src/pages/settings/ThemePreview.tsx',
+  ],
+
+  // === COMPONENTS SPECIALIZED (6 arquivos) ===
+  'Components Specialized': [
+    'src/components/dev/index.ts',
+    'src/components/dev/DevFileChangeMonitor.tsx',
+    'src/components/audit/AuditLogViewer.tsx',
+    'src/components/weather/AnimatedWeatherIcon.tsx',
+    'src/components/spicetify/ThemePreviewCard.tsx',
+    'src/components/docs/CodePlayground.tsx',
+  ],
+
+  // === E2E MOCKS (2 arquivos) ===
+  'E2E Mocks': [
+    'e2e/mocks/backup-api.mock.ts',
+    'e2e/mocks/player-api.mock.ts',
+  ],
+
+  // === HOOKS PAGES (2 arquivos) ===
+  'Hooks Pages': [
+    'src/hooks/pages/index.ts',
+    'src/hooks/pages/useIndexPage.tsx',
+  ],
+
+  // === PAGES ROOT (1 arquivo) ===
+  'Pages Root': [
+    'src/pages/index.ts',
+  ],
 } as const;
 
 // Files that should have generated content (timestamps, version info)
@@ -687,4 +767,14 @@ export const SAFE_SYNC_FILES = [
   ...FILE_CATEGORIES['Pages Dashboards'],
   ...FILE_CATEGORIES['Pages Brand'],
   ...FILE_CATEGORIES['Components Misc'],
+  ...FILE_CATEGORIES['Components Index-Page'],
+  ...FILE_CATEGORIES['Components Backup'],
+  ...FILE_CATEGORIES['Pages Spotify'],
+  ...FILE_CATEGORIES['Pages YouTube'],
+  ...FILE_CATEGORIES['Pages Social'],
+  ...FILE_CATEGORIES['Pages Settings Extended'],
+  ...FILE_CATEGORIES['Components Specialized'],
+  ...FILE_CATEGORIES['E2E Mocks'],
+  ...FILE_CATEGORIES['Hooks Pages'],
+  ...FILE_CATEGORIES['Pages Root'],
 ];

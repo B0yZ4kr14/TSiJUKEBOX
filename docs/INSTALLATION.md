@@ -92,6 +92,10 @@ curl -fsSL https://raw.githubusercontent.com/B0yZ4kr14/TSiJUKEBOX/main/scripts/i
 
 ### Wizard Installation
 
+![Setup Wizard](assets/mockups/setup-wizard-screen.png)
+
+*Assistente visual de instalação - Etapa 2: Seleção de provedores de música*
+
 The visual wizard provides a user-friendly installation experience.
 
 ```bash

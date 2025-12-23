@@ -69,10 +69,14 @@ You'll be asked for your password - type it and press Enter. (The password won't
 
 ### Step 5: Follow the Wizard
 
+![Setup Wizard](assets/mockups/setup-wizard-screen.png)
+
+*Assistente de configuração inicial - Etapa 2: Escolha seus provedores de música*
+
 The installer will open a visual wizard in your web browser. Simply:
 
 1. Review the system information
-2. Choose your preferred options
+2. Choose your preferred options (Spotify, YouTube Music, Local Files)
 3. Click **Install**
 
 That's it! ☕ Grab a coffee while the installation completes.
@@ -80,6 +84,10 @@ That's it! ☕ Grab a coffee while the installation completes.
 ---
 
 ## 🎯 First Launch
+
+![Dashboard](assets/mockups/dashboard-screen.png)
+
+*Tela inicial do TSiJUKEBOX com suas músicas, playlists e recomendações*
 
 After installation, you can access TSiJUKEBOX in two ways:
 

@@ -105,6 +105,14 @@ curl -fsSL https://raw.githubusercontent.com/B0yZ4kr14/TSiJUKEBOX/main/scripts/i
 
 *Navegação animada pelo sistema mostrando Setup Wizard, Dashboard, Spotify Connect e Karaoke Mode.*
 
+---
+
+### 🎵 Player Interface
+
+<img src="docs/assets/mockups/player-screen.png" alt="Player Screen" width="800">
+
+*Interface principal do player com controles completos, visualização de álbum e fila de reprodução.*
+
 </div>
 
 > 💡 **Dica:** Execute a edge function `screenshot-service` para gerar screenshots reais:

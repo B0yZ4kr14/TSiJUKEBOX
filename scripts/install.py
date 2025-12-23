@@ -1,8 +1,9 @@
 #!/usr/bin/env python3
 """
-TSiJUKEBOX Installer Shim v6.0.0
+TSiJUKEBOX Installer Shim v7.0.0
 ================================
-Lightweight shim that downloads and executes the unified installer.
+
+Lightweight shim that downloads and executes the unified installer with a modern UI.
 
 This file is safe to run via: curl -fsSL .../install.py | sudo python3
 
@@ -23,174 +24,131 @@ import ssl
 import subprocess
 from pathlib import Path
 
-VERSION = "6.0.0"
+VERSION = "7.0.0"
 REPO_BASE = "https://raw.githubusercontent.com/B0yZ4kr14/TSiJUKEBOX/main"
-UNIFIED_INSTALLER = f"{REPO_BASE}/scripts/unified-installer.py"
-STANDALONE_INSTALLER = f"{REPO_BASE}/scripts/install_standalone.py"
+UNIFIED_INSTALLER_URL = f"{REPO_BASE}/scripts/unified-installer.py"
 
-# Cores ANSI
+# --- Design System: Dark Neon Gold Black ---
 class Colors:
-    RED = '\033[91m'
-    GREEN = '\033[92m'
-    YELLOW = '\033[93m'
-    BLUE = '\033[94m'
-    MAGENTA = '\033[95m'
-    CYAN = '\033[96m'
+    GOLD = '\033[38;2;251;191;36m'  # #fbbf24
+    CYAN = '\033[38;2;0;212;255m'    # #00d4ff
+    MAGENTA = '\033[38;2;255;0;255m'
     WHITE = '\033[97m'
+    GRAY = '\033[38;5;242m'
+    GREEN = '\033[38;2;34;197;94m'   # #22c55e
+    RED = '\033[38;2;239;68;68m'     # #ef4444
     RESET = '\033[0m'
     BOLD = '\033[1m'
 
+class Icons:
+    ROCKET = "🚀"
+    DOWNLOAD = "📥"
+    EXECUTE = "⚙️"
+    SUCCESS = "✅"
+    ERROR = "❌"
+    WARN = "⚠️"
+    INFO = "ℹ️"
+    PYTHON = "🐍"
+    ROOT = "🔑"
 
-def print_banner():
-    """Exibe banner do instalador."""
-    print(f"""
-{Colors.CYAN}╔══════════════════════════════════════════════════════════════════════════════╗
-║                                                                              ║
-║  {Colors.MAGENTA}████████╗███████╗██╗     ██╗██╗   ██╗██╗  ██╗███████╗██████╗  ██████╗ ██╗  ██╗{Colors.CYAN}  ║
-║  {Colors.MAGENTA}╚══██╔══╝██╔════╝██║     ██║██║   ██║██║ ██╔╝██╔════╝██╔══██╗██╔═══██╗╚██╗██╔╝{Colors.CYAN}  ║
-║  {Colors.MAGENTA}   ██║   ███████╗██║     ██║██║   ██║█████╔╝ █████╗  ██████╔╝██║   ██║ ╚███╔╝{Colors.CYAN}   ║
-║  {Colors.MAGENTA}   ██║   ╚════██║██║██   ██║██║   ██║██╔═██╗ ██╔══╝  ██╔══██╗██║   ██║ ██╔██╗{Colors.CYAN}   ║
-║  {Colors.MAGENTA}   ██║   ███████║██║╚█████╔╝╚██████╔╝██║  ██╗███████╗██████╔╝╚██████╔╝██╔╝ ██╗{Colors.CYAN}  ║
-║  {Colors.MAGENTA}   ╚═╝   ╚══════╝╚═╝ ╚════╝  ╚═════╝ ╚═╝  ╚═╝╚══════╝╚═════╝  ╚═════╝ ╚═╝  ╚═╝{Colors.CYAN}  ║
-║                                                                              ║
-║  {Colors.WHITE}Enterprise Media Server - Installer Shim v{VERSION}{Colors.CYAN}                          ║
-╚══════════════════════════════════════════════════════════════════════════════╝{Colors.RESET}
-""")
-
-
+# --- Logging Functions ---
 def log_info(msg: str):
-    print(f"{Colors.BLUE}ℹ{Colors.RESET}  {msg}")
-
+    print(f"{Colors.CYAN}{Icons.INFO}{Colors.RESET}  {Colors.GRAY}{msg}{Colors.RESET}")
 
 def log_success(msg: str):
-    print(f"{Colors.GREEN}✓{Colors.RESET}  {msg}")
-
+    print(f"{Colors.GREEN}{Icons.SUCCESS}{Colors.RESET}  {Colors.BOLD}{msg}{Colors.RESET}")
 
 def log_warning(msg: str):
-    print(f"{Colors.YELLOW}⚠{Colors.RESET}  {msg}")
-
+    print(f"{Colors.GOLD}{Icons.WARN}{Colors.RESET}  {msg}{Colors.RESET}")
 
 def log_error(msg: str):
-    print(f"{Colors.RED}✗{Colors.RESET}  {msg}")
+    print(f"{Colors.RED}{Icons.ERROR}{Colors.RESET}  {Colors.BOLD}{msg}{Colors.RESET}")
 
+def print_banner():
+    """Displays the installer banner with the new design."""
+    banner = f"""
+{Colors.GRAY}┌──────────────────────────────────────────────────────────────────────────┐
+│                                                                          │
+│   {Colors.GOLD}████████╗███████╗██╗     ██╗██╗   ██╗██╗  ██╗███████╗██████╗  ██████╗ ██╗  ██╗{Colors.GRAY}   │
+│   {Colors.GOLD}╚══██╔══╝██╔════╝██║     ██║██║   ██║██║ ██╔╝██╔════╝██╔══██╗██╔═══██╗╚██╗██╔╝{Colors.GRAY}   │
+│   {Colors.GOLD}   ██║   ███████╗██║     ██║██║   ██║█████╔╝ █████╗  ██████╔╝██║   ██║ ╚███╔╝ {Colors.GRAY}    │
+│   {Colors.GOLD}   ██║   ╚════██║██║██   ██║██║   ██║██╔═██╗ ██╔══╝  ██╔══██╗██║   ██║ ██╔██╗ {Colors.GRAY}    │
+│   {Colors.GOLD}   ██║   ███████║██║╚█████╔╝╚██████╔╝██║  ██╗███████╗██████╔╝╚██████╔╝██╔╝ ██╗{Colors.GRAY}   │
+│   {Colors.GOLD}   ╚═╝   ╚══════╝╚═╝ ╚════╝  ╚═════╝ ╚═╝  ╚═╝╚══════╝╚═════╝  ╚═════╝ ╚═╝  ╚═╝{Colors.GRAY}   │
+│                                                                          │
+│   {Colors.WHITE}{Colors.BOLD}Enterprise Jukebox System - Installer Shim v{VERSION}{Colors.GRAY}                       │
+│                                                                          │
+└──────────────────────────────────────────────────────────────────────────┘{Colors.RESET}
+"""
+    print(banner)
 
+# --- Core Functions ---
 def download_script(url: str, dest: Path) -> bool:
-    """Download installer script from GitHub."""
-    log_info(f"Baixando: {url}")
-    
+    """Download installer script from GitHub with improved error handling."""
+    log_info(f"{Icons.DOWNLOAD} Baixando instalador de: {Colors.CYAN}{url}{Colors.RESET}")
     try:
-        # Criar contexto SSL que aceita certificados
         ctx = ssl.create_default_context()
-        
-        with urllib.request.urlopen(url, context=ctx, timeout=30) as response:
-            content = response.read()
-            
-            # Validar que é Python válido (não placeholder JS)
-            first_line = content.decode('utf-8', errors='ignore').split('\n')[0]
-            if first_line.startswith('//'):
-                log_error("Arquivo corrompido detectado (placeholder JS)")
-                log_error("O script no repositório está com conteúdo inválido.")
-                return False
-            
-            dest.write_bytes(content)
-            log_success(f"Download concluído: {dest}")
-            return True
-            
-    except urllib.error.URLError as e:
-        log_error(f"Erro de rede: {e}")
-        return False
+        ctx.check_hostname = False
+        ctx.verify_mode = ssl.CERT_NONE
+        with urllib.request.urlopen(url, context=ctx, timeout=30) as response, open(dest, 'wb') as out_file:
+            out_file.write(response.read())
+        log_success(f"Download concluído: {dest}")
+        return True
     except Exception as e:
-        log_error(f"Erro ao baixar: {e}")
+        log_error(f"Falha no download: {e}")
         return False
-
 
 def execute_script(script_path: Path, args: list) -> int:
-    """Execute downloaded Python script."""
-    log_info(f"Executando: python3 {script_path}")
-    
+    """Execute downloaded Python script with better feedback."""
+    log_info(f"{Icons.EXECUTE} Executando: {Colors.CYAN}python3 {script_path}{' '.join(args)}{Colors.RESET}")
     try:
-        result = subprocess.run(
+        process = subprocess.run(
             [sys.executable, str(script_path)] + args,
-            check=False
+            check=True,  # Exit on error
+            text=True,
+            capture_output=True
         )
-        return result.returncode
+        if process.stdout:
+            print(f"{Colors.GRAY}{process.stdout}{Colors.RESET}")
+        log_success("Execução do script concluída com sucesso.")
+        return 0
+    except subprocess.CalledProcessError as e:
+        log_error(f"O script de instalação falhou (código de saída: {e.returncode}).")
+        if e.stderr:
+            print(f"{Colors.RED}{e.stderr}{Colors.RESET}")
+        return e.returncode
     except Exception as e:
-        log_error(f"Erro ao executar script: {e}")
+        log_error(f"Erro inesperado ao executar o script: {e}")
         return 1
 
-
-def is_running_from_pipe() -> bool:
-    """Detecta se script está sendo executado via pipe (curl | python3)."""
-    return not sys.stdin.isatty()
-
+def check_prerequisites():
+    """Check for root and Python version."""
+    if os.geteuid() != 0:
+        log_warning(f"{Icons.ROOT} Este script requer privilégios de root (sudo).")
+        return False
+    if sys.version_info < (3, 8):
+        log_error(f"{Icons.PYTHON} Python 3.8+ é necessário (você tem {sys.version_info.major}.{sys.version_info.minor}).")
+        return False
+    return True
 
 def main() -> int:
-    """Entry point principal."""
+    """Main entry point."""
     print_banner()
-    
-    # Verificar se está rodando como root
-    if os.geteuid() != 0:
-        log_warning("Este script deve ser executado como root (sudo)")
-        log_info("Tentando continuar mesmo assim...")
-    
-    # Verificar versão do Python
-    if sys.version_info < (3, 8):
-        log_error(f"Python 3.8+ necessário (atual: {sys.version_info.major}.{sys.version_info.minor})")
-        return 1
-    
-    # Se estamos rodando via pipe, baixar e executar o instalador unificado
-    if is_running_from_pipe():
-        log_info("Detectado: execução via pipe (curl | python3)")
-        log_info("Baixando instalador unificado...")
-        
-        with tempfile.TemporaryDirectory() as tmpdir:
-            installer_path = Path(tmpdir) / "unified-installer.py"
-            
-            # Tentar baixar unified-installer.py
-            if download_script(UNIFIED_INSTALLER, installer_path):
-                log_success("Instalador unificado baixado")
-                return execute_script(installer_path, sys.argv[1:])
-            
-            # Fallback para standalone
-            log_warning("Tentando instalador standalone...")
-            standalone_path = Path(tmpdir) / "install_standalone.py"
-            
-            if download_script(STANDALONE_INSTALLER, standalone_path):
-                log_success("Instalador standalone baixado")
-                return execute_script(standalone_path, sys.argv[1:])
-            
-            log_error("Não foi possível baixar nenhum instalador")
-            log_info("Tente manualmente:")
-            log_info("  git clone https://github.com/B0yZ4kr14/TSiJUKEBOX.git")
-            log_info("  cd TSiJUKEBOX")
-            log_info("  sudo python3 scripts/unified-installer.py")
-            return 1
-    
-    # Se estamos rodando localmente, verificar se unified-installer.py existe
-    script_dir = Path(__file__).parent
-    unified_path = script_dir / "unified-installer.py"
-    standalone_path = script_dir / "install_standalone.py"
-    
-    if unified_path.exists():
-        log_info("Executando instalador unificado local...")
-        return execute_script(unified_path, sys.argv[1:])
-    
-    if standalone_path.exists():
-        log_info("Executando instalador standalone local...")
-        return execute_script(standalone_path, sys.argv[1:])
-    
-    log_error("Nenhum instalador encontrado localmente")
-    log_info("Baixando do repositório...")
-    
-    with tempfile.TemporaryDirectory() as tmpdir:
-        installer_path = Path(tmpdir) / "unified-installer.py"
-        
-        if download_script(UNIFIED_INSTALLER, installer_path):
-            return execute_script(installer_path, sys.argv[1:])
-        
-        log_error("Falha ao baixar instalador")
+
+    if not check_prerequisites():
         return 1
 
+    with tempfile.TemporaryDirectory() as tmpdir:
+        installer_path = Path(tmpdir) / "unified-installer.py"
+        if download_script(UNIFIED_INSTALLER_URL, installer_path):
+            return execute_script(installer_path, sys.argv[1:])
+        else:
+            log_error("Não foi possível baixar o instalador principal.")
+            log_info("Tente a instalação manual:")
+            log_info(f"  {Colors.CYAN}git clone https://github.com/B0yZ4kr14/TSiJUKEBOX.git{Colors.RESET}")
+            log_info(f"  {Colors.CYAN}cd TSiJUKEBOX{Colors.RESET}")
+            log_info(f"  {Colors.CYAN}sudo python3 scripts/unified-installer.py{Colors.RESET}")
+            return 1
 
 if __name__ == "__main__":
     sys.exit(main())

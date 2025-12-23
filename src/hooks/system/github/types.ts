@@ -194,6 +194,32 @@ export const FILE_CATEGORIES = {
     'src/lib/auth/passwordUtils.ts',
     'src/lib/auth/index.ts',
   ],
+  
+  // === CONTEXTS (8 arquivos) === NOVA CATEGORIA
+  'Contexts': [
+    'src/contexts/AppSettingsContext.tsx',
+    'src/contexts/JamContext.tsx',
+    'src/contexts/SettingsContext.tsx',
+    'src/contexts/SpotifyContext.tsx',
+    'src/contexts/ThemeContext.tsx',
+    'src/contexts/UserContext.tsx',
+    'src/contexts/YouTubeMusicContext.tsx',
+    'src/contexts/index.ts',
+  ],
+  
+  // === TYPES (10 arquivos) === NOVA CATEGORIA
+  'Types': [
+    'src/types/audit.ts',
+    'src/types/index.ts',
+    'src/types/kiosk.ts',
+    'src/types/lyrics.ts',
+    'src/types/notifications.ts',
+    'src/types/settings.ts',
+    'src/types/spotify-api.ts',
+    'src/types/track.ts',
+    'src/types/user.ts',
+    'src/types/weather.ts',
+  ],
 } as const;
 
 // Files that should have generated content (timestamps, version info)
@@ -210,7 +236,7 @@ export function isGeneratedFile(path: string): boolean {
   return GENERATED_FILES.includes(path);
 }
 
-// Only these files should be synced - prevents accidental overwrites (95 arquivos)
+// Only these files should be synced - prevents accidental overwrites (113 arquivos)
 export const SAFE_SYNC_FILES = [
   ...FILE_CATEGORIES['Documentação'],
   ...FILE_CATEGORIES['Scripts'],
@@ -222,4 +248,6 @@ export const SAFE_SYNC_FILES = [
   ...FILE_CATEGORIES['Utils'],
   ...FILE_CATEGORIES['API'],
   ...FILE_CATEGORIES['Auth'],
+  ...FILE_CATEGORIES['Contexts'],
+  ...FILE_CATEGORIES['Types'],
 ];

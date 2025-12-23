@@ -9,6 +9,8 @@ import { generatePageContent } from './templates/pageTemplates';
 import { generateUtilsContent } from './templates/utilsTemplates';
 import { generateApiContent } from './templates/apiTemplates';
 import { generateAuthContent } from './templates/authTemplates';
+import { generateContextContent } from './templates/contextTemplates';
+import { generateTypesContent } from './templates/typesTemplates';
 
 const VERSION = '4.1.0';
 
@@ -413,6 +415,18 @@ export function generateFileContent(path: string): string | null {
   if (path.startsWith('src/lib/auth/')) {
     const authContent = generateAuthContent(path);
     if (authContent !== null) return authContent;
+  }
+  
+  // === CONTEXTS (8 files) ===
+  if (path.startsWith('src/contexts/')) {
+    const contextContent = generateContextContent(path);
+    if (contextContent !== null) return contextContent;
+  }
+  
+  // === TYPES (10 files) ===
+  if (path.startsWith('src/types/')) {
+    const typesContent = generateTypesContent(path);
+    if (typesContent !== null) return typesContent;
   }
   
   // Unknown file - return null to prevent overwrite

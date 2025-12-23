@@ -361,8 +361,6 @@ Este software é liberado ao **DOMÍNIO PÚBLICO** sem quaisquer restrições:
 
 **Desenvolvido por [B0.y_Z4kr14](https://github.com/B0yZ4kr14)**
 
-*TSI Telecom*
-
 </div>
 
 ---

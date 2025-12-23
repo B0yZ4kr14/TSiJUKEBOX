@@ -33,6 +33,7 @@ import {
   CollapsibleContent,
   CollapsibleTrigger,
 } from '@/components/ui/collapsible';
+import { cn } from '@/lib/utils';
 
 interface UserFormData {
   username: string;
@@ -51,6 +52,17 @@ const defaultPermissions: UserPermissions = {
   canAccessSystemControls: false,
 };
 
+/**
+ * UserManagementSection Component
+ * 
+ * User management panel with CRUD operations, role-based permissions, and granular access control.
+ * Integrated with TSiJUKEBOX Design System tokens.
+ * 
+ * @example
+ * ```tsx
+ * <UserManagementSection />
+ * ```
+ */
 export function UserManagementSection() {
   const { t } = useTranslation();
   const [users, setUsers] = useState<AppUser[]>([]);
@@ -66,21 +78,22 @@ export function UserManagementSection() {
     customPermissions: undefined,
   });
 
-  const roleConfig: Record<UserRole, { label: string; icon: React.ReactNode; color: string }> = {
+  // Role configuration with design tokens
+  const roleConfig: Record<UserRole, { label: string; icon: React.ReactNode; badgeVariant: 'info' | 'primary' | 'warning' }> = {
     newbie: { 
       label: t('users.roles.newbie'), 
       icon: <Shield className="w-3 h-3" />, 
-      color: 'bg-cyan-500/20 text-cyan-300 border-cyan-500/30' 
+      badgeVariant: 'info'
     },
     user: { 
       label: t('users.roles.user'), 
       icon: <ShieldCheck className="w-3 h-3" />, 
-      color: 'bg-blue-500/20 text-blue-300 border-blue-500/30' 
+      badgeVariant: 'primary'
     },
     admin: { 
       label: t('users.roles.admin'), 
       icon: <ShieldAlert className="w-3 h-3" />, 
-      color: 'bg-amber-500/20 text-amber-300 border-amber-500/30' 
+      badgeVariant: 'warning'
     },
   };
 
@@ -247,20 +260,31 @@ export function UserManagementSection() {
 
   const renderPermissionsSection = () => (
     <Collapsible open={permissionsOpen} onOpenChange={setPermissionsOpen}>
-      <CollapsibleTrigger className="flex items-center justify-between w-full p-3 rounded-lg card-option-dark-3d hover:bg-kiosk-surface/50 transition-colors">
+      <CollapsibleTrigger className={cn(
+        "flex items-center justify-between w-full p-3 rounded-lg",
+        "bg-bg-tertiary/50 border border-[#333333]",
+        "hover:bg-bg-tertiary hover:border-accent-cyan/30",
+        "transition-all duration-normal"
+      )}>
         <div className="flex items-center gap-2">
-          <Settings2 className="w-4 h-4 icon-neon-blue" />
-          <span className="text-label-yellow text-sm font-medium">Permissões Avançadas</span>
+          <Settings2 className="w-4 h-4 text-accent-cyan drop-shadow-[0_0_8px_rgba(0,212,255,0.6)]" />
+          <span className="text-brand-gold text-sm font-medium">Permissões Avançadas</span>
         </div>
-        <ChevronDown className={`w-4 h-4 text-kiosk-text/90 transition-transform ${permissionsOpen ? 'rotate-180' : ''}`} />
+        <ChevronDown className={cn(
+          "w-4 h-4 text-text-secondary transition-transform duration-normal",
+          permissionsOpen && "rotate-180"
+        )} />
       </CollapsibleTrigger>
-      <CollapsibleContent className="mt-3 space-y-2 p-3 rounded-lg card-option-dark-3d">
-        <p className="text-xs text-settings-hint mb-3">
+      <CollapsibleContent className={cn(
+        "mt-3 space-y-2 p-3 rounded-lg",
+        "bg-bg-tertiary/50 border border-[#333333]"
+      )}>
+        <p className="text-xs text-text-tertiary mb-3">
           Personalize as permissões ou use os padrões do nível de acesso selecionado.
         </p>
         {(Object.keys(permissionLabels) as Array<keyof UserPermissions>).map((permission) => (
           <div key={permission} className="flex items-center justify-between py-2">
-            <Label className="text-sm text-kiosk-text/90">{permissionLabels[permission]}</Label>
+            <Label className="text-sm text-text-primary">{permissionLabels[permission]}</Label>
             <Switch
               checked={getCurrentPermissionValue(permission)}
               onCheckedChange={(value) => handlePermissionChange(permission, value)}
@@ -276,7 +300,7 @@ export function UserManagementSection() {
     <SettingsSection
       title={t('users.title')}
       description={t('users.description')}
-      icon={<Users className="w-5 h-5 icon-neon-blue" />}
+      icon={<Users className="w-5 h-5 text-accent-cyan drop-shadow-[0_0_8px_rgba(0,212,255,0.6)]" />}
     >
       <div className="space-y-4">
         {/* User List */}
@@ -284,37 +308,56 @@ export function UserManagementSection() {
           {users.map((user) => (
             <div
               key={user.id}
-              className="flex items-center justify-between p-3 rounded-lg card-option-dark-3d"
+              className={cn(
+                "flex items-center justify-between p-3 rounded-lg",
+                "bg-bg-tertiary/50 backdrop-blur-sm border border-[#333333]",
+                "hover:bg-bg-tertiary hover:border-accent-cyan/30",
+                "transition-all duration-normal"
+              )}
             >
               <div className="flex items-center gap-3">
-                <div className="w-8 h-8 rounded-full avatar-neon-glow flex items-center justify-center">
-                  <span className="text-sm font-medium">
+                <div className={cn(
+                  "w-8 h-8 rounded-full flex items-center justify-center",
+                  "bg-accent-cyan/20 border border-accent-cyan/50",
+                  "shadow-[0_0_15px_rgba(0,212,255,0.3)]"
+                )}>
+                  <span className="text-sm font-medium text-accent-cyan">
                     {user.username.charAt(0).toUpperCase()}
                   </span>
                 </div>
                 <div>
-                  <p className="font-medium text-sm text-kiosk-text">{user.username}</p>
+                  <p className="font-medium text-sm text-text-primary">{user.username}</p>
                   <Badge 
-                    variant="outline" 
-                    className={`text-[10px] ${roleConfig[user.role].color}`}
+                    variant={roleConfig[user.role].badgeVariant}
+                    size="sm"
+                    icon={roleConfig[user.role].icon}
                   >
-                    {roleConfig[user.role].icon}
-                    <span className="ml-1">{roleConfig[user.role].label}</span>
+                    {roleConfig[user.role].label}
                   </Badge>
                 </div>
               </div>
               <div className="flex gap-2">
                 <Button
+                  variant="ghost"
                   size="icon"
-                  className="h-8 w-8 button-action-neon"
+                  className={cn(
+                    "h-8 w-8",
+                    "text-accent-cyan hover:bg-accent-cyan/10",
+                    "hover:shadow-glow-cyan"
+                  )}
                   onClick={() => openEditDialog(user)}
                   aria-label={`Editar usuário ${user.username}`}
                 >
                   <Edit2 className="w-4 h-4" />
                 </Button>
                 <Button
+                  variant="ghost"
                   size="icon"
-                  className="h-8 w-8 button-destructive-neon"
+                  className={cn(
+                    "h-8 w-8",
+                    "text-state-error hover:bg-state-error/10",
+                    "hover:shadow-[0_0_20px_rgba(239,68,68,0.3)]"
+                  )}
                   onClick={() => openDeleteDialog(user)}
                   aria-label={`Remover usuário ${user.username}`}
                 >
@@ -327,7 +370,9 @@ export function UserManagementSection() {
 
         {/* Add User Button */}
         <Button
-          className="w-full button-primary-glow-3d"
+          variant="primary"
+          size="lg"
+          className="w-full"
           data-tour="add-user-button"
           onClick={() => {
             setFormData({ username: '', password: '', role: 'user', customPermissions: undefined });
@@ -340,18 +385,22 @@ export function UserManagementSection() {
         </Button>
 
         {/* Role Legend */}
-        <div className="p-3 rounded-lg card-option-dark-3d space-y-2">
-          <p className="text-xs font-medium text-label-yellow">{t('users.permissionLevels')}:</p>
+        <div className={cn(
+          "p-3 rounded-lg space-y-2",
+          "bg-bg-tertiary/50 backdrop-blur-sm border border-[#333333]"
+        )}>
+          <p className="text-xs font-medium text-brand-gold">{t('users.permissionLevels')}:</p>
           {Object.entries(roleDescriptions).map(([role, desc]) => (
             <div key={role} className="flex items-start gap-2">
               <Badge 
-                variant="outline" 
-                className={`text-[10px] ${roleConfig[role as UserRole].color} shrink-0`}
+                variant={roleConfig[role as UserRole].badgeVariant}
+                size="sm"
+                icon={roleConfig[role as UserRole].icon}
+                className="shrink-0"
               >
-                {roleConfig[role as UserRole].icon}
-                <span className="ml-1">{roleConfig[role as UserRole].label}</span>
+                {roleConfig[role as UserRole].label}
               </Badge>
-              <span className="text-xs text-kiosk-text/80">{desc}</span>
+              <span className="text-xs text-text-tertiary">{desc}</span>
             </div>
           ))}
         </div>
@@ -368,24 +417,26 @@ export function UserManagementSection() {
           </DialogHeader>
           <div className="space-y-4 py-4">
             <div className="space-y-2">
-              <Label className="text-label-yellow">{t('users.username')}</Label>
+              <Label className="text-brand-gold">{t('users.username')}</Label>
               <Input
                 value={formData.username}
                 onChange={(e) => setFormData({ ...formData, username: e.target.value })}
                 placeholder="usuario"
+                variant="default"
               />
             </div>
             <div className="space-y-2">
-              <Label className="text-label-yellow">{t('users.password')}</Label>
+              <Label className="text-brand-gold">{t('users.password')}</Label>
               <Input
                 type="password"
                 value={formData.password}
                 onChange={(e) => setFormData({ ...formData, password: e.target.value })}
                 placeholder="••••••••"
+                variant="default"
               />
             </div>
             <div className="space-y-2">
-              <Label className="text-label-yellow">{t('users.accessLevel')}</Label>
+              <Label className="text-brand-gold">{t('users.accessLevel')}</Label>
               <Select
                 value={formData.role}
                 onValueChange={(value: UserRole) => setFormData({ ...formData, role: value, customPermissions: undefined })}
@@ -405,10 +456,10 @@ export function UserManagementSection() {
             {renderPermissionsSection()}
           </div>
           <DialogFooter>
-            <Button variant="kiosk-outline" onClick={() => setShowAddDialog(false)}>
+            <Button variant="outline" onClick={() => setShowAddDialog(false)}>
               {t('common.cancel')}
             </Button>
-            <Button onClick={handleAddUser}>{t('users.createUser')}</Button>
+            <Button variant="primary" onClick={handleAddUser}>{t('users.createUser')}</Button>
           </DialogFooter>
         </DialogContent>
       </Dialog>
@@ -424,7 +475,7 @@ export function UserManagementSection() {
           </DialogHeader>
           <div className="space-y-4 py-4">
             <div className="space-y-2">
-              <Label className="text-label-yellow">{t('users.accessLevel')}</Label>
+              <Label className="text-brand-gold">{t('users.accessLevel')}</Label>
               <Select
                 value={formData.role}
                 onValueChange={(value: UserRole) => setFormData({ ...formData, role: value, customPermissions: undefined })}
@@ -444,10 +495,10 @@ export function UserManagementSection() {
             {renderPermissionsSection()}
           </div>
           <DialogFooter>
-            <Button variant="kiosk-outline" onClick={() => setEditingUser(null)}>
+            <Button variant="outline" onClick={() => setEditingUser(null)}>
               {t('common.cancel')}
             </Button>
-            <Button onClick={handleEditUser}>{t('common.save')}</Button>
+            <Button variant="primary" onClick={handleEditUser}>{t('common.save')}</Button>
           </DialogFooter>
         </DialogContent>
       </Dialog>
@@ -465,7 +516,11 @@ export function UserManagementSection() {
             <AlertDialogCancel>{t('common.cancel')}</AlertDialogCancel>
             <AlertDialogAction 
               onClick={handleDeleteUser}
-              className="bg-destructive hover:bg-destructive/90"
+              className={cn(
+                "bg-state-error hover:bg-state-error/90",
+                "shadow-[0_0_20px_rgba(239,68,68,0.3)]",
+                "hover:shadow-[0_0_30px_rgba(239,68,68,0.5)]"
+              )}
             >
               {t('common.remove')}
             </AlertDialogAction>

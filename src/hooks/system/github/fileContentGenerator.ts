@@ -1,5 +1,11 @@
-// Generates content for documentation and version files ONLY
+// Main content generator - orchestrates all template generators
 // Critical config files like package.json are NEVER generated here
+
+import { generateE2EFixtureContent } from './templates/e2eFixtureTemplates';
+import { generateE2ESpecContent } from './templates/e2eSpecTemplates';
+import { generateHookContent } from './templates/hookTemplates';
+import { generateComponentContent } from './templates/componentTemplates';
+import { generatePageContent } from './templates/pageTemplates';
 
 const VERSION = '4.1.0';
 
@@ -348,14 +354,45 @@ echo "Doctor check complete!"
 }
 
 // Main content generator - returns null for unknown files to prevent overwrites
+// Supports 71 files: 5 docs + 5 scripts + 9 fixtures + 29 specs + 10 hooks + 8 components + 5 pages
 export function generateFileContent(path: string): string | null {
-  // Try docs first
+  // === DOCS (5 files) ===
   const docContent = generateDocContent(path);
   if (docContent !== null) return docContent;
   
-  // Try scripts
+  // === SCRIPTS (5 files) ===
   const scriptContent = generateScriptContent(path);
   if (scriptContent !== null) return scriptContent;
+  
+  // === E2E FIXTURES (9 files) ===
+  if (path.startsWith('e2e/fixtures/')) {
+    const fixtureContent = generateE2EFixtureContent(path);
+    if (fixtureContent !== null) return fixtureContent;
+  }
+  
+  // === E2E SPECS (29 files) ===
+  if (path.startsWith('e2e/specs/')) {
+    const specContent = generateE2ESpecContent(path);
+    if (specContent !== null) return specContent;
+  }
+  
+  // === HOOKS (10 files) ===
+  if (path.startsWith('src/hooks/system/') && path.endsWith('.ts') && !path.includes('/github/')) {
+    const hookContent = generateHookContent(path);
+    if (hookContent !== null) return hookContent;
+  }
+  
+  // === COMPONENTS (8 files) ===
+  if (path.startsWith('src/components/settings/')) {
+    const componentContent = generateComponentContent(path);
+    if (componentContent !== null) return componentContent;
+  }
+  
+  // === PAGES (5 files) ===
+  if (path.startsWith('src/pages/')) {
+    const pageContent = generatePageContent(path);
+    if (pageContent !== null) return pageContent;
+  }
   
   // Unknown file - return null to prevent overwrite
   console.warn(`[generateFileContent] Unknown file: ${path} - skipping to prevent overwrite`);

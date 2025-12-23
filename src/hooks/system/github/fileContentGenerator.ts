@@ -410,10 +410,34 @@ export function generateFileContent(path: string): string | null {
     if (hookContent !== null) return hookContent;
   }
   
-  // === COMPONENTS SETTINGS (8 files) ===
+  // === COMPONENTS SETTINGS (17 files) ===
   if (path.startsWith('src/components/settings/')) {
-    const componentContent = generateComponentContent(path);
-    if (componentContent !== null) return componentContent;
+    const settingsContent = generateSettingsComponentsContent(path);
+    if (settingsContent !== null) return settingsContent;
+  }
+  
+  // === HOOKS PLAYER (13 files) ===
+  if (path.startsWith('src/hooks/player/')) {
+    const hooksPlayerContent = generateHooksPlayerContent(path);
+    if (hooksPlayerContent !== null) return hooksPlayerContent;
+  }
+  
+  // === HOOKS SPOTIFY (7 files) ===
+  if (path.startsWith('src/hooks/spotify/')) {
+    const hooksSpotifyContent = generateHooksSpotifyContent(path);
+    if (hooksSpotifyContent !== null) return hooksSpotifyContent;
+  }
+  
+  // === HOOKS YOUTUBE (7 files) ===
+  if (path.startsWith('src/hooks/youtube/')) {
+    const hooksYouTubeContent = generateHooksYouTubeContent(path);
+    if (hooksYouTubeContent !== null) return hooksYouTubeContent;
+  }
+  
+  // === HOOKS JAM (6 files) ===
+  if (path.startsWith('src/hooks/jam/')) {
+    const hooksJamContent = generateHooksJamContent(path);
+    if (hooksJamContent !== null) return hooksJamContent;
   }
   
   // === COMPONENTS UI (15 files) ===

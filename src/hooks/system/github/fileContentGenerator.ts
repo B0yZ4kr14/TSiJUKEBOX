@@ -1,6 +1,6 @@
 // Main content generator - orchestrates all template generators
 // Critical config files like package.json are NEVER generated here
-// Supports 160 files across 21 categories
+// Supports 206 files across 29 categories
 
 import { generateE2EFixtureContent } from './templates/e2eFixtureTemplates';
 import { generateE2ESpecContent } from './templates/e2eSpecTemplates';
@@ -21,6 +21,14 @@ import { generateLibIndexContent } from './templates/libIndexTemplate';
 import { generateUIComponentsContent } from './templates/uiComponentsTemplates';
 import { generatePlayerComponentsContent } from './templates/playerComponentsTemplates';
 import { generateGitHubComponentsContent } from './templates/githubComponentsTemplates';
+import { generateLayoutComponentsContent } from './templates/layoutComponentsTemplates';
+import { generateAuthComponentsContent } from './templates/authComponentsTemplates';
+import { generateSpotifyComponentsContent } from './templates/spotifyComponentsTemplates';
+import { generateYouTubeComponentsContent } from './templates/youtubeComponentsTemplates';
+import { generateJamComponentsContent } from './templates/jamComponentsTemplates';
+import { generateLandingComponentsContent } from './templates/landingComponentsTemplates';
+import { generateErrorsComponentsContent } from './templates/errorsComponentsTemplates';
+import { generateRootComponentsContent } from './templates/rootComponentsTemplates';
 
 const VERSION = '4.2.0';
 
@@ -369,7 +377,7 @@ echo "Doctor check complete!"
 }
 
 // Main content generator - returns null for unknown files to prevent overwrites
-// Supports 160 files across 21 categories
+// Supports 206 files across 29 categories
 export function generateFileContent(path: string): string | null {
   // === DOCS (5 files) ===
   const docContent = generateDocContent(path);
@@ -419,6 +427,56 @@ export function generateFileContent(path: string): string | null {
   if (path.startsWith('src/components/github/')) {
     const githubContent = generateGitHubComponentsContent(path);
     if (githubContent !== null) return githubContent;
+  }
+  
+  // === COMPONENTS LAYOUT (2 files) ===
+  if (path.startsWith('src/components/layout/')) {
+    const layoutContent = generateLayoutComponentsContent(path);
+    if (layoutContent !== null) return layoutContent;
+  }
+  
+  // === COMPONENTS AUTH (7 files) ===
+  if (path.startsWith('src/components/auth/')) {
+    const authCompContent = generateAuthComponentsContent(path);
+    if (authCompContent !== null) return authCompContent;
+  }
+  
+  // === COMPONENTS SPOTIFY (9 files) ===
+  if (path.startsWith('src/components/spotify/')) {
+    const spotifyContent = generateSpotifyComponentsContent(path);
+    if (spotifyContent !== null) return spotifyContent;
+  }
+  
+  // === COMPONENTS YOUTUBE (6 files) ===
+  if (path.startsWith('src/components/youtube/')) {
+    const youtubeContent = generateYouTubeComponentsContent(path);
+    if (youtubeContent !== null) return youtubeContent;
+  }
+  
+  // === COMPONENTS JAM (10 files) ===
+  if (path.startsWith('src/components/jam/')) {
+    const jamContent = generateJamComponentsContent(path);
+    if (jamContent !== null) return jamContent;
+  }
+  
+  // === COMPONENTS LANDING (6 files) ===
+  if (path.startsWith('src/components/landing/')) {
+    const landingContent = generateLandingComponentsContent(path);
+    if (landingContent !== null) return landingContent;
+  }
+  
+  // === COMPONENTS ERRORS (3 files) ===
+  if (path.startsWith('src/components/errors/')) {
+    const errorsContent = generateErrorsComponentsContent(path);
+    if (errorsContent !== null) return errorsContent;
+  }
+  
+  // === COMPONENTS ROOT (3 files) ===
+  if (path === 'src/components/GlobalSearchModal.tsx' || 
+      path === 'src/components/NavLink.tsx' ||
+      path.startsWith('src/components/kiosk/')) {
+    const rootContent = generateRootComponentsContent(path);
+    if (rootContent !== null) return rootContent;
   }
   
   // === PAGES (5 files) ===

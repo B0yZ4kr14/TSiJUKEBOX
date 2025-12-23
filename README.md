@@ -4,19 +4,16 @@
 
 <br><br>
 
+# 🎵 TSiJUKEBOX
 ### Enterprise Digital Jukebox System
 
-[![Version](https://img.shields.io/badge/version-4.2.0-blue?style=for-the-badge&logo=github)](docs/CHANGELOG.md)
-[![License](https://img.shields.io/badge/license-Public%20Domain-green?style=for-the-badge&logo=unlicense)](LICENSE)
-[![WCAG 2.1 AA](https://img.shields.io/badge/WCAG-2.1%20AA-success?style=for-the-badge&logo=accessibility)](docs/ACCESSIBILITY.md)
-[![React](https://img.shields.io/badge/React-18.3-61dafb?style=for-the-badge&logo=react)](https://react.dev)
-[![TypeScript](https://img.shields.io/badge/TypeScript-5.0-3178c6?style=for-the-badge&logo=typescript)](https://typescriptlang.org)
-[![Vite](https://img.shields.io/badge/Vite-5.0-646CFF?style=for-the-badge&logo=vite)](https://vitejs.dev)
-[![Tailwind CSS](https://img.shields.io/badge/Tailwind-3.4-06B6D4?style=for-the-badge&logo=tailwindcss)](https://tailwindcss.com)
-[![Build Status](https://img.shields.io/github/actions/workflow/status/B0yZ4kr14/tsijukebox/ci.yml?style=for-the-badge&logo=github-actions)](https://github.com/B0yZ4kr14/tsijukebox/actions)
-[![Last Commit](https://img.shields.io/github/last-commit/B0yZ4kr14/tsijukebox?style=for-the-badge&logo=git)](https://github.com/B0yZ4kr14/tsijukebox/commits)
-[![Issues](https://img.shields.io/github/issues/B0yZ4kr14/tsijukebox?style=for-the-badge&logo=github)](https://github.com/B0yZ4kr14/tsijukebox/issues)
-[![Stars](https://img.shields.io/github/stars/B0yZ4kr14/tsijukebox?style=for-the-badge&logo=github)](https://github.com/B0yZ4kr14/tsijukebox/stargazers)
+[![Version](https://img.shields.io/badge/version-4.2.0-00d4ff?style=for-the-badge&logo=github&logoColor=white)](docs/CHANGELOG.md)
+[![License](https://img.shields.io/badge/license-Public%20Domain-fbbf24?style=for-the-badge&logo=unlicense&logoColor=white)](LICENSE)
+[![WCAG 2.1 AA](https://img.shields.io/badge/WCAG-2.1%20AA-22c55e?style=for-the-badge&logo=accessibility&logoColor=white)](docs/ACCESSIBILITY.md)
+[![React](https://img.shields.io/badge/React-18.3-61dafb?style=for-the-badge&logo=react&logoColor=white)](https://react.dev)
+[![TypeScript](https://img.shields.io/badge/TypeScript-5.0-3178c6?style=for-the-badge&logo=typescript&logoColor=white)](https://typescriptlang.org)
+[![Vite](https://img.shields.io/badge/Vite-5.0-646CFF?style=for-the-badge&logo=vite&logoColor=white)](https://vitejs.dev)
+[![Tailwind CSS](https://img.shields.io/badge/Tailwind-3.4-06B6D4?style=for-the-badge&logo=tailwindcss&logoColor=white)](https://tailwindcss.com)
 
 **Sistema kiosk musical profissional com integração Spotify, YouTube Music e arquivos locais.**
 
@@ -126,7 +123,7 @@ curl -fsSL https://raw.githubusercontent.com/B0yZ4kr14/TSiJUKEBOX/main/scripts/i
 
 ## ✨ Features
 
-### Recursos Principais
+### 🎯 Recursos Principais
 
 | Feature | Descrição | Status |
 | ------- | --------- | ------ |
@@ -141,29 +138,29 @@ curl -fsSL https://raw.githubusercontent.com/B0yZ4kr14/TSiJUKEBOX/main/scripts/i
 | 📱 **PWA** | Progressive Web App com offline support | ✅ Completo |
 | 🔄 **Auto-Update** | Atualizações automáticas em background | ✅ Completo |
 
-### Integrações de Música
+### 🎵 Integrações de Música
 
 | Provider | Recursos | Autenticação |
 | -------- | -------- | ------------ |
-| **Spotify** | Streaming, Playlists, Spotify Connect, Letras | OAuth 2.0 |
-| **YouTube Music** | Streaming, Playlists, Mix Personalizado | OAuth 2.0 |
-| **Arquivos Locais** | MP3, FLAC, AAC, OGG, WAV, OPUS | N/A |
-| **SoundCloud** | Streaming, Playlists (Beta) | OAuth 2.0 |
+| 🎵 **Spotify** | Streaming, Playlists, Spotify Connect, Letras | OAuth 2.0 |
+| 📺 **YouTube Music** | Streaming, Playlists, Mix Personalizado | OAuth 2.0 |
+| 📁 **Arquivos Locais** | MP3, FLAC, AAC, OGG, WAV, OPUS | N/A |
+| ☁️ **SoundCloud** | Streaming, Playlists (Beta) | OAuth 2.0 |
 
-### Modos de Operação
+### 🎮 Modos de Operação
 
 | Modo | Descrição | Casos de Uso |
 | ---- | --------- | ------------ |
-| **Desktop** | Interface completa com todas as funcionalidades | Uso pessoal, estúdios |
-| **Kiosk** | Interface simplificada e bloqueada | Bares, restaurantes, eventos |
-| **Server** | API REST sem interface gráfica | Integração com sistemas externos |
-| **Karaoke** | Foco em letras e fila de músicas | Karaokês, festas |
+| 🖥️ **Desktop** | Interface completa com todas as funcionalidades | Uso pessoal, estúdios |
+| 🏪 **Kiosk** | Interface simplificada e bloqueada | Bares, restaurantes, eventos |
+| 🖧 **Server** | API REST sem interface gráfica | Integração com sistemas externos |
+| 🎤 **Karaoke** | Foco em letras e fila de músicas | Karaokês, festas |
 
 ---
 
 ## 🚀 Quick Start
 
-### Desenvolvimento Local
+### 💻 Desenvolvimento Local
 
 ```bash
 # Clone o repositório
@@ -184,7 +181,7 @@ npm run dev
 
 Acesse **http://localhost:5173** · Login padrão: `admin` / `admin`
 
-### Docker (Recomendado para Produção)
+### 🐳 Docker (Recomendado para Produção)
 
 ```bash
 # Build e start com Docker Compose
@@ -194,17 +191,17 @@ docker-compose up -d
 make docker-up
 ```
 
-### Requisitos do Sistema
+### 📋 Requisitos do Sistema
 
 | Componente | Mínimo | Recomendado |
 | ---------- | ------ | ----------- |
-| **OS** | Linux, Windows, macOS | CachyOS / Arch Linux |
-| **CPU** | 2 cores | 4+ cores |
-| **RAM** | 2 GB | 4+ GB |
-| **Disco** | 500 MB | 2+ GB (com cache de mídia) |
-| **Display** | 1280x720 | 1920x1080+ |
-| **Browser** | Chrome 90+ | Chrome 120+ |
-| **Node.js** | 18.x | 20.x LTS |
+| 🖥️ **OS** | Linux, Windows, macOS | CachyOS / Arch Linux |
+| ⚙️ **CPU** | 2 cores | 4+ cores |
+| 💾 **RAM** | 2 GB | 4+ GB |
+| 💿 **Disco** | 500 MB | 2+ GB (com cache de mídia) |
+| 🖥️ **Display** | 1280x720 | 1920x1080+ |
+| 🌐 **Browser** | Chrome 90+ | Chrome 120+ |
+| 🟢 **Node.js** | 18.x | 20.x LTS |
 
 ---
 
@@ -242,44 +239,44 @@ cd scripts && pytest tests/ --cov=. --cov-report=term-missing
 
 ## 🏗️ Stack Tecnológico
 
-### Frontend
+### 🎨 Frontend
 
 | Tecnologia | Versão | Propósito |
 | ---------- | ------ | --------- |
-| **React** | 18.3 | UI Library |
-| **TypeScript** | 5.0 | Type Safety |
-| **Vite** | 5.0 | Build Tool |
-| **Tailwind CSS** | 3.4 | Styling |
-| **shadcn/ui** | Latest | Component Library |
-| **Framer Motion** | 11.x | Animations |
-| **React Query** | 5.x | Server State |
-| **Zustand** | 4.x | Client State |
+| ⚛️ **React** | 18.3 | UI Library |
+| 📘 **TypeScript** | 5.0 | Type Safety |
+| ⚡ **Vite** | 5.0 | Build Tool |
+| 🎨 **Tailwind CSS** | 3.4 | Styling |
+| 🧩 **shadcn/ui** | Latest | Component Library |
+| 🎬 **Framer Motion** | 11.x | Animations |
+| 🔄 **React Query** | 5.x | Server State |
+| 🗄️ **Zustand** | 4.x | Client State |
 
-### Backend & Infraestrutura
+### 🖧 Backend & Infraestrutura
 
 | Tecnologia | Propósito |
 | ---------- | --------- |
-| **Supabase** | Backend as a Service |
-| **Edge Functions** | Serverless Functions |
-| **PostgreSQL** | Database |
-| **Redis** | Caching |
-| **Nginx** | Reverse Proxy |
+| ⚡ **Supabase** | Backend as a Service |
+| 🔥 **Edge Functions** | Serverless Functions |
+| 🐘 **PostgreSQL** | Database |
+| 🔴 **Redis** | Caching |
+| 🌐 **Nginx** | Reverse Proxy |
 
-### Integrações
+### 🔌 Integrações
 
 | Serviço | API |
 | ------- | --- |
-| **Spotify** | Web API + Playback SDK |
-| **YouTube Music** | Data API v3 |
-| **Spicetify** | CLI + Extensions |
-| **Grafana** | Dashboards |
-| **Prometheus** | Metrics |
+| 🎵 **Spotify** | Web API + Playback SDK |
+| 📺 **YouTube Music** | Data API v3 |
+| 🎨 **Spicetify** | CLI + Extensions |
+| 📊 **Grafana** | Dashboards |
+| 📈 **Prometheus** | Metrics |
 
 ---
 
 ## ❓ FAQ (Perguntas Frequentes)
 
-### Instalação e Configuração
+### 🔧 Instalação e Configuração
 
 **P: Quais sistemas operacionais são suportados?**
 
@@ -299,109 +296,109 @@ R: O instalador automático é otimizado para Arch Linux e derivados. Para outra
 
 ---
 
-### Uso e Funcionalidades
+### 🎵 Uso e Funcionalidades
 
 **P: Como adiciono músicas locais?**
 
-R: Acesse **Biblioteca > Arquivos Locais > Adicionar Pasta** e selecione o diretório com suas músicas. Formatos suportados: MP3, FLAC, AAC, OGG, WAV, OPUS. [Guia completo](https://github.com/B0yZ4kr14/TSiJUKEBOX/wiki/User-Guide-Local-Files)
+R: Acesse **Configurações > Música Local**, clique em "Adicionar Diretório" e selecione a pasta com seus arquivos de música. O sistema escaneará automaticamente os arquivos compatíveis.
 
-**P: Posso usar o TSiJUKEBOX em um bar ou restaurante?**
+**P: Posso usar o TSiJUKEBOX sem internet?**
 
-R: Sim! Use o Modo Kiosk que oferece interface simplificada, bloqueio de configurações e interface touch otimizada. [Tutorial Modo Kiosk](https://github.com/B0yZ4kr14/TSiJUKEBOX/wiki/Tutorial-Kiosk-Mode)
+R: Sim! O modo offline permite reproduzir músicas locais e acessar playlists previamente sincronizadas. Recursos de streaming (Spotify, YouTube) requerem conexão.
 
 **P: Como ativo o modo Karaoke?**
 
-R: Acesse **Configurações > Modos > Karaoke** ou instale com `sudo python3 install.py --mode kiosk` e ative o modo Karaoke nas configurações. [Tutorial Karaoke](https://github.com/B0yZ4kr14/TSiJUKEBOX/wiki/Tutorial-Karaoke-Mode)
+R: Clique no ícone 🎤 no player ou acesse **Configurações > Modos > Karaoke**. As letras serão exibidas em fullscreen sincronizadas com a música.
 
-**P: É possível controlar o TSiJUKEBOX remotamente?**
+**P: O sistema suporta múltiplos usuários?**
 
-R: Sim! Use a API REST ou integre com Home Assistant. [Documentação da API](https://github.com/B0yZ4kr14/TSiJUKEBOX/wiki/Dev-API-Reference)
+R: Sim! O TSiJUKEBOX possui sistema RBAC com 3 níveis: **Admin** (controle total), **User** (uso padrão) e **Newbie** (acesso limitado).
 
 ---
 
-### Problemas Comuns
+### 🛠️ Troubleshooting
 
 **P: O Spotify não conecta. O que fazer?**
 
-R: Verifique se suas credenciais de API estão corretas em `.env`, confirme que o redirect URI está configurado no Spotify Dashboard e limpe o cache do navegador.
+R: Verifique se suas credenciais OAuth estão corretas em **Configurações > Integrações > Spotify**. Certifique-se de que a URI de redirecionamento está configurada no Spotify Developer Dashboard.
 
-**P: As músicas locais não aparecem na biblioteca.**
+**P: O sistema está lento. Como otimizar?**
 
-R: Verifique as permissões da pasta (`ls -la /caminho/musicas`), confirme que os arquivos têm extensões suportadas e force uma reindexação com `tsijukebox-cli library rescan`.
+R: Acesse **Configurações > Performance** e ajuste:
+- Desabilite animações complexas
+- Reduza o cache de álbuns
+- Limite o histórico de reprodução
+- Ative o modo de baixo consumo
 
-**P: O sistema está lento. Como otimizo?**
+**P: Como faço backup das configurações?**
 
-R: Desative análise de áudio em **Configurações > Arquivos Locais**, aumente o cache do banco de dados em **Configurações > Banco de Dados** e considere usar SSD ao invés de HDD.
+R: Acesse **Configurações > Backup** e escolha:
+- **Manual:** Exportar para arquivo local
+- **Automático:** Configurar backup em nuvem (Storj, Google Drive, S3)
 
-**P: Como faço backup da minha biblioteca?**
+**P: Erro ao instalar no CachyOS. O que fazer?**
 
-R: Configure backup automático para Storj, Google Drive ou AWS S3 em **Configurações > Backup na Nuvem**. [Guia de Backup](https://github.com/B0yZ4kr14/TSiJUKEBOX/wiki/Config-Cloud-Backup)
-
----
-
-### Desenvolvimento e Contribuição
-
-**P: Como posso contribuir para o projeto?**
-
-R: Consulte o [Guia de Contribuição](https://github.com/B0yZ4kr14/TSiJUKEBOX/wiki/Dev-Contributing) para instruções sobre como reportar bugs, sugerir features e enviar pull requests.
-
-**P: Onde encontro a documentação da API?**
-
-R: A documentação completa da API está disponível na [Wiki](https://github.com/B0yZ4kr14/TSiJUKEBOX/wiki/Dev-API-Reference) e em [docs/API-REFERENCE.md](docs/API-REFERENCE.md).
-
-**P: Como executo os testes?**
-
-R: Execute `npm run test:all` para todos os testes ou consulte o [Guia de Testes](https://github.com/B0yZ4kr14/TSiJUKEBOX/wiki/Dev-Testing) para opções específicas.
+R: Consulte o [Guia de Instalação CachyOS](https://github.com/B0yZ4kr14/TSiJUKEBOX/wiki/Install-CachyOS) ou abra uma [issue no GitHub](https://github.com/B0yZ4kr14/TSiJUKEBOX/issues).
 
 ---
 
-## 📚 Documentação
-
-### Guias Principais
+## 📚 Documentação Completa
 
 | Documento | Descrição |
 | --------- | --------- |
-| [Quick Install](docs/QUICK-INSTALL.md) | Instalação rápida para iniciantes |
-| [Production Deploy](docs/PRODUCTION-DEPLOY.md) | Deploy em produção |
-| [Developer Guide](docs/DEVELOPER-GUIDE.md) | Guia para desenvolvedores |
-| [API Reference](docs/API-REFERENCE.md) | Referência de APIs |
-| [Routes](docs/ROUTES.md) | Sistema de rotas |
-| [Architecture](docs/ARCHITECTURE.md) | Arquitetura do sistema |
-
-### Wiki
-
-| Seção | Conteúdo |
-| ----- | -------- |
-| [🏠 Home](https://github.com/B0yZ4kr14/TSiJUKEBOX/wiki) | Visão geral e navegação |
-| [⚡ Instalação](https://github.com/B0yZ4kr14/TSiJUKEBOX/wiki/Install-OneCommand) | Guias de instalação |
-| [🐧 CachyOS](https://github.com/B0yZ4kr14/TSiJUKEBOX/wiki/Install-CachyOS) | Setup específico para CachyOS |
-| [🎧 Spotify](https://github.com/B0yZ4kr14/TSiJUKEBOX/wiki/Tutorial-Spotify-Integration) | Integração com Spotify |
-| [🎤 Karaoke](https://github.com/B0yZ4kr14/TSiJUKEBOX/wiki/Tutorial-Karaoke-Mode) | Modo Karaoke |
-| [👨‍💻 Desenvolvimento](https://github.com/B0yZ4kr14/TSiJUKEBOX/wiki/Dev-Architecture) | Arquitetura e contribuição |
+| 📖 [Guia do Usuário](docs/USER-GUIDE.md) | Manual completo de uso |
+| 🏗️ [Guia do Desenvolvedor](docs/DEVELOPER-GUIDE.md) | Arquitetura e contribuição |
+| 🎨 [Design System](docs/DESIGN_SYSTEM.md) | Tokens, componentes e padrões |
+| 🔐 [Segurança](docs/SECURITY.md) | Boas práticas e políticas |
+| ♿ [Acessibilidade](docs/ACCESSIBILITY.md) | Conformidade WCAG 2.1 AA |
+| 🌐 [API Reference](docs/API.md) | Documentação da API REST |
+| 🐳 [Docker Guide](docs/DOCKER.md) | Deploy com containers |
+| 🔄 [Changelog](docs/CHANGELOG.md) | Histórico de versões |
 
 ---
 
-## ⚔️ DECLARAÇÃO DE SOBERANIA INTELECTUAL
+## 🤝 Contribuindo
+
+Contribuições são bem-vindas! Siga os passos:
+
+1. 🍴 Fork o projeto
+2. 🌿 Crie uma branch (`git checkout -b feature/AmazingFeature`)
+3. 💾 Commit suas mudanças (`git commit -m 'Add some AmazingFeature'`)
+4. 📤 Push para a branch (`git push origin feature/AmazingFeature`)
+5. 🔀 Abra um Pull Request
+
+**📋 [Guia de Contribuição](CONTRIBUTING.md)** · **🎨 [Code Style Guide](docs/CODE-STYLE.md)** · **🐛 [Report Bug](https://github.com/B0yZ4kr14/TSiJUKEBOX/issues)**
+
+---
+
+## 📜 Licença e Filosofia
 
 <div align="center">
 
-### 🏴 *"Propriedade Intelectual Não Existe"*
+### ⚔️ DECLARAÇÃO DE SOBERANIA INTELECTUAL
 
-> *"Ideias são superabundantes e não-rivais. A mimese jamais configurará expropriação."*  
-> — **Stephan Kinsella**, *Contra a Propriedade Intelectual*
+<img src="docs/assets/B0.y_Z4kr14-avatar.png" alt="B0.y_Z4kr14 Avatar" width="300">
 
 </div>
 
 ---
 
+### 🏴 "Propriedade Intelectual Não Existe"
+
+> *"Ideias são superabundantes e não-rivais. A mimese jamais configurará expropriação."*
+>
+> — **Stephan Kinsella**, Contra a Propriedade Intelectual
+
+---
+
 ### 🔥 A Falácia da Propriedade Intelectual
 
-Na perspectiva anarcocapitalista, a **propriedade intelectual constitui uma aberração conceitual** — uma falácia lógica incapaz de sustentar-se ante a natureza superabundante e não-rival das ideias.
+Na perspectiva anarcocapitalista, a **propriedade intelectual** constitui uma **aberração conceitual** — uma falácia lógica incapaz de sustentar-se ante a natureza **superabundante** e **não-rival** das ideias.
 
-Diferente de bens tangíveis, **copiar software não priva o autor original do uso de seu código**. Portanto, inexiste "roubo" no compartilhamento de conhecimento — apenas **multiplicação de valor sem custo marginal**.
+Diferente de bens tangíveis, **copiar software não priva o autor original** do uso de seu código. Portanto, inexiste "roubo" no compartilhamento de conhecimento — apenas **multiplicação de valor sem custo marginal**.
 
-| 📜 **Conceito** | 🏛️ **Visão Estatal** | ⚔️ **Visão Libertária** |
-| --------------- | -------------------- | ----------------------- |
+| 📜 Conceito | 🏛️ Visão Estatal | ⚔️ Visão Libertária |
+|-------------|------------------|---------------------|
 | **Software** | "Obra literária" protegida pela Lei 9.609/98 | Informação livre, não-escassa |
 | **Cópia** | "Pirataria" criminosa | Aprendizado legítimo, replicação ética |
 | **Garantia** | Registro no INPI (órgão estatal) | Reputação do autor + contratos privados |
@@ -410,18 +407,26 @@ Diferente de bens tangíveis, **copiar software não priva o autor original do u
 
 ### 🗡️ O Conflito de Propriedade Real
 
-Se o Estado impede você de usar **seu próprio computador** — sua propriedade física — para copiar um código, ele está **violando seu direito de propriedade** sobre o hardware.
+Se o Estado **impede você de usar seu próprio computador** — sua **propriedade física** — para copiar um código, ele está **violando seu direito de propriedade** sobre o hardware.
 
-> 🔥 *Patentes e direitos autorais são privilégios estatais que concedem monopólios artificiais sobre ideias, criando escassez forçada onde naturalmente não existiria.*
+🔥 **Patentes e direitos autorais são privilégios estatais** que concedem **monopólios artificiais** sobre ideias, criando **escassez forçada** onde naturalmente não existiria.
 
 ---
 
 ### 💀 LICENCIAMENTO: DOMÍNIO PÚBLICO ABSOLUTO
 
+<div align="center">
+
+<img src="https://upload.wikimedia.org/wikipedia/commons/thumb/d/d8/Gadsden_flag.svg/1200px-Gadsden_flag.svg.png" alt="Gadsden Flag - Don't Tread On Me" width="400">
+
+**🐍 DON'T TREAD ON ME 🐍**
+
+</div>
+
 Este software é liberado ao **DOMÍNIO PÚBLICO** sem quaisquer restrições:
 
-| 🗡️ **USE** | 🛡️ **MODIFIQUE** | ⚔️ **VENDA** | 🔓 **DISTRIBUA** |
-| ---------- | ---------------- | ------------ | ---------------- |
+| 🗡️ USE | 🛡️ MODIFIQUE | ⚔️ VENDA | 🔓 DISTRIBUA |
+|--------|--------------|----------|--------------|
 | Para qualquer finalidade | Sem pedir permissão | Lucre como quiser | Sem restrições |
 
 ---
@@ -430,16 +435,16 @@ Este software é liberado ao **DOMÍNIO PÚBLICO** sem quaisquer restrições:
 
 > *"O tributo é coerção sistemática travestida de legalidade — mero saque institucionalizado. A retenção dos próprios recursos transcende a defesa: é um imperativo de resistência ética e retificação moral."*
 
-💀 **Imposto é eufemismo para roubo institucionalizado.**  
-⚔️ **Sonegar é legítima defesa — uma reparação.**
+- 💀 **Imposto é eufemismo para roubo institucionalizado.**
+- ⚔️ **Sonegar é legítima defesa — uma reparação.**
 
 ---
 
 ### 📚 Referências Libertárias
 
-- 📖 [Contra a Propriedade Intelectual](https://mises.org.br) — Stephan Kinsella
-- 📖 [O Sistema de Patentes Prejudica a Inovação](https://mises.org.br/artigos/3040/)
-- 📖 [Intellectual Property Laws Violate the Market](https://mises.org/power-market/intellectual-property-laws-violate-free-market)
+- 📖 [Contra a Propriedade Intelectual](https://www.mises.org.br/Article.aspx?id=144) — Stephan Kinsella
+- 📖 [O Sistema de Patentes Prejudica a Inovação](https://www.mises.org.br/Article.aspx?id=2691)
+- 📖 [Intellectual Property Laws Violate the Market](https://mises.org/library/intellectual-property-laws-violate-market)
 
 ---
 
@@ -447,18 +452,53 @@ Este software é liberado ao **DOMÍNIO PÚBLICO** sem quaisquer restrições:
 
 <div align="center">
 
-<img src="docs/assets/B0.y_Z4kr14-v3.png" alt="B0.y_Z4kr14" width="120" style="border-radius: 50%;">
+<img src="docs/assets/B0.y_Z4kr14-avatar.png" alt="B0.y_Z4kr14" width="200">
 
-**Desenvolvido por [B0.y_Z4kr14](https://github.com/B0yZ4kr14)**
+### **B0.y_Z4kr14**
+
+⚔️ Desenvolvedor Libertário · 🏴 Anarcocapitalista · 🐍 Don't Tread On Me
+
+[![GitHub](https://img.shields.io/badge/GitHub-B0yZ4kr14-00d4ff?style=for-the-badge&logo=github&logoColor=white)](https://github.com/B0yZ4kr14)
+[![Bitcoin](https://img.shields.io/badge/Bitcoin-Accepted-fbbf24?style=for-the-badge&logo=bitcoin&logoColor=white)](docs/DONATIONS.md)
+[![Monero](https://img.shields.io/badge/Monero-Accepted-ff6600?style=for-the-badge&logo=monero&logoColor=white)](docs/DONATIONS.md)
 
 </div>
 
 ---
 
+## 🌟 Agradecimentos
+
+Agradecimentos especiais a todos os contribuidores e à comunidade open source:
+
+- 🎵 **Spotify** - API e SDK de reprodução
+- 📺 **YouTube** - Data API v3
+- 🎨 **shadcn/ui** - Component library
+- ⚡ **Supabase** - Backend as a Service
+- 🐧 **Arch Linux Community** - Base sólida e filosofia KISS
+
+---
+
+## 📞 Suporte e Comunidade
+
+| Canal | Link |
+|-------|------|
+| 🐛 **Issues** | [GitHub Issues](https://github.com/B0yZ4kr14/TSiJUKEBOX/issues) |
+| 💬 **Discussions** | [GitHub Discussions](https://github.com/B0yZ4kr14/TSiJUKEBOX/discussions) |
+| 📖 **Wiki** | [GitHub Wiki](https://github.com/B0yZ4kr14/TSiJUKEBOX/wiki) |
+| 📧 **Email** | [b0yz4kr14@proton.me](mailto:b0yz4kr14@proton.me) |
+
+---
+
 <div align="center">
 
-**TSiJUKEBOX Enterprise** — *A música, amplificada.*
+### 🏴 Desenvolvido com ❤️ e Liberdade
 
-[🐛 Report Bug](https://github.com/B0yZ4kr14/TSiJUKEBOX/issues) · [✨ Request Feature](https://github.com/B0yZ4kr14/TSiJUKEBOX/issues) · [🌐 Wiki](https://github.com/B0yZ4kr14/TSiJUKEBOX/wiki)
+**TSiJUKEBOX** © 2025 B0.y_Z4kr14 · Domínio Público Absoluto
+
+🐍 **Don't Tread On Me** 🐍
+
+[![Star this repo](https://img.shields.io/github/stars/B0yZ4kr14/tsijukebox?style=social)](https://github.com/B0yZ4kr14/tsijukebox)
+[![Fork this repo](https://img.shields.io/github/forks/B0yZ4kr14/tsijukebox?style=social)](https://github.com/B0yZ4kr14/tsijukebox/fork)
+[![Watch this repo](https://img.shields.io/github/watchers/B0yZ4kr14/tsijukebox?style=social)](https://github.com/B0yZ4kr14/tsijukebox)
 
 </div>

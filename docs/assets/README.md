@@ -6,8 +6,9 @@ Este diretório contém todos os assets visuais do projeto TSiJUKEBOX.
 
 ```
 assets/
-├── icons/           # Ícones modernos para seções da documentação
-├── diagrams/        # Diagramas técnicos (Mermaid + PNG)
+├── icons/           # Ícones modernos para seções da documentação (8 ícones)
+├── diagrams/        # Diagramas técnicos (Mermaid + PNG, 16 diagramas)
+├── mockups/         # Mockups de alta fidelidade (7 telas)
 ├── screenshots/     # Screenshots da aplicação
 ├── logo.svg         # Logo oficial do TSiJUKEBOX
 └── B0.y_Z4kr14-v3.png  # Avatar do desenvolvedor
@@ -69,9 +70,23 @@ assets/
 | :--- | :--- |
 | `database-schema.png` | Schema completo do banco de dados (ER Diagram) |
 
-## 🖼️ Screenshots
+## 🖼️ Mockups de Alta Fidelidade (7 telas)
 
-*Em desenvolvimento - serão adicionados na Fase 2*
+| Mockup | Descrição |
+| :--- | :--- |
+| `settings-screen.png` | Tela de configurações com sidebar e painéis de ajustes |
+| `player-screen.png` | Interface principal do player com controles e queue |
+| `dashboard-screen.png` | Painel inicial com biblioteca, stats e recomendações |
+| `setup-wizard-screen.png` | Wizard de configuração inicial (step 2/9) |
+| `spotify-integration-screen.png` | Gerenciamento da integração Spotify |
+| `karaoke-mode-screen.png` | Interface de karaokê com letras e controles |
+| `kiosk-mode-screen.png` | Interface simplificada para modo quiosque |
+
+**Detalhes:** Veja [mockups/README.md](mockups/README.md) para especificações completas.
+
+## 📸 Screenshots
+
+*Em desenvolvimento - serão adicionados na Fase 3*
 
 ## 📝 Uso nas Documentações
 

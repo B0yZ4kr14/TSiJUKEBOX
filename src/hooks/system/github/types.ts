@@ -303,6 +303,84 @@ export const FILE_CATEGORIES = {
     'src/components/github/LanguagesChart.tsx',
     'src/components/github/index.ts',
   ],
+
+  // === COMPONENTS LAYOUT (2 arquivos) ===
+  'Components Layout': [
+    'src/components/layout/AdminLayout.tsx',
+    'src/components/layout/KioskLayout.tsx',
+  ],
+
+  // === COMPONENTS AUTH (7 arquivos) ===
+  'Components Auth': [
+    'src/components/auth/AuthFormField.tsx',
+    'src/components/auth/LocalLoginForm.tsx',
+    'src/components/auth/LoginForm.tsx',
+    'src/components/auth/PermissionGate.tsx',
+    'src/components/auth/ProtectedRoute.tsx',
+    'src/components/auth/SignUpForm.tsx',
+    'src/components/auth/index.ts',
+  ],
+
+  // === COMPONENTS SPOTIFY (9 arquivos) ===
+  'Components Spotify': [
+    'src/components/spotify/AddToPlaylistModal.tsx',
+    'src/components/spotify/AlbumCard.tsx',
+    'src/components/spotify/ArtistCard.tsx',
+    'src/components/spotify/CreatePlaylistModal.tsx',
+    'src/components/spotify/PlaylistCard.tsx',
+    'src/components/spotify/SpotifyPanel.tsx',
+    'src/components/spotify/SpotifyUserBadge.tsx',
+    'src/components/spotify/TrackItem.tsx',
+    'src/components/spotify/index.ts',
+  ],
+
+  // === COMPONENTS YOUTUBE (6 arquivos) ===
+  'Components YouTube': [
+    'src/components/youtube/AddToPlaylistModal.tsx',
+    'src/components/youtube/YouTubeMusicAlbumCard.tsx',
+    'src/components/youtube/YouTubeMusicPlaylistCard.tsx',
+    'src/components/youtube/YouTubeMusicTrackItem.tsx',
+    'src/components/youtube/YouTubeMusicUserBadge.tsx',
+    'src/components/youtube/index.ts',
+  ],
+
+  // === COMPONENTS JAM (10 arquivos) ===
+  'Components Jam': [
+    'src/components/jam/CreateJamModal.tsx',
+    'src/components/jam/JamAISuggestions.tsx',
+    'src/components/jam/JamAddTrackModal.tsx',
+    'src/components/jam/JamHeader.tsx',
+    'src/components/jam/JamInviteModal.tsx',
+    'src/components/jam/JamNicknameModal.tsx',
+    'src/components/jam/JamParticipantsList.tsx',
+    'src/components/jam/JamPlayer.tsx',
+    'src/components/jam/JamQueue.tsx',
+    'src/components/jam/JamReactions.tsx',
+  ],
+
+  // === COMPONENTS LANDING (6 arquivos) ===
+  'Components Landing': [
+    'src/components/landing/DemoAnimated.tsx',
+    'src/components/landing/FAQSection.tsx',
+    'src/components/landing/ScreenshotCarousel.tsx',
+    'src/components/landing/ScreenshotPreview.tsx',
+    'src/components/landing/StatsSection.tsx',
+    'src/components/landing/ThemeComparison.tsx',
+  ],
+
+  // === COMPONENTS ERRORS (3 arquivos) ===
+  'Components Errors': [
+    'src/components/errors/ErrorBoundary.tsx',
+    'src/components/errors/SuspenseBoundary.tsx',
+    'src/components/errors/index.ts',
+  ],
+
+  // === COMPONENTS ROOT (3 arquivos) ===
+  'Components Root': [
+    'src/components/GlobalSearchModal.tsx',
+    'src/components/NavLink.tsx',
+    'src/components/kiosk/KioskRemoteControl.tsx',
+  ],
 } as const;
 
 // Files that should have generated content (timestamps, version info)
@@ -319,7 +397,7 @@ export function isGeneratedFile(path: string): boolean {
   return GENERATED_FILES.includes(path);
 }
 
-// Only these files should be synced - prevents accidental overwrites (160 arquivos)
+// Only these files should be synced - prevents accidental overwrites (206 arquivos)
 export const SAFE_SYNC_FILES = [
   ...FILE_CATEGORIES['Documentação'],
   ...FILE_CATEGORIES['Scripts'],
@@ -342,4 +420,12 @@ export const SAFE_SYNC_FILES = [
   ...FILE_CATEGORIES['Components UI'],
   ...FILE_CATEGORIES['Components Player'],
   ...FILE_CATEGORIES['Components GitHub'],
+  ...FILE_CATEGORIES['Components Layout'],
+  ...FILE_CATEGORIES['Components Auth'],
+  ...FILE_CATEGORIES['Components Spotify'],
+  ...FILE_CATEGORIES['Components YouTube'],
+  ...FILE_CATEGORIES['Components Jam'],
+  ...FILE_CATEGORIES['Components Landing'],
+  ...FILE_CATEGORIES['Components Errors'],
+  ...FILE_CATEGORIES['Components Root'],
 ];

@@ -18,24 +18,97 @@ interface CreateDeployKeyModalProps {
 
 type TabMode = 'deploy-key' | 'pat';
 
-// Error codes and messages mapping
-const ERROR_MESSAGES: Record<string, string> = {
-  'key is already in use': 'Esta chave SSH já está em uso em outro repositório. Use uma chave diferente.',
-  'key_already_exists': 'Esta chave SSH já existe no repositório.',
-  'validation failed': 'A chave SSH fornecida é inválida. Verifique o formato.',
-  'bad credentials': 'Token de acesso inválido ou expirado.',
-  'not found': 'Repositório não encontrado ou sem permissão de acesso.',
-  '401': 'Autenticação falhou. Verifique o token de acesso.',
-  '403': 'Sem permissão para adicionar chaves ao repositório.',
-  '422': 'Dados inválidos. Verifique a chave e o título.',
+// Error codes and messages mapping with solutions
+const ERROR_MESSAGES: Record<string, { message: string; solution?: string }> = {
+  'key is already in use': {
+    message: 'Esta chave SSH já está em uso em outro repositório.',
+    solution: 'Use uma chave SSH diferente ou remova a chave existente do outro repositório.'
+  },
+  'key_already_exists': {
+    message: 'Esta chave SSH já existe no repositório.',
+    solution: 'Vá ao GitHub → Settings → Deploy keys e remova a chave existente primeiro.'
+  },
+  'validation failed': {
+    message: 'A chave SSH fornecida é inválida.',
+    solution: 'Verifique se a chave começa com ssh-rsa, ssh-ed25519 ou ecdsa-sha2-nistp*'
+  },
+  'bad credentials': {
+    message: 'Token de acesso inválido ou expirado.',
+    solution: 'Gere um novo token em GitHub → Settings → Developer settings → Personal access tokens'
+  },
+  'not found': {
+    message: 'Repositório não encontrado ou sem permissão de acesso.',
+    solution: 'Verifique se o token tem permissão "repo" e se o repositório existe.'
+  },
+  '401': {
+    message: 'Autenticação falhou.',
+    solution: 'O token pode ter expirado. Gere um novo Personal Access Token no GitHub.'
+  },
+  '403': {
+    message: 'Sem permissão para adicionar chaves ao repositório.',
+    solution: 'Verifique se você tem permissão de administrador no repositório.'
+  },
+  '422': {
+    message: 'Dados inválidos ou chave já em uso.',
+    solution: 'Verifique se a chave já não está cadastrada ou se o título é único.'
+  },
+  'rate limit': {
+    message: 'Limite de requisições da API GitHub atingido.',
+    solution: 'Aguarde alguns minutos e tente novamente.'
+  },
 };
+
+interface ParsedError {
+  message: string;
+  solution?: string;
+  code?: string;
+}
+
+function parseEdgeFunctionError(response: { error?: { message?: string }; data?: { error?: string; code?: string; message?: string } }): ParsedError {
+  // Try to get error from response.data first (edge function response)
+  if (response.data?.error) {
+    const errorText = response.data.error.toLowerCase();
+    const code = response.data.code;
+    
+    for (const [key, value] of Object.entries(ERROR_MESSAGES)) {
+      if (errorText.includes(key.toLowerCase()) || code?.toLowerCase().includes(key.toLowerCase())) {
+        return { ...value, code };
+      }
+    }
+    
+    return { message: response.data.error, code };
+  }
+  
+  // Try response.error (Supabase function invoke error)
+  if (response.error?.message) {
+    const errorText = response.error.message.toLowerCase();
+    
+    // Check if it's just a generic status code error
+    if (errorText.includes('non-2xx status code') || errorText.includes('edge function returned')) {
+      return { 
+        message: 'Erro ao comunicar com a API do GitHub.',
+        solution: 'Verifique suas credenciais e tente novamente.'
+      };
+    }
+    
+    for (const [key, value] of Object.entries(ERROR_MESSAGES)) {
+      if (errorText.includes(key.toLowerCase())) {
+        return { ...value };
+      }
+    }
+    
+    return { message: response.error.message };
+  }
+  
+  return { message: 'Erro desconhecido ao processar a requisição.' };
+}
 
 function getErrorMessage(error: unknown): string {
   const errorMessage = error instanceof Error ? error.message.toLowerCase() : String(error).toLowerCase();
   
-  for (const [key, message] of Object.entries(ERROR_MESSAGES)) {
+  for (const [key, value] of Object.entries(ERROR_MESSAGES)) {
     if (errorMessage.includes(key.toLowerCase())) {
-      return message;
+      return value.message;
     }
   }
   
@@ -99,12 +172,13 @@ export function CreateDeployKeyModal({ open, onOpenChange, onSuccess }: CreateDe
         },
       });
 
-      if (response.error) {
-        throw new Error(response.error.message || 'Failed to create deploy key');
-      }
-
-      if (!response.data?.success) {
-        throw new Error(response.data?.error || 'Failed to create deploy key');
+      // Parse error from edge function response
+      const parsedError = parseEdgeFunctionError(response);
+      
+      if (response.error || !response.data?.success) {
+        setValidationError(parsedError.solution ? `${parsedError.message} ${parsedError.solution}` : parsedError.message);
+        toast.error(parsedError.message);
+        return;
       }
 
       toast.success('Deploy key criada com sucesso!');

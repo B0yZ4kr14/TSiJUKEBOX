@@ -88,6 +88,7 @@ export default {
         'brand-spotify': designTokens.colors.branding.spotify,
         'brand-youtube': designTokens.colors.branding.youtube,
         'brand-github': designTokens.colors.branding.github,
+        'brand-gold': designTokens.colors.accent.yellowGold,
 
         // Text
         'text-primary': designTokens.colors.text.primary,

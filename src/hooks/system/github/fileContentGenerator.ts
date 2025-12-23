@@ -6,6 +6,9 @@ import { generateE2ESpecContent } from './templates/e2eSpecTemplates';
 import { generateHookContent } from './templates/hookTemplates';
 import { generateComponentContent } from './templates/componentTemplates';
 import { generatePageContent } from './templates/pageTemplates';
+import { generateUtilsContent } from './templates/utilsTemplates';
+import { generateApiContent } from './templates/apiTemplates';
+import { generateAuthContent } from './templates/authTemplates';
 
 const VERSION = '4.1.0';
 
@@ -354,7 +357,7 @@ echo "Doctor check complete!"
 }
 
 // Main content generator - returns null for unknown files to prevent overwrites
-// Supports 71 files: 5 docs + 5 scripts + 9 fixtures + 29 specs + 10 hooks + 8 components + 5 pages
+// Supports 95 files: 5 docs + 5 scripts + 9 fixtures + 29 specs + 10 hooks + 8 components + 5 pages + 12 utils + 9 api + 3 auth
 export function generateFileContent(path: string): string | null {
   // === DOCS (5 files) ===
   const docContent = generateDocContent(path);
@@ -392,6 +395,24 @@ export function generateFileContent(path: string): string | null {
   if (path.startsWith('src/pages/')) {
     const pageContent = generatePageContent(path);
     if (pageContent !== null) return pageContent;
+  }
+  
+  // === UTILS (12 files) ===
+  if (path.startsWith('src/lib/') && !path.startsWith('src/lib/api/') && !path.startsWith('src/lib/auth/')) {
+    const utilsContent = generateUtilsContent(path);
+    if (utilsContent !== null) return utilsContent;
+  }
+  
+  // === API (9 files) ===
+  if (path.startsWith('src/lib/api/')) {
+    const apiContent = generateApiContent(path);
+    if (apiContent !== null) return apiContent;
+  }
+  
+  // === AUTH (3 files) ===
+  if (path.startsWith('src/lib/auth/')) {
+    const authContent = generateAuthContent(path);
+    if (authContent !== null) return authContent;
   }
   
   // Unknown file - return null to prevent overwrite

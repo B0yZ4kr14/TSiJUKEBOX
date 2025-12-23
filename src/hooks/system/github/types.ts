@@ -54,7 +54,7 @@ export interface SyncHistoryEntry {
   created_at: string;
 }
 
-// File categories for selection modal - 57 arquivos organizados por tipo
+// File categories for selection modal - 95 arquivos organizados por tipo
 export const FILE_CATEGORIES = {
   // === DOCUMENTAÇÃO (5 arquivos) ===
   'Documentação': [
@@ -158,6 +158,42 @@ export const FILE_CATEGORIES = {
     'src/pages/dashboards/KioskMonitorDashboard.tsx',
     'src/pages/settings/Settings.tsx',
   ],
+  
+  // === UTILS/LIB (12 arquivos) === NOVA CATEGORIA
+  'Utils': [
+    'src/lib/utils.ts',
+    'src/lib/utils/fileChangeDetector.ts',
+    'src/lib/formatters.ts',
+    'src/lib/date-utils.ts',
+    'src/lib/colorExtractor.ts',
+    'src/lib/contrastUtils.ts',
+    'src/lib/theme-utils.ts',
+    'src/lib/globalSearch.ts',
+    'src/lib/lrcParser.ts',
+    'src/lib/lyricsCache.ts',
+    'src/lib/documentExporter.ts',
+    'src/lib/constants.ts',
+  ],
+  
+  // === API CLIENTS (9 arquivos) === NOVA CATEGORIA
+  'API': [
+    'src/lib/api/client.ts',
+    'src/lib/api/spotify.ts',
+    'src/lib/api/localMusic.ts',
+    'src/lib/api/youtubeMusic.ts',
+    'src/lib/api/sshSync.ts',
+    'src/lib/api/storj.ts',
+    'src/lib/api/spicetify.ts',
+    'src/lib/api/types.ts',
+    'src/lib/api/index.ts',
+  ],
+  
+  // === AUTH (3 arquivos) === NOVA CATEGORIA
+  'Auth': [
+    'src/lib/auth/localUsers.ts',
+    'src/lib/auth/passwordUtils.ts',
+    'src/lib/auth/index.ts',
+  ],
 } as const;
 
 // Files that should have generated content (timestamps, version info)
@@ -174,7 +210,7 @@ export function isGeneratedFile(path: string): boolean {
   return GENERATED_FILES.includes(path);
 }
 
-// Only these files should be synced - prevents accidental overwrites (71 arquivos)
+// Only these files should be synced - prevents accidental overwrites (95 arquivos)
 export const SAFE_SYNC_FILES = [
   ...FILE_CATEGORIES['Documentação'],
   ...FILE_CATEGORIES['Scripts'],
@@ -183,4 +219,7 @@ export const SAFE_SYNC_FILES = [
   ...FILE_CATEGORIES['Hooks'],
   ...FILE_CATEGORIES['Componentes'],
   ...FILE_CATEGORIES['Pages'],
+  ...FILE_CATEGORIES['Utils'],
+  ...FILE_CATEGORIES['API'],
+  ...FILE_CATEGORIES['Auth'],
 ];

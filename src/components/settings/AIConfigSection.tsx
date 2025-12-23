@@ -298,7 +298,10 @@ export function AIConfigSection() {
     >
       <div className="space-y-4">
         {/* Fallback Status Card */}
-        <Card className="p-4 bg-gradient-to-r from-kiosk-primary/10 to-kiosk-secondary/10 border-kiosk-primary/30">
+        <Card 
+          data-testid="ai-fallback-status"
+          className="p-4 bg-gradient-to-r from-kiosk-primary/10 to-kiosk-secondary/10 border-kiosk-primary/30"
+        >
           <div className="flex items-center justify-between">
             <div className="flex items-center gap-3">
               <RefreshCw className="w-5 h-5 text-kiosk-primary" />
@@ -310,6 +313,7 @@ export function AIConfigSection() {
               </div>
             </div>
             <Button
+              data-testid="ai-test-fallback"
               variant="outline"
               size="sm"
               onClick={handleTestFallback}
@@ -335,6 +339,7 @@ export function AIConfigSection() {
             {API_CONFIGS.sort((a, b) => a.priority - b.priority).map((config, index) => (
               <Badge 
                 key={config.secretName}
+                data-testid={`ai-priority-badge-${config.secretName.toLowerCase()}`}
                 variant="outline"
                 className={`text-xs ${
                   keyStatus[config.secretName]?.available 
@@ -351,7 +356,11 @@ export function AIConfigSection() {
         </Card>
 
         {API_CONFIGS.map((config, index) => (
-          <Card key={config.secretName} className="p-4 bg-kiosk-surface border-kiosk-border">
+          <Card 
+            key={config.secretName} 
+            data-testid={`ai-provider-${config.secretName.toLowerCase()}`}
+            className="p-4 bg-kiosk-surface border-kiosk-border"
+          >
             <div className="space-y-3">
               {/* Header */}
               <div className="flex items-center justify-between">
@@ -364,17 +373,29 @@ export function AIConfigSection() {
                   {keyStatus[config.secretName]?.configured && (
                     <>
                       {keyStatus[config.secretName]?.needsCredits ? (
-                        <Badge variant="outline" className="border-yellow-500/50 text-yellow-500">
+                        <Badge 
+                          data-testid={`ai-status-${config.secretName.toLowerCase()}-credits`}
+                          variant="outline" 
+                          className="border-yellow-500/50 text-yellow-500"
+                        >
                           <AlertCircle className="w-3 h-3 mr-1" />
                           Sem Créditos
                         </Badge>
                       ) : keyStatus[config.secretName]?.available ? (
-                        <Badge variant="outline" className="border-green-500/50 text-green-500">
+                        <Badge 
+                          data-testid={`ai-status-${config.secretName.toLowerCase()}-available`}
+                          variant="outline" 
+                          className="border-green-500/50 text-green-500"
+                        >
                           <Check className="w-3 h-3 mr-1" />
                           Disponível
                         </Badge>
                       ) : (
-                        <Badge variant="outline" className="border-blue-500/50 text-blue-500">
+                        <Badge 
+                          data-testid={`ai-status-${config.secretName.toLowerCase()}-configured`}
+                          variant="outline" 
+                          className="border-blue-500/50 text-blue-500"
+                        >
                           <Check className="w-3 h-3 mr-1" />
                           Configurado
                         </Badge>
@@ -405,6 +426,7 @@ export function AIConfigSection() {
                   <div className="relative flex-1">
                     <Input
                       id={config.secretName}
+                      data-testid={`ai-apikey-input-${config.secretName.toLowerCase()}`}
                       type={showKeys[config.secretName] ? 'text' : 'password'}
                       value={apiKeys[config.secretName] || ''}
                       onChange={(e) => setApiKeys(prev => ({ ...prev, [config.secretName]: e.target.value }))}
@@ -415,6 +437,7 @@ export function AIConfigSection() {
                       type="button"
                       variant="ghost"
                       size="icon"
+                      data-testid={`ai-toggle-visibility-${config.secretName.toLowerCase()}`}
                       className="absolute right-0 top-0 h-full px-3 text-nav-neon-white hover:text-kiosk-text"
                       onClick={() => toggleShowKey(config.secretName)}
                     >
@@ -423,6 +446,7 @@ export function AIConfigSection() {
                   </div>
                   
                   <Button
+                    data-testid={`ai-save-${config.secretName.toLowerCase()}`}
                     onClick={() => handleSaveKey(config)}
                     disabled={savingKey === config.secretName || !apiKeys[config.secretName]?.trim()}
                     className="bg-kiosk-primary hover:bg-kiosk-primary/90"
@@ -440,17 +464,21 @@ export function AIConfigSection() {
               {keyStatus[config.secretName]?.configured && (
                 <div className="flex items-center justify-between">
                   {keyStatus[config.secretName]?.lastMessage && (
-                    <span className={`text-xs ${
-                      keyStatus[config.secretName]?.needsCredits 
-                        ? 'text-yellow-400' 
-                        : keyStatus[config.secretName]?.available 
-                          ? 'text-green-400' 
-                          : 'text-blue-400'
-                    }`}>
+                    <span 
+                      data-testid={`ai-message-${config.secretName.toLowerCase()}`}
+                      className={`text-xs ${
+                        keyStatus[config.secretName]?.needsCredits 
+                          ? 'text-yellow-400' 
+                          : keyStatus[config.secretName]?.available 
+                            ? 'text-green-400' 
+                            : 'text-blue-400'
+                      }`}
+                    >
                       {keyStatus[config.secretName].lastMessage}
                     </span>
                   )}
                   <Button
+                    data-testid={`ai-test-${config.secretName.toLowerCase()}`}
                     variant="outline"
                     size="sm"
                     onClick={() => handleTestKey(config)}

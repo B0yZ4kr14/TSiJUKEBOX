@@ -451,6 +451,68 @@ export const FILE_CATEGORIES = {
     'src/components/settings/YouTubeMusicSection.tsx',
     'src/components/settings/index.ts',
   ],
+
+  // === HOOKS COMMON (22 arquivos) ===
+  'Hooks Common': [
+    'src/hooks/common/index.ts',
+    'src/hooks/common/use-mobile.tsx',
+    'src/hooks/common/use-toast.ts',
+    'src/hooks/common/useBackNavigation.ts',
+    'src/hooks/common/useDebounce.ts',
+    'src/hooks/common/useFirstAccess.ts',
+    'src/hooks/common/useGlobalSearch.ts',
+    'src/hooks/common/useMediaProviderStorage.ts',
+    'src/hooks/common/useNotifications.ts',
+    'src/hooks/common/usePWAInstall.ts',
+    'src/hooks/common/useReadArticles.ts',
+    'src/hooks/common/useRipple.ts',
+    'src/hooks/common/useSettingsNotifications.ts',
+    'src/hooks/common/useSettingsSelector.ts',
+    'src/hooks/common/useSettingsStatus.ts',
+    'src/hooks/common/useSettingsTour.ts',
+    'src/hooks/common/useSoundEffects.ts',
+    'src/hooks/common/useThemeCustomizer.ts',
+    'src/hooks/common/useTouchGestures.ts',
+    'src/hooks/common/useTranslation.ts',
+    'src/hooks/common/useWikiBookmarks.ts',
+    'src/hooks/common/useWikiOffline.ts',
+  ],
+
+  // === HOOKS SYSTEM (18 arquivos principais) ===
+  'Hooks System': [
+    'src/hooks/system/index.ts',
+    'src/hooks/system/useAutoSync.ts',
+    'src/hooks/system/useCodeScan.ts',
+    'src/hooks/system/useConnectionMonitor.ts',
+    'src/hooks/system/useFileChangeDetector.ts',
+    'src/hooks/system/useGitHubCache.ts',
+    'src/hooks/system/useInstallerMetrics.ts',
+    'src/hooks/system/useKioskMonitor.ts',
+    'src/hooks/system/useLogs.ts',
+    'src/hooks/system/useMockData.ts',
+    'src/hooks/system/useNetworkStatus.ts',
+    'src/hooks/system/usePlaybackStats.ts',
+    'src/hooks/system/useStatus.ts',
+    'src/hooks/system/useSyncHistory.ts',
+    'src/hooks/system/useWeather.ts',
+    'src/hooks/system/useWebSocketStatus.ts',
+  ],
+
+  // === LIB API (12 arquivos) ===
+  'Lib API': [
+    'src/lib/api/index.ts',
+    'src/lib/api/client.ts',
+    'src/lib/api/types.ts',
+    'src/lib/api/spotify.ts',
+    'src/lib/api/youtubeMusic.ts',
+    'src/lib/api/localMusic.ts',
+    'src/lib/api/storj.ts',
+    'src/lib/api/sshSync.ts',
+    'src/lib/api/spicetify.ts',
+    'src/lib/api/spotify/index.ts',
+    'src/lib/api/spotify/types.ts',
+    'src/lib/api/spotify/mappers.ts',
+  ],
 } as const;
 
 // Files that should have generated content (timestamps, version info)
@@ -467,7 +529,7 @@ export function isGeneratedFile(path: string): boolean {
   return GENERATED_FILES.includes(path);
 }
 
-// Only these files should be synced - prevents accidental overwrites (256 arquivos)
+// Only these files should be synced - prevents accidental overwrites (318 arquivos)
 export const SAFE_SYNC_FILES = [
   ...FILE_CATEGORIES['Documentação'],
   ...FILE_CATEGORIES['Scripts'],
@@ -503,4 +565,7 @@ export const SAFE_SYNC_FILES = [
   ...FILE_CATEGORIES['Hooks YouTube'],
   ...FILE_CATEGORIES['Hooks Jam'],
   ...FILE_CATEGORIES['Components Settings'],
+  ...FILE_CATEGORIES['Hooks Common'],
+  ...FILE_CATEGORIES['Hooks System'],
+  ...FILE_CATEGORIES['Lib API'],
 ];

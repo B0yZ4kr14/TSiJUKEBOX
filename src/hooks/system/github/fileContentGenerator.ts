@@ -1,6 +1,6 @@
 // Main content generator - orchestrates all template generators
 // Critical config files like package.json are NEVER generated here
-// Supports 256 files across 34 categories
+// Supports 318 files across 37 categories
 
 import { generateE2EFixtureContent } from './templates/e2eFixtureTemplates';
 import { generateE2ESpecContent } from './templates/e2eSpecTemplates';
@@ -34,6 +34,9 @@ import { generateHooksSpotifyContent } from './templates/hooksSpotifyTemplates';
 import { generateHooksYouTubeContent } from './templates/hooksYouTubeTemplates';
 import { generateHooksJamContent } from './templates/hooksJamTemplates';
 import { generateSettingsComponentsContent } from './templates/settingsComponentsTemplates';
+import { generateHooksCommonContent } from './templates/hooksCommonTemplates';
+import { generateHooksSystemContent } from './templates/hooksSystemTemplates';
+import { generateLibApiContent } from './templates/libApiTemplates';
 
 const VERSION = '4.2.0';
 
@@ -438,6 +441,24 @@ export function generateFileContent(path: string): string | null {
   if (path.startsWith('src/hooks/jam/')) {
     const hooksJamContent = generateHooksJamContent(path);
     if (hooksJamContent !== null) return hooksJamContent;
+  }
+  
+  // === HOOKS COMMON (22 files) ===
+  if (path.startsWith('src/hooks/common/')) {
+    const hooksCommonContent = generateHooksCommonContent(path);
+    if (hooksCommonContent !== null) return hooksCommonContent;
+  }
+  
+  // === HOOKS SYSTEM (18 files) ===
+  if (path.startsWith('src/hooks/system/') && !path.includes('/github/')) {
+    const hooksSystemContent = generateHooksSystemContent(path);
+    if (hooksSystemContent !== null) return hooksSystemContent;
+  }
+  
+  // === LIB API (12 files) ===
+  if (path.startsWith('src/lib/api/')) {
+    const libApiContent = generateLibApiContent(path);
+    if (libApiContent !== null) return libApiContent;
   }
   
   // === COMPONENTS UI (15 files) ===

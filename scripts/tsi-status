@@ -1,17 +1,2 @@
-#!/bin/bash
-# TSiJUKEBOX Status Check
-# Version: 4.1.0
-# Last updated: 2025-12-23T04:48:50.609Z
-
-echo "TSiJUKEBOX Status v4.1.0"
-echo "=========================="
-
-# Check main service
-systemctl is-active --quiet tsijukebox && echo "✅ Main Service: Running" || echo "❌ Main Service: Stopped"
-
-# Check kiosk service
-systemctl is-active --quiet tsijukebox-kiosk && echo "✅ Kiosk Service: Running" || echo "❌ Kiosk Service: Stopped"
-
-# Show uptime
-echo ""
-echo "System Uptime: $(uptime -p)"
+// Auto-synced: 2025-12-23T08:53:32.226Z
+// File: scripts/tsi-status

@@ -417,7 +417,7 @@ Se o Estado **impede você de usar seu próprio computador** — sua **proprieda
 
 <div align="center">
 
-<img src="https://upload.wikimedia.org/wikipedia/commons/thumb/d/d8/Gadsden_flag.svg/1200px-Gadsden_flag.svg.png" alt="Gadsden Flag - Don't Tread On Me" width="400">
+<img src="docs/assets/gadsden-flag.png" alt="Gadsden Flag - Don't Tread On Me" width="400">
 
 **🐍 DON'T TREAD ON ME 🐍**
 

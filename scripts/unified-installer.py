@@ -1800,6 +1800,10 @@ Exemplos:
     installer = UnifiedInstaller(config)
     success = installer.run()
     
+    if success and not config.dry_run:
+        installer.logger.info("You can now access the TSiJUKEBOX interface in your browser at:")
+        installer.logger.info(f"https://{config.ssl_domain}/jukebox")
+    
     sys.exit(0 if success else 1)
 
 if __name__ == "__main__":

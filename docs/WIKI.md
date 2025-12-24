@@ -14,18 +14,10 @@ O TSiJUKEBOX é um sistema completo de jukebox digital com suporte a múltiplas 
 
 ## 📚 Índice Geral
 
-### 🚀 Início Rápido
-- [Home](wiki/Home.md) - Página inicial da Wiki
-- [Getting Started](GETTING-STARTED.md) - Primeiros passos
-- [Instalação Rápida](QUICK-INSTALL.md) - Instalação em um comando
-- [Primeiro Setup](wiki/Tutorial-First-Setup.md) - Tutorial de configuração inicial
-
-### 📦 Instalação
-- [Instalação Completa](INSTALLATION.md) - Guia detalhado de instalação
-- [Instalação CachyOS](wiki/Install-CachyOS.md) - Instalação específica para CachyOS
-- [Docker + Kiosk](wiki/Install-Docker-Kiosk.md) - Instalação com Docker em modo Kiosk
-- [Instalação com Um Comando](wiki/Install-OneCommand.md) - Script automatizado
-- [Referência do Instalador v6](wiki/Installer-v6-Reference.md) - Documentação do instalador
+### 🚀 Guias Principais
+- [Guia de Introdução](guides/GETTING_STARTED.md) - Comece a usar o TSiJUKEBOX rapidamente.
+- [Guia do Desenvolvedor](guides/DEVELOPER_GUIDE.md) - Detalhes da arquitetura e como contribuir.
+- [Guia de Deploy](guides/DEPLOYMENT_GUIDE.md) - Implantação em ambientes de produção.
 
 ### ⚙️ Configuração
 - [Configuração Geral](CONFIGURATION.md) - Todas as opções de configuração
@@ -36,18 +28,13 @@ O TSiJUKEBOX é um sistema completo de jukebox digital com suporte a múltiplas 
 - [Shell (Fish)](wiki/Shell-Configuration.md) - Configuração do Fish Shell
 
 ### 🎵 Integrações de Música
-- [Spotify](wiki/API-Spotify-Integration.md) - Integração com Spotify
-- [YouTube Music](wiki/API-YouTube-Music-Integration.md) - Integração com YouTube Music
-- [Arquivos Locais](wiki/User-Guide-Local-Files.md) - Reprodução de arquivos locais
-- [Tutorial Spotify](wiki/Tutorial-Spotify-Integration.md) - Passo a passo Spotify
-- [Tutorial YouTube Music](wiki/Tutorial-YouTube-Music.md) - Passo a passo YouTube
+- [Spotify](integrations/SPOTIFY_API.md) - Integração com Spotify
+- [YouTube Music](integrations/YOUTUBE_API.md) - Integração com YouTube Music
+- [Arquivos Locais](integrations/LOCAL_FILES.md) - Reprodução de arquivos locais
 
 ### 🎤 Recursos Avançados
-- [Modo Karaokê](wiki/Tutorial-Karaoke-Mode.md) - Como usar o modo karaokê
-- [Modo Kiosk](wiki/Tutorial-Kiosk-Mode.md) - Configuração do modo kiosk
-- [Openbox Kiosk](wiki/Openbox-Kiosk-Setup.md) - Setup completo do Openbox
-- [Controle por Voz](docs/integrations/VOICE_CONTROL.md) - Comandos de voz
-- [WebSocket Real-time](docs/integrations/WEBSOCKET.md) - Comunicação em tempo real
+- [Modo Karaokê](hooks/USEKARAOKE.md) - Como usar o modo karaokê
+- [Controle por Voz](hooks/USEVOICECONTROL.md) - Comandos de voz
 
 ### 👥 Guias do Usuário
 - [Guia Básico](wiki/User-Guide-Basic.md) - Uso básico do sistema
@@ -73,19 +60,12 @@ O TSiJUKEBOX é um sistema completo de jukebox digital com suporte a múltiplas 
 - [Mockups](assets/mockups/README.md) - Mockups de alta fidelidade
 
 ### 🧩 Componentes
-
-#### Navegação
 - [GlobalSidebar](components/GLOBAL_SIDEBAR.md) - Sidebar principal
 - [Header & Layout](components/HEADER_AND_LAYOUT.md) - Header e MainLayout
-
-#### UI Components
 - [Card System](components/CARD_SYSTEM.md) - Sistema de cards
 - [Modal System](components/MODAL_SYSTEM.md) - Sistema de modais
 - [Toast System](components/TOAST_SYSTEM.md) - Sistema de notificações
 - [Button System](components/BUTTON_SYSTEM.md) - Botões e variantes
-- [Badge System](components/BADGE_SYSTEM.md) - Badges
-- [Form Components](components/FORM_COMPONENTS.md) - Inputs, selects, etc.
-- [Specialized Cards](components/SPECIALIZED_CARDS.md) - MusicCard, StatCard, etc.
 
 #### Player
 - [PlayerControls](components/PLAYER_CONTROLS.md) - Controles do player
@@ -95,38 +75,36 @@ O TSiJUKEBOX é um sistema completo de jukebox digital com suporte a múltiplas 
 - [Queue](components/QUEUE.md) - Fila de reprodução
 
 ### 🪝 Hooks
-- [usePlayer](hooks/USEPLAYER.md) - Hook do player
 - [useQueue](hooks/USEQUEUE.md) - Hook da fila
 - [useSpotify](hooks/USESPOTIFY.md) - Hook do Spotify
 - [useYouTube](hooks/USEYOUTUBE.md) - Hook do YouTube Music
 - [useKaraoke](hooks/USEKARAOKE.md) - Hook do karaokê
-- [useLayout](hooks/USELAYOUT.md) - Hook do layout
+- [useVoiceControl](hooks/USEVOICECONTROL.md) - Hook de controle por voz
+- [useSettings](hooks/USESETTINGS.md) - Hook de configurações
 - [useTheme](hooks/USETHEME.md) - Hook de temas
-- [useModal](hooks/USEMODAL.md) - Hook de modais
-- [useToast](hooks/USETOAST.md) - Hook de toasts
 
 ### 🌐 Contextos
-- [UserContext](contexts/USERCONTEXT.md) - Contexto de usuário
+- [AuthContext](contexts/AUTHCONTEXT.md) - Contexto de autenticação
 - [PlayerContext](contexts/PLAYERCONTEXT.md) - Contexto do player
 - [QueueContext](contexts/QUEUECONTEXT.md) - Contexto da fila
 - [LayoutContext](contexts/LAYOUTCONTEXT.md) - Contexto do layout
 - [ThemeContext](contexts/THEMECONTEXT.md) - Contexto de temas
 
 ### 🔌 Integrações
-- [Spotify API](integrations/SPOTIFY_API.md) - Integração Spotify Web API
-- [YouTube Music API](integrations/YOUTUBE_MUSIC_API.md) - Integração YouTube Music
-- [Voice Control (Vosk)](integrations/VOICE_CONTROL.md) - Reconhecimento de voz
-- [WebSocket](integrations/WEBSOCKET.md) - Comunicação real-time
-- [Supabase](integrations/SUPABASE.md) - Backend Supabase
-- [Local Backend](integrations/LOCAL_BACKEND.md) - API local
+- [Spotify API](integrations/SPOTIFY_API.md) - Integração com a API do Spotify
+- [YouTube API](integrations/YOUTUBE_API.md) - Integração com a API do YouTube
+- [Discord Webhooks](integrations/DISCORD_WEBHOOKS.md) - Integração com Webhooks do Discord
+- [Arquivos Locais](integrations/LOCAL_FILES.md) - Integração com o sistema de arquivos local
+- [Grafana API](integrations/GRAFANA_API.md) - Integração com a API do Grafana
+- [Supabase API](integrations/SUPABASE_API.md) - Integração com a API do Supabase
 
 ### 📄 Páginas
-- [Dashboard](pages/DASHBOARD.md) - Página inicial
-- [Player](pages/PLAYER.md) - Página do player
-- [Settings](pages/SETTINGS.md) - Página de configurações
-- [Karaoke](pages/KARAOKE.md) - Página de karaokê
-- [Library](pages/LIBRARY.md) - Biblioteca de músicas
-- [Auth](pages/AUTH.md) - Autenticação (Login/Signup)
+- [Dashboard](pages/DASHBOARD_PAGE.md) - Página do Dashboard
+- [Player](pages/PLAYER_PAGE.md) - Página do Player
+- [Settings](pages/SETTINGS_PAGE.md) - Página de Configurações
+- [Help](pages/HELP_PAGE.md) - Página de Ajuda
+- [Wiki](pages/WIKI_PAGE.md) - Página da Wiki
+- [SetupWizard](pages/SETUPWIZARD_PAGE.md) - Página do SetupWizard
 
 ### 🧪 Testes
 - [Guia de Testes](TESTING.md) - Guia geral de testes

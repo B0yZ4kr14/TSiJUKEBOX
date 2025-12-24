@@ -1,258 +1,184 @@
-# GlobalSidebar Component
+# GlobalSidebar
 
-Componente de navegação global do TSiJUKEBOX com integração completa do Design System.
+**Tipo:** React Component  
+**Localização:** `src/components/navigation/GlobalSidebar.tsx`  
+**Versão:** 1.0.0  
+**Categoria:** Navigation & Layout
 
-## Visão Geral
+---
 
-O `GlobalSidebar` é o componente principal de navegação da aplicação, fornecendo acesso a todas as páginas e seções da documentação. Ele implementa o Design System validado com cores neon, animações suaves e estados interativos.
+## Descrição
 
-## Características
+A `GlobalSidebar` é a barra de navegação lateral principal da aplicação TSiJUKEBOX. É um componente altamente estilizado e interativo que serve como o principal meio de navegação entre as diferentes seções do sistema. Ela é responsiva, animada e integrada com o Design System da aplicação.
 
-- ✅ **Design System Integrado**: Usa todas as cores e tokens do Design System
-- ✅ **8 Ícones das Seções**: Integração completa com os ícones coloridos
-- ✅ **Estados Interativos**: Hover, active, focus com animações
-- ✅ **Collapse/Expand**: Sidebar retrátil com persistência de estado
-- ✅ **Navegação Inteligente**: Destaque automático da rota ativa
-- ✅ **Tooltips**: Tooltips em estado collapsed
-- ✅ **Responsivo**: Adaptável a diferentes tamanhos de tela
-- ✅ **Acessível**: ARIA labels e navegação por teclado
-- ✅ **Testado**: 100% de cobertura de testes
+**Principais recursos:**
+- Navegação principal e seções de documentação.
+- Estado recolhível (collapsed) com animações suaves (`Framer Motion`).
+- Destaque do item de menu ativo baseado na rota atual (`react-router-dom`).
+- Tooltips informativos quando a barra está recolhida.
+- Seções de navegação e itens de menu configuráveis.
+- Design consistente com o `Design System` (ícones, cores, tipografia).
 
-## Instalação
-
-```bash
-# O componente já está incluído no projeto
-# Nenhuma instalação adicional necessária
-```
+---
 
 ## Uso Básico
 
-```tsx
-import { GlobalSidebar } from '@/components/navigation/GlobalSidebar';
+O componente é geralmente usado dentro de um layout principal, como o `MainLayout`.
 
-function App() {
+```typescript
+import { GlobalSidebar } from '@/components/navigation/GlobalSidebar';
+import { Header } from '@/components/layout/Header';
+
+function MainLayout({ children }) {
   return (
-    <div className="flex h-screen">
+    <div class="flex h-screen bg-bg-primary">
       <GlobalSidebar />
-      <main className="flex-1">
-        {/* Seu conteúdo aqui */}
-      </main>
+      <div class="flex-1 flex flex-col overflow-hidden">
+        <Header />
+        <main class="flex-1 p-6 overflow-y-auto">
+          {children}
+        </main>
+      </div>
     </div>
   );
 }
 ```
 
-## Props
+---
 
-| Prop | Tipo | Padrão | Descrição |
-|------|------|--------|-----------|
-| `className` | `string` | `undefined` | Classes CSS adicionais |
-| `defaultCollapsed` | `boolean` | `false` | Estado inicial collapsed |
-| `onCollapsedChange` | `(collapsed: boolean) => void` | `undefined` | Callback quando estado muda |
+## Propriedades (`GlobalSidebarProps`)
 
-## Exemplos
+| Propriedade | Tipo | Obrigatório | Padrão | Descrição |
+|---|---|---|---|---|
+| `className` | `string` | Não | `undefined` | Classes CSS adicionais para customização do container principal. |
+| `defaultCollapsed` | `boolean` | Não | `false` | Define se a sidebar deve iniciar no estado recolhido. |
+| `onCollapsedChange` | `(collapsed: boolean) => void` | Não | `undefined` | Função de callback que é chamada quando o estado de recolhimento muda. |
 
-### Sidebar com Estado Controlado
-
-```tsx
-import { useState } from 'react';
-import { GlobalSidebar } from '@/components/navigation/GlobalSidebar';
-
-function App() {
-  const [collapsed, setCollapsed] = useState(false);
-
-  return (
-    <div className="flex h-screen">
-      <GlobalSidebar
-        defaultCollapsed={collapsed}
-        onCollapsedChange={setCollapsed}
-      />
-      <main className="flex-1">
-        <button onClick={() => setCollapsed(!collapsed)}>
-          Toggle Sidebar
-        </button>
-      </main>
-    </div>
-  );
-}
-```
-
-### Sidebar com Classes Customizadas
-
-```tsx
-<GlobalSidebar
-  className="shadow-2xl border-r-2 border-accent-cyan/20"
-/>
-```
-
-### Sidebar Collapsed por Padrão
-
-```tsx
-<GlobalSidebar defaultCollapsed={true} />
-```
-
-## Hook useGlobalSidebar
-
-O hook `useGlobalSidebar` fornece controle programático do sidebar:
-
-```tsx
-import { useGlobalSidebar } from '@/hooks/useGlobalSidebar';
-
-function MyComponent() {
-  const {
-    collapsed,
-    toggleCollapsed,
-    setCollapsed,
-    navigateTo,
-    goBack,
-  } = useGlobalSidebar();
-
-  return (
-    <div>
-      <button onClick={toggleCollapsed}>
-        {collapsed ? 'Expandir' : 'Recolher'}
-      </button>
-      <button onClick={() => navigateTo('/dashboard')}>
-        Ir para Dashboard
-      </button>
-      <button onClick={goBack}>
-        Voltar
-      </button>
-    </div>
-  );
-}
-```
+---
 
 ## Estrutura de Navegação
 
-### Seção Principal
-- **Dashboard** - `/dashboard`
-- **Player** - `/player`
-- **Karaoke** - `/karaoke` (com badge "Beta")
-- **Biblioteca** - `/library`
+A navegação é definida pelo array `navigationSections` dentro do componente.
 
-### Seção Documentação
-- **Instalação** - `/docs/installation` (Verde Neon #00ff88)
-- **Configuração** - `/settings` (Cyan #00d4ff)
-- **Tutoriais** - `/docs/tutorials` (Magenta #ff00d4)
-- **Desenvolvimento** - `/docs/development` (Amarelo Ouro #ffd400)
+### `NavSection`
 
-### Seção Avançado
-- **API** - `/docs/api` (Roxo #d400ff)
-- **Segurança** - `/docs/security` (Laranja #ff4400)
-- **Monitoramento** - `/docs/monitoring` (Verde Lima #00ff44)
-- **Testes** - `/docs/testing` (Azul Elétrico #4400ff)
-
-## Cores e Design
-
-O componente usa as seguintes cores do Design System:
-
-| Elemento | Cor | Hex |
-|----------|-----|-----|
-| Fundo | `bg-bg-secondary` | #1a1a1a |
-| Hover | `bg-bg-tertiary` | #2a2a2a |
-| Active Border | `bg-accent-cyan` | #00d4ff |
-| Logo TSI | `text-accent-yellowGold` | #ffd400 |
-| Logo JUKEBOX | `text-gray-400` | - |
-
-## Animações
-
-O componente usa Framer Motion para animações suaves:
-
-- **Collapse/Expand**: Transição de largura com easing cubic-bezier
-- **Items**: Fade in/out com slide horizontal
-- **Icons**: Glow effect no estado ativo
-- **Active Indicator**: Pulse sutil contínuo
-
-## Acessibilidade
-
-- ✅ **ARIA Labels**: Todos os botões têm labels descritivos
-- ✅ **ARIA Current**: Rota ativa marcada com `aria-current="page"`
-- ✅ **Keyboard Navigation**: Navegação completa por teclado
-- ✅ **Focus Visible**: Estados de foco claramente visíveis
-- ✅ **Screen Readers**: Compatível com leitores de tela
-
-## Responsividade
-
-| Breakpoint | Comportamento |
-|------------|---------------|
-| Desktop (>1024px) | Sidebar expandido por padrão |
-| Tablet (768px-1024px) | Sidebar collapsed por padrão |
-| Mobile (<768px) | Sidebar overlay com backdrop |
-
-## Testes
-
-Execute os testes com:
-
-```bash
-npm run test src/components/navigation/__tests__/GlobalSidebar.test.tsx
+```typescript
+interface NavSection {
+  id: string;
+  title: string;
+  items: NavItem[];
+}
 ```
 
-Cobertura de testes:
-- ✅ Renderização de todos os elementos
-- ✅ Collapse/Expand functionality
-- ✅ Navegação e rotas ativas
-- ✅ Cores e estilos
-- ✅ Acessibilidade
-- ✅ Responsividade
-- ✅ Persistência de estado
+### `NavItem`
 
-## Performance
-
-- **Bundle Size**: ~15KB (minified + gzipped)
-- **First Paint**: <50ms
-- **Interaction**: <16ms (60fps)
-- **Memory**: <2MB
-
-## Troubleshooting
-
-### Sidebar não aparece
-
-Verifique se o componente está dentro de um `BrowserRouter`:
-
-```tsx
-import { BrowserRouter } from 'react-router-dom';
-
-<BrowserRouter>
-  <GlobalSidebar />
-</BrowserRouter>
+```typescript
+interface NavItem {
+  id: string;
+  label: string;
+  icon: React.ElementType; // Ícone do Lucide React
+  path: string;
+  badge?: string; // Badge opcional (ex: "Beta")
+  color?: string; // Classe de cor para o ícone ativo
+}
 ```
 
-### Estado não persiste
+### Exemplo de Dados
 
-Verifique se o localStorage está habilitado no navegador.
-
-### Ícones não aparecem
-
-Certifique-se de que o Lucide React está instalado:
-
-```bash
-npm install lucide-react
+```typescript
+const navigationSections: NavSection[] = [
+  {
+    id: 'main',
+    title: 'Principal',
+    items: [
+      { id: 'dashboard', label: 'Dashboard', icon: Home, path: '/dashboard' },
+      { id: 'player', label: 'Player', icon: Music, path: '/player' },
+    ],
+  },
+  {
+    id: 'documentation',
+    title: 'Documentação',
+    items: [
+      { id: 'installation', label: 'Instalação', icon: Download, path: '/docs/installation' },
+      // ... outros itens
+    ],
+  },
+];
 ```
+
+---
+
+## Animações e Interatividade
+
+- **Animações:** O componente utiliza `Framer Motion` para animar a largura da sidebar ao expandir/recolher e para animar a aparição/desaparição dos textos e títulos.
+- **Estado Ativo:** O hook `useLocation` de `react-router-dom` é usado para determinar o item de menu ativo, aplicando estilos específicos (`bg-bg-tertiary`, borda lateral colorida, etc.).
+- **Tooltips:** Quando a sidebar está recolhida, um tooltip aparece ao passar o mouse sobre um ícone, mostrando o label do item de menu.
+
+---
+
+## Exemplo Completo com Estado Controlado
+
+É possível controlar o estado de recolhimento da sidebar a partir de um componente pai.
+
+```typescript
+import { useState } from 'react';
+import { GlobalSidebar } from '@/components/navigation/GlobalSidebar';
+import { Button } from '@/components/ui/button';
+
+function App() {
+  const [isCollapsed, setIsCollapsed] = useState(false);
+
+  return (
+    <div class="flex">
+      <GlobalSidebar 
+        defaultCollapsed={isCollapsed}
+        onCollapsedChange={setIsCollapsed}
+      />
+      <main class="p-4">
+        <Button onClick={() => setIsCollapsed(!isCollapsed)}>
+          Toggle Sidebar Externamente
+        </Button>
+        {/* Conteúdo da página */}
+      </main>
+    </div>
+  );
+}
+```
+
+---
+
+## Estilização
+
+- **Layout:** Construído com Flexbox e Tailwind CSS.
+- **Cores e Temas:** Utiliza variáveis CSS do Design System para cores de fundo (`bg-bg-secondary`), bordas (`border-white/5`), e cores de destaque (`text-accent-cyan`, `text-accent-yellowGold`, etc.).
+- **Ícones:** Utiliza a biblioteca `lucide-react` para todos os ícones.
+- **Utilitário `cn`:** As classes são combinadas de forma condicional usando o utilitário `cn` para um código mais limpo.
+
+---
+
+## Componentes Internos
+
+- **Header da Sidebar:** Exibe o logo e o botão de toggle.
+- **Lista de Navegação:** Renderiza as seções e os itens de menu.
+- **Footer da Sidebar:** Exibe informações do usuário, link para perfil/logout e créditos.
+
+---
+
+## Relacionados
+
+- [LayoutContext](../contexts/LAYOUTCONTEXT.md) - Contexto que pode ser usado para gerenciar o estado da sidebar globalmente.
+- [MainLayout](./HEADER_AND_LAYOUT.md) - Componente de layout que geralmente encapsula a `GlobalSidebar`.
+- [Framer Motion](https://www.framer.com/motion/) - Biblioteca de animação utilizada.
+- [Lucide React](https://lucide.dev/) - Biblioteca de ícones.
+
+---
 
 ## Changelog
 
-### v1.0.0 (2024-12-23)
-- ✅ Implementação inicial
-- ✅ Integração com Design System
-- ✅ 8 ícones das seções
-- ✅ Animações com Framer Motion
-- ✅ Testes unitários completos
-- ✅ Documentação completa
-
-## Contribuindo
-
-Para contribuir com melhorias:
-
-1. Mantenha a consistência com o Design System
-2. Adicione testes para novas funcionalidades
-3. Atualize a documentação
-4. Siga os padrões de código do projeto
-
-## Licença
-
-Desenvolvido por **B0.y_Z4kr14** para TSI Telecom.
-
-## Suporte
-
-Para dúvidas ou problemas, abra uma issue no repositório.
+### v1.0.0 (24/12/2024)
+- ✅ Implementação inicial do componente.
+- ✅ Navegação por seções e itens.
+- ✅ Estado recolhível com animações.
+- ✅ Destaque de rota ativa.
+- ✅ Documentação completa.
+- ✅ Documentação completa.

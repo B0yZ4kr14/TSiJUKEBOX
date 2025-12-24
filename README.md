@@ -17,7 +17,7 @@
 
 **Sistema kiosk musical profissional com integração Spotify, YouTube Music e arquivos locais.**
 
-[📖 Documentação](docs/README.md) · [🌐 Wiki](https://github.com/B0yZ4kr14/TSiJUKEBOX/wiki) · [🎮 Demo](https://tsijukebox.lovable.app) · [🐛 Report Bug](https://github.com/B0yZ4kr14/TSiJUKEBOX/issues) · [✨ Request Feature](https://github.com/B0yZ4kr14/TSiJUKEBOX/issues)
+[📖 Documentação](docs/WIKI.md) · [🌐 Wiki](https://github.com/B0yZ4kr14/TSiJUKEBOX/wiki) · [🎮 Demo](https://tsijukebox.lovable.app) · [🐛 Report Bug](https://github.com/B0yZ4kr14/TSiJUKEBOX/issues) · [✨ Request Feature](https://github.com/B0yZ4kr14/TSiJUKEBOX/issues)
 
 </div>
 
@@ -403,14 +403,14 @@ R: Consulte o [Guia de Instalação CachyOS](https://github.com/B0yZ4kr14/TSiJUK
 
 | Documento | Descrição |
 | --------- | --------- |
-| 📖 [Guia do Usuário](docs/USER-GUIDE.md) | Manual completo de uso |
-| 🏗️ [Guia do Desenvolvedor](docs/DEVELOPER-GUIDE.md) | Arquitetura e contribuição |
-| 🎨 [Design System](docs/DESIGN_SYSTEM.md) | Tokens, componentes e padrões |
-| 🔐 [Segurança](docs/SECURITY.md) | Boas práticas e políticas |
-| ♿ [Acessibilidade](docs/ACCESSIBILITY.md) | Conformidade WCAG 2.1 AA |
-| 🌐 [API Reference](docs/API.md) | Documentação da API REST |
-| 🐳 [Docker Guide](docs/DOCKER.md) | Deploy com containers |
-| 🔄 [Changelog](docs/CHANGELOG.md) | Histórico de versões |
+| 🚀 [Guia de Introdução](docs/guides/GETTING_STARTED.md) | Comece a usar o TSiJUKEBOX rapidamente. |
+| 🏗️ [Guia do Desenvolvedor](docs/guides/DEVELOPER_GUIDE.md) | Detalhes da arquitetura e como contribuir. |
+| 🏭 [Guia de Deploy](docs/guides/DEPLOYMENT_GUIDE.md) | Implantação em ambientes de produção. |
+| 📚 [Wiki Completa](docs/WIKI.md) | Documentação detalhada de todos os recursos. |
+| 🎨 [Design System](docs/DESIGN_SYSTEM.md) | Tokens, componentes e padrões visuais. |
+| 🔐 [Segurança](docs/SECURITY.md) | Políticas e práticas de segurança. |
+| ♿ [Acessibilidade](docs/ACCESSIBILITY.md) | Conformidade com as diretrizes WCAG 2.1 AA. |
+| 🔄 [Changelog](docs/CHANGELOG.md) | Histórico completo de versões e alterações. |
 
 ---
 

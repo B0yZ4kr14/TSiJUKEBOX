@@ -282,6 +282,8 @@ class InstallationWizard:
             'install_fail2ban': True,
             'install_spotify': True,
             'install_spicetify': True,
+            'database': 'sqlite',
+            'sqlite_path': '/var/lib/tsijukebox/data.db',
         }
         self.hardware = HardwareAnalyzer()
     
@@ -398,6 +400,7 @@ class InstallationWizard:
         print(f"  Usuário: {self.config['user']}")
         print(f"  Acesso: https://{self.config['ssl_domain']}/jukebox")
         print(f"  Login: admin / admin")
+        print(f"  Banco de dados: SQLite ({self.config['sqlite_path']})")
         
         print(f"\n{Colors.BOLD}Componentes a serem instalados:{Colors.RESET}")
         components = [
@@ -405,6 +408,7 @@ class InstallationWizard:
             ('UFW Firewall', self.config['install_ufw']),
             ('NTP (sincronização de tempo)', self.config['install_ntp']),
             ('Nginx (proxy reverso)', self.config['install_nginx']),
+            ('SQLite (banco de dados)', True),
             ('Grafana (monitoramento)', self.config['install_grafana']),
             ('Prometheus (métricas)', self.config['install_prometheus']),
             ('Fail2ban (segurança)', self.config['install_fail2ban']),
@@ -456,6 +460,10 @@ class InstallationWizard:
             cmd.append('--no-docker')
         if not self.config['install_spotify']:
             cmd.append('--no-spotify')
+        
+        # SQLite como banco de dados padrão
+        cmd.extend(['--database', 'sqlite'])
+        cmd.extend(['--sqlite-path', self.config['sqlite_path']])
         
         print_info(f"Executando: {' '.join(cmd)}")
         print()

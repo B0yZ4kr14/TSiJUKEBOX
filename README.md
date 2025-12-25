@@ -146,6 +146,34 @@ O TSiJUKEBOX utiliza um Design System consistente baseado em:
 
 ---
 
+## ♿ Acessibilidade WCAG 2.1 AA
+
+O TSiJUKEBOX foi desenvolvido com foco em acessibilidade, seguindo as diretrizes **WCAG 2.1 nível AA**.
+
+| Recurso | Implementação | Status |
+|---------|---------------|--------|
+| **Navegação por Teclado** | Todos os elementos interativos acessíveis via Tab | ✅ |
+| **Leitores de Tela** | 238 aria-labels, 550 aria-hidden | ✅ |
+| **Contraste de Cores** | Ratio mínimo de 4.5:1 para texto | ✅ |
+| **Foco Visível** | Indicador de foco claro em todos os elementos | ✅ |
+| **Formulários Acessíveis** | Labels associados e feedback de erro | ✅ |
+
+<details>
+<summary><strong>📊 Métricas de Acessibilidade</strong></summary>
+
+```
+aria-label:       238 elementos
+aria-hidden:      550 elementos
+role:             50 elementos
+sr-only:          17 elementos
+```
+
+Para mais detalhes, consulte o [Relatório de Acessibilidade](docs/ACCESSIBILITY_REPORT_FINAL.md).
+
+</details>
+
+---
+
 ## 📖 Documentação
 
 Consulte nossa [Wiki](https://github.com/B0yZ4kr14/TSiJUKEBOX/wiki) para documentação completa:

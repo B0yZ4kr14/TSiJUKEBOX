@@ -16,9 +16,7 @@ import { useState, useEffect } from 'react';
 import { useNavigate, useSearchParams } from 'react-router-dom';
 import { motion, AnimatePresence } from 'framer-motion';
 import { useUser } from '@/contexts/UserContext';
-import { Card, CardContent, CardDescription, CardHeader } from '@/components/ui/card';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
-import { Button } from '@/components/ui/button';
 import { Checkbox } from '@/components/ui/checkbox';
 import { Label } from '@/components/ui/label';
 import { Separator } from '@/components/ui/separator';
@@ -40,6 +38,7 @@ import {
 import { LogoBrand } from '@/components/ui/LogoBrand';
 import { LoginForm, SignUpForm, LocalLoginForm } from '@/components/auth';
 import type { LoginFormData, SignUpFormData, LocalLoginFormData } from '@/lib/validations/authSchemas';
+import { Button, Card } from "@/components/ui/themed"
 
 // ============================================================================
 // ANIMATION VARIANTS
@@ -393,8 +392,7 @@ export default function Auth() {
           className="border-cyan-500/30 bg-kiosk-surface/95 backdrop-blur-xl shadow-2xl shadow-cyan-500/10" 
           data-testid="auth-card"
         >
-          <CardHeader className="text-center space-y-4 pb-2">
-            <motion.div variants={pulseVariants} animate="pulse">
+          <motion.div variants={pulseVariants} animate="pulse">
               <LogoBrand 
                 size="sm" 
                 variant="metal" 
@@ -406,7 +404,7 @@ export default function Auth() {
             </motion.div>
             
             <motion.div variants={itemVariants}>
-              <CardDescription className="flex items-center justify-center gap-2 mt-2 text-kiosk-text/90">
+              <p className="text-sm text-[var(--text-muted)]">
                 {isSupabaseProvider ? (
                   <>
                     <Cloud className="w-4 h-4 text-accent-cyan" />
@@ -418,11 +416,11 @@ export default function Auth() {
                     <span>Autenticação Local</span>
                   </>
                 )}
-              </CardDescription>
+              </p>
             </motion.div>
-          </CardHeader>
+          
 
-          <CardContent className="space-y-4 pt-2">
+          <div className="mt-4">
             <AnimatePresence mode="wait">
               {showForgotPassword ? (
                 <ForgotPasswordView
@@ -508,7 +506,7 @@ export default function Auth() {
                         </div>
                         
                         <Button
-                          variant="link"
+                          variant="ghost"
                           size="sm"
                           onClick={() => setShowForgotPassword(true)}
                           className="text-accent-cyan hover:text-accent-cyan/80 p-0 h-auto"
@@ -575,7 +573,7 @@ export default function Auth() {
             >
               TSiJUKEBOX v4.2.1 • Secure Authentication
             </motion.p>
-          </CardContent>
+          </div>
         </Card>
       </motion.div>
     </div>

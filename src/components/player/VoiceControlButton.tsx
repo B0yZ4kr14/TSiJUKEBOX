@@ -1,7 +1,7 @@
 import { useState, useEffect, useRef } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { Mic, MicOff, Volume2, SkipForward, Play, Pause } from 'lucide-react';
-import { Button } from '@/components/ui/button';
+import { Button } from "@/components/ui/themed";
 import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from '@/components/ui/tooltip';
 import { useVoiceControl } from '@/hooks/player/useVoiceControl';
 import { useSoundEffects } from '@/hooks/common/useSoundEffects';
@@ -16,10 +16,10 @@ interface VoiceControlButtonProps {
 const commandIcons: Record<string, React.ReactNode> = {
   play: <Play className="h-4 w-4" />,
   pause: <Pause className="h-4 w-4" />,
-  next: <SkipForward className="h-4 w-4" />,
-  previous: <SkipForward className="h-4 w-4 rotate-180" />,
-  volumeUp: <Volume2 className="h-4 w-4" />,
-  volumeDown: <Volume2 className="h-4 w-4" />,
+  next: <SkipForward aria-hidden="true" className="h-4 w-4" />,
+  previous: <SkipForward aria-hidden="true" className="h-4 w-4 rotate-180" />,
+  volumeUp: <Volume2 aria-hidden="true" className="h-4 w-4" />,
+  volumeDown: <Volume2 aria-hidden="true" className="h-4 w-4" />,
 };
 
 const commandLabels: Record<string, string> = {
@@ -94,7 +94,7 @@ export function VoiceControlButton({
               <Button
                 data-testid="voice-control-button"
                 variant="ghost"
-                size="icon"
+                size="xs"
                 disabled
                 aria-label="Controle por voz não suportado"
                 className={cn(
@@ -139,7 +139,7 @@ export function VoiceControlButton({
               data-testid="voice-control-button"
               data-listening={isListening}
               variant="ghost"
-              size="icon"
+              size="xs"
               onClick={toggleListening}
               aria-label={isListening ? 'Parar de ouvir' : 'Ativar controle por voz'}
               className={cn(

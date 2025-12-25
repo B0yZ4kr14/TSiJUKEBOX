@@ -1,9 +1,9 @@
 # Relatório de Refatoração de Cores Hardcoded
 
-> **Gerado em:** 24/12/2025 02:02  
-> **Total de Ocorrências:** 360  
-> **Com Sugestão:** 311  
-> **Sem Sugestão:** 49
+> **Gerado em:** 25/12/2025 01:36  
+> **Total de Ocorrências:** 367  
+> **Com Sugestão:** 312  
+> **Sem Sugestão:** 55
 
 ---
 
@@ -13,15 +13,15 @@
 |-----------|------------|
 | Accent | 20 |
 | Background | 59 |
-| Brand | 147 |
+| Brand | 151 |
 | Gradient | 3 |
 | Language | 18 |
 | Overlay | 1 |
 | State | 22 |
 | Text | 6 |
-| Theme | 22 |
-| Unknown | 49 |
-| Weather | 13 |
+| Theme | 27 |
+| Unknown | 55 |
+| Weather | 5 |
 
 ---
 
@@ -29,26 +29,26 @@
 
 | Cor | Ocorrências | Token Sugerido | Tailwind |
 |-----|-------------|----------------|----------|
-| `#1DB954` | 100 | `spotify-green` | `text-spotify-green` |
-| `#FF0000` | 38 | `youtube-red` | `text-youtube-red` |
+| `#1DB954` | 102 | `spotify-green` | `text-spotify-green` |
+| `#FF0000` | 40 | `youtube-red` | `text-youtube-red` |
 | `#333333` | 32 | `background-active` | `bg-accent` |
 | `#444444` | 12 | `background-elevated-hover` | `bg-zinc-700` |
 | `rgba(0,212,255,0.6)` | 10 | `accent-cyan-60` | `bg-cyan-400/60` |
-| `#FFD93D` | 7 | `weather-sun` | `text-yellow-300` |
 | `#3ECF8E` | 6 | `success-light` | `text-emerald-400` |
+| `#FF6B35` | 6 | `theme-orange` | `text-[#FF6B35]` |
+| `#00D4FF` | 5 | `accent-cyan` | `text-cyan-400` |
 | `#00FF88` | 4 | `success-bright` | `text-emerald-300` |
-| `#00D4FF` | 4 | `accent-cyan` | `text-cyan-400` |
 | `#050508` | 4 | `background-black-elevated` | `bg-zinc-950` |
 | `#222222` | 4 | `background-darker` | `bg-zinc-900` |
+| `#FFD93D` | 4 | `weather-sun` | `text-yellow-300` |
 | `#000000` | 3 | `background-black` | `bg-black` |
 | `rgba(29,185,84,0.6)` | 3 | `spotify-green-60` | `bg-spotify-green/60` |
 | `#1ED760` | 3 | `spotify-green-light` | `text-spotify-green-light` |
 | `rgba(255,0,0,0.5)` | 3 | `youtube-red-50` | `bg-youtube-red/50` |
 | `#FFFFFF` | 3 | `text-primary` | `text-foreground` |
 | `#CCCCCC` | 3 | `text-light` | `text-gray-300` |
+| `#FBBF24` | 3 | `❌ Não mapeado` | `-` |
 | `#3178C6` | 2 | `lang-typescript` | `text-[#3178C6]` |
-| `#F7DF1E` | 2 | `lang-javascript` | `text-[#F7DF1E]` |
-| `#3776AB` | 2 | `lang-python` | `text-[#3776AB]` |
 
 ---
 
@@ -58,16 +58,16 @@
 
 | Linha | Cor | Sugestão |
 |-------|-----|----------|
-| 171 | `#1DB954` | `text-spotify-green` |
-| 171 | `#1DB954` | `text-spotify-green` |
-| 171 | `#1DB954` | `text-spotify-green` |
-| 173 | `#1DB954` | `text-spotify-green` |
+| 172 | `#1DB954` | `text-spotify-green` |
+| 172 | `#1DB954` | `text-spotify-green` |
+| 172 | `#1DB954` | `text-spotify-green` |
 | 174 | `#1DB954` | `text-spotify-green` |
-| 195 | `#1DB954` | `text-spotify-green` |
-| 199 | `#1DB954` | `text-spotify-green` |
-| 203 | `#1DB954` | `text-spotify-green` |
-| 211 | `#1DB954` | `text-spotify-green` |
-| 245 | `#1DB954` | `text-spotify-green` |
+| 175 | `#1DB954` | `text-spotify-green` |
+| 196 | `#1DB954` | `text-spotify-green` |
+| 200 | `#1DB954` | `text-spotify-green` |
+| 204 | `#1DB954` | `text-spotify-green` |
+| 212 | `#1DB954` | `text-spotify-green` |
+| 246 | `#1DB954` | `text-spotify-green` |
 
 *... e mais 33 ocorrências*
 
@@ -75,16 +75,16 @@
 
 | Linha | Cor | Sugestão |
 |-------|-----|----------|
-| 30 | `#00BFFF` | `text-sky-400` |
-| 30 | `#00FF7F` | `text-[#00FF7F]` |
-| 30 | `#9B59B6` | `text-[#9B59B6]` |
-| 30 | `#FF6B35` | `text-[#FF6B35]` |
-| 30 | `#FF1493` | `text-[#FF1493]` |
-| 30 | `#FFD700` | `text-[#FFD700]` |
-| 31 | `#3B82F6` | `text-blue-500` |
-| 31 | `#10B981` | `text-emerald-500` |
-| 31 | `#8B5CF6` | `text-violet-500` |
-| 31 | `#F59E0B` | `text-yellow-500` |
+| 31 | `#00BFFF` | `text-sky-400` |
+| 31 | `#00FF7F` | `text-[#00FF7F]` |
+| 31 | `#9B59B6` | `text-[#9B59B6]` |
+| 31 | `#FF6B35` | `text-[#FF6B35]` |
+| 31 | `#FF1493` | `text-[#FF1493]` |
+| 31 | `#FFD700` | `text-[#FFD700]` |
+| 32 | `#3B82F6` | `text-blue-500` |
+| 32 | `#10B981` | `text-emerald-500` |
+| 32 | `#8B5CF6` | `text-violet-500` |
+| 32 | `#F59E0B` | `text-yellow-500` |
 
 *... e mais 13 ocorrências*
 
@@ -105,54 +105,54 @@
 
 *... e mais 10 ocorrências*
 
-### `src/components/weather/AnimatedWeatherIcon.tsx` (17 ocorrências)
-
-| Linha | Cor | Sugestão |
-|-------|-----|----------|
-| 32 | `#FFD93D` | `text-yellow-300` |
-| 46 | `#FFD93D` | `text-yellow-300` |
-| 49 | `#FFD93D` | `text-yellow-300` |
-| 49 | `#FFD93D` | `text-yellow-300` |
-| 49 | `#FFD93D` | `text-yellow-300` |
-| 58 | `#B0BEC5` | `text-gray-400` |
-| 85 | `#78909C` | `text-gray-500` |
-| 97 | `#4FC3F7` | `text-cyan-300` |
-| 121 | `#90A4AE` | `text-gray-400` |
-| 130 | `#E3F2FD` | `text-blue-50` |
-
-*... e mais 7 ocorrências*
-
 ### `src/components/settings/DatabaseConfigSection.tsx` (13 ocorrências)
 
 | Linha | Cor | Sugestão |
 |-------|-----|----------|
-| 115 | `#333333` | `bg-accent` |
-| 142 | `#333333` | `bg-accent` |
-| 169 | `#333333` | `bg-accent` |
-| 196 | `#333333` | `bg-accent` |
-| 219 | `#333333` | `bg-accent` |
-| 239 | `#333333` | `bg-accent` |
-| 307 | `#333333` | `bg-accent` |
-| 362 | `#333333` | `bg-accent` |
-| 99 | `rgba(0,212,255,0.6)` | `bg-cyan-400/60` |
-| 123 | `rgba(0,212,255,0.6)` | `bg-cyan-400/60` |
+| 116 | `#333333` | `bg-accent` |
+| 143 | `#333333` | `bg-accent` |
+| 170 | `#333333` | `bg-accent` |
+| 197 | `#333333` | `bg-accent` |
+| 220 | `#333333` | `bg-accent` |
+| 240 | `#333333` | `bg-accent` |
+| 308 | `#333333` | `bg-accent` |
+| 363 | `#333333` | `bg-accent` |
+| 100 | `rgba(0,212,255,0.6)` | `bg-cyan-400/60` |
+| 124 | `rgba(0,212,255,0.6)` | `bg-cyan-400/60` |
 
 *... e mais 3 ocorrências*
+
+### `src/components/ui/TSiLogo.tsx` (12 ocorrências)
+
+| Linha | Cor | Sugestão |
+|-------|-----|----------|
+| 73 | `#1A1A2E` | `❌` |
+| 74 | `#16213E` | `❌` |
+| 77 | `#FF6B35` | `text-[#FF6B35]` |
+| 78 | `#FBBF24` | `❌` |
+| 79 | `#FF6B35` | `text-[#FF6B35]` |
+| 82 | `#00D4FF` | `text-cyan-400` |
+| 83 | `#00B4D8` | `❌` |
+| 166 | `#FF6B35` | `text-[#FF6B35]` |
+| 166 | `#FBBF24` | `❌` |
+| 166 | `#FF6B35` | `text-[#FF6B35]` |
+
+*... e mais 2 ocorrências*
 
 ### `src/components/youtube/AddToPlaylistModal.tsx` (12 ocorrências)
 
 | Linha | Cor | Sugestão |
 |-------|-----|----------|
-| 88 | `#FF0000` | `text-youtube-red` |
-| 137 | `#FF0000` | `text-youtube-red` |
-| 137 | `#FF0000` | `text-youtube-red` |
-| 158 | `#FF0000` | `text-youtube-red` |
-| 158 | `#FF0000` | `text-youtube-red` |
-| 158 | `#FF0000` | `text-youtube-red` |
-| 179 | `#FF0000` | `text-youtube-red` |
-| 179 | `#FF0000` | `text-youtube-red` |
-| 192 | `#FF0000` | `text-youtube-red` |
-| 205 | `#FF0000` | `text-youtube-red` |
+| 89 | `#FF0000` | `text-youtube-red` |
+| 138 | `#FF0000` | `text-youtube-red` |
+| 138 | `#FF0000` | `text-youtube-red` |
+| 159 | `#FF0000` | `text-youtube-red` |
+| 159 | `#FF0000` | `text-youtube-red` |
+| 159 | `#FF0000` | `text-youtube-red` |
+| 180 | `#FF0000` | `text-youtube-red` |
+| 180 | `#FF0000` | `text-youtube-red` |
+| 193 | `#FF0000` | `text-youtube-red` |
+| 206 | `#FF0000` | `text-youtube-red` |
 
 *... e mais 2 ocorrências*
 
@@ -160,16 +160,16 @@
 
 | Linha | Cor | Sugestão |
 |-------|-----|----------|
-| 248 | `#1DB954` | `text-spotify-green` |
-| 273 | `#1DB954` | `text-spotify-green` |
-| 276 | `#1DB954` | `text-spotify-green` |
-| 279 | `#1DB954` | `text-spotify-green` |
-| 282 | `#1DB954` | `text-spotify-green` |
-| 285 | `#1DB954` | `text-spotify-green` |
-| 288 | `#1DB954` | `text-spotify-green` |
-| 291 | `#1DB954` | `text-spotify-green` |
-| 501 | `#1DB954` | `text-spotify-green` |
+| 249 | `#1DB954` | `text-spotify-green` |
+| 274 | `#1DB954` | `text-spotify-green` |
+| 277 | `#1DB954` | `text-spotify-green` |
+| 280 | `#1DB954` | `text-spotify-green` |
+| 283 | `#1DB954` | `text-spotify-green` |
+| 286 | `#1DB954` | `text-spotify-green` |
+| 289 | `#1DB954` | `text-spotify-green` |
+| 292 | `#1DB954` | `text-spotify-green` |
 | 502 | `#1DB954` | `text-spotify-green` |
+| 503 | `#1DB954` | `text-spotify-green` |
 
 *... e mais 1 ocorrências*
 
@@ -207,16 +207,16 @@
 
 | Linha | Cor | Sugestão |
 |-------|-----|----------|
-| 265 | `#333333` | `bg-accent` |
-| 280 | `#333333` | `bg-accent` |
-| 313 | `#333333` | `bg-accent` |
-| 390 | `#333333` | `bg-accent` |
-| 270 | `rgba(0,212,255,0.6)` | `bg-cyan-400/60` |
-| 303 | `rgba(0,212,255,0.6)` | `bg-cyan-400/60` |
-| 322 | `rgba(0,212,255,0.3)` | `bg-cyan-400/30` |
-| 359 | `rgba(239,68,68,0.3)` | `bg-red-500/30` |
-| 521 | `rgba(239,68,68,0.3)` | `bg-red-500/30` |
-| 522 | `rgba(239,68,68,0.5)` | `bg-red-500/50` |
+| 266 | `#333333` | `bg-accent` |
+| 281 | `#333333` | `bg-accent` |
+| 314 | `#333333` | `bg-accent` |
+| 391 | `#333333` | `bg-accent` |
+| 271 | `rgba(0,212,255,0.6)` | `bg-cyan-400/60` |
+| 304 | `rgba(0,212,255,0.6)` | `bg-cyan-400/60` |
+| 323 | `rgba(0,212,255,0.3)` | `bg-cyan-400/30` |
+| 360 | `rgba(239,68,68,0.3)` | `bg-red-500/30` |
+| 522 | `rgba(239,68,68,0.3)` | `bg-red-500/30` |
+| 523 | `rgba(239,68,68,0.5)` | `bg-red-500/50` |
 
 ### `src/components/ui/button.tsx` (10 ocorrências)
 
@@ -262,44 +262,45 @@
 | 41 | `#444444` | `bg-zinc-700` |
 | 45 | `#333333` | `bg-accent` |
 
-### `src/components/settings/ColorPicker.tsx` (8 ocorrências)
+### `src/components/weather/AnimatedWeatherIcon.tsx` (9 ocorrências)
 
 | Linha | Cor | Sugestão |
 |-------|-----|----------|
-| 76 | `#00BFFF` | `text-sky-400` |
-| 107 | `#FF0000` | `text-youtube-red` |
-| 107 | `#FFFF00` | `text-yellow-400` |
-| 107 | `#00FF00` | `text-green-400` |
-| 107 | `#00FFFF` | `text-cyan-400` |
-| 107 | `#0000FF` | `text-blue-500` |
-| 107 | `#FF00FF` | `text-fuchsia-500` |
-| 107 | `#FF0000` | `text-youtube-red` |
+| 49 | `#FFD93D` | `text-yellow-300` |
+| 49 | `#FFD93D` | `text-yellow-300` |
+| 49 | `#FFD93D` | `text-yellow-300` |
+| 58 | `#B0BEC5` | `text-gray-400` |
+| 158 | `#546E7A` | `❌` |
+| 163 | `#FFC107` | `❌` |
+| 173 | `#FFC107` | `❌` |
+| 220 | `#FFD93D` | `text-yellow-300` |
+| 225 | `#ECEFF1` | `❌` |
 
 ### `src/components/settings/MusicIntegrationsSection.tsx` (8 ocorrências)
 
 | Linha | Cor | Sugestão |
 |-------|-----|----------|
-| 46 | `#1DB954` | `text-spotify-green` |
-| 59 | `#FF0000` | `text-youtube-red` |
-| 68 | `#1ED760` | `text-spotify-green-light` |
-| 77 | `#6366F1` | `text-indigo-500` |
-| 252 | `#1DB954` | `text-spotify-green` |
-| 252 | `#1DB954` | `text-spotify-green` |
-| 262 | `#FF0000` | `text-youtube-red` |
-| 262 | `#FF0000` | `text-youtube-red` |
+| 47 | `#1DB954` | `text-spotify-green` |
+| 60 | `#FF0000` | `text-youtube-red` |
+| 69 | `#1ED760` | `text-spotify-green-light` |
+| 78 | `#6366F1` | `text-indigo-500` |
+| 253 | `#1DB954` | `text-spotify-green` |
+| 253 | `#1DB954` | `text-spotify-green` |
+| 263 | `#FF0000` | `text-youtube-red` |
+| 263 | `#FF0000` | `text-youtube-red` |
 
 ### `src/components/settings/SettingsSidebar.tsx` (8 ocorrências)
 
 | Linha | Cor | Sugestão |
 |-------|-----|----------|
-| 91 | `#222222` | `bg-zinc-900` |
-| 177 | `#333333` | `bg-accent` |
-| 202 | `#222222` | `bg-zinc-900` |
-| 246 | `#333333` | `bg-accent` |
-| 266 | `#222222` | `bg-zinc-900` |
-| 268 | `#222222` | `bg-zinc-900` |
-| 300 | `#333333` | `bg-accent` |
-| 227 | `rgba(0,212,255,0.6)` | `bg-cyan-400/60` |
+| 92 | `#222222` | `bg-zinc-900` |
+| 178 | `#333333` | `bg-accent` |
+| 203 | `#222222` | `bg-zinc-900` |
+| 247 | `#333333` | `bg-accent` |
+| 267 | `#222222` | `bg-zinc-900` |
+| 269 | `#222222` | `bg-zinc-900` |
+| 301 | `#333333` | `bg-accent` |
+| 228 | `rgba(0,212,255,0.6)` | `bg-cyan-400/60` |
 
 ### `src/components/ui/SectionIconsShowcase.tsx` (8 ocorrências)
 
@@ -339,17 +340,17 @@
 | 52 | `#050508` | `bg-zinc-950` |
 | 55 | `rgba(0,0,0,0.6)` | `bg-black/60` |
 
-### `src/components/youtube/YouTubeMusicAlbumCard.tsx` (7 ocorrências)
+### `src/components/settings/ColorPicker.tsx` (7 ocorrências)
 
 | Linha | Cor | Sugestão |
 |-------|-----|----------|
-| 22 | `#FF0000` | `text-youtube-red` |
-| 22 | `#FF0000` | `text-youtube-red` |
-| 100 | `#FF0000` | `text-youtube-red` |
-| 100 | `#FF0000` | `text-youtube-red` |
-| 101 | `#FF0000` | `text-youtube-red` |
-| 112 | `#FF0000` | `text-youtube-red` |
-| 112 | `rgba(255,0,0,0.5)` | `bg-youtube-red/50` |
+| 108 | `#FF0000` | `text-youtube-red` |
+| 108 | `#FFFF00` | `text-yellow-400` |
+| 108 | `#00FF00` | `text-green-400` |
+| 108 | `#00FFFF` | `text-cyan-400` |
+| 108 | `#0000FF` | `text-blue-500` |
+| 108 | `#FF00FF` | `text-fuchsia-500` |
+| 108 | `#FF0000` | `text-youtube-red` |
 
 
 ---

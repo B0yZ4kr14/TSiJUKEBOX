@@ -1,17 +1,15 @@
 import { useState } from 'react';
 import { Shield, Play, Trash2, Download, AlertTriangle, CheckCircle2, Info, Loader2, FileCode } from 'lucide-react';
 import { SettingsSection } from './SettingsSection';
-import { Button } from '@/components/ui/button';
 import { Textarea } from '@/components/ui/textarea';
-import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
-import { Badge } from '@/components/ui/badge';
 import { Progress } from '@/components/ui/progress';
 import { ScrollArea } from '@/components/ui/scroll-area';
 import { Separator } from '@/components/ui/separator';
 import { Collapsible, CollapsibleContent, CollapsibleTrigger } from '@/components/ui/collapsible';
 import { useCodeScan, CodeIssue } from '@/hooks/system/useCodeScan';
 import { toast } from 'sonner';
+import { Badge, Button, Input } from "@/components/ui/themed"
 
 export function CodeScanSection() {
   const [code, setCode] = useState('');
@@ -165,7 +163,7 @@ export function CodeScanSection() {
                   onClick={handleExport}
                   aria-label="Exportar relatório"
                 >
-                  <Download className="w-4 h-4 mr-2" />
+                  <Download aria-hidden="true" className="w-4 h-4 mr-2" />
                   Exportar
                 </Button>
                 <Button 

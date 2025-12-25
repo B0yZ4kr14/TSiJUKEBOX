@@ -215,7 +215,7 @@ export function GlobalSidebar({
               transition={{ duration: 0.2 }}
               className="flex items-center gap-3"
             >
-              <div className="flex items-center justify-center w-10 h-10 rounded-lg bg-gradient-to-br from-accent-cyan/20 to-accent-cyan/5 border border-accent-cyan/20">
+              <div className="flex items-center justify-center w-10 h-10 rounded-lg bg-gradient-to-br from-accent-cyan/20 to-accent-cyan/5 border border-accent-cyan/20" aria-hidden="true">
                 <Music className="w-5 h-5 text-accent-cyan" />
               </div>
               <div className="flex flex-col">
@@ -242,9 +242,9 @@ export function GlobalSidebar({
           aria-label={collapsed ? 'Expandir sidebar' : 'Recolher sidebar'}
         >
           {collapsed ? (
-            <ChevronRight className="w-4 h-4" />
+            <ChevronRight aria-hidden="true" className="w-4 h-4" />
           ) : (
-            <ChevronLeft className="w-4 h-4" />
+            <ChevronLeft aria-hidden="true" className="w-4 h-4" />
           )}
         </button>
       </div>
@@ -358,7 +358,7 @@ export function GlobalSidebar({
           )}
         >
           <div className="flex items-center justify-center w-8 h-8 rounded-full bg-gradient-to-br from-accent-cyan/30 to-accent-purple/30 border border-accent-cyan/20">
-            <User className="w-4 h-4 text-accent-cyan" />
+            <User aria-hidden="true" className="w-4 h-4 text-accent-cyan" />
           </div>
 
           <AnimatePresence mode="wait">

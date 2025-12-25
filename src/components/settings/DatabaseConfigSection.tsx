@@ -1,13 +1,11 @@
 import { useState, useEffect } from 'react';
 import { SettingsSection } from './SettingsSection';
-import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
-import { Button } from '@/components/ui/button';
 import { RadioGroup, RadioGroupItem } from '@/components/ui/radio-group';
-import { Badge } from '@/components/ui/badge';
 import { toast } from 'sonner';
 import { Database, Server, Cloud, HardDrive, Save, CheckCircle2, Sparkles, AlertTriangle } from 'lucide-react';
 import { cn } from '@/lib/utils';
+import { Badge, Button, Input } from "@/components/ui/themed"
 
 type DatabaseType = 'sqlite-local' | 'sqlite-remote' | 'supabase' | 'lovable-cloud';
 
@@ -225,7 +223,7 @@ export function DatabaseConfigSection({ isDemoMode = false }: DatabaseConfigSect
                 onChange={(e) => updateConfig('sqlitePath', e.target.value)}
                 placeholder="/var/lib/jukebox/jukebox.db"
                 disabled={isDemoMode}
-                variant="default"
+                variant="primary"
               />
               <p className="text-xs text-text-tertiary">
                 Caminho completo para o arquivo SQLite no computador
@@ -246,7 +244,7 @@ export function DatabaseConfigSection({ isDemoMode = false }: DatabaseConfigSect
                   onChange={(e) => updateConfig('sqliteHost', e.target.value)}
                   placeholder="192.168.1.100"
                   disabled={isDemoMode}
-                  variant="default"
+                  variant="primary"
                 />
               </div>
               <div className="space-y-2">
@@ -257,7 +255,7 @@ export function DatabaseConfigSection({ isDemoMode = false }: DatabaseConfigSect
                   onChange={(e) => updateConfig('sqlitePort', e.target.value)}
                   placeholder="22"
                   disabled={isDemoMode}
-                  variant="default"
+                  variant="primary"
                 />
               </div>
             </div>
@@ -270,7 +268,7 @@ export function DatabaseConfigSection({ isDemoMode = false }: DatabaseConfigSect
                 onChange={(e) => updateConfig('sqlitePath', e.target.value)}
                 placeholder="/var/lib/jukebox/jukebox.db"
                 disabled={isDemoMode}
-                variant="default"
+                variant="primary"
               />
             </div>
 
@@ -283,7 +281,7 @@ export function DatabaseConfigSection({ isDemoMode = false }: DatabaseConfigSect
                   onChange={(e) => updateConfig('sqliteUsername', e.target.value)}
                   placeholder="admin"
                   disabled={isDemoMode}
-                  variant="default"
+                  variant="primary"
                 />
               </div>
               <div className="space-y-2">
@@ -295,7 +293,7 @@ export function DatabaseConfigSection({ isDemoMode = false }: DatabaseConfigSect
                   onChange={(e) => updateConfig('sqlitePassword', e.target.value)}
                   placeholder="••••••••"
                   disabled={isDemoMode}
-                  variant="default"
+                  variant="primary"
                 />
               </div>
             </div>
@@ -313,7 +311,7 @@ export function DatabaseConfigSection({ isDemoMode = false }: DatabaseConfigSect
                 onChange={(e) => updateConfig('supabaseUrl', e.target.value)}
                 placeholder="https://xyzcompany.supabase.co"
                 disabled={isDemoMode}
-                variant="default"
+                variant="primary"
               />
               <p className="text-xs text-text-tertiary">
                 Encontre isso em: Supabase Dashboard → Settings → API
@@ -328,7 +326,7 @@ export function DatabaseConfigSection({ isDemoMode = false }: DatabaseConfigSect
                 onChange={(e) => updateConfig('supabaseAnonKey', e.target.value)}
                 placeholder="eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9..."
                 disabled={isDemoMode}
-                variant="default"
+                variant="primary"
                 className="font-mono text-xs"
               />
               <p className="text-xs text-text-tertiary">
@@ -345,7 +343,7 @@ export function DatabaseConfigSection({ isDemoMode = false }: DatabaseConfigSect
                 onChange={(e) => updateConfig('supabaseServiceKey', e.target.value)}
                 placeholder="••••••••"
                 disabled={isDemoMode}
-                variant="default"
+                variant="primary"
               />
               <div className="flex items-start gap-2 p-3 rounded-lg bg-state-warning/10 border border-state-warning/30">
                 <AlertTriangle className="w-4 h-4 text-state-warning shrink-0 mt-0.5" />

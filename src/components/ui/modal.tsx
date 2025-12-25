@@ -240,12 +240,12 @@ export function ModalHeader({
       {closable && (
         <Button
           variant="ghost"
-          size="icon"
+          size="xs"
           onClick={onClose}
           className="text-kiosk-text/60 hover:text-kiosk-text hover:bg-kiosk-surface-alt -mr-2"
           aria-label="Fechar modal"
         >
-          <X className="w-5 h-5" />
+          <X aria-hidden="true" className="w-5 h-5" />
         </Button>
       )}
     </div>

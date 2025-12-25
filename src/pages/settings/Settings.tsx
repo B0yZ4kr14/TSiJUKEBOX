@@ -3,11 +3,7 @@ import { Link } from 'react-router-dom';
 import { motion, AnimatePresence } from 'framer-motion';
 import { ArrowLeft, Monitor, TestTube, Music, ExternalLink, LogOut, Check, AlertCircle, Eye, EyeOff, Download, Sparkles } from 'lucide-react';
 import { KioskLayout } from '@/components/layout/KioskLayout';
-;
-;
-;
 import { Label } from '@/components/ui/label';
-;
 import { Separator } from '@/components/ui/separator';
 import { LogoBrand } from '@/components/ui/LogoBrand';
 import { LogoDownload } from '@/components/ui/LogoDownload';
@@ -289,7 +285,7 @@ export default function Settings() {
                           className="w-12 h-12 rounded-full"
                         />
                       ) : (
-                        <div className="w-12 h-12 rounded-full bg-[#1DB954]/20 flex items-center justify-center">
+                        <div className="w-12 h-12 rounded-full bg-[#1DB954]/20 flex items-center justify-center" aria-hidden="true">
                           <Music className="w-6 h-6 text-[#1DB954]" />
                         </div>
                       )}
@@ -361,8 +357,7 @@ export default function Settings() {
                         variant="ghost"
                         size="xs"
                         className="absolute right-0 top-0 h-full px-3 text-nav-neon-white hover:text-kiosk-text"
-                        onClick={() => setShowClientSecret(!showClientSecret)}
-                      >
+                        onClick={() => setShowClientSecret(!showClientSecret)} aria-label="Ocultar">
                         {showClientSecret ? <EyeOff className="w-4 h-4" /> : <Eye className="w-4 h-4" />}
                       </Button>
                     </div>
@@ -515,8 +510,7 @@ export default function Settings() {
               <Button
                 variant="ghost"
                 size="xs"
-                className="w-10 h-10 rounded-full bg-kiosk-surface hover:bg-kiosk-surface/80 button-3d"
-              >
+                className="w-10 h-10 rounded-full bg-kiosk-surface hover:bg-kiosk-surface/80 button-3d" aria-label="Voltar">
                 <ArrowLeft className="w-5 h-5 text-kiosk-text" />
               </Button>
             </Link>

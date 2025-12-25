@@ -180,7 +180,7 @@ const SearchBar: React.FC<SearchBarProps> = ({
                 'transition-all duration-200'
               )}
             >
-              <X className="w-5 h-5" />
+              <X aria-hidden="true" className="w-5 h-5" />
             </button>
           </motion.div>
         ) : (
@@ -197,7 +197,7 @@ const SearchBar: React.FC<SearchBarProps> = ({
             )}
             aria-label="Abrir busca"
           >
-            <Search className="w-5 h-5" />
+            <Search aria-hidden="true" className="w-5 h-5" />
           </motion.button>
         )}
       </AnimatePresence>
@@ -243,7 +243,7 @@ const NotificationsDropdown: React.FC<NotificationsDropdownProps> = ({
         )}
         aria-label="Notificações"
       >
-        <Bell className="w-5 h-5" />
+        <Bell aria-hidden="true" className="w-5 h-5" />
         {unreadCount > 0 && (
           <span className="absolute -top-1 -right-1 flex items-center justify-center w-5 h-5 text-xs font-bold bg-[var(--accent-primary)] text-white rounded-full border-2 border-[var(--bg-secondary)]">
             {unreadCount}
@@ -342,7 +342,7 @@ const UserMenuDropdown: React.FC<UserMenuDropdownProps> = ({
           />
         ) : (
           <div className="w-8 h-8 rounded-full bg-gradient-to-br from-[var(--accent-primary)]/30 to-[var(--brand-primary)]/30 border border-[var(--accent-primary)]/20 flex items-center justify-center">
-            <User className="w-4 h-4 text-[var(--accent-primary)]" />
+            <User aria-hidden="true" className="w-4 h-4 text-[var(--accent-primary)]" />
           </div>
         )}
         <span className="hidden md:block text-sm font-medium text-[var(--text-primary)]">
@@ -369,7 +369,7 @@ const UserMenuDropdown: React.FC<UserMenuDropdownProps> = ({
                 className="flex items-center gap-3 px-4 py-2 text-sm text-[var(--text-secondary)] hover:bg-[var(--bg-tertiary)] hover:text-[var(--text-primary)] transition-colors"
                 onClick={onToggle}
               >
-                <User className="w-4 h-4" />
+                <User aria-hidden="true" className="w-4 h-4" />
                 Meu Perfil
               </Link>
               <Link
@@ -377,12 +377,12 @@ const UserMenuDropdown: React.FC<UserMenuDropdownProps> = ({
                 className="flex items-center gap-3 px-4 py-2 text-sm text-[var(--text-secondary)] hover:bg-[var(--bg-tertiary)] hover:text-[var(--text-primary)] transition-colors"
                 onClick={onToggle}
               >
-                <Settings className="w-4 h-4" />
+                <Settings aria-hidden="true" className="w-4 h-4" />
                 Configurações
               </Link>
             </div>
             <div className="p-2 border-t border-[var(--border-primary)]">
-              <button className="w-full flex items-center gap-3 px-4 py-2 text-sm text-[var(--error)] hover:bg-[var(--error)]/10 rounded-lg transition-colors text-left">
+              <button aria-label="PREENCHER" type="button" className="w-full flex items-center gap-3 px-4 py-2 text-sm text-[var(--error)] hover:bg-[var(--error)]/10 rounded-lg transition-colors text-left">
                 <LogOut className="w-4 h-4" />
                 Sair
               </button>
@@ -453,7 +453,7 @@ export function HeaderV2({
           )}
           aria-label="Toggle menu"
         >
-          <Menu className="w-5 h-5" />
+          <Menu aria-hidden="true" className="w-5 h-5" />
         </button>
 
         {/* Logo */}
@@ -492,7 +492,7 @@ export function HeaderV2({
             {breadcrumbs.map((crumb, index) => (
               <div key={crumb.path} className="flex items-center gap-2">
                 {index > 0 && (
-                  <ChevronRight className="w-4 h-4 text-[var(--text-muted)] flex-shrink-0" />
+                  <ChevronRight aria-hidden="true" className="w-4 h-4 text-[var(--text-muted)] flex-shrink-0" />
                 )}
                 <Link
                   to={crumb.path}
@@ -550,7 +550,7 @@ export function HeaderV2({
           )}
           aria-label="Configurações"
         >
-          <Settings className="w-5 h-5" />
+          <Settings aria-hidden="true" className="w-5 h-5" />
         </Link>
 
         {/* Profile */}

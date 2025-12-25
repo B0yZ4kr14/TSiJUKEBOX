@@ -257,7 +257,7 @@ export const Input = forwardRef<HTMLInputElement, InputProps>(
           )}
         </div>
         {error && (
-          <p className="mt-1 text-xs text-[var(--error)]">{error}</p>
+          <p role="alert" className="mt-1 text-xs text-[var(--error)]">{error}</p>
         )}
       </div>
     );
@@ -477,9 +477,9 @@ export const StatCard: React.FC<StatCardProps> = ({
   className,
 }) => {
   return (
-    <Card variant="default" className={cn('flex items-center gap-4', className)}>
+    <Card variant="primary" className={cn('flex items-center gap-4', className)}>
       {icon && (
-        <div className="flex items-center justify-center w-12 h-12 rounded-xl bg-[var(--accent-primary)]/10 text-[var(--accent-primary)]">
+        <div className="flex items-center justify-center w-12 h-12 rounded-xl bg-[var(--accent-primary)]/10 text-[var(--accent-primary)]" aria-hidden="true">
           {icon}
         </div>
       )}

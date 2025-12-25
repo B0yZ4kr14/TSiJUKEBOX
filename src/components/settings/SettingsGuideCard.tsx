@@ -1,5 +1,5 @@
 import { LucideIcon, ArrowRight } from 'lucide-react';
-import { Card } from '@/components/ui/card';
+import { Card } from "@/components/ui/themed";
 import { cn } from '@/lib/utils';
 
 /**

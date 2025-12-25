@@ -22,12 +22,11 @@ import { useGitHubStats, GitHubCommit } from '@/hooks/system/useGitHubStats';
 import { useGitHubFullSync } from '@/hooks/system/useGitHubFullSync';
 import { useAutoSync } from '@/hooks/system/useAutoSync';
 import { KioskLayout } from '@/components/layout/KioskLayout';
-import { Button } from '@/components/ui/button';
-import { Badge } from '@/components/ui/badge';
 import { LogoBrand } from '@/components/ui/LogoBrand';
 import { ComponentBoundary } from '@/components/errors';
 import { Progress } from '@/components/ui/progress';
-import { 
+import { Badge, Button } from "@/components/ui/themed"
+import {
   KpiCard,
   LanguagesChart,
   ContributorsChart,
@@ -87,10 +86,9 @@ export default function GitHubDashboard() {
           <div className="flex items-center gap-4">
             <Button 
               variant="ghost" 
-              size="icon"
+              size="xs"
               onClick={() => navigate('/settings')}
-              className="hover:bg-muted"
-            >
+              className="hover:bg-muted" aria-label="Voltar">
               <ArrowLeft className="h-5 w-5" />
             </Button>
             <LogoBrand size="sm" />
@@ -115,7 +113,7 @@ export default function GitHubDashboard() {
             {/* Full Sync Button with Progress */}
             <div className="relative">
               <Button 
-                variant="default" 
+                variant="primary" 
                 size="sm"
                 onClick={handleFullSync}
                 disabled={isSyncing}
@@ -175,7 +173,7 @@ export default function GitHubDashboard() {
               onClear={clearAllCache} 
             />
             <Button 
-              variant="default" 
+              variant="primary" 
               size="sm"
               onClick={() => refetch(true)}
               disabled={isLoading}

@@ -122,7 +122,7 @@ const Input = React.forwardRef<HTMLInputElement, InputProps>(
             className="block text-small font-medium text-text-primary mb-1"
           >
             {label}
-            {required && <span className="text-state-error ml-1">*</span>}
+            {required && <span role="alert" className="text-state-error ml-1">*</span>}
           </label>
         )}
         

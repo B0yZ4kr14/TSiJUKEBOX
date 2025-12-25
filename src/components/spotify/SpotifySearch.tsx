@@ -1,5 +1,5 @@
 import { Search } from 'lucide-react';
-import { Input } from '@/components/ui/input';
+import { Input } from "@/components/ui/themed";
 
 interface SpotifySearchProps {
   searchQuery: string;
@@ -15,7 +15,7 @@ export function SpotifySearch({
   return (
     <form onSubmit={onSearch} className="p-4 border-b border-kiosk-surface">
       <div className="relative">
-        <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-kiosk-text/90" />
+        <Search aria-hidden="true" className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-kiosk-text/90" />
         <Input
           type="text"
           placeholder="Buscar músicas, artistas..."

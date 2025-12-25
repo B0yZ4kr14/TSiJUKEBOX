@@ -19,13 +19,11 @@ import {
   ChevronRight
 } from 'lucide-react';
 import { Link } from 'react-router-dom';
-import { Button } from '@/components/ui/button';
-import { Badge } from '@/components/ui/badge';
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { LogoBrand } from '@/components/ui/LogoBrand';
 import { BackButton } from '@/components/ui/BackButton';
 import { SectionIconsShowcase } from '@/components/ui/SectionIconsShowcase';
 import { BrandText } from '@/components/ui/BrandText';
+import { Badge, Button, Card } from "@/components/ui/themed"
 
 const features = [
   { name: 'Multi-Provider', description: 'Spotify, YouTube Music, Arquivos Locais', status: 'complete' },
@@ -107,18 +105,17 @@ export default function About() {
           transition={{ delay: 0.1 }}
         >
           <Card className="bg-bg-secondary border-border-default">
-            <CardHeader>
-              <CardTitle className="flex items-center gap-2">
+            <h3 className="text-lg font-semibold text-[var(--text-primary)] mb-2">
                 <Sparkles className="w-5 h-5 text-accent-cyan" />
                 Seções da Documentação
-              </CardTitle>
-              <CardDescription>
+              </h3>
+              <p className="text-sm text-[var(--text-muted)]">
                 8 ícones modernos representando as principais áreas do projeto
-              </CardDescription>
-            </CardHeader>
-            <CardContent>
+              </p>
+            
+            <div className="mt-4">
               <SectionIconsShowcase variant="grid" />
-            </CardContent>
+            </div>
           </Card>
         </motion.section>
 
@@ -129,13 +126,12 @@ export default function About() {
           transition={{ delay: 0.2 }}
         >
           <Card className="bg-bg-secondary border-border-default">
-            <CardHeader>
-              <CardTitle className="flex items-center gap-2">
+            <h3 className="text-lg font-semibold text-[var(--text-primary)] mb-2">
                 <Music className="w-5 h-5 text-accent-magenta" />
                 Recursos Principais
-              </CardTitle>
-            </CardHeader>
-            <CardContent>
+              </h3>
+            
+            <div className="mt-4">
               <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
                 {features.map((feature) => (
                   <div 
@@ -143,14 +139,14 @@ export default function About() {
                     className="p-4 rounded-lg bg-bg-tertiary border border-border-default"
                   >
                     <div className="flex items-center gap-2 mb-2">
-                      <div className="w-2 h-2 rounded-full bg-accent-greenNeon" />
+                      <div className="w-2 h-2 rounded-full bg-accent-greenNeon" aria-hidden="true" />
                       <span className="font-medium text-text-primary">{feature.name}</span>
                     </div>
                     <p className="text-xs text-text-secondary">{feature.description}</p>
                   </div>
                 ))}
               </div>
-            </CardContent>
+            </div>
           </Card>
         </motion.section>
 
@@ -161,13 +157,12 @@ export default function About() {
           transition={{ delay: 0.3 }}
         >
           <Card className="bg-bg-secondary border-border-default">
-            <CardHeader>
-              <CardTitle className="flex items-center gap-2">
+            <h3 className="text-lg font-semibold text-[var(--text-primary)] mb-2">
                 <Code className="w-5 h-5 text-accent-yellowGold" />
                 Stack Tecnológico
-              </CardTitle>
-            </CardHeader>
-            <CardContent>
+              </h3>
+            
+            <div className="mt-4">
               <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
                 {techStack.map((tech) => (
                   <div 
@@ -185,7 +180,7 @@ export default function About() {
                   </div>
                 ))}
               </div>
-            </CardContent>
+            </div>
           </Card>
         </motion.section>
 

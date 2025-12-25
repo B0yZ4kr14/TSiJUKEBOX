@@ -1,11 +1,9 @@
 import { Clock, Calendar, Save, RotateCcw } from 'lucide-react';
-import { Button } from '@/components/ui/button';
 import { Label } from '@/components/ui/label';
-import { Switch } from '@/components/ui/switch';
-import { Input } from '@/components/ui/input';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 import { Checkbox } from '@/components/ui/checkbox';
 import type { ScheduleConfig, BackupProvider, SyncSchedule } from './types';
+import { Button, Input, Toggle } from "@/components/ui/themed"
 
 interface BackupSchedulerProps {
   config: ScheduleConfig;

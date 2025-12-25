@@ -1,14 +1,11 @@
 import { useState, useEffect } from 'react';
 import { Bot, Key, ExternalLink, Check, AlertCircle, Eye, EyeOff, Loader2, Sparkles, Zap, Brain, Cpu, RefreshCw } from 'lucide-react';
 import { SettingsSection } from './SettingsSection';
-import { Button } from '@/components/ui/button';
-import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
-import { Badge } from '@/components/ui/badge';
-import { Card } from '@/components/ui/card';
 import { Separator } from '@/components/ui/separator';
 import { toast } from 'sonner';
 import { supabase } from '@/integrations/supabase/client';
+import { Badge, Button, Card, Input } from "@/components/ui/themed"
 
 interface APIKeyConfig {
   name: string;
@@ -304,7 +301,7 @@ export function AIConfigSection() {
         >
           <div className="flex items-center justify-between">
             <div className="flex items-center gap-3">
-              <RefreshCw className="w-5 h-5 text-kiosk-primary" />
+              <RefreshCw aria-hidden="true" className="w-5 h-5 text-kiosk-primary" />
               <div>
                 <h4 className="font-medium text-kiosk-text">Sistema de Fallback</h4>
                 <p className="text-xs text-description-visible">
@@ -327,7 +324,7 @@ export function AIConfigSection() {
                 </>
               ) : (
                 <>
-                  <RefreshCw className="w-3 h-3 mr-1" />
+                  <RefreshCw aria-hidden="true" className="w-3 h-3 mr-1" />
                   Testar Fallback
                 </>
               )}
@@ -387,7 +384,7 @@ export function AIConfigSection() {
                           variant="outline" 
                           className="border-green-500/50 text-green-500"
                         >
-                          <Check className="w-3 h-3 mr-1" />
+                          <Check aria-hidden="true" className="w-3 h-3 mr-1" />
                           Disponível
                         </Badge>
                       ) : (
@@ -396,7 +393,7 @@ export function AIConfigSection() {
                           variant="outline" 
                           className="border-blue-500/50 text-blue-500"
                         >
-                          <Check className="w-3 h-3 mr-1" />
+                          <Check aria-hidden="true" className="w-3 h-3 mr-1" />
                           Configurado
                         </Badge>
                       )}
@@ -410,7 +407,7 @@ export function AIConfigSection() {
                   className="text-xs text-cyan-400 hover:underline flex items-center gap-1"
                 >
                   {config.consoleName}
-                  <ExternalLink className="w-3 h-3" />
+                  <ExternalLink aria-hidden="true" className="w-3 h-3" />
                 </a>
               </div>
 
@@ -436,11 +433,10 @@ export function AIConfigSection() {
                     <Button
                       type="button"
                       variant="ghost"
-                      size="icon"
+                      size="xs"
                       data-testid={`ai-toggle-visibility-${config.secretName.toLowerCase()}`}
                       className="absolute right-0 top-0 h-full px-3 text-nav-neon-white hover:text-kiosk-text"
-                      onClick={() => toggleShowKey(config.secretName)}
-                    >
+                      onClick={() => toggleShowKey(config.secretName)} aria-label="Ocultar">
                       {showKeys[config.secretName] ? <EyeOff className="w-4 h-4" /> : <Eye className="w-4 h-4" />}
                     </Button>
                   </div>
@@ -492,7 +488,7 @@ export function AIConfigSection() {
                       </>
                     ) : (
                       <>
-                        <Check className="w-3 h-3 mr-1" />
+                        <Check aria-hidden="true" className="w-3 h-3 mr-1" />
                         Testar Conexão
                       </>
                     )}

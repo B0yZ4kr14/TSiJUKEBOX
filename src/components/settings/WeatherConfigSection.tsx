@@ -1,16 +1,13 @@
 import { useState } from 'react';
 import { motion } from 'framer-motion';
 import { Cloud, Eye, EyeOff, MapPin, Check, AlertCircle, ExternalLink, RefreshCw } from 'lucide-react';
-import { Button } from '@/components/ui/button';
-import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
-import { Switch } from '@/components/ui/switch';
-import { Badge } from '@/components/ui/badge';
 import { SettingsSection } from './SettingsSection';
 import { useSettings } from '@/contexts/SettingsContext';
 import { useWeather, useTranslation } from '@/hooks';
 import { toast } from 'sonner';
 import { cn } from '@/lib/utils';
+import { Badge, Button, Input, Toggle } from "@/components/ui/themed"
 
 /**
  * WeatherConfigSection Component
@@ -111,7 +108,7 @@ export function WeatherConfigSection() {
       badge={
         weather.isEnabled && testWeather ? (
           <Badge variant="primary" size="sm" className="ml-2">
-            <Check className="w-3 h-3 mr-1" />
+            <Check aria-hidden="true" className="w-3 h-3 mr-1" />
             {testWeather.temperature}°C
           </Badge>
         ) : null
@@ -165,11 +162,10 @@ export function WeatherConfigSection() {
               </div>
               <Button
                 variant="ghost"
-                size="icon"
+                size="xs"
                 onClick={refresh}
                 disabled={isLoading}
-                className="text-text-secondary hover:text-accent-cyan"
-              >
+                className="text-text-secondary hover:text-accent-cyan" aria-label="Atualizar">
                 <RefreshCw className={cn(
                   "w-4 h-4 transition-transform duration-normal",
                   isLoading && "animate-spin"
@@ -186,7 +182,7 @@ export function WeatherConfigSection() {
             "bg-state-error/10 border border-state-error/30"
           )}>
             <AlertCircle className="w-4 h-4 text-state-error shrink-0" />
-            <span className="text-sm text-state-error">{error}</span>
+            <span role="alert" className="text-sm text-state-error">{error}</span>
           </div>
         )}
 
@@ -200,14 +196,14 @@ export function WeatherConfigSection() {
               value={localApiKey}
               onChange={(e) => setLocalApiKey(e.target.value)}
               placeholder={t('weatherConfig.apiKeyPlaceholder')}
-              variant="default"
+              variant="primary"
               className="font-mono text-sm pr-10"
               data-tour="weather-api-key"
             />
             <Button
               type="button"
               variant="ghost"
-              size="icon"
+              size="xs"
               className="absolute right-0 top-0 h-full px-3 text-text-secondary hover:text-accent-cyan"
               onClick={() => setShowApiKey(!showApiKey)}
               aria-label={showApiKey ? 'Ocultar chave de API' : 'Mostrar chave de API'}
@@ -225,7 +221,7 @@ export function WeatherConfigSection() {
             value={localCity}
             onChange={(e) => setLocalCity(e.target.value)}
             placeholder={t('weatherConfig.cityPlaceholder')}
-            variant="default"
+            variant="primary"
             data-tour="weather-city"
           />
           <p className="text-xs text-text-tertiary">
@@ -254,7 +250,7 @@ export function WeatherConfigSection() {
           >
             {isTesting ? (
               <>
-                <RefreshCw className="w-4 h-4 mr-2 animate-spin" />
+                <RefreshCw aria-hidden="true" className="w-4 h-4 mr-2 animate-spin" />
                 {t('weatherConfig.testing')}
               </>
             ) : (
@@ -281,7 +277,7 @@ export function WeatherConfigSection() {
                     rel="noopener noreferrer" 
                     className="text-accent-cyan hover:underline inline-flex items-center gap-1 transition-colors duration-normal"
                   >
-                    OpenWeatherMap <ExternalLink className="w-3 h-3" />
+                    OpenWeatherMap <ExternalLink aria-hidden="true" className="w-3 h-3" />
                   </a>
                 </li>
                 <li>{t('weatherConfig.helpStep2')}</li>

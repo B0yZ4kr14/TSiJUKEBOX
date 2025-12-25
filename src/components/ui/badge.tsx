@@ -96,11 +96,11 @@ export interface BadgeProps
  * <Badge variant="youtube">YouTube Music</Badge>
  * 
  * // With icon
- * <Badge variant="primary" icon={<CheckIcon />}>Ativo</Badge>
+ * <Badge variant="primary" icon={<CheckIcon aria-hidden="true" />}>Ativo</Badge>
  * 
  * // Sizes
  * <Badge size="sm">Small</Badge>
- * <Badge size="default">Default</Badge>
+ * <Badge size="md">Default</Badge>
  * <Badge size="lg">Large</Badge>
  * 
  * // Clickable

@@ -32,6 +32,7 @@ from dataclasses import dataclass, field
 PROJECT_ROOT = Path(__file__).parent.parent
 SRC_DIR = PROJECT_ROOT / "src"
 PAGES_DIR = SRC_DIR / "pages"
+COMPONENTS_DIR = SRC_DIR / "components"
 BACKUP_DIR = PROJECT_ROOT / "backups" / "ui-migration"
 
 # Arquivos prioritários para migração
@@ -195,7 +196,7 @@ def analyze_all_files() -> List[FileAnalysis]:
     """Analisa todos os arquivos de páginas."""
     analyses = []
     
-    for tsx_file in PAGES_DIR.rglob("*.tsx"):
+    for tsx_file in list(PAGES_DIR.rglob("*.tsx")) + list(COMPONENTS_DIR.rglob("*.tsx")):
         if ".test." not in str(tsx_file):
             analysis = analyze_file(tsx_file)
             if analysis.imports_to_update or analysis.components:

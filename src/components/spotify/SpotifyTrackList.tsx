@@ -1,5 +1,5 @@
 import { Music2, Play, Plus } from 'lucide-react';
-import { Button } from '@/components/ui/button';
+import { Button } from "@/components/ui/themed";
 import { RippleContainer } from '@/components/ui/RippleContainer';
 import { useRipple, useSoundEffects } from '@/hooks';
 import { useSettings } from '@/contexts/SettingsContext';
@@ -57,13 +57,13 @@ export function SpotifyTrackRow({ track, onPlay, onAddToQueue }: SpotifyTrackRow
       </div>
       <Button
         variant="ghost"
-        size="icon"
+        size="xs"
         className="h-8 w-8 opacity-0 group-hover:opacity-100 transition-opacity button-3d relative overflow-hidden"
         onClick={handleQueue}
         aria-label="Adicionar à fila"
       >
         <RippleContainer ripples={queueRipple.ripples} color="spotify" />
-        <Plus className="w-4 h-4 relative z-10" />
+        <Plus aria-hidden="true" className="w-4 h-4 relative z-10" />
       </Button>
     </div>
   );

@@ -268,10 +268,10 @@ export const Sidebar: React.FC<SidebarProps> = ({
           title={collapsed ? 'Expandir' : 'Recolher'}
         >
           {collapsed ? (
-            <ChevronRight className="w-5 h-5" />
+            <ChevronRight aria-hidden="true" className="w-5 h-5" />
           ) : (
             <>
-              <ChevronLeft className="w-5 h-5" />
+              <ChevronLeft aria-hidden="true" className="w-5 h-5" />
               <span className="text-sm font-medium">Recolher</span>
             </>
           )}

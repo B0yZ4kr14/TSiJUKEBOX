@@ -172,7 +172,7 @@ export function GitHubEmptyState({
       animate={{ opacity: 1, y: 0 }}
       className="flex flex-col items-center justify-center py-12 text-center"
     >
-      <div className="w-16 h-16 rounded-full bg-muted flex items-center justify-center mb-4">
+      <div className="w-16 h-16 rounded-full bg-muted flex items-center justify-center mb-4" aria-hidden="true">
         <svg 
           className="w-8 h-8 text-muted-foreground" 
           fill="none" 

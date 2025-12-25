@@ -27,8 +27,6 @@ import {
   Image
 } from 'lucide-react';
 import { formatBrandInText } from '@/components/ui/BrandText';
-;
-;
 import { ScrollArea } from '@/components/ui/scroll-area';
 import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from '@/components/ui/accordion';
 import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger } from '@/components/ui/dropdown-menu';
@@ -1027,7 +1025,7 @@ export default function Help() {
                   className="space-y-4"
                 >
                   <div className="flex items-center gap-3 mb-6">
-                    <div className="w-12 h-12 rounded-lg bg-primary/20 flex items-center justify-center text-primary">
+                    <div className="w-12 h-12 rounded-lg bg-primary/20 flex items-center justify-center text-primary" aria-hidden="true">
                       {selectedSectionData.icon}
                     </div>
                     <div>
@@ -1128,7 +1126,7 @@ export default function Help() {
                 </motion.div>
               ) : (
               <div className="text-center py-12">
-                  <HelpCircle className="w-16 h-16 mx-auto icon-neon-blue opacity-30 mb-4" />
+                  <HelpCircle aria-hidden="true" className="w-16 h-16 mx-auto icon-neon-blue opacity-30 mb-4" />
                   <p className="text-kiosk-text/90">Selecione uma seção no índice para ver o conteúdo</p>
                 </div>
               )}

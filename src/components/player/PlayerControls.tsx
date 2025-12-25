@@ -1,5 +1,5 @@
 import { motion } from 'framer-motion';
-import { Button } from '@/components/ui/button';
+import { Button } from "@/components/ui/themed";
 import { Play, Pause, SkipBack, SkipForward, Square } from 'lucide-react';
 import { usePlayer } from '@/hooks/player';
 import { useRipple, useSoundEffects, useTranslation } from '@/hooks/common';
@@ -84,7 +84,7 @@ export function PlayerControls({ isPlaying }: PlayerControlsProps) {
       >
         <Button
           variant="ghost"
-          size="icon"
+          size="xs"
           onClick={handlePrev}
           disabled={isLoading || !canControl}
           aria-label={t('player.previousTrack')}
@@ -102,14 +102,14 @@ export function PlayerControls({ isPlaying }: PlayerControlsProps) {
           )}
         >
           <RippleContainer ripples={prevRipple.ripples} color="cyan" />
-          <SkipBack className="w-5 h-5 md:w-5 md:h-5 drop-shadow-lg relative z-10" />
+          <SkipBack aria-hidden="true" className="w-5 h-5 md:w-5 md:h-5 drop-shadow-lg relative z-10" />
         </Button>
       </motion.div>
 
       {/* Play/Pause Button - Chrome Neon Design com design tokens */}
       <div className="relative">
         <Button
-          variant="default"
+          variant="primary"
           size="icon-lg"
           onClick={handlePlayPause}
           disabled={isLoading || !canControl}
@@ -148,7 +148,7 @@ export function PlayerControls({ isPlaying }: PlayerControlsProps) {
       >
         <Button
           variant="ghost"
-          size="icon"
+          size="xs"
           onClick={handleNext}
           disabled={isLoading || !canControl}
           aria-label={t('player.nextTrack')}
@@ -166,7 +166,7 @@ export function PlayerControls({ isPlaying }: PlayerControlsProps) {
           )}
         >
           <RippleContainer ripples={nextRipple.ripples} color="cyan" />
-          <SkipForward className="w-5 h-5 md:w-5 md:h-5 drop-shadow-lg relative z-10" />
+          <SkipForward aria-hidden="true" className="w-5 h-5 md:w-5 md:h-5 drop-shadow-lg relative z-10" />
         </Button>
       </motion.div>
 

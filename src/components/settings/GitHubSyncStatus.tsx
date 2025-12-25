@@ -1,12 +1,11 @@
 import { useEffect } from 'react';
 import { Github, RefreshCw, ExternalLink, GitCommit, Clock, CheckCircle2, AlertCircle, Loader2 } from 'lucide-react';
 import { SettingsSection } from './SettingsSection';
-import { Button } from '@/components/ui/button';
-import { Badge } from '@/components/ui/badge';
 import { Separator } from '@/components/ui/separator';
 import { useGitHubSync } from '@/hooks/system/useGitHubSync';
 import { formatDistanceToNow } from 'date-fns';
 import { ptBR } from 'date-fns/locale';
+import { Badge, Button } from "@/components/ui/themed"
 
 export function GitHubSyncStatus() {
   const { syncStatus, isLoading, error, refresh, lastRefresh } = useGitHubSync();
@@ -30,7 +29,7 @@ export function GitHubSyncStatus() {
 
     if (error) {
       return (
-        <Badge data-testid="github-status-badge" variant="destructive">
+        <Badge data-testid="github-status-badge" variant="danger">
           <AlertCircle className="w-3 h-3 mr-1" />
           Erro
         </Badge>
@@ -113,7 +112,7 @@ export function GitHubSyncStatus() {
             {isLoading ? (
               <Loader2 className="w-4 h-4 mr-2 animate-spin" />
             ) : (
-              <RefreshCw className="w-4 h-4 mr-2" />
+              <RefreshCw aria-hidden="true" className="w-4 h-4 mr-2" />
             )}
             Atualizar
           </Button>
@@ -165,7 +164,7 @@ export function GitHubSyncStatus() {
                     className="text-kiosk-primary hover:text-kiosk-primary/80"
                     aria-label="Ver commit no GitHub"
                   >
-                    <ExternalLink className="w-4 h-4" />
+                    <ExternalLink aria-hidden="true" className="w-4 h-4" />
                   </a>
                 </div>
               </div>
@@ -197,7 +196,7 @@ export function GitHubSyncStatus() {
                   className="text-kiosk-primary hover:underline inline-flex items-center gap-1"
                 >
                   Ver no GitHub
-                  <ExternalLink className="w-3 h-3" />
+                  <ExternalLink aria-hidden="true" className="w-3 h-3" />
                 </a>
               </div>
             </div>

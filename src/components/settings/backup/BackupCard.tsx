@@ -1,8 +1,7 @@
 import { Archive, Cloud, HardDrive, Download, Upload, Trash2 } from 'lucide-react';
-import { Button } from '@/components/ui/button';
-import { Badge } from '@/components/ui/badge';
 import { cn } from '@/lib/utils';
 import type { BackupItem, BackupProvider } from './types';
+import { Badge, Button } from "@/components/ui/themed"
 
 interface BackupCardProps {
   backup: BackupItem;
@@ -104,25 +103,23 @@ export function BackupCard({
       {/* Action Buttons */}
       <div className="flex items-center gap-1 flex-shrink-0 ml-2">
         <Button
-          size="icon"
+          size="xs"
           variant="ghost"
           onClick={() => onRestore(backup.id)}
           disabled={disabled || isLoading}
           className="w-8 h-8 text-text-secondary hover:bg-state-success/20 hover:text-state-success transition-all duration-normal"
           title="Restaurar"
-          data-testid={`backup-restore-${backup.id}`}
-        >
-          <Upload className="w-4 h-4" />
+          data-testid={`backup-restore-${backup.id}`} aria-label="Enviar">
+          <Upload aria-hidden="true" className="w-4 h-4" />
         </Button>
         <Button
-          size="icon"
+          size="xs"
           variant="ghost"
           onClick={() => onDelete(backup.id)}
           disabled={disabled || isLoading}
           className="w-8 h-8 text-text-secondary hover:bg-state-error/20 hover:text-state-error transition-all duration-normal"
           title="Excluir"
-          data-testid={`backup-delete-${backup.id}`}
-        >
+          data-testid={`backup-delete-${backup.id}`} aria-label="Excluir">
           <Trash2 className="w-4 h-4" />
         </Button>
       </div>

@@ -23,13 +23,7 @@ import {
   Sun,
   ChevronRight
 } from 'lucide-react';
-;
-;
-;
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
-;
-;
-;
 import { SectionIconsShowcase, sectionIcons } from '@/components/ui/SectionIconsShowcase';
 import { LogoBrand } from '@/components/ui/LogoBrand';
 import { BackButton } from '@/components/ui/BackButton';
@@ -387,8 +381,8 @@ export default function DesignSystem() {
               <h3 className="text-lg font-semibold text-[var(--text-primary)] mb-2">Inputs</h3>
               
               <div className="mt-4">
-                <Input placeholder="Input padrão" />
-                <Input placeholder="Input desabilitado" disabled />
+                <Input placeholder="Input padrão"  aria-label="Input padrão" />
+                <Input placeholder="Input desabilitado" disabled  aria-label="Input desabilitado" />
                 <div className="flex items-center gap-4">
                   <Switch />
                   <span className="text-text-secondary">Toggle Switch</span>

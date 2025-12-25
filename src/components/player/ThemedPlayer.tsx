@@ -271,7 +271,7 @@ const PlaybackControls: React.FC<PlaybackControlsProps> = ({
         )}
         aria-label={shuffle ? 'Desativar shuffle' : 'Ativar shuffle'}
       >
-        <Shuffle className={config.icon} />
+        <Shuffle aria-hidden="true" className={config.icon} />
       </button>
 
       {/* Previous */}
@@ -285,7 +285,7 @@ const PlaybackControls: React.FC<PlaybackControlsProps> = ({
         )}
         aria-label="Música anterior"
       >
-        <SkipBack className={config.icon} />
+        <SkipBack aria-hidden="true" className={config.icon} />
       </button>
 
       {/* Play/Pause */}
@@ -322,7 +322,7 @@ const PlaybackControls: React.FC<PlaybackControlsProps> = ({
         )}
         aria-label="Próxima música"
       >
-        <SkipForward className={config.icon} />
+        <SkipForward aria-hidden="true" className={config.icon} />
       </button>
 
       {/* Repeat */}
@@ -338,7 +338,7 @@ const PlaybackControls: React.FC<PlaybackControlsProps> = ({
         )}
         aria-label={`Repetir: ${repeat}`}
       >
-        <RepeatIcon className={config.icon} />
+        <RepeatIcon aria-hidden="true" className={config.icon} />
       </button>
     </div>
   );
@@ -373,7 +373,7 @@ const VolumeControl: React.FC<VolumeControlProps> = ({
         className="p-1.5 rounded-lg text-[var(--text-muted)] hover:text-[var(--text-primary)] transition-colors"
         aria-label={isMuted ? 'Ativar som' : 'Silenciar'}
       >
-        <VolumeIcon className="w-5 h-5" />
+        <VolumeIcon aria-hidden="true" className="w-5 h-5" />
       </button>
       <div className="w-24">
         <Slider
@@ -641,7 +641,7 @@ export const ThemedPlayer: React.FC<ThemedPlayerProps> = ({
                 )}
                 aria-label={state.isLiked ? 'Remover dos favoritos' : 'Adicionar aos favoritos'}
               >
-                <Heart className={cn('w-5 h-5', state.isLiked && 'fill-current')} />
+                <Heart aria-hidden="true" className={cn('w-5 h-5', state.isLiked && 'fill-current')} />
               </button>
 
               <button
@@ -659,7 +659,7 @@ export const ThemedPlayer: React.FC<ThemedPlayerProps> = ({
                 className="p-2 rounded-lg text-[var(--text-muted)] hover:text-[var(--text-primary)] transition-colors"
                 aria-label="Tela cheia"
               >
-                <Maximize2 className="w-5 h-5" />
+                <Maximize2 aria-hidden="true" className="w-5 h-5" />
               </button>
             </div>
           </div>

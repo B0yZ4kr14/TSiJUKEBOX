@@ -1,9 +1,6 @@
 import { useState } from 'react';
 import { Link } from 'react-router-dom';
 import { ArrowLeft, Copy, Check, Palette, Type, Shield, Download, Info, Music, Play, RotateCcw, Sparkles } from 'lucide-react';
-;
-;
-;
 import { Separator } from '@/components/ui/separator';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from '@/components/ui/dialog';
@@ -175,7 +172,7 @@ ${baseColors.map(c => `  ${c.cssVar}: ${c.hsl};`).join('\n')}
       {/* Header */}
       <header className="border-b border-kiosk-border/30 bg-kiosk-surface/30 backdrop-blur sticky top-0 z-10">
         <div className="container mx-auto px-4 py-4 flex items-center gap-4">
-          <Button variant="ghost" size="xs" asChild>
+          <Button variant="ghost" size="xs" asChild aria-label="Copiar link">
             <Link to="/help">
               <ArrowLeft className="w-5 h-5 icon-neon-blue" />
             </Link>

@@ -1,12 +1,10 @@
 import { useState, useEffect } from 'react';
 import { LineChart, Activity, ExternalLink, Save, CheckCircle2, AlertCircle } from 'lucide-react';
 import { Label } from '@/components/ui/label';
-import { Input } from '@/components/ui/input';
-import { Button } from '@/components/ui/button';
-import { Badge } from '@/components/ui/badge';
 import { SettingsSection } from './SettingsSection';
 import { useTranslation } from '@/hooks';
 import { toast } from 'sonner';
+import { Badge, Button, Input } from "@/components/ui/themed"
 
 interface SystemUrls {
   dashboardUrl: string;
@@ -152,12 +150,11 @@ export function SystemUrlsSection() {
             />
             <Button
               variant="outline"
-              size="icon"
+              size="xs"
               onClick={() => handleTestUrl(urls.dashboardUrl, 'Dashboard')}
               className="border-accent-cyan text-accent-cyan hover:bg-accent-cyan/10 hover:shadow-glow-cyan transition-all duration-normal"
-              title={t('systemUrls.testUrl')}
-            >
-              <ExternalLink className="w-4 h-4" />
+              title={t('systemUrls.testUrl')} aria-label="Abrir em nova aba">
+              <ExternalLink aria-hidden="true" className="w-4 h-4" />
             </Button>
           </div>
           <p className="text-xs text-text-secondary">
@@ -199,12 +196,11 @@ export function SystemUrlsSection() {
             />
             <Button
               variant="outline"
-              size="icon"
+              size="xs"
               onClick={() => handleTestUrl(urls.datasourceUrl, 'Datasource')}
               className="border-accent-cyan text-accent-cyan hover:bg-accent-cyan/10 hover:shadow-glow-cyan transition-all duration-normal"
-              title={t('systemUrls.testUrl')}
-            >
-              <ExternalLink className="w-4 h-4" />
+              title={t('systemUrls.testUrl')} aria-label="Abrir em nova aba">
+              <ExternalLink aria-hidden="true" className="w-4 h-4" />
             </Button>
           </div>
           <p className="text-xs text-text-secondary">

@@ -13,8 +13,6 @@ import {
   TrendingUp,
   PieChart as PieChartIcon
 } from 'lucide-react';
-;
-;
 import { LogoBrand } from '@/components/ui/LogoBrand';
 import { AreaChart, Area, XAxis, YAxis, Tooltip, ResponsiveContainer, BarChart, Bar, PieChart, Pie, Cell, LineChart, Line } from 'recharts';
 import { useStatus, useTranslation } from '@/hooks';
@@ -119,8 +117,7 @@ export default function Dashboard() {
             variant="ghost"
             size="xs"
             onClick={() => navigate('/')}
-            className="button-3d"
-          >
+            className="button-3d" aria-label="Voltar">
             <ArrowLeft className="w-5 h-5" />
           </Button>
           <div>
@@ -194,15 +191,15 @@ export default function Dashboard() {
                 </div>
                 <div className="flex justify-center gap-6 mt-4">
                   <div className="flex items-center gap-2">
-                    <div className="w-3 h-3 rounded-full bg-cyan-400" />
+                    <div className="w-3 h-3 rounded-full bg-cyan-400" aria-hidden="true" />
                     <span className="text-xs text-kiosk-text/90">CPU</span>
                   </div>
                   <div className="flex items-center gap-2">
-                    <div className="w-3 h-3 rounded-full bg-purple-400" />
+                    <div className="w-3 h-3 rounded-full bg-purple-400" aria-hidden="true" />
                     <span className="text-xs text-kiosk-text/90">Memória</span>
                   </div>
                   <div className="flex items-center gap-2">
-                    <div className="w-3 h-3 rounded-full bg-orange-400" />
+                    <div className="w-3 h-3 rounded-full bg-orange-400" aria-hidden="true" />
                     <span className="text-xs text-kiosk-text/90">Temperatura</span>
                   </div>
                 </div>
@@ -249,7 +246,7 @@ export default function Dashboard() {
                 <div className="flex flex-wrap justify-center gap-3 mt-2">
                   {genreData.map((genre) => (
                     <div key={genre.name} className="flex items-center gap-1">
-                      <div className="w-2 h-2 rounded-full" style={{ background: genre.color }} />
+                      <div className="w-2 h-2 rounded-full" style={{ background: genre.color }} aria-hidden="true" />
                       <span className="text-xs text-kiosk-text/90">{genre.name}</span>
                     </div>
                   ))}

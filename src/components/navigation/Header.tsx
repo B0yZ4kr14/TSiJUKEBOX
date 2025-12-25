@@ -136,7 +136,7 @@ export function Header({
           className="lg:hidden flex items-center justify-center w-10 h-10 rounded-lg bg-bg-tertiary hover:bg-accent-cyan/10 border border-white/5 hover:border-accent-cyan/30 text-gray-400 hover:text-accent-cyan transition-all duration-200"
           aria-label="Toggle menu"
         >
-          <Menu className="w-5 h-5" />
+          <Menu aria-hidden="true" className="w-5 h-5" />
         </button>
 
         {/* Breadcrumbs */}
@@ -145,7 +145,7 @@ export function Header({
             {breadcrumbs.map((crumb, index) => (
               <div key={crumb.path} className="flex items-center gap-2">
                 {index > 0 && (
-                  <ChevronRight className="w-4 h-4 text-gray-600 flex-shrink-0" />
+                  <ChevronRight aria-hidden="true" className="w-4 h-4 text-gray-600 flex-shrink-0" />
                 )}
                 <Link
                   to={crumb.path}
@@ -193,7 +193,7 @@ export function Header({
                     }}
                     className="flex items-center justify-center w-10 h-10 rounded-lg bg-bg-tertiary hover:bg-red-500/10 border border-white/5 hover:border-red-500/30 text-gray-400 hover:text-red-400 transition-all duration-200"
                   >
-                    <X className="w-5 h-5" />
+                    <X aria-hidden="true" className="w-5 h-5" />
                   </button>
                 </motion.div>
               ) : (
@@ -205,7 +205,7 @@ export function Header({
                   className="flex items-center justify-center w-10 h-10 rounded-lg bg-bg-tertiary hover:bg-accent-cyan/10 border border-white/5 hover:border-accent-cyan/30 text-gray-400 hover:text-accent-cyan transition-all duration-200"
                   aria-label="Abrir busca"
                 >
-                  <Search className="w-5 h-5" />
+                  <Search aria-hidden="true" className="w-5 h-5" />
                 </motion.button>
               )}
             </AnimatePresence>
@@ -220,7 +220,7 @@ export function Header({
               className="relative flex items-center justify-center w-10 h-10 rounded-lg bg-bg-tertiary hover:bg-accent-cyan/10 border border-white/5 hover:border-accent-cyan/30 text-gray-400 hover:text-accent-cyan transition-all duration-200"
               aria-label="Notificações"
             >
-              <Bell className="w-5 h-5" />
+              <Bell aria-hidden="true" className="w-5 h-5" />
               {unreadCount > 0 && (
                 <span className="absolute -top-1 -right-1 flex items-center justify-center w-5 h-5 text-xs font-bold bg-accent-cyan text-bg-primary rounded-full border-2 border-bg-secondary">
                   {unreadCount}
@@ -293,7 +293,7 @@ export function Header({
           className="flex items-center justify-center w-10 h-10 rounded-lg bg-bg-tertiary hover:bg-accent-cyan/10 border border-white/5 hover:border-accent-cyan/30 text-gray-400 hover:text-accent-cyan transition-all duration-200"
           aria-label="Configurações"
         >
-          <Settings className="w-5 h-5" />
+          <Settings aria-hidden="true" className="w-5 h-5" />
         </Link>
 
         {/* Profile */}
@@ -305,7 +305,7 @@ export function Header({
               aria-label="Perfil"
             >
               <div className="w-8 h-8 rounded-full bg-gradient-to-br from-accent-cyan/30 to-accent-purple/30 border border-accent-cyan/20 flex items-center justify-center">
-                <User className="w-4 h-4 text-accent-cyan" />
+                <User aria-hidden="true" className="w-4 h-4 text-accent-cyan" />
               </div>
               <span className="hidden md:block text-sm font-medium text-white">
                 Usuário
@@ -331,7 +331,7 @@ export function Header({
                       className="flex items-center gap-3 px-4 py-2 text-sm text-gray-300 hover:bg-bg-secondary hover:text-white transition-colors"
                       onClick={() => setProfileOpen(false)}
                     >
-                      <User className="w-4 h-4" />
+                      <User aria-hidden="true" className="w-4 h-4" />
                       Meu Perfil
                     </Link>
                     <Link
@@ -339,12 +339,12 @@ export function Header({
                       className="flex items-center gap-3 px-4 py-2 text-sm text-gray-300 hover:bg-bg-secondary hover:text-white transition-colors"
                       onClick={() => setProfileOpen(false)}
                     >
-                      <Settings className="w-4 h-4" />
+                      <Settings aria-hidden="true" className="w-4 h-4" />
                       Configurações
                     </Link>
                   </div>
                   <div className="p-2 border-t border-white/5">
-                    <button className="w-full px-4 py-2 text-sm text-red-400 hover:bg-red-500/10 rounded-lg transition-colors text-left">
+                    <button aria-label="PREENCHER" type="button" className="w-full px-4 py-2 text-sm text-red-400 hover:bg-red-500/10 rounded-lg transition-colors text-left">
                       Sair
                     </button>
                   </div>

@@ -1,13 +1,11 @@
 import { useState } from 'react';
 import { Clock, RefreshCw, Check, AlertCircle, Globe } from 'lucide-react';
-import { Button } from '@/components/ui/button';
-import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
-import { Badge } from '@/components/ui/badge';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 import { SettingsSection } from './SettingsSection';
 import { useTranslation } from '@/hooks';
 import { toast } from 'sonner';
+import { Badge, Button, Input } from "@/components/ui/themed"
 
 /**
  * Lista de servidores NTP pré-configurados
@@ -161,7 +159,7 @@ export function NtpConfigSection() {
           variant={config.syncStatus === 'synced' ? 'success' : config.syncStatus === 'error' ? 'error' : 'default'}
           size="sm"
         >
-          {config.syncStatus === 'synced' && <Check className="w-3 h-3" />}
+          {config.syncStatus === 'synced' && <Check aria-hidden="true" className="w-3 h-3" />}
           {config.syncStatus === 'error' && <AlertCircle className="w-3 h-3" />}
           {getBadgeText()}
         </Badge>
@@ -223,7 +221,7 @@ export function NtpConfigSection() {
             <span className="text-text-secondary font-medium">{t('ntp.status')}:</span>
             <div className="flex items-center gap-2">
               {config.syncStatus === 'synced' ? (
-                <Check className="w-4 h-4 text-state-success" />
+                <Check aria-hidden="true" className="w-4 h-4 text-state-success" />
               ) : config.syncStatus === 'error' ? (
                 <AlertCircle className="w-4 h-4 text-state-error" />
               ) : (
@@ -246,7 +244,7 @@ export function NtpConfigSection() {
           className="w-full bg-accent-cyan hover:bg-accent-cyan/90 text-text-primary font-medium shadow-glow-cyan hover:shadow-glow-cyan-strong transition-all duration-normal disabled:opacity-50 disabled:cursor-not-allowed"
           data-tour="ntp-sync-button"
         >
-          <RefreshCw className={`w-4 h-4 mr-2 ${isSyncing ? 'animate-spin' : ''}`} />
+          <RefreshCw aria-hidden="true" className={`w-4 h-4 mr-2 ${isSyncing ? 'animate-spin' : ''}`} />
           {isSyncing ? t('ntp.syncing') : t('ntp.syncNow')}
         </Button>
 

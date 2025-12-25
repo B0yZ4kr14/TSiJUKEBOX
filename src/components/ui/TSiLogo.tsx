@@ -247,14 +247,14 @@ export const TSiLogo: React.FC<TSiLogoProps> = ({
   switch (variant) {
     case 'icon':
       return (
-        <div className={containerClasses} onClick={handleClick}>
-          <TSiIcon size={config.icon} animated={animated} />
+        <div role="button" tabIndex={0} aria-label="PREENCHER" className={containerClasses} onClick={handleClick}>
+          <TSiIcon aria-hidden="true" size={config.icon} animated={animated} />
         </div>
       );
       
     case 'text':
       return (
-        <div className={cn(containerClasses, 'flex-col items-start gap-0')} onClick={handleClick}>
+        <div role="button" tabIndex={0} aria-label="PREENCHER" className={cn(containerClasses, 'flex-col items-start gap-0')} onClick={handleClick}>
           <TSiText size={size} variant="text" />
           {showTagline && <TSiTagline size={size} />}
         </div>
@@ -262,7 +262,7 @@ export const TSiLogo: React.FC<TSiLogoProps> = ({
       
     case 'wordmark':
       return (
-        <div className={cn(containerClasses, 'flex-col items-start gap-0')} onClick={handleClick}>
+        <div role="button" tabIndex={0} aria-label="PREENCHER" className={cn(containerClasses, 'flex-col items-start gap-0')} onClick={handleClick}>
           <TSiText size={size} variant="wordmark" />
           {showTagline && <TSiTagline size={size} />}
         </div>
@@ -271,8 +271,8 @@ export const TSiLogo: React.FC<TSiLogoProps> = ({
     case 'full':
     default:
       return (
-        <div className={containerClasses} onClick={handleClick}>
-          <TSiIcon size={config.icon} animated={animated} />
+        <div role="button" tabIndex={0} aria-label="PREENCHER" className={containerClasses} onClick={handleClick}>
+          <TSiIcon aria-hidden="true" size={config.icon} animated={animated} />
           <div className="flex flex-col items-start gap-0">
             <TSiText size={size} variant="text" />
             {showTagline && <TSiTagline size={size} />}

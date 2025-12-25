@@ -79,7 +79,7 @@ export const MusicCard = React.forwardRef<HTMLDivElement, MusicCardProps>(
             )}
             
             {/* Play Button Overlay */}
-            <div className="absolute inset-0 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity">
+            <div className="absolute inset-0 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity" role="presentation">
               <button
                 onClick={onPlay}
                 className="w-14 h-14 rounded-full bg-accent-cyan/90 backdrop-blur-sm flex items-center justify-center hover:bg-accent-cyan hover:scale-110 transition-all shadow-glow-cyan"
@@ -94,7 +94,7 @@ export const MusicCard = React.forwardRef<HTMLDivElement, MusicCardProps>(
 
             {/* Duration Badge */}
             {duration && (
-              <CardBadge variant="default" position="bottom-right" size="sm">
+              <CardBadge variant="primary" position="bottom-right" size="sm">
                 {duration}
               </CardBadge>
             )}
@@ -112,7 +112,7 @@ export const MusicCard = React.forwardRef<HTMLDivElement, MusicCardProps>(
           </div>
 
           {/* Content */}
-          <CardContent className="p-4">
+          <div className="mt-4">
             <div className="flex items-start justify-between gap-2">
               <div className="flex-1 min-w-0">
                 <h3 className="text-base font-semibold text-white truncate">{title}</h3>
@@ -128,7 +128,7 @@ export const MusicCard = React.forwardRef<HTMLDivElement, MusicCardProps>(
                     isFavorite && 'text-accent-magenta'
                   )}
                 >
-                  <Heart className="w-4 h-4" fill={isFavorite ? 'currentColor' : 'none'} />
+                  <Heart aria-hidden="true" className="w-4 h-4" fill={isFavorite ? 'currentColor' : 'none'} />
                 </button>
                 <button
                   onClick={onMore}
@@ -138,7 +138,7 @@ export const MusicCard = React.forwardRef<HTMLDivElement, MusicCardProps>(
                 </button>
               </div>
             </div>
-          </CardContent>
+          </div>
         </Card>
       </motion.div>
     );
@@ -192,7 +192,7 @@ export const StatCard = React.forwardRef<HTMLDivElement, StatCardProps>(
               <h3 className="text-3xl font-bold text-white">{value}</h3>
               {trend && trendValue && (
                 <div className={cn('flex items-center gap-1 text-sm font-medium', trendColors[trend])}>
-                  <TrendIcon className="w-4 h-4" />
+                  <TrendIcon aria-hidden="true" className="w-4 h-4" />
                   <span>{trendValue}</span>
                 </div>
               )}
@@ -203,7 +203,7 @@ export const StatCard = React.forwardRef<HTMLDivElement, StatCardProps>(
           </div>
           
           {icon && (
-            <CardIcon variant={iconVariant} size="lg" glow>
+            <CardIcon aria-hidden="true" variant={iconVariant} size="lg" glow>
               {icon}
             </CardIcon>
           )}
@@ -298,7 +298,7 @@ export const PlaylistCard = React.forwardRef<HTMLDivElement, PlaylistCardProps>(
           </div>
 
           {/* Content */}
-          <CardContent className="p-4">
+          <div className="mt-4">
             <h3 className="text-base font-semibold text-white truncate mb-1">{name}</h3>
             {description && (
               <p className="text-sm text-text-secondary line-clamp-2 mb-2">{description}</p>
@@ -312,7 +312,7 @@ export const PlaylistCard = React.forwardRef<HTMLDivElement, PlaylistCardProps>(
                 </>
               )}
             </div>
-          </CardContent>
+          </div>
         </Card>
       </motion.div>
     );
@@ -469,7 +469,7 @@ export const AlbumCard = React.forwardRef<HTMLDivElement, AlbumCardProps>(
             )}
             
             {/* Play Button */}
-            <div className="absolute inset-0 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity">
+            <div className="absolute inset-0 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity" role="presentation">
               <button
                 onClick={(e) => {
                   e.stopPropagation();
@@ -483,14 +483,14 @@ export const AlbumCard = React.forwardRef<HTMLDivElement, AlbumCardProps>(
 
             {/* Year Badge */}
             {year && (
-              <CardBadge variant="default" position="top-right" size="sm">
+              <CardBadge variant="primary" position="top-right" size="sm">
                 {year}
               </CardBadge>
             )}
           </div>
 
           {/* Content */}
-          <CardContent className="p-4">
+          <div className="mt-4">
             <h3 className="text-base font-semibold text-white truncate mb-1">{title}</h3>
             <p className="text-sm text-text-secondary truncate mb-2">{artist}</p>
             {trackCount && (
@@ -498,7 +498,7 @@ export const AlbumCard = React.forwardRef<HTMLDivElement, AlbumCardProps>(
                 {trackCount} {trackCount === 1 ? 'track' : 'tracks'}
               </p>
             )}
-          </CardContent>
+          </div>
         </Card>
       </motion.div>
     );

@@ -44,7 +44,7 @@ const themeIcons: Record<ThemeName, React.ReactNode> = {
   'karaoke-stage': <Mic2 className="w-5 h-5" />,
   'dashboard-home': <LayoutDashboard className="w-5 h-5" />,
   'spotify-integration': <Music className="w-5 h-5" />,
-  'settings-dark': <Settings className="w-5 h-5" />,
+  'settings-dark': <Settings aria-hidden="true" className="w-5 h-5" />,
 };
 
 // ============================================================================
@@ -139,7 +139,7 @@ const ThemeCard: React.FC<ThemeCardProps> = ({
               {theme.displayName}
             </span>
             {isSelected && (
-              <Check className="w-4 h-4 text-[var(--accent-primary)]" />
+              <Check aria-hidden="true" className="w-4 h-4 text-[var(--accent-primary)]" />
             )}
           </div>
           {showDescription && (
@@ -178,7 +178,7 @@ const ThemeCard: React.FC<ThemeCardProps> = ({
             className="flex items-center justify-center w-6 h-6 rounded-full"
             style={{ backgroundColor: colors.accentPrimary }}
           >
-            <Check className="w-4 h-4 text-white" />
+            <Check aria-hidden="true" className="w-4 h-4 text-white" />
           </div>
         </div>
       )}

@@ -872,7 +872,7 @@
             
             <div class="themes-grid">
                 <div class="theme-card">
-                    <div class="theme-preview cosmic"></div>
+                    <div class="theme-preview cosmic" style="background-image: url('https://raw.githubusercontent.com/B0yZ4kr14/tsijukebox/main/docs/assets/theme-references/theme-cosmic-player.png'); background-size: cover;"></div>
                     <div class="theme-info">
                         <h3 class="theme-name">🌌 Cosmic Player</h3>
                         <p class="theme-desc">Tema padrão com estética espacial e cores vibrantes</p>
@@ -880,7 +880,7 @@
                 </div>
                 
                 <div class="theme-card">
-                    <div class="theme-preview karaoke"></div>
+                    <div class="theme-preview karaoke" style="background-image: url('https://raw.githubusercontent.com/B0yZ4kr14/tsijukebox/main/docs/assets/theme-references/theme-karaoke-stage.png'); background-size: cover;"></div>
                     <div class="theme-info">
                         <h3 class="theme-name">🎤 Karaoke Stage</h3>
                         <p class="theme-desc">Tema otimizado para o modo karaoke com luzes de palco</p>
@@ -896,15 +896,15 @@
                 </div>
                 
                 <div class="theme-card">
-                    <div class="theme-preview dashboard"></div>
+                    <div class="theme-preview dashboard" style="background-image: url('https://raw.githubusercontent.com/B0yZ4kr14/tsijukebox/main/docs/assets/theme-references/theme-dashboard-home.png'); background-size: cover;"></div>
                     <div class="theme-info">
-                        <h3 class="theme-name">📊 Dashboard Home</h3>
+                        <h3 class="theme-name">🏠 Dashboard Home</h3>
                         <p class="theme-desc">Tema clean para visualização de estatísticas</p>
                     </div>
                 </div>
                 
                 <div class="theme-card">
-                    <div class="theme-preview spotify"></div>
+                    <div class="theme-preview spotify" style="background-image: url('https://raw.githubusercontent.com/B0yZ4kr14/tsijukebox/main/docs/assets/theme-references/theme-spotify-integration.png'); background-size: cover;"></div>
                     <div class="theme-info">
                         <h3 class="theme-name">🟢 Spotify Integration</h3>
                         <p class="theme-desc">Tema inspirado na interface do Spotify</p>
@@ -912,7 +912,7 @@
                 </div>
                 
                 <div class="theme-card">
-                    <div class="theme-preview settings"></div>
+                    <div class="theme-preview settings" style="background-image: url('https://raw.githubusercontent.com/B0yZ4kr14/tsijukebox/main/docs/assets/theme-references/theme-settings-dark.png'); background-size: cover;"></div>
                     <div class="theme-info">
                         <h3 class="theme-name">⚙️ Settings Dark</h3>
                         <p class="theme-desc">Tema escuro para configurações do sistema</p>
@@ -928,41 +928,42 @@
     <section class="installation" id="installation">
         <div class="container">
             <h2 class="section-title">INSTALAÇÃO RÁPIDA</h2>
+            <p style="text-align: center; color: var(--text-secondary); margin-bottom: 2rem;">Otimizado para <strong style="color: var(--accent-cyan);">CachyOS / Arch Linux</strong> com Openbox e Fish shell</p>
             
             <div class="wizard-steps">
                 <div class="wizard-step">
                     <div class="step-number">1</div>
                     <div class="step-content">
-                        <h3 class="step-title">Clone o Repositório</h3>
-                        <p class="step-description">Faça o clone do projeto para sua máquina local</p>
-                        <div class="code-block">git clone https://github.com/B0yZ4kr14/tsijukebox.git</div>
+                        <h3 class="step-title">🧙 Wizard Interativo</h3>
+                        <p class="step-description">Analisa seu hardware e sugere o melhor modo de instalação</p>
+                        <div class="code-block">curl -fsSL https://raw.githubusercontent.com/B0yZ4kr14/tsijukebox/main/scripts/installation-wizard.py | python3</div>
                     </div>
                 </div>
                 
                 <div class="wizard-step">
                     <div class="step-number">2</div>
                     <div class="step-content">
-                        <h3 class="step-title">Instale as Dependências</h3>
-                        <p class="step-description">Use pnpm para instalar todas as dependências do projeto</p>
-                        <div class="code-block">cd tsijukebox && pnpm install</div>
+                        <h3 class="step-title">🎵 Modo Full</h3>
+                        <p class="step-description">Docker, UFW, NTP, Nginx, SSL, Avahi, Grafana, Prometheus, Fail2ban, Spotify</p>
+                        <div class="code-block">sudo python3 unified-installer.py</div>
                     </div>
                 </div>
                 
                 <div class="wizard-step">
                     <div class="step-number">3</div>
                     <div class="step-content">
-                        <h3 class="step-title">Configure as Variáveis</h3>
-                        <p class="step-description">Copie o arquivo de exemplo e configure suas credenciais</p>
-                        <div class="code-block">cp .env.example .env && nano .env</div>
+                        <h3 class="step-title">🖥️ Modo Kiosk</h3>
+                        <p class="step-description">Interface touchscreen, Chromium --kiosk, proteção contra saída</p>
+                        <div class="code-block">sudo python3 unified-installer.py --mode kiosk</div>
                     </div>
                 </div>
                 
                 <div class="wizard-step">
                     <div class="step-number">4</div>
                     <div class="step-content">
-                        <h3 class="step-title">Inicie o Servidor</h3>
-                        <p class="step-description">Execute o servidor de desenvolvimento</p>
-                        <div class="code-block">pnpm dev</div>
+                        <h3 class="step-title">🌐 Acesse o Sistema</h3>
+                        <p class="step-description">Login padrão: <strong>admin</strong> / <strong>admin</strong></p>
+                        <div class="code-block">https://midiaserver.local/jukebox</div>
                     </div>
                 </div>
             </div>
@@ -1020,7 +1021,7 @@
             <div class="footer-logo">TSiJUKEBOX</div>
             <p class="footer-text">
                 Desenvolvido com ❤️ por B0.y_Z4kr14 + Manus AI<br>
-                © 2025 TSiJUKEBOX. Licença MIT.
+                © 2025 TSiJUKEBOX. Domínio Público Absoluto 🐍 Don't Tread On Me
             </p>
             <div class="footer-links">
                 <a href="https://github.com/B0yZ4kr14/tsijukebox" target="_blank" title="GitHub">

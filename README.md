@@ -15,13 +15,12 @@
 
 [![React](https://img.shields.io/badge/React-18.3-61dafb?style=flat-square&logo=react&logoColor=white)](https://react.dev)
 [![TypeScript](https://img.shields.io/badge/TypeScript-5.9-3178c6?style=flat-square&logo=typescript&logoColor=white)](https://typescriptlang.org)
-[![Vite](https://img.shields.io/badge/Vite-5.4-646CFF?style=flat-square&logo=vite&logoColor=white)](https://vitejs.dev)
-[![Tailwind CSS](https://img.shields.io/badge/Tailwind-3.4-06B6D4?style=flat-square&logo=tailwindcss&logoColor=white)](https://tailwindcss.com)
-[![pnpm](https://img.shields.io/badge/pnpm-10.x-F69220?style=flat-square&logo=pnpm&logoColor=white)](https://pnpm.io)
+[![Python](https://img.shields.io/badge/Python-3.11-3776ab?style=flat-square&logo=python&logoColor=white)](https://python.org)
+[![Docker](https://img.shields.io/badge/Docker-Ready-2496ED?style=flat-square&logo=docker&logoColor=white)](https://docker.com)
 
 **Sistema kiosk musical profissional com integração Spotify, YouTube Music e arquivos locais.**
 
-[📖 Wiki](https://github.com/B0yZ4kr14/tsijukebox/wiki) · [🌐 Demo](https://tsijukebox.vercel.app) · [🐛 Issues](https://github.com/B0yZ4kr14/tsijukebox/issues) · [✨ Features](https://github.com/B0yZ4kr14/tsijukebox/issues)
+[📖 Wiki](https://github.com/B0yZ4kr14/tsijukebox/wiki) · [🌐 Demo](https://tsijukebox.vercel.app) · [🐛 Issues](https://github.com/B0yZ4kr14/tsijukebox/issues) · [🎨 Temas](docs/mockups/index.html)
 
 </div>
 
@@ -31,10 +30,16 @@
 
 <div align="center">
 
-### 🐧 Copie e Cole no Terminal Fish:
+### 🐧 Wizard Interativo (Recomendado):
 
 ```fish
-curl -fsSL https://raw.githubusercontent.com/B0yZ4kr14/tsijukebox/main/scripts/install.py | sudo python3
+curl -fsSL https://raw.githubusercontent.com/B0yZ4kr14/tsijukebox/main/scripts/installation-wizard.py | python3
+```
+
+### 🚀 Instalação Direta:
+
+```fish
+curl -fsSL https://raw.githubusercontent.com/B0yZ4kr14/tsijukebox/main/scripts/unified-installer.py | sudo python3
 ```
 
 **✅ Otimizado para:** CachyOS · Arch Linux · Manjaro · EndeavourOS
@@ -43,54 +48,112 @@ curl -fsSL https://raw.githubusercontent.com/B0yZ4kr14/tsijukebox/main/scripts/i
 
 ### 🎮 Modos de Instalação
 
-| Modo | Comando | Ideal Para |
-|------|---------|------------|
-| 🎵 **Completo** | `sudo python3 install.py` | Uso doméstico com todas as features |
-| 🖥️ **Kiosk** | `sudo python3 install.py --mode kiosk` | Bares, eventos, karaokês |
-| 🖧 **Server** | `sudo python3 install.py --mode server` | Servidor headless com API REST |
+| Modo | Comando | Acesso | Ideal Para |
+|------|---------|--------|------------|
+| 🎵 **Full** | `sudo python3 unified-installer.py` | `https://midiaserver.local/jukebox` | Uso doméstico completo |
+| 🖥️ **Kiosk** | `sudo python3 unified-installer.py --mode kiosk` | `https://midiaserver.local/jukebox` | Bares, eventos, karaokês |
+| 🖧 **Server** | `sudo python3 unified-installer.py --mode server` | `https://midiaserver.local:8080/api` | Servidor headless |
 
-### 📦 Dependências (Instaladas Automaticamente)
+### 📦 Componentes Instalados
 
-```fish
-# CachyOS / Arch Linux
-sudo pacman -S nodejs pnpm git chromium
+| Componente | Descrição | Status |
+|------------|-----------|:------:|
+| 🐳 **Docker** | Containerização | ✅ |
+| 🔥 **UFW** | Firewall | ✅ |
+| ⏰ **NTP** | Sincronização de tempo | ✅ |
+| 🌐 **Nginx** | Proxy reverso + SSL | ✅ |
+| 📊 **Grafana** | Monitoramento visual | ✅ |
+| 📈 **Prometheus** | Métricas | ✅ |
+| 🛡️ **Fail2ban** | Proteção contra ataques | ✅ |
+| 📡 **Avahi/mDNS** | Acesso via `.local` | ✅ |
+| 🎵 **Spotify** | Player integrado | ✅ |
+| 🎨 **Spicetify** | Customização Spotify | ✅ |
 
-# Opcional: Spotify + Spicetify
-yay -S spotify spicetify-cli
-```
-
----
-
-## 💻 Desenvolvimento Local
-
-### Pré-requisitos CachyOS/Arch
-
-```fish
-# Instalar dependências base
-sudo pacman -S nodejs pnpm git base-devel
-
-# Clonar repositório
-git clone https://github.com/B0yZ4kr14/tsijukebox.git
-cd tsijukebox
-
-# Instalar dependências do projeto
-pnpm install
-
-# Iniciar servidor de desenvolvimento
-pnpm dev
-```
-
-Acesse **http://localhost:8080** · Login: `admin` / `admin`
-
-### 🐳 Docker (Alternativa)
-
-```fish
-docker run -d -p 8080:8080 --name tsijukebox b0yz4kr14/tsijukebox:latest
-```
+**🔐 Login padrão:** `admin` / `admin`
 
 ---
 
-## ✨ Features
+## 🎨 Design System — 6 Temas Visuais
+
+O TSiJUKEBOX oferece **6 temas profissionais** com design neon metallic:
+
+<table>
+<tr>
+<td align="center" width="33%">
+
+### 🌌 Cosmic Player
+`Tema Padrão`
+
+<img src="docs/assets/theme-references/theme-cosmic-player.png" alt="Cosmic Player" width="200">
+
+![#09090B](https://via.placeholder.com/15/09090B/09090B) ![#00D4FF](https://via.placeholder.com/15/00D4FF/00D4FF) ![#FF00D4](https://via.placeholder.com/15/FF00D4/FF00D4)
+
+</td>
+<td align="center" width="33%">
+
+### 🎤 Karaoke Stage
+`Modo Karaoke`
+
+<img src="docs/assets/theme-references/theme-karaoke-stage.png" alt="Karaoke Stage" width="200">
+
+![#1a0a2e](https://via.placeholder.com/15/1a0a2e/1a0a2e) ![#FF00D4](https://via.placeholder.com/15/FF00D4/FF00D4) ![#8A2BE2](https://via.placeholder.com/15/8A2BE2/8A2BE2)
+
+</td>
+<td align="center" width="33%">
+
+### ✨ Stage Neon Metallic
+`Novo`
+
+![#0a0a1a](https://via.placeholder.com/15/0a0a1a/0a0a1a) ![#00FFFF](https://via.placeholder.com/15/00FFFF/00FFFF) ![#FF00D4](https://via.placeholder.com/15/FF00D4/FF00D4)
+
+**Variáveis CSS:**
+```css
+--accent-cyan: #00ffff;
+--accent-magenta: #ff00d4;
+--metallic-chrome: #e8e8e8;
+```
+
+</td>
+</tr>
+<tr>
+<td align="center">
+
+### 🏠 Dashboard Home
+`Dourado`
+
+<img src="docs/assets/theme-references/theme-dashboard-home.png" alt="Dashboard Home" width="200">
+
+![#0f0f12](https://via.placeholder.com/15/0f0f12/0f0f12) ![#FFD700](https://via.placeholder.com/15/FFD700/FFD700)
+
+</td>
+<td align="center">
+
+### 🎵 Spotify Integration
+`Verde Spotify`
+
+<img src="docs/assets/theme-references/theme-spotify-integration.png" alt="Spotify" width="200">
+
+![#121212](https://via.placeholder.com/15/121212/121212) ![#1DB954](https://via.placeholder.com/15/1DB954/1DB954)
+
+</td>
+<td align="center">
+
+### ⚙️ Settings Dark
+`Roxo`
+
+<img src="docs/assets/theme-references/theme-settings-dark.png" alt="Settings" width="200">
+
+![#0a0a0c](https://via.placeholder.com/15/0a0a0c/0a0a0c) ![#8B5CF6](https://via.placeholder.com/15/8B5CF6/8B5CF6)
+
+</td>
+</tr>
+</table>
+
+**📄 Ver todos os mockups:** [docs/mockups/index.html](docs/mockups/index.html)
+
+---
+
+## ✨ Features Principais
 
 <table>
 <tr>
@@ -149,82 +212,70 @@ Cloud Backup (Storj/S3)
 | 📺 **YouTube Music** | Streaming, Playlists, Mix Personalizado | OAuth 2.0 |
 | 📁 **Arquivos Locais** | MP3, FLAC, AAC, OGG, WAV, OPUS | N/A |
 
-### 🎮 Modos de Operação
-
-| Modo | Descrição | Casos de Uso |
-|------|-----------|--------------|
-| 🖥️ **Desktop** | Interface completa | Uso pessoal, estúdios |
-| 🏪 **Kiosk** | Interface simplificada e bloqueada | Bares, restaurantes |
-| 🖧 **Server** | API REST sem interface gráfica | Integração com sistemas |
-| 🎤 **Karaoke** | Foco em letras e fila | Karaokês, festas |
-
 ---
 
-## 🎨 Temas
+## 🏗️ Arquitetura
 
-O TSiJUKEBOX oferece **6 temas visuais**:
+```
+┌─────────────────────────────────────────────────────────────────────────────┐
+│                           TSiJUKEBOX Architecture                           │
+├─────────────────────────────────────────────────────────────────────────────┤
+│                                                                             │
+│  ┌─────────────────────────────────────────────────────────────────────┐   │
+│  │                        FRONTEND (React + Vite)                      │   │
+│  │  ┌──────────┐ ┌──────────┐ ┌──────────┐ ┌──────────┐ ┌──────────┐  │   │
+│  │  │  Player  │ │  Queue   │ │ Karaoke  │ │ Settings │ │  Kiosk   │  │   │
+│  │  └──────────┘ └──────────┘ └──────────┘ └──────────┘ └──────────┘  │   │
+│  │                    6 Temas Visuais · WCAG 2.1 AA                    │   │
+│  └─────────────────────────────────────────────────────────────────────┘   │
+│                                    │                                        │
+│  ┌─────────────────────────────────┼───────────────────────────────────┐   │
+│  │                         NGINX (Proxy Reverso)                       │   │
+│  │              https://midiaserver.local/jukebox                      │   │
+│  │                    SSL · Avahi/mDNS · UFW                           │   │
+│  └─────────────────────────────────┼───────────────────────────────────┘   │
+│                                    │                                        │
+│  ┌─────────────────────────────────┼───────────────────────────────────┐   │
+│  │                          DOCKER CONTAINERS                          │   │
+│  │  ┌──────────┐ ┌──────────┐ ┌──────────┐ ┌──────────┐ ┌──────────┐  │   │
+│  │  │ TSiJUKE  │ │ Grafana  │ │Prometheus│ │ Fail2ban │ │   NTP    │  │   │
+│  │  │  :8080   │ │  :3000   │ │  :9090   │ │          │ │          │  │   │
+│  │  └──────────┘ └──────────┘ └──────────┘ └──────────┘ └──────────┘  │   │
+│  └─────────────────────────────────────────────────────────────────────┘   │
+│                                                                             │
+│  ┌─────────────────────────────────────────────────────────────────────┐   │
+│  │                        SUPABASE (Backend)                           │   │
+│  │  ┌──────────┐ ┌──────────┐ ┌──────────┐ ┌──────────┐               │   │
+│  │  │PostgreSQL│ │   Auth   │ │ Storage  │ │Edge Funcs│               │   │
+│  │  └──────────┘ └──────────┘ └──────────┘ └──────────┘               │   │
+│  └─────────────────────────────────────────────────────────────────────┘   │
+│                                                                             │
+└─────────────────────────────────────────────────────────────────────────────┘
+```
 
-<table>
-<tr>
-<td align="center">
+### 📁 Estrutura de Pastas
 
-**Cosmic Player**
-`Padrão`
-![#09090B](https://via.placeholder.com/15/09090B/09090B) ![#00D4FF](https://via.placeholder.com/15/00D4FF/00D4FF)
-
-</td>
-<td align="center">
-
-**Karaoke Stage**
-`Palco`
-![#1a0a2e](https://via.placeholder.com/15/1a0a2e/1a0a2e) ![#FF00D4](https://via.placeholder.com/15/FF00D4/FF00D4)
-
-</td>
-<td align="center">
-
-**Stage Neon Metallic**
-`✨ Novo`
-![#0a0a1a](https://via.placeholder.com/15/0a0a1a/0a0a1a) ![#00FFFF](https://via.placeholder.com/15/00FFFF/00FFFF)
-
-</td>
-</tr>
-<tr>
-<td align="center">
-
-**Dashboard Home**
-`Dourado`
-![#0f0f12](https://via.placeholder.com/15/0f0f12/0f0f12) ![#FFD700](https://via.placeholder.com/15/FFD700/FFD700)
-
-</td>
-<td align="center">
-
-**Spotify Integration**
-`Verde`
-![#121212](https://via.placeholder.com/15/121212/121212) ![#1DB954](https://via.placeholder.com/15/1DB954/1DB954)
-
-</td>
-<td align="center">
-
-**Settings Dark**
-`Roxo`
-![#0a0a0c](https://via.placeholder.com/15/0a0a0c/0a0a0c) ![#8B5CF6](https://via.placeholder.com/15/8B5CF6/8B5CF6)
-
-</td>
-</tr>
-</table>
-
----
-
-## ♿ Acessibilidade WCAG 2.1 AA
-
-| Recurso | Implementação | Status |
-|---------|---------------|:------:|
-| ⌨️ Navegação por Teclado | Tab, Enter, Escape | ✅ |
-| 🔊 Leitores de Tela | ARIA labels e roles | ✅ |
-| 🎨 Contraste de Cores | Ratio mínimo 4.5:1 | ✅ |
-| 🎯 Foco Visível | Indicador claro | ✅ |
-
-**Métricas:** 238 aria-labels · 550 aria-hidden · 50 roles · [📄 Relatório Completo](docs/ACCESSIBILITY_REPORT_FINAL.md)
+```
+tsijukebox/
+├── 📁 src/
+│   ├── 📁 components/     # 72 Componentes React
+│   │   ├── 📁 ui/         # shadcn/ui base
+│   │   ├── 📁 player/     # Player de música
+│   │   ├── 📁 karaoke/    # Sistema de karaoke
+│   │   └── 📁 settings/   # Configurações
+│   ├── 📁 pages/          # 45 Páginas
+│   ├── 📁 hooks/          # React hooks customizados
+│   ├── 📁 stores/         # Estado global (Zustand)
+│   └── 📁 themes/         # 6 Temas visuais
+├── 📁 scripts/            # 26 Scripts Python
+│   ├── unified-installer.py      # Instalador principal
+│   ├── installation-wizard.py    # Wizard interativo
+│   └── master-fix.py             # Correções automáticas
+├── 📁 docs/               # Documentação completa
+│   ├── 📁 mockups/        # Mockups HTML dos temas
+│   └── 📁 assets/         # Imagens e ícones
+└── 📁 wiki/               # Páginas Wiki preparadas
+```
 
 ---
 
@@ -237,14 +288,18 @@ O TSiJUKEBOX oferece **6 temas visuais**:
 | ⚙️ **CPU** | 2 cores | 4+ cores |
 | 💾 **RAM** | 2 GB | 4+ GB |
 | 💿 **Disco** | 500 MB | 2+ GB |
-| 🟢 **Node.js** | 18.x | 20.x LTS |
-| 📦 **pnpm** | 8.x | 10.x |
+| 🐍 **Python** | 3.9 | 3.11+ |
+| 🐳 **Docker** | 20.x | 24.x |
 
 ---
 
 ## 🛠️ Scripts Disponíveis
 
 ```fish
+# Instalação
+python3 scripts/installation-wizard.py    # Wizard interativo
+sudo python3 scripts/unified-installer.py # Instalação direta
+
 # Desenvolvimento
 pnpm dev              # Servidor de desenvolvimento
 pnpm build            # Build de produção
@@ -261,29 +316,20 @@ pnpm test:coverage    # Relatório de cobertura
 
 # Utilitários
 python3 scripts/master-fix.py --all    # Correções automáticas
-python3 scripts/uat-installation-tests.py  # Testes de instalação
 ```
 
 ---
 
-## 🏗️ Arquitetura
+## ♿ Acessibilidade WCAG 2.1 AA
 
-```
-tsijukebox/
-├── 📁 src/
-│   ├── 📁 components/     # 72 Componentes React
-│   │   ├── 📁 ui/         # shadcn/ui base
-│   │   ├── 📁 player/     # Player de música
-│   │   ├── 📁 karaoke/    # Sistema de karaoke
-│   │   └── 📁 settings/   # Configurações
-│   ├── 📁 pages/          # 45 Páginas
-│   ├── 📁 hooks/          # React hooks customizados
-│   ├── 📁 stores/         # Estado global (Zustand)
-│   └── 📁 themes/         # 6 Temas visuais
-├── 📁 scripts/            # 26 Scripts Python/Shell
-├── 📁 docs/               # Documentação completa
-└── 📁 wiki/               # Páginas Wiki preparadas
-```
+| Recurso | Implementação | Status |
+|---------|---------------|:------:|
+| ⌨️ Navegação por Teclado | Tab, Enter, Escape | ✅ |
+| 🔊 Leitores de Tela | ARIA labels e roles | ✅ |
+| 🎨 Contraste de Cores | Ratio mínimo 4.5:1 | ✅ |
+| 🎯 Foco Visível | Indicador claro | ✅ |
+
+**Métricas:** 238 aria-labels · 550 aria-hidden · 50 roles · [📄 Relatório Completo](docs/ACCESSIBILITY_REPORT_FINAL.md)
 
 ---
 
@@ -297,6 +343,7 @@ tsijukebox/
 | 🎨 [Design System](https://github.com/B0yZ4kr14/tsijukebox/wiki/Design-System) | Tokens e cores |
 | 🔌 [API Reference](https://github.com/B0yZ4kr14/tsijukebox/wiki/API-Reference) | Endpoints REST |
 | ♿ [Acessibilidade](docs/ACCESSIBILITY_REPORT_FINAL.md) | Relatório WCAG 2.1 AA |
+| 🎨 [Mockups](docs/mockups/index.html) | Temas visuais |
 
 ---
 
@@ -344,14 +391,6 @@ Diferente de bens tangíveis, **copiar software não priva o autor original** do
 
 ---
 
-### 🗡️ O Conflito de Propriedade Real
-
-Se o Estado **impede você de usar seu próprio computador** — sua **propriedade física** — para copiar um código, ele está **violando seu direito de propriedade** sobre o hardware.
-
-🔥 **Patentes e direitos autorais são privilégios estatais** que concedem **monopólios artificiais** sobre ideias, criando **escassez forçada** onde naturalmente não existiria.
-
----
-
 ### 💀 LICENCIAMENTO: DOMÍNIO PÚBLICO ABSOLUTO
 
 <div align="center">
@@ -367,23 +406,6 @@ Este software é liberado ao **DOMÍNIO PÚBLICO** sem quaisquer restrições:
 | 🗡️ USE | 🛡️ MODIFIQUE | ⚔️ VENDA | 🔓 DISTRIBUA |
 |--------|-------------|---------|-------------|
 | Para qualquer finalidade | Sem pedir permissão | Lucre como quiser | Sem restrições |
-
----
-
-### ⚡ Sobre a Tributação
-
-> *"O tributo é coerção sistemática travestida de legalidade — mero saque institucionalizado. A retenção dos próprios recursos transcende a defesa: é um imperativo de resistência ética e retificação moral."*
-
-- 💀 **Imposto é eufemismo para roubo institucionalizado.**
-- ⚔️ **Sonegar é legítima defesa — uma reparação.**
-
----
-
-### 📚 Referências Libertárias
-
-- 📖 [Contra a Propriedade Intelectual](https://www.mises.org.br/Article.aspx?id=144) — Stephan Kinsella
-- 📖 [O Sistema de Patentes Prejudica a Inovação](https://www.mises.org.br/Article.aspx?id=2691)
-- 📖 [Intellectual Property Laws Violate the Market](https://mises.org/library/intellectual-property-laws-violate-market)
 
 ---
 

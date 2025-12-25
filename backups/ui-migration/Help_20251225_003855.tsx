@@ -27,8 +27,8 @@ import {
   Image
 } from 'lucide-react';
 import { formatBrandInText } from '@/components/ui/BrandText';
-;
-;
+import { Button } from '@/components/ui/button';
+import { Input } from '@/components/ui/input';
 import { ScrollArea } from '@/components/ui/scroll-area';
 import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from '@/components/ui/accordion';
 import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger } from '@/components/ui/dropdown-menu';
@@ -43,7 +43,6 @@ import { BackButton } from '@/components/ui/BackButton';
 import { Home } from 'lucide-react';
 import { downloadMarkdown, downloadHTML, printDocument } from '@/lib/documentExporter';
 import { toast } from 'sonner';
-import { Button, Input } from "@/components/ui/themed"
 
 interface HelpSection {
   id: string;

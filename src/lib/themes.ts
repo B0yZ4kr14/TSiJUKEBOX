@@ -18,7 +18,8 @@ export type ThemeName =
   | 'karaoke-stage'
   | 'dashboard-home'
   | 'spotify-integration'
-  | 'settings-dark';
+  | 'settings-dark'
+  | 'stage-neon-metallic';
 
 export interface ThemeColors {
   // Backgrounds
@@ -492,6 +493,77 @@ export const settingsDarkTheme: Theme = {
 };
 
 // ============================================================================
+// TEMA 6: STAGE NEON METALLIC
+// Visual inspirado no modo Karaoke com interface metálica e luzes de palco
+// Aplicável a todos os modos do sistema
+// ============================================================================
+
+export const stageNeonMetallicTheme: Theme = {
+  name: 'stage-neon-metallic',
+  displayName: 'Stage Neon Metallic',
+  description: 'Visual de palco com interface metálica, luzes neon cyan/magenta e efeitos de spotlight',
+  colors: {
+    // Backgrounds - azul escuro profundo com nuances roxas
+    bgPrimary: '#0a0a1a',
+    bgSecondary: '#1a0a2e',
+    bgTertiary: '#2a1040',
+    bgCard: 'rgba(26, 10, 46, 0.85)',
+    bgCardHover: 'rgba(42, 16, 64, 0.95)',
+    bgOverlay: 'rgba(10, 10, 26, 0.9)',
+    bgGradient: 'linear-gradient(135deg, #0a0a1a 0%, #1a0a2e 50%, #2a1040 100%)',
+    
+    // Accent - cyan neon como cor principal, magenta como secundária
+    accentPrimary: '#00ffff',
+    accentSecondary: '#ff00d4',
+    accentTertiary: '#8a2be2',
+    accentGlow: 'rgba(0, 255, 255, 0.6)',
+    
+    // Text
+    textPrimary: '#ffffff',
+    textSecondary: '#b0b0b0',
+    textMuted: '#808080',
+    textAccent: '#00ffff',
+    
+    // Borders - metálicos
+    borderPrimary: '#4a4a4a',
+    borderSecondary: '#606060',
+    borderAccent: '#00ffff',
+    
+    // States
+    success: '#00ff44',
+    warning: '#ffd700',
+    error: '#ff4444',
+    info: '#00ffff',
+    
+    // Brand
+    brandPrimary: '#00ffff',
+    brandSecondary: '#ff00d4',
+    brandGradient: 'linear-gradient(90deg, #00ffff 0%, #ff00d4 100%)',
+  },
+  typography: {
+    ...sharedTypography,
+    fontFamilyDisplay: "'Bebas Neue', 'Impact', sans-serif",
+  },
+  spacing: sharedSpacing,
+  borderRadius: sharedBorderRadius,
+  shadows: {
+    sm: '0 1px 3px rgba(0, 0, 0, 0.4)',
+    md: '0 4px 8px rgba(0, 0, 0, 0.5)',
+    lg: '0 10px 20px rgba(0, 0, 0, 0.6)',
+    xl: '0 20px 40px rgba(0, 0, 0, 0.7)',
+    glow: '0 0 20px rgba(0, 255, 255, 0.6), 0 0 40px rgba(0, 255, 255, 0.3)',
+    glowStrong: '0 0 30px rgba(0, 255, 255, 0.8), 0 0 60px rgba(0, 255, 255, 0.4)',
+    card: '0 4px 20px rgba(0, 0, 0, 0.5), inset 0 1px 0 rgba(255, 255, 255, 0.1)',
+    button: '0 0 15px rgba(0, 255, 255, 0.5), inset 0 1px 0 rgba(255, 255, 255, 0.3)',
+  },
+  effects: {
+    ...sharedEffects,
+    blur: 'blur(10px)',
+    blurStrong: 'blur(20px)',
+  },
+};
+
+// ============================================================================
 // EXPORTAÇÕES
 // ============================================================================
 
@@ -501,6 +573,7 @@ export const themes: Record<ThemeName, Theme> = {
   'dashboard-home': dashboardHomeTheme,
   'spotify-integration': spotifyIntegrationTheme,
   'settings-dark': settingsDarkTheme,
+  'stage-neon-metallic': stageNeonMetallicTheme,
 };
 
 export const themeList: Theme[] = Object.values(themes);

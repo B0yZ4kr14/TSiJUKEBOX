@@ -23,18 +23,17 @@ import {
   Sun,
   ChevronRight
 } from 'lucide-react';
-;
-;
-;
+import { Button } from '@/components/ui/button';
+import { Badge } from '@/components/ui/badge';
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
-;
-;
-;
+import { Input } from '@/components/ui/input';
+import { Switch } from '@/components/ui/switch';
+import { Slider } from '@/components/ui/slider';
 import { SectionIconsShowcase, sectionIcons } from '@/components/ui/SectionIconsShowcase';
 import { LogoBrand } from '@/components/ui/LogoBrand';
 import { BackButton } from '@/components/ui/BackButton';
 import { toast } from 'sonner';
-import { Badge, Button, Card, Input, Slider, Toggle } from "@/components/ui/themed"
 
 // Color Palette Data
 const colorPalette = {
@@ -229,50 +228,54 @@ export default function DesignSystem() {
 
             {/* Backgrounds */}
             <Card className="bg-bg-secondary border-border-default">
-              <h3 className="text-lg font-semibold text-[var(--text-primary)] mb-2">Backgrounds</h3>
-                <p className="text-sm text-[var(--text-muted)]">Cores de fundo para diferentes níveis de hierarquia</p>
-              
-              <div className="mt-4">
+              <CardHeader>
+                <CardTitle className="text-lg">Backgrounds</CardTitle>
+                <CardDescription>Cores de fundo para diferentes níveis de hierarquia</CardDescription>
+              </CardHeader>
+              <CardContent className="grid grid-cols-1 md:grid-cols-3 gap-4">
                 {colorPalette.backgrounds.map((color) => (
                   <ColorSwatch key={color.name} {...color} />
                 ))}
-              </div>
+              </CardContent>
             </Card>
 
             {/* Accent Colors */}
             <Card className="bg-bg-secondary border-border-default">
-              <h3 className="text-lg font-semibold text-[var(--text-primary)] mb-2">Cores de Destaque (Accent)</h3>
-                <p className="text-sm text-[var(--text-muted)]">Cores vibrantes neon para elementos interativos e destaques</p>
-              
-              <div className="mt-4">
+              <CardHeader>
+                <CardTitle className="text-lg">Cores de Destaque (Accent)</CardTitle>
+                <CardDescription>Cores vibrantes neon para elementos interativos e destaques</CardDescription>
+              </CardHeader>
+              <CardContent className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
                 {colorPalette.accents.map((color) => (
                   <ColorSwatch key={color.name} {...color} />
                 ))}
-              </div>
+              </CardContent>
             </Card>
 
             {/* Brand Colors */}
             <Card className="bg-bg-secondary border-border-default">
-              <h3 className="text-lg font-semibold text-[var(--text-primary)] mb-2">Cores de Marca (Brands)</h3>
-                <p className="text-sm text-[var(--text-muted)]">Cores oficiais das integrações de terceiros</p>
-              
-              <div className="mt-4">
+              <CardHeader>
+                <CardTitle className="text-lg">Cores de Marca (Brands)</CardTitle>
+                <CardDescription>Cores oficiais das integrações de terceiros</CardDescription>
+              </CardHeader>
+              <CardContent className="grid grid-cols-1 md:grid-cols-3 gap-4">
                 {colorPalette.brands.map((color) => (
                   <ColorSwatch key={color.name} {...color} />
                 ))}
-              </div>
+              </CardContent>
             </Card>
 
             {/* State Colors */}
             <Card className="bg-bg-secondary border-border-default">
-              <h3 className="text-lg font-semibold text-[var(--text-primary)] mb-2">Cores de Estado</h3>
-                <p className="text-sm text-[var(--text-muted)]">Cores semânticas para feedback visual</p>
-              
-              <div className="mt-4">
+              <CardHeader>
+                <CardTitle className="text-lg">Cores de Estado</CardTitle>
+                <CardDescription>Cores semânticas para feedback visual</CardDescription>
+              </CardHeader>
+              <CardContent className="grid grid-cols-1 md:grid-cols-4 gap-4">
                 {colorPalette.states.map((color) => (
                   <ColorSwatch key={color.name} {...color} />
                 ))}
-              </div>
+              </CardContent>
             </Card>
           </TabsContent>
 
@@ -286,9 +289,10 @@ export default function DesignSystem() {
 
             {/* Font Families */}
             <Card className="bg-bg-secondary border-border-default">
-              <h3 className="text-lg font-semibold text-[var(--text-primary)] mb-2">Famílias de Fontes</h3>
-              
-              <div className="mt-4">
+              <CardHeader>
+                <CardTitle className="text-lg">Famílias de Fontes</CardTitle>
+              </CardHeader>
+              <CardContent className="space-y-6">
                 {typography.fonts.map((font) => (
                   <div key={font.name} className="p-4 rounded-lg bg-bg-tertiary">
                     <div className="flex items-center justify-between mb-2">
@@ -304,14 +308,15 @@ export default function DesignSystem() {
                     <p className="text-xs font-mono text-text-tertiary mt-2">{font.family}</p>
                   </div>
                 ))}
-              </div>
+              </CardContent>
             </Card>
 
             {/* Font Sizes */}
             <Card className="bg-bg-secondary border-border-default">
-              <h3 className="text-lg font-semibold text-[var(--text-primary)] mb-2">Hierarquia de Tamanhos</h3>
-              
-              <div className="mt-4">
+              <CardHeader>
+                <CardTitle className="text-lg">Hierarquia de Tamanhos</CardTitle>
+              </CardHeader>
+              <CardContent className="space-y-4">
                 {typography.sizes.map((item) => (
                   <div key={item.name} className="flex items-center gap-4 p-3 rounded-lg bg-bg-tertiary">
                     <div className="w-16 text-center">
@@ -334,7 +339,7 @@ export default function DesignSystem() {
                     </div>
                   </div>
                 ))}
-              </div>
+              </CardContent>
             </Card>
           </TabsContent>
 
@@ -348,45 +353,48 @@ export default function DesignSystem() {
 
             {/* Buttons */}
             <Card className="bg-bg-secondary border-border-default">
-              <h3 className="text-lg font-semibold text-[var(--text-primary)] mb-2">Botões</h3>
-              
-              <div className="mt-4">
+              <CardHeader>
+                <CardTitle className="text-lg">Botões</CardTitle>
+              </CardHeader>
+              <CardContent className="space-y-6">
                 <div className="flex flex-wrap gap-4">
                   <Button>Primary</Button>
                   <Button variant="secondary">Secondary</Button>
                   <Button variant="outline">Outline</Button>
                   <Button variant="ghost">Ghost</Button>
-                  <Button variant="danger">Destructive</Button>
+                  <Button variant="destructive">Destructive</Button>
                   <Button disabled>Disabled</Button>
                 </div>
                 <div className="flex flex-wrap gap-4">
                   <Button size="sm">Small</Button>
-                  <Button size="md">Default</Button>
+                  <Button size="default">Default</Button>
                   <Button size="lg">Large</Button>
                 </div>
-              </div>
+              </CardContent>
             </Card>
 
             {/* Badges */}
             <Card className="bg-bg-secondary border-border-default">
-              <h3 className="text-lg font-semibold text-[var(--text-primary)] mb-2">Badges</h3>
-              
-              <div className="mt-4">
+              <CardHeader>
+                <CardTitle className="text-lg">Badges</CardTitle>
+              </CardHeader>
+              <CardContent className="flex flex-wrap gap-4">
                 <Badge>Default</Badge>
                 <Badge variant="secondary">Secondary</Badge>
                 <Badge variant="outline">Outline</Badge>
-                <Badge variant="danger">Destructive</Badge>
+                <Badge variant="destructive">Destructive</Badge>
                 <Badge className="bg-accent-cyan text-black">Cyan</Badge>
                 <Badge className="bg-accent-greenNeon text-black">Success</Badge>
                 <Badge className="bg-accent-yellowGold text-black">Warning</Badge>
-              </div>
+              </CardContent>
             </Card>
 
             {/* Inputs */}
             <Card className="bg-bg-secondary border-border-default">
-              <h3 className="text-lg font-semibold text-[var(--text-primary)] mb-2">Inputs</h3>
-              
-              <div className="mt-4">
+              <CardHeader>
+                <CardTitle className="text-lg">Inputs</CardTitle>
+              </CardHeader>
+              <CardContent className="space-y-4 max-w-md">
                 <Input placeholder="Input padrão" />
                 <Input placeholder="Input desabilitado" disabled />
                 <div className="flex items-center gap-4">
@@ -394,7 +402,7 @@ export default function DesignSystem() {
                   <span className="text-text-secondary">Toggle Switch</span>
                 </div>
                 <Slider defaultValue={[50]} max={100} step={1} />
-              </div>
+              </CardContent>
             </Card>
           </TabsContent>
 
@@ -408,29 +416,32 @@ export default function DesignSystem() {
 
             {/* Grid Variant */}
             <Card className="bg-bg-secondary border-border-default">
-              <h3 className="text-lg font-semibold text-[var(--text-primary)] mb-2">Variante Grid</h3>
-                <p className="text-sm text-[var(--text-muted)]">Layout em grade 4x2 para exibição compacta</p>
-              
-              <div className="mt-4">
+              <CardHeader>
+                <CardTitle className="text-lg">Variante Grid</CardTitle>
+                <CardDescription>Layout em grade 4x2 para exibição compacta</CardDescription>
+              </CardHeader>
+              <CardContent>
                 <SectionIconsShowcase variant="grid" />
-              </div>
+              </CardContent>
             </Card>
 
             {/* List Variant */}
             <Card className="bg-bg-secondary border-border-default">
-              <h3 className="text-lg font-semibold text-[var(--text-primary)] mb-2">Variante Lista</h3>
-                <p className="text-sm text-[var(--text-muted)]">Layout em lista com descrições detalhadas</p>
-              
-              <div className="mt-4">
+              <CardHeader>
+                <CardTitle className="text-lg">Variante Lista</CardTitle>
+                <CardDescription>Layout em lista com descrições detalhadas</CardDescription>
+              </CardHeader>
+              <CardContent>
                 <SectionIconsShowcase variant="list" />
-              </div>
+              </CardContent>
             </Card>
 
             {/* Color Reference */}
             <Card className="bg-bg-secondary border-border-default">
-              <h3 className="text-lg font-semibold text-[var(--text-primary)] mb-2">Referência de Cores</h3>
-              
-              <div className="mt-4">
+              <CardHeader>
+                <CardTitle className="text-lg">Referência de Cores</CardTitle>
+              </CardHeader>
+              <CardContent>
                 <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
                   {sectionIcons.map((icon) => (
                     <div 
@@ -448,7 +459,7 @@ export default function DesignSystem() {
                     </div>
                   ))}
                 </div>
-              </div>
+              </CardContent>
             </Card>
           </TabsContent>
 
@@ -462,9 +473,10 @@ export default function DesignSystem() {
 
             {/* Spacing Scale */}
             <Card className="bg-bg-secondary border-border-default">
-              <h3 className="text-lg font-semibold text-[var(--text-primary)] mb-2">Escala de Espaçamento</h3>
-              
-              <div className="mt-4">
+              <CardHeader>
+                <CardTitle className="text-lg">Escala de Espaçamento</CardTitle>
+              </CardHeader>
+              <CardContent className="space-y-4">
                 {spacing.map((item) => (
                   <div key={item.name} className="flex items-center gap-4">
                     <div className="w-16 text-right">
@@ -483,14 +495,15 @@ export default function DesignSystem() {
                     <span className="text-sm text-text-secondary">{item.value}</span>
                   </div>
                 ))}
-              </div>
+              </CardContent>
             </Card>
 
             {/* Border Radius */}
             <Card className="bg-bg-secondary border-border-default">
-              <h3 className="text-lg font-semibold text-[var(--text-primary)] mb-2">Border Radius</h3>
-              
-              <div className="mt-4">
+              <CardHeader>
+                <CardTitle className="text-lg">Border Radius</CardTitle>
+              </CardHeader>
+              <CardContent className="flex flex-wrap gap-6">
                 {borderRadius.map((item) => (
                   <div key={item.name} className="text-center">
                     <div 
@@ -503,7 +516,7 @@ export default function DesignSystem() {
                     <p className="text-xs text-text-tertiary">{item.value}</p>
                   </div>
                 ))}
-              </div>
+              </CardContent>
             </Card>
           </TabsContent>
 
@@ -517,9 +530,10 @@ export default function DesignSystem() {
 
             {/* Glow Effects */}
             <Card className="bg-bg-secondary border-border-default">
-              <h3 className="text-lg font-semibold text-[var(--text-primary)] mb-2">Efeitos de Glow</h3>
-              
-              <div className="mt-4">
+              <CardHeader>
+                <CardTitle className="text-lg">Efeitos de Glow</CardTitle>
+              </CardHeader>
+              <CardContent className="grid grid-cols-2 md:grid-cols-4 gap-6">
                 {[
                   { name: 'Cyan', color: '#00d4ff' },
                   { name: 'Green', color: '#00ff88' },
@@ -535,14 +549,15 @@ export default function DesignSystem() {
                     <p className="text-xs font-mono text-text-tertiary">{glow.color}</p>
                   </div>
                 ))}
-              </div>
+              </CardContent>
             </Card>
 
             {/* Shadows */}
             <Card className="bg-bg-secondary border-border-default">
-              <h3 className="text-lg font-semibold text-[var(--text-primary)] mb-2">Sombras</h3>
-              
-              <div className="mt-4">
+              <CardHeader>
+                <CardTitle className="text-lg">Sombras</CardTitle>
+              </CardHeader>
+              <CardContent className="grid grid-cols-3 gap-6">
                 {[
                   { name: 'Small', shadow: '0 2px 4px rgba(0, 0, 0, 0.3)' },
                   { name: 'Medium', shadow: '0 4px 8px rgba(0, 0, 0, 0.4)' },
@@ -556,14 +571,15 @@ export default function DesignSystem() {
                     <p className="text-sm font-medium text-text-primary mt-3">{item.name}</p>
                   </div>
                 ))}
-              </div>
+              </CardContent>
             </Card>
 
             {/* Animations */}
             <Card className="bg-bg-secondary border-border-default">
-              <h3 className="text-lg font-semibold text-[var(--text-primary)] mb-2">Animações</h3>
-              
-              <div className="mt-4">
+              <CardHeader>
+                <CardTitle className="text-lg">Animações</CardTitle>
+              </CardHeader>
+              <CardContent className="grid grid-cols-3 gap-6">
                 <motion.div 
                   className="w-20 h-20 mx-auto rounded-xl bg-accent-cyan/30 border border-accent-cyan"
                   animate={{ scale: [1, 1.1, 1] }}
@@ -579,7 +595,7 @@ export default function DesignSystem() {
                   animate={{ opacity: [0.5, 1, 0.5] }}
                   transition={{ duration: 2, repeat: Infinity }}
                 />
-              </div>
+              </CardContent>
             </Card>
           </TabsContent>
         </Tabs>
